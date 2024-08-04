@@ -6,7 +6,6 @@ const navItems = [
   { path: '/projects', label: 'Projects' },
   { path: '/works', label: 'Works' },
   { path: '/about', label: 'About' },
-  { path: '/contact', label: 'Contact' },
 ];
 
 
@@ -40,14 +39,14 @@ const NavList = styled.ul`
 
 const NavItem = styled.li`
   margin: 0 20px;
-  font-size: 1rem;
+  font-size: ${({ theme }) => theme.fontSize.font_B01};
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
+    text-decoration: ${({ theme }) => theme.fontWeight.decoration};
   }
 `;
 
