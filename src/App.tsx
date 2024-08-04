@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Gnb from './component/gnb/Gnb';
 import Landing from './page/Landing';
 import Projects from './page/Projects';
+import Works from './page/Works';
 import About from './page/About';
 
 const App: React.FC = () => {
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/works" element={<Works />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </Router>
