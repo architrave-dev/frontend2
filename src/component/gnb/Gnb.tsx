@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import Logo from './Logo'
 import Navigation from './Navigation';
-import User from './User';
+import User from './UserComp';
 
 const Gnb: React.FC = () => {
   return (
