@@ -13,10 +13,10 @@ const theme: DefaultTheme = {
     color_Alpha_03: 'rgba(255, 255, 255, 0.3)'
   },
   fontSize: {
-    font_H01: '72px',
-    font_H02: '40px',
-    font_B01: '24px',
-    font_B02: '20px',
+    font_H01: '68px',
+    font_H02: '36px',
+    font_B01: '20px',
+    font_B02: '16px',
   },
   fontWeight: {
     bold: '700',
