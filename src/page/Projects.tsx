@@ -48,7 +48,13 @@ const Projects: React.FC = () => {
       />
       <ProjectSimpleList>
         {projectItems.map((each) => (
-          <ProjectSimple key={each.idx} title={each.title} description={each.description} />
+          <ProjectSimple
+            key={each.idx}
+            initialTitle={each.title}
+            initialDescription={each.description}
+            initialImage={projectImg}
+            isEditMode={isEditMode}
+          />
         ))}
       </ProjectSimpleList>
     </ProjectsPage>
