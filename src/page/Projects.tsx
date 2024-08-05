@@ -37,6 +37,9 @@ const Projects: React.FC = () => {
 
   return (
     <ProjectsPage>
+      <button onClick={toggleEditMode}>
+        임시 editmode 변경
+      </button>
       <LandingBox
         initialTitle={title}
         initialDescription={description}
@@ -46,6 +49,7 @@ const Projects: React.FC = () => {
         onTitleChange={handleTitleChange}
         onDescriptionChange={handleDescriptionChange}
       />
+      <Space />
       <ProjectSimpleList>
         {projectItems.map((each) => (
           <ProjectSimple
@@ -76,5 +80,10 @@ const ProjectSimpleList = styled.section`
     display: none;
   }
 `;
+
+const Space = styled.div`
+  width: 100%;
+  height: 40px;
+`
 
 export default Projects;
