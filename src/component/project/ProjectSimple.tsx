@@ -2,12 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import projectImg from '../../asset/project/starship.jpeg';
 
-const ProjectSimple: React.FC = () => {
+interface ProjectSimpleProps {
+  title: string;
+  description: string;
+}
+
+
+const ProjectSimple: React.FC<ProjectSimpleProps> = ({ title, description }) => {
   return (
     <ProjectSimpleComp>
       <ProjectSimpleInfo>
-        <ProjectSimpleTitle>Project Title</ProjectSimpleTitle>
-        <ProjectSimpleDescription>This is Project description.This is Project description.This is Project description.</ProjectSimpleDescription>
+        <ProjectSimpleTitle>{title}</ProjectSimpleTitle>
+        <ProjectSimpleDescription>{description}</ProjectSimpleDescription>
       </ProjectSimpleInfo>
       <ProjectRepresent />
     </ProjectSimpleComp>
