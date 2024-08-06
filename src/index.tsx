@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import App from './App';
 import theme from './shared/theme';
 import { GlobalStyle } from './shared/GlobalStyle';
+import ModalTemplate from './shared/ModalTemplate';
 
 
 const root = ReactDOM.createRoot(
@@ -14,6 +15,7 @@ root.render(
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <App />
+      <ModalTemplate />
     </ThemeProvider>
   </React.StrictMode>
 );
