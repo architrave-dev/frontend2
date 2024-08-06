@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import LandingBox from '../component/LandingBox';
 import ProjectSimple from '../component/project/ProjectSimple';
 import projectImg from '../asset/project/starship.jpeg'
+import Space from '../shared/Space';
 
 const projectItems = [
   { idx: 0, title: "Project Title 1", description: "This is Project description.This is Project description.This is Project description." },
@@ -80,10 +81,5 @@ const ProjectSimpleList = styled.section`
     display: none;
   }
 `;
-
-const Space = styled.div`
-  width: 100%;
-  height: 40px;
-`
 
 export default Projects;

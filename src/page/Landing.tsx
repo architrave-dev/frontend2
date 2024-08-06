@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchBar from '../component/SearchBar';
 import LandingLogo from '../component/LandingLogo';
+import Space from '../shared/Space';
 
 const Landing: React.FC = () => {
   const handleSearch = (query: string) => {
@@ -11,7 +12,7 @@ const Landing: React.FC = () => {
   return (
     <LandingContainer>
       <LandingLogo />
-    </div>
+      <Space />
       <SearchBar onSearch={handleSearch} />
     </LandingContainer>
 
