@@ -16,7 +16,8 @@ const MainLogoContainer = styled.header`
 `;
 
 const MainLogo = styled.img`
-  width: 300px;
+  width: 400px;
+  height: auto;
 `;
 
 
