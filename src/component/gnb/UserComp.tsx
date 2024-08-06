@@ -1,38 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { ModalType, useAuthStore } from '../../shared/store';
 
 const UserComp: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isEditMode = useAuthStore((state) => state.isEditMode);
+  const setModalType = useAuthStore((state) => state.setModalType);
+  const setIsEditMode = useAuthStore((state) => state.setIsEditMode);
 
   const toggleEditMode = () => {
     if (!isLoggedIn) {
       return;
     }
-    setIsEditMode(prev => !prev);
+    setIsEditMode(!isEditMode);
   };
 
   const showLoginModal = () => {
-    if (isEditMode) {
-      alert("isEditMode가 true일 때 isLoggedIn는 false가 될 수 없다");
-      return;
+    if (isLoggedIn) {
+      alert("로그아웃 할래?");
+    } else {
+      console.log("login Modal 나타나랏!");
+      setModalType(ModalType.LOGIN);
     }
-    setIsLoggedIn(prev => !prev);
   };
 
   return (
     <UserArticle>
-      <EditToggle isVisible={isLoggedIn} onClick={toggleEditMode}>
+      <EditToggle $isVisible={isLoggedIn} onClick={toggleEditMode}>
         {isLoggedIn && (isEditMode ? '완료' : '편집')}
       </EditToggle>
       <ArtistName onClick={showLoginModal}>이름</ArtistName>
     </UserArticle>
   );
-}
-
-interface EditToggleProps {
-  isVisible: boolean;
 }
 
 const UserArticle = styled.article`
@@ -54,8 +53,8 @@ const ArtistName = styled.div`
   cursor: pointer;
 `;
 
-const EditToggle = styled.div<EditToggleProps>`
-  visibility: ${props => (props.isVisible ? 'visible' : 'hidden')}; 
+const EditToggle = styled.div<{ $isVisible: boolean }>`
+  visibility: ${props => (props.$isVisible ? 'visible' : 'hidden')}; 
   text-decoration: none;
   &:hover {
     text-decoration: ${({ theme }) => theme.fontWeight.decoration};
