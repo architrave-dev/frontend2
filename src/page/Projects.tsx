@@ -4,6 +4,7 @@ import LandingBox from '../component/LandingBox';
 import ProjectSimple from '../component/project/ProjectSimple';
 import projectImg from '../asset/project/starship.jpeg'
 import Space from '../shared/Space';
+import { useArtistIdValidation } from '../shared/hooks/useAuiValidation';
 
 const projectItems = [
   { idx: 0, title: "Project Title 1", description: "This is Project description.This is Project description.This is Project description." },
@@ -13,6 +14,8 @@ const projectItems = [
 
 
 const Projects: React.FC = () => {
+  const AUI = useArtistIdValidation();
+
   const [isEditMode, setIsEditMode] = useState(true);
 
   const [title, setTitle] = useState("young's website");
