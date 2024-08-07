@@ -10,13 +10,16 @@ const theme: DefaultTheme = {
     color_White: '#ffffff',
     color_Alpha_01: 'rgba(0, 0, 0, 0.6)',
     color_Alpha_02: 'rgba(0, 0, 0, 0.2)',
-    color_Alpha_03: 'rgba(255, 255, 255, 0.3)'
+    color_Alpha_03: 'rgba(255, 255, 255, 0.3)',
+    color_alert_red: '#ff0000'
   },
   fontSize: {
     font_H01: '68px',
     font_H02: '36px',
     font_B01: '20px',
     font_B02: '16px',
+    font_B03: '14px',
+    font_B04: '12px',
   },
   fontWeight: {
     bold: '700',
