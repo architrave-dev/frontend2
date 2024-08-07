@@ -38,17 +38,18 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.colors.color_Alpha_02};
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const ModalContent = styled.div`
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.color_White};
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 440px;
+  //height은 각자 정해
 `;
 
 export default ModalTemplate;
