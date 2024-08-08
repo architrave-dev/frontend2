@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import Gnb from './component/gnb/Gnb';
 import Landing from './page/Landing';
 import Projects from './page/Projects';
+import ProjectDetail from './page/ProjectDetail';
 import Works from './page/Works';
 import About from './page/About';
+import ErrorPage from './page/Error';
 
 const App: React.FC = () => {
   return (
@@ -14,9 +16,12 @@ const App: React.FC = () => {
         <Gnb />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/works" element={<Works />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/:AUI/projects" element={<Projects />} />
+          <Route path="/:AUI/projects/:projectId" element={<ProjectDetail />} />
+          <Route path="/:AUI/works" element={<Works />} />
+          <Route path="/:AUI/about" element={<About />} />
+          <Route path="/error" element={<ErrorPage />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
     </AppComp>
