@@ -7,7 +7,7 @@ import Projects from './page/Projects';
 import ProjectDetail from './page/ProjectDetail';
 import Works from './page/Works';
 import About from './page/About';
-import ErrorPage from './shared/Error';
+import ErrorPage from './page/Error';
 
 const App: React.FC = () => {
   return (
