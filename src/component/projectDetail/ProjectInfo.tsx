@@ -39,13 +39,28 @@ const ProjectInfoItem = styled.div`
 `;
 
 const NameInput = styled.input`
-  margin-left: 5px;
+  width: 12vw;
+  margin-right: 20px;
   padding: 5px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #fff;
+  outline: none;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
 
 const ValueInput = styled.input`
-  margin-left: 5px;
+  width: 50vw;  
   padding: 5px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #fff;
+  outline: none;
+  color: ${({ theme }) => theme.colors.color_Gray_02};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;
 
 
@@ -55,7 +70,6 @@ const NameSection = styled.div`
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B02};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
-
 `;
 
 const ValueSection = styled.div`
