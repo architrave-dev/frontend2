@@ -66,7 +66,7 @@ const LandingBox: React.FC<LandingBoxProps> = ({
           <Input
             type="text"
             value={title}
-            onChange={handleImageChange}
+            onChange={handleTitleChange}
             placeholder="Enter title"
           />
           <TextArea
