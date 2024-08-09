@@ -29,7 +29,10 @@ const initialProjectDetailValues = {
       content: {
         image: projectImg1,
         title: 'Snow-covered Rock',
-        description: 'A large rock formation covered in snow, set against a backdrop of snowy mountains.'
+        description: '',
+        material: '종이에 오일파스텔',
+        size: '175.0 x 334.0cm',
+        prodYear: 2023
       }
     },
     {
@@ -37,7 +40,10 @@ const initialProjectDetailValues = {
       content: {
         image: projectImg2,
         title: 'Rocky Outcrop',
-        description: 'A prominent rocky outcrop jutting out from a snowy landscape, with a small object (possibly a flag or marker) on top.'
+        description: 'A large rock formation covered in snow, set against a backdrop of snowy mountains. \n A prominent rocky outcrop jutting out from a snowy landscape, with a small object (possibly a flag or marker) on top.',
+        material: '한지에 수묵 - 호분',
+        size: '162.2 x 130.3cm',
+        prodYear: 2023
       }
     },
     {
@@ -45,7 +51,10 @@ const initialProjectDetailValues = {
       content: {
         image: projectImg3,
         title: 'Stone Pile 1',
-        description: 'A carefully balanced pile of stones in a snowy environment, creating a natural sculpture.'
+        description: 'A carefully balanced pile of stones in a snowy environment, creating a natural sculpture. A prominent rocky outcrop jutting out from a snowy landscape, with a small object (possibly a flag or marker) on top.',
+        material: '종이에 오일파스텔',
+        size: '162.2 x 130.3cm',
+        prodYear: 2022
       }
     },
     {
@@ -53,14 +62,20 @@ const initialProjectDetailValues = {
       content: {
         image: projectImg4,
         title: 'Stone Pile 2',
-        description: 'Another view of a stone pile, this time with more jagged and complex formations, still set in a snowy landscape.'
+        description: 'Another view of a stone pile, this time with more jagged and complex formations, still set in a snowy landscape.',
+        material: '캔버스에 유채',
+        size: '162.2 x 130.3cm',
+        prodYear: 2019
       }
     },
     {
       type: ProjectElementType.TEXTBOX,
       content: {
         texBoxType: TextBoxType.CENTER,
-        content: '"Put your left hand on the stones"\n\nThis series explores the interaction between human touch and the raw elements of nature. The artist invites viewers to imagine placing their hand on these cold, snow-covered stones, bridging the gap between the observer and the observed.'
+        content: '"Put your left hand on the stones"\n\nThis series explores the interaction between human touch and the raw elements of nature. The artist invites viewers to imagine placing their hand on these cold, snow-covered stones, bridging the gap between the observer and the observed.',
+        material: '캔버스에 유채',
+        size: '162.2 x 130.3cm',
+        prodYear: 2019
       }
     },
     {
@@ -74,14 +89,20 @@ const initialProjectDetailValues = {
       content: {
         image: projectImg5,
         title: 'Mountain Landscape',
-        description: 'A expansive view of a mountain range, with misty peaks and valleys creating a dramatic, ethereal atmosphere.'
+        description: 'A expansive view of a mountain range, with misty peaks and valleys creating a dramatic, ethereal atmosphere.',
+        material: '한지에 수묵채색',
+        size: '162.2 x 130.3cm',
+        prodYear: 2019
       }
     },
     {
       type: ProjectElementType.TEXTBOX,
       content: {
         texBoxType: TextBoxType.RIGHT,
-        content: 'The "Muth Endap Inam Mo" series captures the essence of a journey through snowy, mountainous terrain. Each image represents a moment of stillness and contemplation in the vast, unforgiving landscape. The artists perspective invites viewers to consider their place in nature and the delicate balance between human presence and the untouched wilderness.'
+        content: 'The "Muth Endap Inam Mo" series captures the essence of a journey through snowy, mountainous terrain. Each image represents a moment of stillness and contemplation in the vast, unforgiving landscape. The artists perspective invites viewers to consider their place in nature and the delicate balance between human presence and the untouched wilderness.',
+        material: '캔버스에 유채',
+        size: '162.2 x 130.3cm',
+        prodYear: 2018
       }
     }
   ]
@@ -123,7 +144,11 @@ const ProjectDetail: React.FC = () => {
       </ProjectDetailContainer>
       <ProjectElementList>
         {projectDetailValue.elements.map((element, index) => (
-          <ProjectElement key={index} isEditMode={isEditMode} {...element} />
+          <ProjectElement
+            key={index}
+            type={element.type}
+            content={element.content}
+          />
         ))}
       </ProjectElementList>
     </ProjectDetailPage>
