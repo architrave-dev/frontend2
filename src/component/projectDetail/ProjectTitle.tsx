@@ -31,20 +31,20 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({ initialTitle, isEditMode })
 
 const TitleInput = styled.input`
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: calc(2vh);
   padding: 5px;
   background: transparent;
   border: none;
   border-bottom: 2px solid #fff;
   outline: none;
   font-size: ${({ theme }) => theme.fontSize.font_H015};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
 `;
 
 const TitleDisplay = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.font_H015};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  margin-bottom: 20px;
+  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
+  margin-bottom: calc(2vh);
 `;
 
 export default ProjectTitle;
