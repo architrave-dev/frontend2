@@ -4,6 +4,7 @@ import Work, { WorkProps } from './Work';
 import TextBox, { TextBoxProps } from './TextBox';
 import Divider, { DividerProps } from '../../shared/Divider';
 import Work2 from './Work2';
+import { useAuthStore } from '../../shared/store';
 
 export enum ProjectElementType {
   WORK = 'Work',
@@ -12,21 +13,21 @@ export enum ProjectElementType {
 }
 
 export type ProjectElementProps = {
-  isEditMode: boolean;
   type: ProjectElementType;
   content: WorkProps | TextBoxProps | DividerProps;
 };
 
-const ProjectElement: React.FC<ProjectElementProps> = ({ isEditMode, type, content }) => {
-
+const ProjectElement: React.FC<ProjectElementProps> = ({ type, content }) => {
   const contentRouter = () => {
-    if (type === ProjectElementType.WORK) {
-      return <Work {...(content as WorkProps)} />;
-      // return <Work2 {...(content as WorkProps)} />;
-    } else if (type === ProjectElementType.TEXTBOX) {
-      return <TextBox {...(content as TextBoxProps)} />;
-    } else if (type === ProjectElementType.DIVIDER) {
-      return <Divider {...(content as DividerProps)} />;
+    switch (type) {
+      case ProjectElementType.WORK:
+        return <Work {...(content as WorkProps)} />;
+      case ProjectElementType.TEXTBOX:
+        return <TextBox {...(content as TextBoxProps)} />;
+      case ProjectElementType.DIVIDER:
+        return <Divider {...(content as DividerProps)} />;
+      default:
+        return null;
     }
   }
 
@@ -39,7 +40,6 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ isEditMode, type, conte
 
 const ProjectElementListWrapper = styled.div<{ elementType: ProjectElementType }>`
   width: 100%;
-  max-height: 100vh;
   padding: ${({ elementType }) => {
     switch (elementType) {
       case ProjectElementType.WORK:
