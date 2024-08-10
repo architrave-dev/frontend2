@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Portal from '../Portal';
 import { ModalType, useAuthStore } from '../shared/store';
 import Login from '../component/auth/Login';
+import Signin from '../component/auth/SignIn';
 
 
 const ModalTemplate: React.FC = () => {
@@ -11,6 +12,8 @@ const ModalTemplate: React.FC = () => {
 
   const renderModalContent = () => {
     switch (modalType) {
+      case ModalType.SIGNIN:
+        return <Signin />;
       case ModalType.LOGIN:
         return <Login />;
       default:

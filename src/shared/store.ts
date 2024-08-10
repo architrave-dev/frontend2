@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 export enum ModalType {
   NONE = 'NONE',
+  SIGNIN = 'SIGNIN',
   LOGIN = 'LOGIN',
   ALERT = 'ALERT',
 }
