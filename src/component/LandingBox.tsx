@@ -1,49 +1,44 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import { uploadToS3 } from '../shared/aws/s3Upload';
+import { useAuthStore, useLandingBoxStore } from '../shared/store';
 
-interface LandingBoxProps {
-  initialTitle: string;
-  initialDescription: string;
-  initialBackgroundImage: string;
-  isEditMode: boolean;
-  onImageChange: (file: File) => void;
-  onTitleChange: (title: string) => void;
-  onDescriptionChange: (description: string) => void;
-}
+const LandingBox: React.FC = () => {
+  const { isEditMode } = useAuthStore();
+  const {
+    title,
+    description,
+    backgroundImageUrl,
+    setTitle,
+    setDescription,
+    setBackgroundImageUrl
+  } = useLandingBoxStore();
 
-const LandingBox: React.FC<LandingBoxProps> = ({
-  initialTitle,
-  initialDescription,
-  initialBackgroundImage,
-  isEditMode,
-  onImageChange,
-  onTitleChange,
-  onDescriptionChange
-}) => {
-  const [title, setTitle] = useState(initialTitle);
-  const [description, setDescription] = useState(initialDescription);
-  const [backgroundImage, setBackgroundImage] = useState(initialBackgroundImage);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setBackgroundImage(imageUrl);
-      onImageChange(file);
+      setIsUploading(true);
+      try {
+        const imageUrl = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!);
+        setBackgroundImageUrl(imageUrl);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        // Handle error (e.g., show error message to user)
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
-    setTitle(newTitle);
-    onTitleChange(newTitle);
+    setTitle(e.target.value);
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newDescription = e.target.value;
-    setDescription(newDescription);
-    onDescriptionChange(newDescription);
+    setDescription(e.target.value);
   };
 
   const triggerFileInput = () => {
@@ -51,11 +46,11 @@ const LandingBox: React.FC<LandingBoxProps> = ({
   };
 
   return (
-    <Container $backgroundimage={backgroundImage}>
+    <Container $backgroundimage={backgroundImageUrl}>
       {isEditMode ? (
         <>
-          <ReplaceImageButton onClick={triggerFileInput}>
-            이미지 교체
+          <ReplaceImageButton onClick={triggerFileInput} disabled={isUploading}>
+            {isUploading ? 'Uploading...' : 'Replace Image'}
           </ReplaceImageButton>
           <HiddenFileInput
             type="file"
@@ -66,7 +61,7 @@ const LandingBox: React.FC<LandingBoxProps> = ({
           <Input
             type="text"
             value={title}
-            onChange={handleImageChange}
+            onChange={handleTitleChange}
             placeholder="Enter title"
           />
           <TextArea
