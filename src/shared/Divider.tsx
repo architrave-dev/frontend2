@@ -13,18 +13,18 @@ export interface DividerProps {
 
 const Divider: React.FC<DividerProps> = ({ dividerType }) => {
   return (
-    <DividerComp dividerType={dividerType} />
+    <DividerComp $dividerType={dividerType} />
   );
 }
 
-const DividerComp = styled.hr<{ dividerType: DividerType }>`
+const DividerComp = styled.hr<{ $dividerType: DividerType }>`
   display: block;
   border-top: 1px;
   transform: scaleY(0.3);
   border-color: ${({ theme }) => theme.colors.color_Gray_05};
   margin-bottom: 40px;
-  border-style: ${({ dividerType }) => {
-    switch (dividerType) {
+  border-style: ${({ $dividerType }) => {
+    switch ($dividerType) {
       case DividerType.DOTTED:
         return 'dotted';
       case DividerType.DASHED:

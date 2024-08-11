@@ -24,7 +24,7 @@ const RepresentImg: React.FC<RepresentImgProps> = ({ initialBackgroundImg, isEdi
 
 
   return (
-    <RepresentImgContainer backgroundImg={backgroundImg}>
+    <RepresentImgContainer $backgroundImg={backgroundImg}>
       {isEditMode && (
         <>
           <ReplaceImgButton onClick={triggerFileInput}>
@@ -42,10 +42,10 @@ const RepresentImg: React.FC<RepresentImgProps> = ({ initialBackgroundImg, isEdi
   );
 }
 
-const RepresentImgContainer = styled.div<{ backgroundImg: string }>`
+const RepresentImgContainer = styled.div<{ $backgroundImg: string }>`
   position: relative;
 
-  background-image: url(${props => props.backgroundImg});
+  background-image: url(${props => props.$backgroundImg});
   background-size: cover;
   background-position: center;
 
