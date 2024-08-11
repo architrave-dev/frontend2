@@ -28,8 +28,8 @@ const Login: React.FC = () => {
   };
 
   const validatePassword = (password: string) => {
-    if (password.length < 8) {
-      setPasswordError('비밀번호는 8자 이상이어야 합니다.');
+    if (password.length < 4) {
+      setPasswordError('비밀번호는 4자 이상이어야 합니다.');
       return false;
     }
     setPasswordError('');
