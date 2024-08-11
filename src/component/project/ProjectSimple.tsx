@@ -58,7 +58,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
             />
             {/* <SaveButton onClick={handleSave}>Save</SaveButton> */}
           </ProjectSimpleInfo>
-          <ProjectRepresent backgroundImage={image}>
+          <ProjectRepresent $backgroundimage={image}>
             <ReplaceImageButton onClick={triggerFileInput}>
               이미지 교체
             </ReplaceImageButton>
@@ -76,7 +76,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
             <ProjectSimpleTitle>{title}</ProjectSimpleTitle>
             <ProjectSimpleDescription>{description}</ProjectSimpleDescription>
           </ProjectSimpleInfo>
-          <ProjectRepresent backgroundImage={image} />
+          <ProjectRepresent $backgroundimage={image} />
         </>
       )}
     </ProjectSimpleComp>
@@ -117,11 +117,11 @@ const ProjectSimpleDescription = styled.div`
   font-size: ${({ theme }) => theme.fontSize.font_B01};
 `;
 
-const ProjectRepresent = styled.div<{ backgroundImage: string }>`
+const ProjectRepresent = styled.div<{ $backgroundimage: string }>`
   width: calc(62vw);
   height: 100%;
 
-  background-image: url(${props => props.backgroundImage});
+  background-image: url(${props => props.$backgroundimage});
   background-size: cover;
   background-position: center;
   position: relative;

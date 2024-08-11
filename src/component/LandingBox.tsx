@@ -51,7 +51,7 @@ const LandingBox: React.FC<LandingBoxProps> = ({
   };
 
   return (
-    <Container backgroundImage={backgroundImage}>
+    <Container $backgroundimage={backgroundImage}>
       {isEditMode ? (
         <>
           <ReplaceImageButton onClick={triggerFileInput}>
@@ -66,7 +66,7 @@ const LandingBox: React.FC<LandingBoxProps> = ({
           <Input
             type="text"
             value={title}
-            onChange={handleTitleChange}
+            onChange={handleImageChange}
             placeholder="Enter title"
           />
           <TextArea
@@ -85,10 +85,10 @@ const LandingBox: React.FC<LandingBoxProps> = ({
   );
 };
 
-const Container = styled.div<{ backgroundImage: string }>`
+const Container = styled.div<{ $backgroundimage: string }>`
   position: relative;
 
-  background-image: url(${props => props.backgroundImage});
+  background-image: url(${props => props.$backgroundimage});
   background-size: cover;
   background-position: center;
 
