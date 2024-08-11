@@ -1,10 +1,12 @@
 import axios, { AxiosError } from 'axios';
+import { getConfig } from '../env/envManager';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 
+const config = getConfig();
 
 const authApi = axios.create({
-  baseURL: API_BASE_URL,
+  // baseURL: API_BASE_URL,
+  baseURL: config.apiBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
