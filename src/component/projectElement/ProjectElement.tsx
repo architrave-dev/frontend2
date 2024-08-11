@@ -32,16 +32,16 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ type, content }) => {
   }
 
   return (
-    <ProjectElementListWrapper elementType={type}>
+    <ProjectElementListWrapper $elementType={type}>
       {contentRouter()}
     </ProjectElementListWrapper>
   );
 }
 
-const ProjectElementListWrapper = styled.div<{ elementType: ProjectElementType }>`
+const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType }>`
   width: 100%;
-  padding: ${({ elementType }) => {
-    switch (elementType) {
+  padding: ${({ $elementType }) => {
+    switch ($elementType) {
       case ProjectElementType.WORK:
         return null;
       default:
@@ -49,9 +49,9 @@ const ProjectElementListWrapper = styled.div<{ elementType: ProjectElementType }
     }
   }};
   
-  margin-bottom: ${({ elementType }) => {
+  margin-bottom: ${({ $elementType }) => {
     /* 각 Element를 순수하게 남기기 위해 여기서 설정 */
-    switch (elementType) {
+    switch ($elementType) {
       case ProjectElementType.WORK:
         return 'calc(16vh)';
       case ProjectElementType.TEXTBOX:

@@ -44,14 +44,14 @@ const TextBox: React.FC<TextBoxProps> = ({ texBoxType: initialTexBoxType, conten
           </AlignmentSelect>
           <TextArea
             ref={textAreaRef}
-            align={texBoxType}
+            $textBoxType={texBoxType}
             value={content}
             onChange={handleContentChange}
             rows={1}
           />
         </>
       ) : (
-        <TextBoxContent align={texBoxType}>{content}</TextBoxContent>
+        <TextBoxContent $textBoxType={texBoxType}>{content}</TextBoxContent>
       )}
     </TextBoxWrapper>
   );
@@ -70,7 +70,7 @@ const AlignmentSelect = styled.select`
   border-radius: 4px;
 `;
 
-const TextArea = styled.textarea<{ align: TextBoxType }>`
+const TextArea = styled.textarea<{ $textBoxType: TextBoxType }>`
   width: 100%;
   min-height: 120px;
   padding: 8px;
@@ -80,8 +80,8 @@ const TextArea = styled.textarea<{ align: TextBoxType }>`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   resize: none;
   overflow: hidden;
-  text-align: ${({ align }) => {
-    switch (align) {
+  text-align: ${({ $textBoxType }) => {
+    switch ($textBoxType) {
       case TextBoxType.LEFT:
         return 'left';
       case TextBoxType.CENTER:
@@ -94,9 +94,9 @@ const TextArea = styled.textarea<{ align: TextBoxType }>`
   }};
 `;
 
-const TextBoxContent = styled.p<{ align: TextBoxType }>`
-  text-align: ${({ align }) => {
-    switch (align) {
+const TextBoxContent = styled.p<{ $textBoxType: TextBoxType }>`
+  text-align: ${({ $textBoxType }) => {
+    switch ($textBoxType) {
       case TextBoxType.LEFT:
         return 'left';
       case TextBoxType.CENTER:

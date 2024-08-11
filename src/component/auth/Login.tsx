@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ModalType, useAuthStore } from '../../shared/store';
+import { useAuth } from '../../shared/hooks/useAuth';
 
 
 const Login: React.FC = () => {
   const setModalType = useAuthStore((state) => state.setModalType);
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
+  const { isLoading, error: apiError, login } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,22 +28,25 @@ const Login: React.FC = () => {
   };
 
   const validatePassword = (password: string) => {
-    if (password.length < 8) {
-      setPasswordError('비밀번호는 8자 이상이어야 합니다.');
+    if (password.length < 4) {
+      setPasswordError('비밀번호는 4자 이상이어야 합니다.');
       return false;
     }
     setPasswordError('');
     return true;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
     if (isEmailValid && isPasswordValid) {
-      console.log('Login attempt with:', email, password);
-      setIsLoggedIn(true);
-      setModalType(ModalType.NONE);
+      try {
+        await login({ email, password });
+        setModalType(ModalType.NONE);
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
     }
   };
 
@@ -82,8 +86,11 @@ const Login: React.FC = () => {
           </InputWrapper>
           <ErrorText>{passwordError}</ErrorText>
         </div>
+        {apiError && <ErrorText>{apiError}</ErrorText>}
         <ButtonContainer>
-          <SubmitButton type="submit" $isValid={isValid()}>로그인</SubmitButton>
+          <SubmitButton type="submit" $isValid={isValid()} disabled={isLoading}>
+            {isLoading ? '로그인 중...' : '로그인'}
+          </SubmitButton>
           <CancelButton type="button" onClick={() => setModalType(ModalType.NONE)}>취소</CancelButton>
         </ButtonContainer>
       </form>
