@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAuthStore } from '../shared/store';
+import { useEditMode } from '../shared/hooks/useEditMode';
 import { useArtistIdValidation } from '../shared/hooks/useAuiValidation';
 import RepresentImg from '../component/projectDetail/RepresentImg';
 import ProjectInfo from '../component/projectDetail/ProjectInfo';
@@ -110,13 +110,13 @@ const initialProjectDetailValues = {
 
 const ProjectDetail: React.FC = () => {
   const AUI = useArtistIdValidation();
-  const isEditMode = useAuthStore((state) => state.isEditMode);
-  const setIsEditMode = useAuthStore((state) => state.setIsEditMode);
+  const { isEditMode, setEditMode } = useEditMode();
+
 
   const [projectDetailValue, setProjectDetailValue] = useState(initialProjectDetailValues);
 
   const toggleEditMode = () => {
-    setIsEditMode(!isEditMode);
+    setEditMode(!isEditMode);
   };
 
   return (

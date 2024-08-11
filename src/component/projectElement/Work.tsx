@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useAuthStore } from '../../shared/store';
+import { useEditMode } from '../../shared/hooks/useEditMode';
 
 export interface WorkProps {
   image: string;
@@ -19,7 +19,7 @@ const Work: React.FC<WorkProps> = ({
   size: initialSize,
   prodYear: initialProdYear
 }) => {
-  const isEditMode = useAuthStore((state) => state.isEditMode);
+  const { isEditMode } = useEditMode();
   const [image, setImage] = useState(initialImage);
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);

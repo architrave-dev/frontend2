@@ -5,7 +5,7 @@ import ProjectSimple from '../component/project/ProjectSimple';
 import projectImg from '../asset/project/starship.jpeg'
 import Space from '../shared/Space';
 import { useArtistIdValidation } from '../shared/hooks/useAuiValidation';
-import { useAuthStore } from '../shared/store';
+import { useEditMode } from '../shared/hooks/useEditMode';
 
 const projectItems = [
   { idx: 0, title: "Project Title 1", description: "This is Project description.This is Project description.This is Project description." },
@@ -16,10 +16,10 @@ const projectItems = [
 
 const Projects: React.FC = () => {
   const AUI = useArtistIdValidation();
-  const { isEditMode, setIsEditMode } = useAuthStore();
+  const { isEditMode, setEditMode } = useEditMode();
 
   const toggleEditMode = () => {
-    setIsEditMode(!isEditMode);
+    setEditMode(!isEditMode);
   };
 
 

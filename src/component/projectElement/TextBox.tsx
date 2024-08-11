@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useAuthStore } from '../../shared/store';
+import { useEditMode } from '../../shared/hooks/useEditMode';
 
 export enum TextBoxType {
   LEFT = 'Left',
@@ -14,7 +14,7 @@ export interface TextBoxProps {
 }
 
 const TextBox: React.FC<TextBoxProps> = ({ texBoxType: initialTexBoxType, content: initialContent }) => {
-  const isEditMode = useAuthStore((state) => state.isEditMode);
+  const { isEditMode } = useEditMode();
   const [texBoxType, setTexBoxType] = useState(initialTexBoxType);
   const [content, setContent] = useState(initialContent);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);

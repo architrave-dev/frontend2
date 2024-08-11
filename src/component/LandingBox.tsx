@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { uploadToS3 } from '../shared/aws/s3Upload';
-import { useAuthStore, useLandingBoxStore } from '../shared/store';
+import { useLandingBoxStore } from '../shared/store/landingBoxStore';
+import { useEditMode } from '../shared/hooks/useEditMode';
 
 const LandingBox: React.FC = () => {
-  const { isEditMode } = useAuthStore();
+  const { isEditMode } = useEditMode();
   const {
     title,
     description,
