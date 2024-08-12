@@ -4,7 +4,7 @@ import LandingBox from '../component/LandingBox';
 import ProjectSimple from '../component/project/ProjectSimple';
 import projectImg from '../asset/project/starship.jpeg'
 import Space from '../shared/Space';
-import { useArtistIdValidation } from '../shared/hooks/useAuiValidation';
+import { useAuiValidation } from '../shared/hooks/useAuiValidation';
 import { useEditMode } from '../shared/hooks/useEditMode';
 
 const projectItems = [
@@ -15,7 +15,7 @@ const projectItems = [
 
 
 const Projects: React.FC = () => {
-  const AUI = useArtistIdValidation();
+  const AUI = useAuiValidation();
   const { isEditMode, setEditMode } = useEditMode();
 
   const toggleEditMode = () => {
