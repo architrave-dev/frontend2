@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../shared/hooks/useEditMode';
-import { useAuiValidation } from '../shared/hooks/useAuiValidation';
 import RepresentImg from '../component/projectDetail/RepresentImg';
 import ProjectInfo from '../component/projectDetail/ProjectInfo';
 import ProjectTitle from '../component/projectDetail/ProjectTitle';
@@ -109,7 +108,6 @@ const initialProjectDetailValues = {
 };
 
 const ProjectDetail: React.FC = () => {
-  const AUI = useAuiValidation();
   const { isEditMode, setEditMode } = useEditMode();
 
 

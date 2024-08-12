@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import LandingBox from '../component/LandingBox';
 import ProjectSimple from '../component/project/ProjectSimple';
 import projectImg from '../asset/project/starship.jpeg'
 import Space from '../shared/Space';
+import { useParams } from 'react-router-dom';
 import { useAuiValidation } from '../shared/hooks/useAuiValidation';
-import { useEditMode } from '../shared/hooks/useEditMode';
+import { useAuth } from '../shared/hooks/useAuth';
+import { useAui } from '../shared/hooks/useAui';
 
 const projectItems = [
   { idx: 0, title: "Project Title 1", description: "This is Project description.This is Project description.This is Project description." },
@@ -15,19 +17,20 @@ const projectItems = [
 
 
 const Projects: React.FC = () => {
-  const AUI = useAuiValidation();
-  const { isEditMode, setEditMode } = useEditMode();
+  const { AUI } = useParams<{ AUI: string }>();
+  useAuiValidation(AUI);
 
-  const toggleEditMode = () => {
-    setEditMode(!isEditMode);
-  };
+  // const { user } = useAuth();
+  // const { aui } = useAui();
+
+  // useEffect(() => {
+  //   console.log("user: ", user);
+  //   console.log("Owner aui: ", aui);
+  // }, [user, aui]);
 
 
   return (
     <ProjectsPage>
-      <button onClick={toggleEditMode}>
-        임시 editmode 변경
-      </button>
       <LandingBox />
       <Space />
       <ProjectSimpleList>
@@ -37,7 +40,6 @@ const Projects: React.FC = () => {
             initialTitle={each.title}
             initialDescription={each.description}
             initialImage={projectImg}
-            isEditMode={isEditMode}
           />
         ))}
       </ProjectSimpleList>

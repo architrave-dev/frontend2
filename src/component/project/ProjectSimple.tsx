@@ -1,28 +1,27 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import projectImg from '../../asset/project/starship.jpeg';
+import { useEditMode } from '../../shared/hooks/useEditMode';
 
 interface ProjectSimpleProps {
   initialTitle: string;
   initialDescription: string;
   initialImage: string;
-  isEditMode: boolean;
-  // onSave: (title: string, description: string, image: File | null) => void;
 }
 
 
 const ProjectSimple: React.FC<ProjectSimpleProps> = ({
   initialTitle,
   initialDescription,
-  initialImage,
-  isEditMode,
+  initialImage
   // onSave 
 }) => {
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
   const [image, setImage] = useState(initialImage);
+  const { isEditMode } = useEditMode();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newImage, setNewImage] = useState<File | null>(null);
+
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -35,10 +34,6 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   };
-
-  // const handleSave = () => {
-  //   onSave(title, description, newImage);
-  // };
 
   return (
     <ProjectSimpleComp>
