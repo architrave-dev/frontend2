@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAuthStore } from '../../shared/store/authStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { ModalType, useModalStore } from '../../shared/store/modalStore';
+import { useAuiValidation } from '../../shared/hooks/useAuiValidation';
+import { useModal } from '../../shared/hooks/useModal';
+import { ModalType } from '../../shared/store/modalStore';
 
 const UserComp: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const setModalType = useModalStore((state) => state.setModalType);
+  const { openModal } = useModal();
 
   const toggleEditMode = () => {
     if (!isLoggedIn) {
@@ -20,8 +22,7 @@ const UserComp: React.FC = () => {
     if (isLoggedIn) {
       alert("로그아웃 할래?");
     } else {
-      console.log("login Modal 나타나랏!");
-      setModalType(ModalType.LOGIN);
+      openModal(ModalType.LOGIN);
     }
   };
 
