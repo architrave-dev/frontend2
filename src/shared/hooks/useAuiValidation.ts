@@ -1,16 +1,34 @@
-import { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { isValidAui } from '../isValidAui';
+import { useEffect, useMemo } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
-export const useArtistIdValidation = () => {
-  const { AUI } = useParams<{ AUI: string }>();
+
+const isValidAui = (AUI: string | undefined): boolean => {
+  if (!AUI) return false;
+  const auiPattern = /^[a-zA-Z0-9가-힣]+-[a-zA-Z0-9]{8}$/;
+
+  return auiPattern.test(AUI);
+};
+
+export const useAuiValidation = () => {
+  const { AUI } = useParams<{ AUI?: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const errorRoute = '/error';
+
+  const isValid = useMemo(() => {
+    if (location.pathname === '/') return true;
+    return isValidAui(AUI);
+  }, [AUI, location.pathname]);
 
   useEffect(() => {
-    if (!isValidAui(AUI)) {
-      navigate('/error', { replace: true });
+    if (!isValid) {
+      try {
+        navigate(errorRoute, { replace: true });
+      } catch (error) {
+        console.error('Navigation failed:', error);
+      }
     }
-  }, [AUI, navigate]);
+  }, [isValid, navigate]);
 
   return AUI;
 };
