@@ -1,10 +1,17 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components'
 import Logo from './Logo'
 import Navigation from './Navigation';
 import User from './UserComp';
 
 const Gnb: React.FC = () => {
+  const location = useLocation();
+
+  if (location.pathname === '/') {
+    return null;
+  }
+
   return (
     <GnbSection>
       <Logo />
