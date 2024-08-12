@@ -4,19 +4,18 @@ export interface UserData {
   id: number;
   email: string;
   username: string;
+  aui: string;
   role: string;
 }
 
 interface AuthState {
   user: UserData | null;
   authToken: string | null;
-  isLoggedIn: boolean;
 }
 
 interface AuthActions {
   setUser: (user: UserData | null) => void;
   setAuthToken: (token: string | null) => void;
-  setIsLoggedIn: (value: boolean) => void;
   clearAuth: () => void;
 }
 
@@ -25,12 +24,10 @@ type AuthStore = AuthState & AuthActions;
 export const useAuthStore = create<AuthStore>()((set) => ({
   user: null,
   authToken: null,
-  isLoggedIn: false,
 
   setUser: (user) => set({ user }),
   setAuthToken: (authToken) => set({ authToken }),
-  setIsLoggedIn: (value) => set({ isLoggedIn: value }),
-  clearAuth: () => set({ user: null, authToken: null, isLoggedIn: false }),
+  clearAuth: () => set({ user: null, authToken: null }),
 }));
 
 interface EditModeState {

@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
+import { UserData } from '../store/authStore';
 
 
 const config = getConfig();
@@ -21,13 +22,6 @@ export interface SignUpData {
 export interface LoginData {
   email: string;
   password: string;
-}
-
-export interface UserData {
-  id: number;
-  email: string;
-  username: string;
-  role: string;
 }
 
 export interface AuthResponse {
