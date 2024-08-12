@@ -4,7 +4,6 @@ import Work, { WorkProps } from './Work';
 import TextBox, { TextBoxProps } from './TextBox';
 import Divider, { DividerProps } from '../../shared/Divider';
 import Work2 from './Work2';
-import { useAuthStore } from '../../shared/store';
 
 export enum ProjectElementType {
   WORK = 'Work',

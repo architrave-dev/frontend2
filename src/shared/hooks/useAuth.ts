@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuthStore } from '../store';
+import { useAuthStore } from '../store/authStore';
 import { signUp, login, SignUpData, LoginData, AuthResponse } from '../api/authAPI';
 
 

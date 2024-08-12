@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import defaultImage from '../asset/project/launches_header_desktop.jpg'
+import defaultImage from '../../asset/project/launches_header_desktop.jpg'
 
 interface LandingBoxState {
   title: string;
