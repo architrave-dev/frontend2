@@ -57,11 +57,6 @@ export const useAuth = (): UseAuthResult => {
   };
 }
 
-export const validateUserOwner = (loginUsername: string, aui: string): boolean => {
-  return loginUsername === extractUsernameFromAui(aui);
-}
-
-const extractUsernameFromAui = (aui: string): string => {
-  console.log("from extractUsernameFromAui", aui.split("-")[0]);
+export const extractUsernameFromAui = (aui: string): string => {
   return aui.split("-")[0];
 }

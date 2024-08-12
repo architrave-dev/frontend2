@@ -1,16 +1,16 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useAuiValidation } from '../../shared/hooks/useAuiValidation';
-import { useAuth, validateUserOwner } from '../../shared/hooks/useAuth';
+import { extractUsernameFromAui, useAuth } from '../../shared/hooks/useAuth';
 import { useModal } from '../../shared/hooks/useModal';
 import { ModalType } from '../../shared/store/modalStore';
+import { useAui } from '../../shared/hooks/useAui';
+import { UserData } from '../../shared/store/authStore';
 
 const UserComp: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const AUI = useAuiValidation();
+  const { aui } = useAui();
 
   const { isEditMode, setEditMode } = useEditMode();
   const { user, logout } = useAuth();
@@ -18,32 +18,23 @@ const UserComp: React.FC = () => {
 
 
   const toggleEditMode = () => {
-    if (!user) {
-      return;
-    }
     setEditMode(!isEditMode);
   };
 
   const handleUserAction = () => {
-    if (!AUI) {
-      console.error('AUI is undefined');
-      return;
-    }
     if (user) {
-      if (validateUserOwner(user.username, AUI)) {
-        if (window.confirm("Do you want to log out?")) {
-          logout();
-        }
-      } else {
-        navigate(`/${AUI}`);
-      }
+      compareAuiLoggedInAui(user);
     } else {
       openModal(ModalType.LOGIN);
     }
   };
 
-  if (location.pathname === '/' || !AUI) {
-    return null;
+  const compareAuiLoggedInAui = (user: UserData) => {
+    if (aui && aui === user.aui) {
+      if (window.confirm("Do you want to log out?")) logout();
+    } else {
+      navigate(`/${aui}`);
+    }
   }
 
   return (
@@ -55,7 +46,7 @@ const UserComp: React.FC = () => {
         </EditToggle>
       )}
       <ArtistName onClick={handleUserAction}>
-        {AUI}
+        {extractUsernameFromAui(aui)}
       </ArtistName>
     </UserArticle>
   );

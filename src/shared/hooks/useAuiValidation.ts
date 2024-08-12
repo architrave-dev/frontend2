@@ -1,34 +1,28 @@
 import { useEffect, useMemo } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAui } from './useAui';
 
 
 const isValidAui = (AUI: string | undefined): boolean => {
   if (!AUI) return false;
   const auiPattern = /^[a-zA-Z0-9가-힣]+-[a-zA-Z0-9]{8}$/;
-
   return auiPattern.test(AUI);
 };
 
-export const useAuiValidation = () => {
-  const { AUI } = useParams<{ AUI?: string }>();
+export const useAuiValidation = (AUI: string | undefined) => {
+  const { setOwnerAui } = useAui();
   const navigate = useNavigate();
   const location = useLocation();
   const errorRoute = '/error';
 
-  const isValid = useMemo(() => {
-    if (location.pathname === '/') return true;
-    return isValidAui(AUI);
-  }, [AUI, location.pathname]);
-
   useEffect(() => {
-    if (!isValid) {
-      try {
-        navigate(errorRoute, { replace: true });
-      } catch (error) {
-        console.error('Navigation failed:', error);
-      }
+    if (location.pathname !== '/' && !isValidAui(AUI)) {
+      console.error("Invalid AUI:", AUI);
+      navigate(errorRoute);
+    } else {
+      setOwnerAui(AUI);
     }
-  }, [isValid, navigate]);
+  }, [AUI, location.pathname, navigate]);
 
   return AUI;
 };
