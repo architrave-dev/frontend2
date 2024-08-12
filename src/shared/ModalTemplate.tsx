@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import Portal from '../Portal';
-import { ModalType, useAuthStore } from '../shared/store';
+import { ModalType, useModalStore } from './store/modalStore';
 import Login from '../component/auth/Login';
 import Signin from '../component/auth/SignIn';
 
 
 const ModalTemplate: React.FC = () => {
-  const modalType = useAuthStore((state) => state.modalType);
-  const setModalType = useAuthStore((state) => state.setModalType);
+  const modalType = useModalStore((state) => state.modalType);
+  const setModalType = useModalStore((state) => state.setModalType);
 
   const renderModalContent = () => {
     switch (modalType) {

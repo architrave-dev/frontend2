@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ModalType, useAuthStore } from '../../shared/store';
 import { useAuth } from '../../shared/hooks/useAuth';
+import { ModalType, useModalStore } from '../../shared/store/modalStore';
 
 
 const Login: React.FC = () => {
-  const setModalType = useAuthStore((state) => state.setModalType);
+  const setModalType = useModalStore((state) => state.setModalType);
   const { isLoading, error: apiError, login } = useAuth();
 
   const [email, setEmail] = useState('');
