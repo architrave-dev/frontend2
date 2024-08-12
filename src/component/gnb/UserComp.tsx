@@ -1,37 +1,62 @@
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useAuthStore } from '../../shared/store/authStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAuiValidation } from '../../shared/hooks/useAuiValidation';
+import { useAuth, validateUserOwner } from '../../shared/hooks/useAuth';
 import { useModal } from '../../shared/hooks/useModal';
 import { ModalType } from '../../shared/store/modalStore';
 
 const UserComp: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const AUI = useAuiValidation();
+
   const { isEditMode, setEditMode } = useEditMode();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const { user, logout } = useAuth();
   const { openModal } = useModal();
 
+
   const toggleEditMode = () => {
-    if (!isLoggedIn) {
+    if (!user) {
       return;
     }
     setEditMode(!isEditMode);
   };
 
-  const showLoginModal = () => {
-    if (isLoggedIn) {
-      alert("로그아웃 할래?");
+  const handleUserAction = () => {
+    if (!AUI) {
+      console.error('AUI is undefined');
+      return;
+    }
+    if (user) {
+      if (validateUserOwner(user.username, AUI)) {
+        if (window.confirm("Do you want to log out?")) {
+          logout();
+        }
+      } else {
+        navigate(`/${AUI}`);
+      }
     } else {
       openModal(ModalType.LOGIN);
     }
   };
 
+  if (location.pathname === '/' || !AUI) {
+    return null;
+  }
+
   return (
     <UserArticle>
-      <EditToggle $isVisible={isLoggedIn} onClick={toggleEditMode}>
-        {isLoggedIn && (isEditMode ? '완료' : '편집')}
-      </EditToggle>
-      <ArtistName onClick={showLoginModal}>이름</ArtistName>
+      {user && (
+        <EditToggle
+          onClick={toggleEditMode}>
+          {isEditMode ? 'Complete' : 'Edit'}
+        </EditToggle>
+      )}
+      <ArtistName onClick={handleUserAction}>
+        {AUI}
+      </ArtistName>
     </UserArticle>
   );
 }
@@ -55,8 +80,7 @@ const ArtistName = styled.div`
   cursor: pointer;
 `;
 
-const EditToggle = styled.div<{ $isVisible: boolean }>`
-  visibility: ${props => (props.$isVisible ? 'visible' : 'hidden')}; 
+const EditToggle = styled.div`
   text-decoration: none;
   &:hover {
     text-decoration: ${({ theme }) => theme.fontWeight.decoration};

@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useAuthStore } from '../store/authStore';
+import { UserData, useAuthStore } from '../store/authStore';
 import { signUp, login, SignUpData, LoginData, AuthResponse } from '../api/authAPI';
 
 
 interface UseAuthResult {
   isLoading: boolean;
   error: string | null;
+  user: UserData | null;
   signUp: (data: SignUpData) => Promise<void>;
   login: (data: LoginData) => Promise<void>;
   logout: () => void;
@@ -14,7 +15,7 @@ interface UseAuthResult {
 export const useAuth = (): UseAuthResult => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { setUser, setAuthToken, clearAuth } = useAuthStore();
+  const { user, setUser, setAuthToken, clearAuth } = useAuthStore();
 
   const handleAuthSuccess = (response: AuthResponse) => {
     const { authToken, ...userData } = response.data;
@@ -49,8 +50,18 @@ export const useAuth = (): UseAuthResult => {
   return {
     isLoading,
     error,
+    user,
     signUp: signUpHandler,
     login: loginHandler,
     logout,
   };
+}
+
+export const validateUserOwner = (loginUsername: string, aui: string): boolean => {
+  return loginUsername === extractUsernameFromAui(aui);
+}
+
+const extractUsernameFromAui = (aui: string): string => {
+  console.log("from extractUsernameFromAui", aui.split("-")[0]);
+  return aui.split("-")[0];
 }
