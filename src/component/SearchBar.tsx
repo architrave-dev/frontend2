@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-interface SearchBarProps {
-  onSearch: (query: string) => void;
-}
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [query, setQuery] = useState('');
+
+const SearchBar: React.FC = () => {
+  const [aui, setAui] = useState('');
 
   const handleSearch = () => {
-    onSearch(query);
+    console.log('Searching for:', aui);
   };
 
   return (
     <SearchWrapper>
       <Input
         type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        value={aui}
+        onChange={(e) => setAui(e.target.value)}
         placeholder="작가 이름을 검색해 주세요."
       />
       <Button onClick={handleSearch}>검색</Button>
