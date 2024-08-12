@@ -1,18 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ModalType, useAuthStore } from '../../shared/store';
+import { useEditMode } from '../../shared/hooks/useEditMode';
 
 const UserComp: React.FC = () => {
+  const { isEditMode, setEditMode } = useEditMode();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const isEditMode = useAuthStore((state) => state.isEditMode);
+  const setModalType = useModalStore((state) => state.setModalType);
   const setModalType = useAuthStore((state) => state.setModalType);
-  const setIsEditMode = useAuthStore((state) => state.setIsEditMode);
 
   const toggleEditMode = () => {
     if (!isLoggedIn) {
       return;
     }
-    setIsEditMode(!isEditMode);
+    setEditMode(!isEditMode);
   };
 
   const showLoginModal = () => {
