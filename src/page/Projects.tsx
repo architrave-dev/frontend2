@@ -7,7 +7,7 @@ import Space from '../shared/Space';
 import { useParams } from 'react-router-dom';
 import { useAuiValidation } from '../shared/hooks/useAuiValidation';
 import { useAuth } from '../shared/hooks/useAuth';
-import { useAui } from '../shared/hooks/useAui';
+import { UserData } from '../shared/store/authStore';
 
 const projectItems = [
   { idx: 0, title: "Project Title 1", description: "This is Project description.This is Project description.This is Project description." },
@@ -20,14 +20,21 @@ const Projects: React.FC = () => {
   const { AUI } = useParams<{ AUI: string }>();
   useAuiValidation(AUI);
 
-  // const { user } = useAuth();
-  // const { aui } = useAui();
+  const { user, setUser } = useAuth();
 
-  // useEffect(() => {
-  //   console.log("user: ", user);
-  //   console.log("Owner aui: ", aui);
-  // }, [user, aui]);
-
+  useEffect(() => {
+    if (user) {
+      console.log("UserData from store: ", user);
+    } else {
+      const userFromStorage = localStorage.getItem('userData');
+      if (userFromStorage) {
+        const parsedUserData: UserData = JSON.parse(userFromStorage);
+        setUser(parsedUserData);
+      } else {
+        console.log("there is no login data");
+      }
+    }
+  }, [user]);
 
   return (
     <ProjectsPage>
