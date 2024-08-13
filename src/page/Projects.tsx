@@ -1,19 +1,12 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import LandingBox from '../component/LandingBox';
-import ProjectSimple from '../component/project/ProjectSimple';
-import projectImg from '../asset/project/starship.jpeg'
+import LandingBox from '../component/project/LandingBox';
 import Space from '../shared/Space';
 import { useParams } from 'react-router-dom';
 import { useAuiValidation } from '../shared/hooks/useAuiValidation';
 import { useAuth } from '../shared/hooks/useAuth';
 import { UserData } from '../shared/store/authStore';
-
-const projectItems = [
-  { idx: 0, title: "Project Title 1", description: "This is Project description.This is Project description.This is Project description." },
-  { idx: 1, title: "Project Title 2", description: "This is Project description.This is Project description.This is Project description." },
-  { idx: 2, title: "Project Title 3", description: "This is Project description.This is Project description.This is Project description." }
-];
+import ProjectList from '../component/project/ProjectList';
 
 
 const Projects: React.FC = () => {
@@ -40,19 +33,8 @@ const Projects: React.FC = () => {
     <ProjectsPage>
       <LandingBox />
       <Space />
-      <ProjectSimpleList>
-        {projectItems.map((each) => (
-          <ProjectSimple
-            key={each.idx}
-            initialTitle={each.title}
-            initialDescription={each.description}
-            initialImage={projectImg}
-          />
-        ))}
-      </ProjectSimpleList>
+      <ProjectList />
     </ProjectsPage>
-
-
   );
 }
 const ProjectsPage = styled.div`
@@ -62,12 +44,5 @@ const ProjectsPage = styled.div`
     display: none;
   }
 `
-
-const ProjectSimpleList = styled.section`
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 export default Projects;
