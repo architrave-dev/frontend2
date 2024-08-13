@@ -17,10 +17,10 @@ export const useLandingBox = (): UseLandingBoxResult => {
   const { landingBox, setLandingBox } = useLandingBoxStore();
 
   const handleLandingBoxSuccess = (response: LandingBoxResponse) => {
-    const landingBoxResult = response.data;
-    setLandingBox(landingBoxResult);
+    const landingBoxData = response.data;
+    console.log("landingBoxData from useLandingBox: ", landingBoxData);
+    setLandingBox(landingBoxData);
   };
-
 
   const handleLandingBoxRequest = async <T extends string | LandingBoxData>(
     landingBoxFunction: (data: T) => Promise<LandingBoxResponse>,
