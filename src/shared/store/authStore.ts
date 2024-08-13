@@ -10,12 +10,10 @@ export interface UserData {
 
 interface AuthState {
   user: UserData | null;
-  authToken: string | null;
 }
 
 interface AuthActions {
   setUser: (user: UserData | null) => void;
-  setAuthToken: (token: string | null) => void;
   clearAuth: () => void;
 }
 
@@ -23,11 +21,9 @@ type AuthStore = AuthState & AuthActions;
 
 export const useAuthStore = create<AuthStore>()((set) => ({
   user: null,
-  authToken: null,
 
   setUser: (user) => set({ user }),
-  setAuthToken: (authToken) => set({ authToken }),
-  clearAuth: () => set({ user: null, authToken: null }),
+  clearAuth: () => set({ user: null }),
 }));
 
 interface EditModeState {
