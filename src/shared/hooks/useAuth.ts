@@ -7,6 +7,7 @@ interface UseAuthResult {
   isLoading: boolean;
   error: string | null;
   user: UserData | null;
+  setUser: (user: UserData) => void;
   signUp: (data: SignUpData) => Promise<void>;
   login: (data: LoginData) => Promise<void>;
   logout: () => void;
@@ -15,12 +16,14 @@ interface UseAuthResult {
 export const useAuth = (): UseAuthResult => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user, setUser, setAuthToken, clearAuth } = useAuthStore();
+  const { user, setUser, clearAuth } = useAuthStore();
 
   const handleAuthSuccess = (response: AuthResponse) => {
     const { authToken, ...userData } = response.data;
+    console.log("authToken from useAuth: ", authToken); //authToken 없음
     setUser(userData);
-    setAuthToken(authToken);
+    localStorage.setItem('userData', JSON.stringify(userData));
+    // localStorage.setItem('authToken', JSON.stringify(authToken));  // Todo
   };
 
 
@@ -45,12 +48,14 @@ export const useAuth = (): UseAuthResult => {
 
   const logout = () => {
     clearAuth();
+    localStorage.removeItem('userData');
   };
 
   return {
     isLoading,
     error,
     user,
+    setUser,
     signUp: signUpHandler,
     login: loginHandler,
     logout,
