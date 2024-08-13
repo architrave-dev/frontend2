@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { uploadToS3 } from '../shared/aws/s3Upload';
-import { useEditMode } from '../shared/hooks/useEditMode';
-import { useLandingBox } from '../shared/hooks/useLandingBox';
-import defaultImg from '../asset/project/launches_header_desktop.jpg';
-import { useAui } from '../shared/hooks/useAui';
+import { uploadToS3 } from '../../shared/aws/s3Upload';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useLandingBox } from '../../shared/hooks/useLandingBox';
+import defaultImg from '../../asset/project/launches_header_desktop.jpg';
+import { useAui } from '../../shared/hooks/useAui';
 
 
 const LandingBox: React.FC = () => {
