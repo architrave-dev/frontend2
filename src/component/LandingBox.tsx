@@ -1,23 +1,25 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { uploadToS3 } from '../shared/aws/s3Upload';
-import { useLandingBoxStore } from '../shared/store/landingBoxStore';
 import { useEditMode } from '../shared/hooks/useEditMode';
+import { useLandingBox } from '../shared/hooks/useLandingBox';
+import defaultImg from '../asset/project/launches_header_desktop.jpg';
+
 
 const LandingBox: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const {
-    title,
-    description,
-    backgroundImageUrl,
-    setTitle,
-    setDescription,
-    setBackgroundImageUrl
-  } = useLandingBoxStore();
+  //백엔드에 요청해서 useLandingBoxStore채우기
+  const { isLoading, error: apiError, landingBox, getLandingBox, updateLandingBox } = useLandingBox();
 
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [title, setTitle] = useState(landingBox?.title);
+  const [description, setDescription] = useState(landingBox?.description);
+  const [backgroundImageUrl, setBackgroundImageUrl] = useState(landingBox?.originUrl);
 
+  if (!landingBox) {
+    return null;
+  }
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -47,7 +49,7 @@ const LandingBox: React.FC = () => {
   };
 
   return (
-    <Container $backgroundimage={backgroundImageUrl}>
+    <Container $backgroundimage={backgroundImageUrl ? backgroundImageUrl : defaultImg}>
       {isEditMode ? (
         <>
           <ReplaceImageButton onClick={triggerFileInput} disabled={isUploading}>
