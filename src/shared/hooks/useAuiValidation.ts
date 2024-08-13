@@ -20,7 +20,14 @@ export const useAuiValidation = (AUI: string | undefined) => {
       console.error("Invalid AUI:", AUI);
       navigate(errorRoute);
     } else {
-      setOwnerAui(AUI);
+      // 여기서 API를 통해서 해당 AUI가 유효한지 확인해야해. // Todo
+      try {
+        // getMember(AUI);
+        setOwnerAui(AUI);
+      } catch (err) {
+        // 유효하지 않은 AUI면 /error 로 이동
+        navigate(errorRoute);
+      }
     }
   }, [AUI, location.pathname, navigate]);
 
