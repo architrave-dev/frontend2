@@ -39,7 +39,7 @@ const UserComp: React.FC = () => {
 
   return (
     <UserArticle>
-      {user && (
+      {user && user.aui === aui && (
         <EditToggle
           onClick={toggleEditMode}>
           {isEditMode ? 'Complete' : 'Edit'}
