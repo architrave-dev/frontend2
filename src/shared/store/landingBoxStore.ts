@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import defaultImage from '../../asset/project/launches_header_desktop.jpg'
 
 export interface LandingBoxData {
   id: number;
