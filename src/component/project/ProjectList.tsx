@@ -29,6 +29,7 @@ const ProjectList: React.FC = () => {
       {projects.map((each, idx) => (
         <ProjectSimple
           key={idx}
+          projectId={each.id}
           initialTitle={each.title}
           initialDescription={each.description}
           initialImage={each.originImgUrl}
