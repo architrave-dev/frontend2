@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useAui } from '../../shared/hooks/useAui';
+import { useNavigate } from 'react-router-dom';
 
 interface ProjectSimpleProps {
+  projectId: string;
   initialTitle: string;
   initialDescription: string;
   initialImage: string;
@@ -10,15 +13,18 @@ interface ProjectSimpleProps {
 
 
 const ProjectSimple: React.FC<ProjectSimpleProps> = ({
+  projectId,
   initialTitle,
   initialDescription,
   initialImage
   // onSave 
 }) => {
+  const { aui } = useAui();
+  const { isEditMode } = useEditMode();
+  const navigate = useNavigate();
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
   const [image, setImage] = useState(initialImage);
-  const { isEditMode } = useEditMode();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newImage, setNewImage] = useState<File | null>(null);
 
@@ -35,8 +41,11 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
     fileInputRef.current?.click();
   };
 
+  const moveToProjectDetail = () => {
+    navigate(`/${aui}/projects/${title}`);
+  }
   return (
-    <ProjectSimpleComp>
+    <ProjectSimpleComp $isEditMode={isEditMode} onClick={isEditMode ? undefined : moveToProjectDetail}>
       {isEditMode ? (
         <>
           <ProjectSimpleInfo>
@@ -78,7 +87,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
   );
 };
 
-const ProjectSimpleComp = styled.div`
+const ProjectSimpleComp = styled.div<{ $isEditMode: boolean }>`
   position: relative;
 
   width: 100%;
@@ -88,6 +97,7 @@ const ProjectSimpleComp = styled.div`
   justify-content: space-between; 
   margin-bottom: 20px;
   background-color: #EECFBB;
+  cursor: ${props => props.$isEditMode ? "none" : "pointer"}
 `;
 
 const ProjectSimpleInfo = styled.div`
