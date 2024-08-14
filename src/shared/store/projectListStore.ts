@@ -4,7 +4,7 @@ export interface ProjectSimpleData {
   id: string;
   title: string;
   description: string;
-  originalImageUrl: string;
+  originImgUrl: string;
   thumbnailUrl: string;
 }
 

@@ -31,7 +31,7 @@ const ProjectList: React.FC = () => {
           key={idx}
           initialTitle={each.title}
           initialDescription={each.description}
-          initialImage={each.originalImageUrl}
+          initialImage={each.originImgUrl}
         />
       ))}
     </ProjectSimpleList>
