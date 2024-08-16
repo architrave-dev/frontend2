@@ -1,10 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { ProjectSimpleData } from '../store/projectListStore';
+import { ProjectData } from '../store/projectStore';
 
 const config = getConfig();
 
-const projectListApi = axios.create({
+const projectApi = axios.create({
   // baseURL: API_BASE_URL,
   baseURL: config.apiBaseUrl,
   headers: {
@@ -12,8 +13,11 @@ const projectListApi = axios.create({
   },
 });
 
-export interface ProjectResponse {
+export interface ProjectListResponse {
   data: ProjectSimpleData[];
+}
+export interface ProjectResponse {
+  data: ProjectData;
 }
 
 export interface ErrorResponse {
@@ -21,9 +25,18 @@ export interface ErrorResponse {
   timestamp: string;
 }
 
-export const getProjectList = async (aui: string): Promise<ProjectResponse> => {
+export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
   try {
-    const response = await projectListApi.get<ProjectResponse>('/api/v1/project/list?aui=' + aui);
+    const response = await projectApi.get<ProjectListResponse>('/api/v1/project/list?aui=' + aui);
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+export const getProjectDetail = async (aui: string, title: string): Promise<ProjectResponse> => {
+  try {
+    const response = await projectApi.get<ProjectResponse>(`/api/v1/project?aui=${aui}&title=${title}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -40,4 +53,7 @@ const handleApiError = (error: unknown): Error => {
   return new Error('An unexpected error occurred');
 };
 
-export default projectListApi;
+export default projectApi;
+
+
+
