@@ -1,20 +1,27 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 
-interface RepresentImgProps {
-  initialBackgroundImg: string;
-  isEditMode: boolean;
-}
 
-const RepresentImg: React.FC<RepresentImgProps> = ({ initialBackgroundImg, isEditMode }) => {
-  const [backgroundImg, setBackgroundImg] = useState(initialBackgroundImg);
+
+const RepresentImg: React.FC = () => {
+  const { isEditMode } = useEditMode();
+  const { isLoading, project } = useProjectDetail();
+  const [backgroundImg, setBackgroundImg] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (project) {
+      setBackgroundImg(project.originUrl);
+    }
+  }, [project]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setBackgroundImg(imageUrl);
+      // setBackgroundImg(imageUrl);
     }
   };
 
