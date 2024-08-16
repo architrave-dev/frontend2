@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 export enum DividerType {
-  PLAIN = 'Plain',
-  DOTTED = 'Dotted',
-  DASHED = 'Dashed',
+  PLAIN = 'PLAIN',
+  DOTTED = 'DOTTED',
+  DASHED = 'DASHED',
 }
 
 export interface DividerProps {
