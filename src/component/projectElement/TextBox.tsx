@@ -1,31 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import { TextBoxAlignment, TextBoxData } from '../../shared/store/projectStore';
 
-export enum TextBoxType {
-  LEFT = 'Left',
-  CENTER = 'Center',
-  RIGHT = 'Right',
-}
 
 export interface TextBoxProps {
-  texBoxType: TextBoxType;
-  content: string;
+  alignment: TextBoxAlignment | null;
+  data: TextBoxData;
 }
 
-const TextBox: React.FC<TextBoxProps> = ({ texBoxType: initialTexBoxType, content: initialContent }) => {
+const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, data: initialData }) => {
   const { isEditMode } = useEditMode();
-  const [texBoxType, setTexBoxType] = useState(initialTexBoxType);
-  const [content, setContent] = useState(initialContent);
+  const [textBoxAlignment, setTextBoxAlignment] = useState(initialTexBoxAlignment);
+  const [content, setContent] = useState(initialData.content);
+  const [isDeleted, setIsDeleted] = useState(initialData.isDeleted);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleAlignmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTexBoxType(e.target.value as TextBoxType);
+    setTextBoxAlignment(e.target.value as TextBoxAlignment);
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
+
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = 'auto';
@@ -37,21 +35,21 @@ const TextBox: React.FC<TextBoxProps> = ({ texBoxType: initialTexBoxType, conten
     <TextBoxWrapper>
       {isEditMode ? (
         <>
-          <AlignmentSelect value={texBoxType} onChange={handleAlignmentChange}>
-            <option value={TextBoxType.LEFT}>Left</option>
-            <option value={TextBoxType.CENTER}>Center</option>
-            <option value={TextBoxType.RIGHT}>Right</option>
+          <AlignmentSelect value={textBoxAlignment || ''} onChange={handleAlignmentChange}>
+            <option value={TextBoxAlignment.LEFT}>Left</option>
+            <option value={TextBoxAlignment.CENTER}>Center</option>
+            <option value={TextBoxAlignment.RIGHT}>Right</option>
           </AlignmentSelect>
           <TextArea
             ref={textAreaRef}
-            $textBoxType={texBoxType}
+            $textBoxAlignment={textBoxAlignment}
             value={content}
             onChange={handleContentChange}
             rows={1}
           />
         </>
       ) : (
-        <TextBoxContent $textBoxType={texBoxType}>{content}</TextBoxContent>
+        <TextBoxContent $textBoxAlignment={textBoxAlignment}>{content}</TextBoxContent>
       )}
     </TextBoxWrapper>
   );
@@ -70,7 +68,7 @@ const AlignmentSelect = styled.select`
   border-radius: 4px;
 `;
 
-const TextArea = styled.textarea<{ $textBoxType: TextBoxType }>`
+const TextArea = styled.textarea<{ $textBoxAlignment: TextBoxAlignment | null }>`
   width: 100%;
   min-height: 120px;
   padding: 8px;
@@ -80,37 +78,27 @@ const TextArea = styled.textarea<{ $textBoxType: TextBoxType }>`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   resize: none;
   overflow: hidden;
-  text-align: ${({ $textBoxType }) => {
-    switch ($textBoxType) {
-      case TextBoxType.LEFT:
-        return 'left';
-      case TextBoxType.CENTER:
-        return 'center';
-      case TextBoxType.RIGHT:
-        return 'right';
-      default:
-        return 'center';
-    }
-  }};
+  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
 `;
 
-const TextBoxContent = styled.p<{ $textBoxType: TextBoxType }>`
-  text-align: ${({ $textBoxType }) => {
-    switch ($textBoxType) {
-      case TextBoxType.LEFT:
-        return 'left';
-      case TextBoxType.CENTER:
-        return 'center';
-      case TextBoxType.RIGHT:
-        return 'right';
-      default:
-        return 'center';
-    }
-  }};
+const TextBoxContent = styled.p<{ $textBoxAlignment: TextBoxAlignment | null }>`
+  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};  
   color: ${({ theme }) => theme.colors.color_Gray_03};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
 
+const getAlignment = (alignment: TextBoxAlignment | null): string => {
+  switch (alignment) {
+    case TextBoxAlignment.LEFT:
+      return 'left';
+    case TextBoxAlignment.CENTER:
+      return 'center';
+    case TextBoxAlignment.RIGHT:
+      return 'right';
+    default:
+      return 'center';
+  }
+};
 
 export default TextBox;
