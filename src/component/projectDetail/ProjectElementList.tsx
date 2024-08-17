@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import ProjectElement from '../../component/projectElement/ProjectElement';
+import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 
 
 const ProjectElementList: React.FC = () => {
   const { isEditMode } = useEditMode();
+  const { isLoading, project } = useProjectDetail();
+  const [projectElementList, setProjectElementList] = useState(project?.projectElementList);
+
+  useEffect(() => {
+    if (project) {
+      setProjectElementList(project.projectElementList);
+    }
+  }, [project]);
 
   return (
     <ProjectElementListComp>
-      {/* {projectDetailValue.elements.map((element, index) => (
+      {projectElementList && projectElementList.map((each, index) => (
         <ProjectElement
           key={index}
-          type={element.type}
-          content={element.content}
+          id={each.id}
+          projectElementType={each.projectElementType}
+          // order={each.order}
+          work={each.work}
+          workAlignment={each.workAlignment}
+          textBox={each.textBox}
+          textBoxAlignment={each.textBoxAlignment}
+          dividerType={each.dividerType}
         />
-      ))} */}
+      ))}
     </ProjectElementListComp>
   );
 }

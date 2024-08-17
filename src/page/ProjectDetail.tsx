@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import RepresentImg from '../component/projectDetail/RepresentImg';
 import ProjectElementList from '../component/projectDetail/ProjectElementList';
