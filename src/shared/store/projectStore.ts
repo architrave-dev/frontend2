@@ -20,6 +20,32 @@ export enum ProjectElementType {
   DIVIDER = 'DIVIDER',
 }
 
+export const convertSizeToString = (value: SizeData): string => {
+  if (value.depth) {
+    return `${value.width}x${value.height}x${value.depth}`;
+  } else {
+    return `${value.width}x${value.height}`;
+  }
+}
+
+export const convertStringToSize = (value: string): SizeData => {
+  const dimensions = value.split('x').map(dim => dim.trim());
+
+  if (dimensions.length < 2 || dimensions.length > 3) {
+    throw new Error('Invalid size string format. Expected "widthxheight" or "widthxheightxdepth"');
+  }
+
+  const result: SizeData = {
+    width: dimensions[0],
+    height: dimensions[1]
+  };
+
+  if (dimensions.length === 3) {
+    result.depth = dimensions[2];
+  }
+
+  return result;
+}
 
 export interface ProjectInfoData {
   id: string;
@@ -29,7 +55,7 @@ export interface ProjectInfoData {
 export interface SizeData {
   width: string;
   height: string;
-  depth: string;
+  depth?: string;
 }
 
 export interface WorkData {
