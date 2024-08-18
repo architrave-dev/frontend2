@@ -1,49 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import LandingBox from '../component/LandingBox';
-import ProjectSimple from '../component/project/ProjectSimple';
-import projectImg from '../asset/project/starship.jpeg'
+import LandingBox from '../component/project/LandingBox';
 import Space from '../shared/Space';
-import { useArtistIdValidation } from '../shared/hooks/useAuiValidation';
-import { useAuthStore } from '../shared/store';
-
-const projectItems = [
-  { idx: 0, title: "Project Title 1", description: "This is Project description.This is Project description.This is Project description." },
-  { idx: 1, title: "Project Title 2", description: "This is Project description.This is Project description.This is Project description." },
-  { idx: 2, title: "Project Title 3", description: "This is Project description.This is Project description.This is Project description." }
-];
+import { useParams } from 'react-router-dom';
+import { useAuiValidation } from '../shared/hooks/useAuiValidation';
+import { useAuth } from '../shared/hooks/useAuth';
+import { UserData } from '../shared/store/authStore';
+import ProjectList from '../component/project/ProjectList';
 
 
 const Projects: React.FC = () => {
-  const AUI = useArtistIdValidation();
-  const { isEditMode, setIsEditMode } = useAuthStore();
+  const { AUI } = useParams<{ AUI: string }>();
+  useAuiValidation(AUI);
 
-  const toggleEditMode = () => {
-    setIsEditMode(!isEditMode);
-  };
+  const { user, setUser } = useAuth();
 
+  useEffect(() => {
+    if (user) {
+      console.log("UserData from store: ", user);
+    } else {
+      const userFromStorage = localStorage.getItem('userData');
+      if (userFromStorage) {
+        const parsedUserData: UserData = JSON.parse(userFromStorage);
+        setUser(parsedUserData);
+      } else {
+        console.log("there is no login data");
+      }
+    }
+  }, [user]);
 
   return (
     <ProjectsPage>
-      <button onClick={toggleEditMode}>
-        임시 editmode 변경
-      </button>
       <LandingBox />
       <Space />
-      <ProjectSimpleList>
-        {projectItems.map((each) => (
-          <ProjectSimple
-            key={each.idx}
-            initialTitle={each.title}
-            initialDescription={each.description}
-            initialImage={projectImg}
-            isEditMode={isEditMode}
-          />
-        ))}
-      </ProjectSimpleList>
+      <ProjectList />
     </ProjectsPage>
-
-
   );
 }
 const ProjectsPage = styled.div`
@@ -53,12 +44,5 @@ const ProjectsPage = styled.div`
     display: none;
   }
 `
-
-const ProjectSimpleList = styled.section`
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 export default Projects;

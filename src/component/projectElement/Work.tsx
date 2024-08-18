@@ -1,31 +1,21 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useAuthStore } from '../../shared/store';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { WorkAlignment, WorkData, convertSizeToString } from '../../shared/store/projectStore';
 
 export interface WorkProps {
-  image: string;
-  title: string;
-  description: string;
-  material: string;
-  size: string;
-  prodYear: number;
+  alignment: WorkAlignment | null;
+  data: WorkData;
 }
 
-const Work: React.FC<WorkProps> = ({
-  image: initialImage,
-  title: initialTitle,
-  description: initialDescription,
-  material: initialMaterial,
-  size: initialSize,
-  prodYear: initialProdYear
-}) => {
-  const isEditMode = useAuthStore((state) => state.isEditMode);
-  const [image, setImage] = useState(initialImage);
-  const [title, setTitle] = useState(initialTitle);
-  const [description, setDescription] = useState(initialDescription);
-  const [material, setMaterial] = useState(initialMaterial);
-  const [size, setSize] = useState(initialSize);
-  const [prodYear, setProdYear] = useState(initialProdYear);
+const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: initialData }) => {
+  const { isEditMode } = useEditMode();
+  const [image, setImage] = useState(initialData.originImgUrl);
+  const [title, setTitle] = useState(initialData.title);
+  const [description, setDescription] = useState(initialData.description);
+  const [material, setMaterial] = useState(initialData.material);
+  const [size, setSize] = useState(convertSizeToString(initialData.size));
+  const [prodYear, setProdYear] = useState(initialData.prodYear);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = () => {
@@ -92,7 +82,7 @@ const Work: React.FC<WorkProps> = ({
             <Input
               type="number"
               value={prodYear}
-              onChange={(e) => setProdYear(Number(e.target.value))}
+              onChange={(e) => setProdYear(e.target.value)}
               placeholder="Year"
             />
           </WorkInfoEdit>

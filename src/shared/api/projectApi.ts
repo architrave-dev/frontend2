@@ -1,11 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { UserData } from '../store/authStore';
-
+import { ProjectSimpleData } from '../store/projectListStore';
+import { ProjectData } from '../store/projectStore';
 
 const config = getConfig();
 
-const authApi = axios.create({
+const projectApi = axios.create({
   // baseURL: API_BASE_URL,
   baseURL: config.apiBaseUrl,
   headers: {
@@ -13,19 +13,11 @@ const authApi = axios.create({
   },
 });
 
-export interface SignUpData {
-  email: string;
-  password: string;
-  username: string;
+export interface ProjectListResponse {
+  data: ProjectSimpleData[];
 }
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  data: UserData & { authToken: string };
+export interface ProjectResponse {
+  data: ProjectData;
 }
 
 export interface ErrorResponse {
@@ -33,18 +25,18 @@ export interface ErrorResponse {
   timestamp: string;
 }
 
-export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
+export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
   try {
-    const response = await authApi.post<AuthResponse>('/api/v1/auth/signin', data);
+    const response = await projectApi.get<ProjectListResponse>('/api/v1/project/list?aui=' + aui);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
   }
 };
 
-export const login = async (data: LoginData): Promise<AuthResponse> => {
+export const getProjectDetail = async (aui: string, title: string): Promise<ProjectResponse> => {
   try {
-    const response = await authApi.post<AuthResponse>('/api/v1/auth/login', data);
+    const response = await projectApi.get<ProjectResponse>(`/api/v1/project?aui=${aui}&title=${title}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -61,4 +53,7 @@ const handleApiError = (error: unknown): Error => {
   return new Error('An unexpected error occurred');
 };
 
-export default authApi;
+export default projectApi;
+
+
+

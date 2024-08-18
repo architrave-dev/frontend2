@@ -2,37 +2,52 @@ import React from 'react';
 import styled from 'styled-components';
 import Work, { WorkProps } from './Work';
 import TextBox, { TextBoxProps } from './TextBox';
-import Divider, { DividerProps } from '../../shared/Divider';
+import Divider, { DividerProps, DividerType } from '../../shared/Divider';
 import Work2 from './Work2';
-import { useAuthStore } from '../../shared/store';
+import { TextBoxAlignment, TextBoxData, WorkAlignment, WorkData } from '../../shared/store/projectStore';
 
 export enum ProjectElementType {
-  WORK = 'Work',
-  TEXTBOX = 'TextBox',
-  DIVIDER = 'Divider'
+  WORK = 'WORK',
+  TEXTBOX = 'TEXTBOX',
+  DIVIDER = 'DIVIDER'
 }
 
 export type ProjectElementProps = {
-  type: ProjectElementType;
-  content: WorkProps | TextBoxProps | DividerProps;
+  id: string;
+  projectElementType: ProjectElementType;
+  // order: string;
+  work: WorkData | null;
+  workAlignment: WorkAlignment | null;
+  textBox: TextBoxData | null;
+  textBoxAlignment: TextBoxAlignment | null;
+  dividerType: DividerType | null;
 };
 
-const ProjectElement: React.FC<ProjectElementProps> = ({ type, content }) => {
+const ProjectElement: React.FC<ProjectElementProps> = ({
+  id,
+  projectElementType,
+  // order,
+  work,
+  workAlignment,
+  textBox,
+  textBoxAlignment,
+  dividerType
+}) => {
   const contentRouter = () => {
-    switch (type) {
+    switch (projectElementType) {
       case ProjectElementType.WORK:
-        return <Work {...(content as WorkProps)} />;
+        return work && <Work alignment={workAlignment} data={work} />;
       case ProjectElementType.TEXTBOX:
-        return <TextBox {...(content as TextBoxProps)} />;
+        return textBox && <TextBox alignment={textBoxAlignment} data={textBox} />;
       case ProjectElementType.DIVIDER:
-        return <Divider {...(content as DividerProps)} />;
+        return dividerType && <Divider dividerType={dividerType} />;
       default:
         return null;
     }
   }
 
   return (
-    <ProjectElementListWrapper $elementType={type}>
+    <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
     </ProjectElementListWrapper>
   );

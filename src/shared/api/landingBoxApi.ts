@@ -1,11 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { UserData } from '../store/authStore';
+import { LandingBoxData } from '../store/landingBoxStore';
 
 
 const config = getConfig();
 
-const authApi = axios.create({
+const langindBoxApi = axios.create({
   // baseURL: API_BASE_URL,
   baseURL: config.apiBaseUrl,
   headers: {
@@ -13,19 +13,9 @@ const authApi = axios.create({
   },
 });
 
-export interface SignUpData {
-  email: string;
-  password: string;
-  username: string;
-}
 
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  data: UserData & { authToken: string };
+export interface LandingBoxResponse {
+  data: LandingBoxData;
 }
 
 export interface ErrorResponse {
@@ -33,18 +23,18 @@ export interface ErrorResponse {
   timestamp: string;
 }
 
-export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
+export const getLandingBox = async (data: string): Promise<LandingBoxResponse> => {
   try {
-    const response = await authApi.post<AuthResponse>('/api/v1/auth/signin', data);
+    const response = await langindBoxApi.get<LandingBoxResponse>('/api/v1/landing-box?aui=' + data);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
   }
 };
 
-export const login = async (data: LoginData): Promise<AuthResponse> => {
+export const updateLandingBox = async (data: LandingBoxData): Promise<LandingBoxResponse> => {
   try {
-    const response = await authApi.post<AuthResponse>('/api/v1/auth/login', data);
+    const response = await langindBoxApi.post<LandingBoxResponse>('/api/v1/landing-box', data);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -61,4 +51,4 @@ const handleApiError = (error: unknown): Error => {
   return new Error('An unexpected error occurred');
 };
 
-export default authApi;
+export default langindBoxApi;

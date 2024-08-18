@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 
-interface ProjectTitleProps {
-  initialTitle: string;
-  isEditMode: boolean;
-}
 
-const ProjectTitle: React.FC<ProjectTitleProps> = ({ initialTitle, isEditMode }) => {
-  const [title, setTitle] = useState(initialTitle);
+
+const ProjectTitle: React.FC = () => {
+  const { isEditMode } = useEditMode();
+  const { isLoading, project } = useProjectDetail();
+  const [title, setTitle] = useState(project?.title);
+
+  useEffect(() => {
+    if (project) {
+      setTitle(project.title);
+    }
+  }, [project]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);

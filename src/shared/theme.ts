@@ -11,7 +11,7 @@ const theme: DefaultTheme = {
     color_Alpha_01: 'rgba(0, 0, 0, 0.6)',
     color_Alpha_02: 'rgba(0, 0, 0, 0.2)',
     color_Alpha_03: 'rgba(255, 255, 255, 0.3)',
-    color_alert_red: '#ff0000'
+    color_alert_red: '#FA4545'
   },
   fontSize: {
     font_H01: '68px',

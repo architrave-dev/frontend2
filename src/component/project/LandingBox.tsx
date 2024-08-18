@@ -1,22 +1,45 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { uploadToS3 } from '../shared/aws/s3Upload';
-import { useAuthStore, useLandingBoxStore } from '../shared/store';
+import { uploadToS3 } from '../../shared/aws/s3Upload';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useLandingBox } from '../../shared/hooks/useLandingBox';
+import defaultImg from '../../asset/project/launches_header_desktop.jpg';
+import { useAui } from '../../shared/hooks/useAui';
+
 
 const LandingBox: React.FC = () => {
-  const { isEditMode } = useAuthStore();
-  const {
-    title,
-    description,
-    backgroundImageUrl,
-    setTitle,
-    setDescription,
-    setBackgroundImageUrl
-  } = useLandingBoxStore();
+  const { isEditMode } = useEditMode();
+  const { isLoading, landingBox, getLandingBox, updateLandingBox } = useLandingBox();
 
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [title, setTitle] = useState(landingBox?.title);
+  const [description, setDescription] = useState(landingBox?.description);
+  const [backgroundImageUrl, setBackgroundImageUrl] = useState(landingBox?.originUrl);
 
+  const { aui } = useAui();
+
+  useEffect(() => {
+    if (!aui) return;
+    try {
+      getLandingBox(aui);
+    } catch (error) {
+      console.error('get LandingBox failed:', error);
+    }
+  }, [aui]);
+
+  useEffect(() => {
+    if (landingBox) {
+      setTitle(landingBox.title);
+      setDescription(landingBox.description);
+      setBackgroundImageUrl(landingBox.originUrl);
+    }
+  }, [landingBox]);
+
+
+  if (!landingBox) {
+    return null;
+  }
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -26,7 +49,6 @@ const LandingBox: React.FC = () => {
         setBackgroundImageUrl(imageUrl);
       } catch (error) {
         console.error("Error uploading image:", error);
-        // Handle error (e.g., show error message to user)
       } finally {
         setIsUploading(false);
       }
@@ -46,7 +68,7 @@ const LandingBox: React.FC = () => {
   };
 
   return (
-    <Container $backgroundimage={backgroundImageUrl}>
+    <Container $backgroundimage={backgroundImageUrl ? backgroundImageUrl : defaultImg}>
       {isEditMode ? (
         <>
           <ReplaceImageButton onClick={triggerFileInput} disabled={isUploading}>

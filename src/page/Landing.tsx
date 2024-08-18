@@ -5,17 +5,12 @@ import LandingLogo from '../component/LandingLogo';
 import Space from '../shared/Space';
 
 const Landing: React.FC = () => {
-  const handleSearch = (query: string) => {
-    console.log('Searching for:', query);
-  };
-
   return (
     <LandingContainer>
       <LandingLogo />
       <Space />
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar />
     </LandingContainer>
-
   );
 }
 
