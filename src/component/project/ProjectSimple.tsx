@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
+// import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAui } from '../../shared/hooks/useAui';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
   // onSave 
 }) => {
   const { aui } = useAui();
-  const { isEditMode } = useEditMode();
+  const isEditMode = false;
   const navigate = useNavigate();
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
