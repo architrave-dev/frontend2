@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { ProjectData, useProjectStore } from '../store/projectStore';
-import { ProjectResponse, getProjectDetail } from '../api/projectApi';
+import { ProjectResponse, UpdateProjectReq, getProjectDetail, updateProject } from '../api/projectApi';
 
 
 interface UseProjectResult {
   isLoading: boolean;
   error: string | null;
   project: ProjectData | null;
-  getProjectDetail: (aui: string, title: string) => Promise<void>;
+  getProject: (aui: string, title: string) => Promise<void>;
+  updateProject: (aui: string, data: UpdateProjectReq) => Promise<void>;
 }
 
 export const useProjectDetail = (): UseProjectResult => {
@@ -22,15 +23,21 @@ export const useProjectDetail = (): UseProjectResult => {
     setProject(projectData);
   };
 
-  const handleProjectRequest = async <T extends string[]>(
-    projectFunction: (...args: T) => Promise<ProjectResponse>,
-    ...data: T
+  const handleProjectRequest = async (
+    aui: string,
+    title: string | null,
+    data?: UpdateProjectReq
   ) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await projectFunction(...data);
-      handleProjectSuccess(response);
+      if (data) {
+        const response = await updateProject(aui, data);
+        handleProjectSuccess(response);
+      } else if (title) {
+        const response = await getProjectDetail(aui, title);
+        handleProjectSuccess(response);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
@@ -38,13 +45,15 @@ export const useProjectDetail = (): UseProjectResult => {
     }
   };
 
-  const getProjectDetailHandler = (aui: string, title: string) => handleProjectRequest(getProjectDetail, aui, title);
+  const getProjectHandler = (aui: string, title: string) => handleProjectRequest(aui, title);
+  const updateProjectHandler = (aui: string, data: UpdateProjectReq) => handleProjectRequest(aui, null, data);
 
 
   return {
     isLoading,
     error,
     project,
-    getProjectDetail: getProjectDetailHandler
+    getProject: getProjectHandler,
+    updateProject: updateProjectHandler
   };
 };

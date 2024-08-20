@@ -21,8 +21,39 @@ export interface ProjectResponse {
 }
 
 export interface ErrorResponse {
-  message: string;
+  errorCode: string;
   timestamp: string;
+}
+
+export interface CreateProjectInfoReq {
+  customName: string;
+  customValue: string;
+}
+
+export interface UpdatedProjectInfoReq {
+  id: string;
+  customName: string;
+  customValue: string;
+}
+
+export interface RemoveProjectInfoReq {
+  id: string;
+}
+
+
+export interface UpdateProjectReq {
+  id: string;
+  originUrl?: string;
+  thumbnailUrl?: string;
+  title?: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+  supportedBy?: string;
+  createdProjectInfoList?: CreateProjectInfoReq[];
+  updatedProjectInfoList?: UpdatedProjectInfoReq[];
+  removedProjectInfoList?: RemoveProjectInfoReq[];
+  isDeleted: boolean;
 }
 
 export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
@@ -43,11 +74,26 @@ export const getProjectDetail = async (aui: string, title: string): Promise<Proj
   }
 };
 
+export const updateProject = async (aui: string, data: UpdateProjectReq): Promise<ProjectResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await projectApi.put<ProjectResponse>(`/api/v1/project?aui=${aui}`, data, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
 const handleApiError = (error: unknown): Error => {
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError<ErrorResponse>;
     if (axiosError.response?.data) {
-      return new Error(axiosError.response.data.message);
+      return new Error(axiosError.response.data.errorCode);
     }
   }
   return new Error('An unexpected error occurred');

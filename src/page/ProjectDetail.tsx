@@ -31,13 +31,13 @@ const ProjectDetail: React.FC = () => {
   }, [user]);
 
   const { aui } = useAui();
-  const { isLoading, project, getProjectDetail } = useProjectDetail();
+  const { isLoading, project, getProject } = useProjectDetail();
 
   useEffect(() => {
     const getProjectWithApi = async () => {
       if (aui && projectTitle) {
         try {
-          await getProjectDetail(aui, projectTitle);
+          await getProject(aui, projectTitle);
         } catch (error) {
           console.error('get ProjectDetail failed:', error);
         }
@@ -53,7 +53,6 @@ const ProjectDetail: React.FC = () => {
 
   return (
     <ProjectDetailPage>
-      <RepresentImg />
       <ProjectDetailContainer />
       <ProjectElementList />
     </ProjectDetailPage>
