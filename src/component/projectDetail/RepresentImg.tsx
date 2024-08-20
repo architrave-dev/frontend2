@@ -1,27 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
+import { uploadToS3 } from '../../shared/aws/s3Upload';
 
+interface ProjectTitleProps {
+  backgroundImg: string;
+  setBackgroundImg: (value: string) => void;
+}
 
-
-const RepresentImg: React.FC = () => {
+const RepresentImg: React.FC<ProjectTitleProps> = ({
+  backgroundImg, setBackgroundImg
+}) => {
   const { isEditMode } = useEditMode();
-  const { isLoading, project } = useProjectDetail();
-  const [backgroundImg, setBackgroundImg] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (project) {
-      setBackgroundImg(project.originUrl);
-    }
-  }, [project]);
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      // setBackgroundImg(imageUrl);
+      setIsUploading(true);
+      try {
+        const imageUrl = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!);
+        setBackgroundImg(imageUrl);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -35,7 +40,7 @@ const RepresentImg: React.FC = () => {
       {isEditMode && (
         <>
           <ReplaceImgButton onClick={triggerFileInput}>
-            이미지 교체
+            {isUploading ? 'Uploading...' : 'Replace Image'}
           </ReplaceImgButton>
           <HiddenFileInput
             type="file"
