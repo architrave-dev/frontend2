@@ -1,62 +1,45 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useProjectInfoListStore } from '../../shared/store/projectInfoListStore';
+import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 
 interface ProjectInfoTempProps {
-  index: number;
+  tempId: string;
   initialCustomName: string;
   initialCustomValue: string;
 }
 
 const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
+  tempId,
   initialCustomName,
-  initialCustomValue,
-  index
+  initialCustomValue
 }) => {
-  const { createInfoList, setCreateInfoList } = useProjectInfoListStore();
+  const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
 
-  const [customName, setCustomName] = useState(initialCustomName);
-  const [customValue, setCustomValue] = useState(initialCustomValue);
 
-  const updateCreateInfoList = (name: string, value: string) => {
-    const updatedCreateInfoList = createInfoList.map((item, idx) => {
-      if (idx === index) {
-        return { customName: name, customValue: value };
-      } else {
-        return item;
-      }
-    });
-    setCreateInfoList(updatedCreateInfoList);
-  };
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = e.target.value;
-    setCustomName(newName);
-    updateCreateInfoList(newName, customValue);
-  };
-
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setCustomValue(newValue);
-    updateCreateInfoList(customName, newValue);
-  };
+  const handlechange = (field: keyof CreateProjectInfoReq, value: string) => {
+    const newCreateInfoList: CreateProjectInfoReq[] = createInfoList.map(each =>
+      each.tempId === tempId ? { ...each, [field]: value } : each
+    )
+    setCreateInfoList(newCreateInfoList);
+  }
 
   const handleDelete = () => {
-    const filteredList = createInfoList.filter((_, idx) => idx !== index);
+    const filteredList = createInfoList.filter((each) => each.tempId !== tempId);
     setCreateInfoList(filteredList);
   };
 
   return (
     <ProjectInfoItem>
       <NameInput
-        value={customName}
-        onChange={handleNameChange}
+        value={initialCustomName}
+        onChange={(e) => handlechange("customName", e.target.value)}
         placeholder="Enter name"
       />
       <ValueInput
-        value={customValue}
-        onChange={handleValueChange}
+        value={initialCustomValue}
+        onChange={(e) => handlechange("customValue", e.target.value)}
         placeholder="Enter value"
       />
       <DeleteButton onClick={handleDelete}>

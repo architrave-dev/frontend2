@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useProjectInfoListStore } from '../../shared/store/projectInfoListStore';
+import { ProjectInfoData, useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { RemoveProjectInfoReq } from '../../shared/api/projectApi';
+import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/api/projectApi';
 
 interface ProjectInfoProps {
   projectInfoId: string;
@@ -15,21 +15,37 @@ const ProjectInfoFlex: React.FC<ProjectInfoProps> = ({
   initialCustomName,
   initialCustomValue }) => {
   const { isEditMode } = useEditMode();
-  const { projectInfoList, setProjectInfoList, removeInfoList, setRemoveInfoList } = useProjectInfoListStore();
+  const { projectInfoList, setProjectInfoList } = useProjectInfoListStore();
+  const { updateInfoList, setUpdateInfoList, removeInfoList, setRemoveInfoList } = useProjectInfoListStoreForUpdate();
   const [isDeleted, setIsDeleted] = useState(false);
-  const handlechangeName = (value: string) => {
-    const updatedProjectInfoList = projectInfoList.map(each =>
-      each.id === projectInfoId ? { ...each, customName: value } : each
-    );
+
+
+  const handlechange = (field: keyof UpdatedProjectInfoReq, value: string) => {
+
+    const targetElement = updateInfoList.find(info => info.id === projectInfoId);
+    if (targetElement) {
+      //updateInfoList에 있다면
+      const updatedProjectInfoList = updateInfoList.map(each =>
+        each.id === projectInfoId ? { ...each, [field]: value } : each
+      )
+      setUpdateInfoList(updatedProjectInfoList);
+    } else {
+      //updateInfoList에 없다면
+      const target = projectInfoList.find(info => info.id === projectInfoId);
+      if (!target) return;
+
+      const newUpdatedProjectInfoReq: UpdatedProjectInfoReq = {
+        ...target,
+        [field]: value
+      };
+      setUpdateInfoList([...updateInfoList, newUpdatedProjectInfoReq]);
+    }
+    const updatedProjectInfoList: ProjectInfoData[] = projectInfoList.map(each =>
+      each.id === projectInfoId ? { ...each, [field]: value } : each
+    )
     setProjectInfoList(updatedProjectInfoList);
   }
 
-  const handlechangeValue = (value: string) => {
-    const updatedProjectInfoList = projectInfoList.map(each =>
-      each.id === projectInfoId ? { ...each, customValue: value } : each
-    );
-    setProjectInfoList(updatedProjectInfoList);
-  }
 
   const handleDelete = () => {
     setIsDeleted(true);
@@ -43,11 +59,11 @@ const ProjectInfoFlex: React.FC<ProjectInfoProps> = ({
         <>
           <NameInput
             value={initialCustomName}
-            onChange={(e) => handlechangeName(e.target.value)}
+            onChange={(e) => handlechange("customName", e.target.value)}
           />
           <ValueInput
             value={initialCustomValue}
-            onChange={(e) => handlechangeValue(e.target.value)}
+            onChange={(e) => handlechange("customValue", e.target.value)}
           />
           <DeleteButton onClick={handleDelete} disabled={isDeleted}>
             Delete
@@ -107,8 +123,6 @@ const DeleteButton = styled.button`
     cursor: not-allowed;
   }
 `;
-
-
 
 const NameSection = styled.div`
   width: 18vw;

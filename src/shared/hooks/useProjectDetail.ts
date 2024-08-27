@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ProjectData, useProjectStore } from '../store/projectStore';
 import { ProjectResponse, UpdateProjectReq, getProjectDetail, updateProject } from '../api/projectApi';
+import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../store/projectInfoListStore';
 
 
 interface UseProjectResult {
@@ -15,12 +16,16 @@ export const useProjectDetail = (): UseProjectResult => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { project, setProject } = useProjectStore();
+  const { setProjectInfoList } = useProjectInfoListStore()
+  const { clearAll } = useProjectInfoListStoreForUpdate()
 
 
   const handleProjectSuccess = (response: ProjectResponse) => {
     const projectData = response.data;
     console.log("projectData from useProjectDetail: ", projectData);
     setProject(projectData);
+    setProjectInfoList(projectData.projectInfoList);
+    clearAll();
   };
 
   const handleProjectRequest = async (

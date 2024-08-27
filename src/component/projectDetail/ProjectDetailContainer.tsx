@@ -8,11 +8,11 @@ import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import { UpdateProjectReq } from '../../shared/api/projectApi';
 import { useAui } from '../../shared/hooks/useAui';
 import RepresentImg from './RepresentImg';
-import { useProjectInfoListStore } from '../../shared/store/projectInfoListStore';
+import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { ProjectData } from '../../shared/store/projectStore';
 
 const ProjectDetailContainer: React.FC = () => {
-  const { isEditMode } = useEditMode();
+  const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
   const { isLoading, error, project, updateProject } = useProjectDetail();
   const [title, setTitle] = useState("");
@@ -21,7 +21,7 @@ const ProjectDetailContainer: React.FC = () => {
   const [supportedBy, setSupprotedBy] = useState("");
   const [date, setDate] = useState("");
 
-  const { projectInfoList, setProjectInfoList, createInfoList, removeInfoList } = useProjectInfoListStore();
+  const { createInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
 
   const removeTime = (localDateTime: string): string => {
     return localDateTime.split('T')[0];
@@ -50,12 +50,13 @@ const ProjectDetailContainer: React.FC = () => {
       endDate: date.split(" ~ ")[1],
       supportedBy: supportedBy,
       createdProjectInfoList: createInfoList,
-      updatedProjectInfoList: projectInfoList,
+      updatedProjectInfoList: updateInfoList,
       removedProjectInfoList: removeInfoList,
       isDeleted: false,
     };
 
     await updateProject(aui, updatedData);
+    setEditMode(false);
   };
 
   // const isChanged = (initialData: ProjectData, currentData: UpdateProjectReq): boolean => {
@@ -70,7 +71,7 @@ const ProjectDetailContainer: React.FC = () => {
       endDate: date.split(" ~ ")[1],
       supportedBy: supportedBy,
       createdProjectInfoList: createInfoList,
-      updatedProjectInfoList: projectInfoList,
+      updatedProjectInfoList: updateInfoList,
       removedProjectInfoList: removeInfoList,
       isDeleted: false
     };
@@ -80,20 +81,20 @@ const ProjectDetailContainer: React.FC = () => {
       initialData.startDate !== currentData.startDate ||
       initialData.endDate !== currentData.endDate ||
       initialData.supportedBy !== currentData.supportedBy ||
-      initialData.projectInfoList !== currentData.updatedProjectInfoList ||
       (currentData.createdProjectInfoList?.length ?? 0) > 0 ||
+      (currentData.updatedProjectInfoList?.length ?? 0) > 0 ||
       (currentData.removedProjectInfoList?.length ?? 0) > 0
     );
   };
 
 
   return (
-    <>
+    <ProjectDetailContainerComp>
       {isEditMode && project && isChanged(project) ?
         <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
       }
       <RepresentImg backgroundImg={backgroundImageUrl} setBackgroundImg={setBackgroundImageUrl} />
-      <ProjectDetailContainerComp>
+      <ProjectDetailWrapper>
         <ProjectTitle title={title} setTitle={setTitle} />
         <Divider dividerType={DividerType.PLAIN} />
         <ProjectInfoList
@@ -102,12 +103,15 @@ const ProjectDetailContainer: React.FC = () => {
           supportedBy={supportedBy}
           setSupportedBy={setSupprotedBy}
         />
-      </ProjectDetailContainerComp>
-    </>
+      </ProjectDetailWrapper>
+    </ProjectDetailContainerComp>
   );
 }
 
 const ProjectDetailContainerComp = styled.section`
+  position: relative;
+`;
+const ProjectDetailWrapper = styled.article`
   padding: calc(8vh) calc(10vw);
 `;
 

@@ -4,8 +4,9 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import ProjectInfo from '../../component/projectDetail/ProjectInfo';
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectInfoFlex from './ProjectInfoFlex';
-import { useProjectInfoListStore } from '../../shared/store/projectInfoListStore';
+import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import ProjectInfoTemp from './ProjectInfoTemp';
+import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 
 interface ProjectInfoListProps {
   date: string;
@@ -19,21 +20,28 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
 ) => {
   const { isEditMode } = useEditMode();
   const { isLoading, project } = useProjectDetail();
-  const { projectInfoList, setProjectInfoList, createInfoList, setCreateInfoList } = useProjectInfoListStore();
-
-  useEffect(() => {
-    if (project) {
-      setProjectInfoList(project.projectInfoList);
-    }
-  }, [project]);
+  const { projectInfoList } = useProjectInfoListStore();
+  const { createInfoList, setCreateInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
 
   const handleCreateInfo = () => {
-    const newInfo = {
+    const newInfo: CreateProjectInfoReq = {
+      tempId: Math.floor(Math.random() * 100) + "",
       customName: 'New Info',
       customValue: 'New value'
     };
     setCreateInfoList([...createInfoList, newInfo]);
   };
+
+  useEffect(() => {
+    console.log("================================= start");
+    console.log("projectInfoList: ", projectInfoList);
+    console.log("createInfoList: ", createInfoList);
+    console.log("updateInfoList: ", updateInfoList);
+    console.log("removeInfoList: ", removeInfoList);
+    console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end");
+
+  }, [projectInfoList, createInfoList, updateInfoList, removeInfoList]);
+
 
   return (
     <ProjectInfoListComp>
@@ -61,15 +69,14 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
           initialCustomValue={each.customValue}
         />
       ))}
-
       {isEditMode && (
         <>
-          {createInfoList.map((newInfo, index) => (
+          {createInfoList.map((each) => (
             <ProjectInfoTemp
-              key={`new-${index}`}
-              initialCustomName={newInfo.customName}
-              initialCustomValue={newInfo.customValue}
-              index={index}
+              key={each.tempId}
+              tempId={each.tempId}
+              initialCustomName={each.customName}
+              initialCustomValue={each.customValue}
             />
           ))}
           <CreateButton onClick={handleCreateInfo}>

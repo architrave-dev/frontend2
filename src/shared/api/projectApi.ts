@@ -26,6 +26,7 @@ export interface ErrorResponse {
 }
 
 export interface CreateProjectInfoReq {
+  tempId: string;
   customName: string;
   customValue: string;
 }
