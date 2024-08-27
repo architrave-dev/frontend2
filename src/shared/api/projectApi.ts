@@ -16,6 +16,9 @@ const projectApi = axios.create({
 export interface ProjectListResponse {
   data: ProjectSimpleData[];
 }
+export interface CreatedProjectResponse {
+  data: ProjectSimpleData;
+}
 export interface ProjectResponse {
   data: ProjectData;
 }
@@ -57,6 +60,13 @@ export interface UpdateProjectReq {
   isDeleted: boolean;
 }
 
+export interface CreateProjectReq {
+  originUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  description: string;
+}
+
 export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
   try {
     const response = await projectApi.get<ProjectListResponse>('/api/v1/project/list?aui=' + aui);
@@ -82,6 +92,21 @@ export const updateProject = async (aui: string, data: UpdateProjectReq): Promis
       throw new Error('Authentication required');
     }
     const response = await projectApi.put<ProjectResponse>(`/api/v1/project?aui=${aui}`, data, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+export const createProject = async (aui: string, data: CreateProjectReq): Promise<CreatedProjectResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await projectApi.post<ProjectResponse>(`/api/v1/project?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

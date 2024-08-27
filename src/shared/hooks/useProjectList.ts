@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { ProjectSimpleData, useProjectListStore } from '../store/projectListStore';
-import { ProjectListResponse, ProjectResponse, getProjectList } from '../api/projectApi';
+import { CreateProjectReq, CreatedProjectResponse, ProjectListResponse, ProjectResponse, createProject, getProjectList } from '../api/projectApi';
 
 
 interface UseProjectListResult {
   isLoading: boolean;
   error: string | null;
   projects: ProjectSimpleData[];
-  getProjectList: (data: string) => Promise<void>;
+  getProjectList: (aui: string) => Promise<void>;
+  createProject: (aui: string, data: CreateProjectReq) => Promise<void>;
 }
 
 export const useProjectList = (): UseProjectListResult => {
@@ -21,15 +22,26 @@ export const useProjectList = (): UseProjectListResult => {
     setProjects(projectListData);
   };
 
-  const handleProjectRequest = async <T extends string>(
-    projectFunction: (data: T) => Promise<ProjectListResponse>,
-    data: T
+  const handleCreateProjectSuccess = (response: CreatedProjectResponse) => {
+    const createdProjectData = response.data;
+    console.log("projectData from useProjectList: ", createdProjectData);
+    setProjects([...projects, createdProjectData]);
+  };
+
+  const handleProjectRequest = async (
+    aui: string,
+    data?: CreateProjectReq
   ) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await projectFunction(data);
-      handleProjectListSuccess(response);
+      if (data) {
+        const response = await createProject(aui, data);
+        handleCreateProjectSuccess(response);
+      } else {
+        const response = await getProjectList(aui);
+        handleProjectListSuccess(response);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
@@ -38,7 +50,8 @@ export const useProjectList = (): UseProjectListResult => {
   };
 
 
-  const getProjectListHandler = (aui: string) => handleProjectRequest(getProjectList, aui);
+  const getProjectListHandler = (aui: string) => handleProjectRequest(aui);
+  const createProjectHandler = (aui: string, data: CreateProjectReq) => handleProjectRequest(aui, data);
 
 
   return {
@@ -46,5 +59,6 @@ export const useProjectList = (): UseProjectListResult => {
     error,
     projects,
     getProjectList: getProjectListHandler,
+    createProject: createProjectHandler
   };
 };
