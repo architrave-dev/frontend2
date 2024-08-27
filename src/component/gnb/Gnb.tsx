@@ -22,6 +22,9 @@ const Gnb: React.FC = () => {
 }
 
 const GnbSection = styled.section`
+  position: absolute;
+  top: 0px;
+  z-index: 2;
   width: 100%;
   height: calc(10vh);
   max-height: 140px;
@@ -29,9 +32,10 @@ const GnbSection = styled.section`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px 100px 0px 100px;
+  padding: 0px 6vw;
 
-  background-color: #F6B99D;  /*for dev*/
+  background-color: transparent;
+  // background-color: #F6B99D;  /*for dev*/
 `;
 
 export default Gnb;

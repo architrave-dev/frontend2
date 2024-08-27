@@ -1,21 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAui } from '../../shared/hooks/useAui';
 
-const navItems = [
-  { path: '/projects', label: 'Projects' },
-  { path: '/works', label: 'Works' },
-  { path: '/about', label: 'About' },
-];
+
 
 
 const Navigation: React.FC = () => {
+  const { aui } = useAui();
+  const location = useLocation();
+
+  const navItems = [
+    { path: `/${aui}/projects`, label: 'Projects' },
+    { path: `/${aui}/works`, label: 'Works' },
+    { path: `/${aui}/about`, label: 'About' },
+  ];
+
   return (
     <NavigationComp>
       <NavList>
         {navItems.map((item) => (
           <NavItem key={item.path}>
-            <StyledLink to={item.path}>{item.label}</StyledLink>
+            <StyledLink
+              to={item.path}
+              $isActive={location.pathname === item.path}
+            >{item.label}</StyledLink>
           </NavItem>
         ))}
       </NavList>
@@ -24,7 +33,7 @@ const Navigation: React.FC = () => {
 }
 
 const NavigationComp = styled.nav`
-  width: calc(50vw);
+  width: calc(62vw);
   
   display: flex;
   align-items: center;
@@ -42,8 +51,8 @@ const NavItem = styled.li`
   font-size: ${({ theme }) => theme.fontSize.font_B01};
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
+const StyledLink = styled(Link) <{ $isActive: boolean }>`
+  text-decoration: ${({ $isActive }) => $isActive ? 'underline' : 'none'};
 
   &:hover {
     text-decoration: ${({ theme }) => theme.fontWeight.decoration};

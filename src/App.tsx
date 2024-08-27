@@ -31,6 +31,7 @@ const App: React.FC = () => {
 
 
 const AppComp = styled.div`
+  position: relative;
   height: 100vh;
   display: flex;
   flex-direction: column;

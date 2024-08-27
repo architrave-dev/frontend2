@@ -39,15 +39,15 @@ const UserComp: React.FC = () => {
 
   return (
     <UserArticle>
+      <ArtistName onClick={handleUserAction}>
+        {extractUsernameFromAui(aui)}
+      </ArtistName>
       {user && user.aui === aui && (
         <EditToggle
           onClick={toggleEditMode}>
           {isEditMode ? 'Complete' : 'Edit'}
         </EditToggle>
       )}
-      <ArtistName onClick={handleUserAction}>
-        {extractUsernameFromAui(aui)}
-      </ArtistName>
     </UserArticle>
   );
 }
@@ -57,6 +57,7 @@ const UserArticle = styled.article`
   max-width: 100px;
 
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between; 
 
