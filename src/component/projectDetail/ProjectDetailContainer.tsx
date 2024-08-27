@@ -26,14 +26,25 @@ const ProjectDetailContainer: React.FC = () => {
   const removeTime = (localDateTime: string): string => {
     return localDateTime.split('T')[0];
   }
+  const getToday = (): string => {
+    const now = new Date();
+    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const formattedDate = date.toISOString().split('T')[0]; // '0000-00-00' 형식으로 포맷팅
+    return formattedDate;
+  }
 
   useEffect(() => {
+
     if (project) {
       setTitle(project.title);
       setDescription(project.description);
       setBackgroundImageUrl(project.originUrl);
-      setSupprotedBy(project.supportedBy);
-      setDate(removeTime(project.startDate) + " ~ " + removeTime(project.endDate))
+      setSupprotedBy(project.supportedBy ? project.supportedBy : ' ');
+      setDate(
+        (project.startDate && project.endDate) ?
+          removeTime(project.startDate) + " ~ " + removeTime(project.endDate)
+          : getToday() + ' ~ ' + getToday()
+      )
     }
   }, [project]);
 

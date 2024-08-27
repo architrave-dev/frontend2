@@ -71,6 +71,18 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
       ))}
       {isEditMode && (
         <>
+          <ProjectInfo
+            initialCustomName="Date"
+            initialCustomValue={date}
+            changeValue={setDate}
+            isEditMode={isEditMode}
+          />
+          <ProjectInfo
+            initialCustomName="Support"
+            initialCustomValue={supportedBy}
+            changeValue={setSupportedBy}
+            isEditMode={isEditMode}
+          />
           {createInfoList.map((each) => (
             <ProjectInfoTemp
               key={each.tempId}

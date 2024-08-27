@@ -34,9 +34,12 @@ const ProjectList: React.FC = () => {
       title: 'new_Project',
       description: 'This is a new project.'
     };
-
-    await createProject(aui, newDummyProject);
-    navigate(`/${aui}/projects/new_Project`);
+    try {
+      await createProject(aui, newDummyProject);
+      navigate(`/${aui}/projects/new_Project`);
+    } catch (error) {
+      console.error('create Project failed:', error);
+    }
   };
 
   return (
