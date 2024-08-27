@@ -8,7 +8,7 @@ import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import { UpdateProjectReq } from '../../shared/api/projectApi';
 import { useAui } from '../../shared/hooks/useAui';
 import RepresentImg from './RepresentImg';
-import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
+import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { ProjectData } from '../../shared/store/projectStore';
 
 const ProjectDetailContainer: React.FC = () => {
@@ -34,7 +34,6 @@ const ProjectDetailContainer: React.FC = () => {
   }
 
   useEffect(() => {
-
     if (project) {
       setTitle(project.title);
       setDescription(project.description);

@@ -9,7 +9,7 @@ import { LandingBoxData } from '../../shared/store/landingBoxStore';
 
 
 const LandingBox: React.FC = () => {
-  const { isEditMode } = useEditMode();
+  const { isEditMode, setEditMode } = useEditMode();
   const { isLoading, landingBox, getLandingBox, updateLandingBox } = useLandingBox();
 
   const [isUploading, setIsUploading] = useState(false);
@@ -92,6 +92,7 @@ const LandingBox: React.FC = () => {
     };
 
     await updateLandingBox(aui, updatedData);
+    setEditMode(false);
   };
 
   return (

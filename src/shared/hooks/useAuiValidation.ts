@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAui } from './useAui';
+import { useMember } from './useMember';
 
 
 const isValidAui = (AUI: string | undefined): boolean => {
@@ -14,22 +15,32 @@ export const useAuiValidation = (AUI: string | undefined) => {
   const navigate = useNavigate();
   const location = useLocation();
   const errorRoute = '/error';
+  const { error, checkAui } = useMember();
 
   useEffect(() => {
-    if (location.pathname !== '/' && !isValidAui(AUI)) {
-      console.error("Invalid AUI:", AUI);
-      navigate(errorRoute);
-    } else {
-      // 여기서 API를 통해서 해당 AUI가 유효한지 확인해야해. // Todo
-      try {
-        // getMember(AUI);
-        setOwnerAui(AUI);
-      } catch (err) {
-        // 유효하지 않은 AUI면 /error 로 이동
+    const handleAui = async () => {
+      if (AUI === undefined) {
+        navigate('/');
+        return;
+      }
+      if (location.pathname !== '/' && !isValidAui(AUI)) {
+        console.error("Invalid AUI:", AUI);
         navigate(errorRoute);
+        return;
+      } else {
+        await checkAui(AUI);
+        setOwnerAui(AUI);
       }
     }
+    handleAui();
   }, [AUI, location.pathname, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      navigate('/');
+    }
+
+  }, [error]);
 
   return AUI;
 };

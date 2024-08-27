@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import RepresentImg from '../component/projectDetail/RepresentImg';
 import ProjectElementList from '../component/projectDetail/ProjectElementList';
 import ProjectDetailContainer from '../component/projectDetail/ProjectDetailContainer';
 import { useParams } from 'react-router-dom';
@@ -36,11 +35,7 @@ const ProjectDetail: React.FC = () => {
   useEffect(() => {
     const getProjectWithApi = async () => {
       if (aui && projectTitle) {
-        try {
-          await getProject(aui, projectTitle);
-        } catch (error) {
-          console.error('get ProjectDetail failed:', error);
-        }
+        await getProject(aui, projectTitle);
       }
     }
     getProjectWithApi();
