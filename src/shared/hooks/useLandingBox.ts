@@ -7,8 +7,8 @@ interface UseLandingBoxResult {
   isLoading: boolean;
   error: string | null;
   landingBox: LandingBoxData | null;
-  getLandingBox: (data: string) => Promise<void>;
-  updateLandingBox: (data: LandingBoxData) => Promise<void>;
+  getLandingBox: (aui: string) => Promise<void>;
+  updateLandingBox: (aui: string, data: LandingBoxData) => Promise<void>;
 }
 
 export const useLandingBox = (): UseLandingBoxResult => {
@@ -22,15 +22,21 @@ export const useLandingBox = (): UseLandingBoxResult => {
     setLandingBox(landingBoxData);
   };
 
-  const handleLandingBoxRequest = async <T extends string | LandingBoxData>(
-    landingBoxFunction: (data: T) => Promise<LandingBoxResponse>,
-    data: T
+  const handleLandingBoxRequest = async (
+    aui: string,
+    data?: LandingBoxData
   ) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await landingBoxFunction(data);
-      handleLandingBoxSuccess(response);
+      if (!data) {
+        const response = await getLandingBox(aui);
+        handleLandingBoxSuccess(response);
+      } else {
+        const response = await updateLandingBox(aui, data);
+        handleLandingBoxSuccess(response);
+      }
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
@@ -38,8 +44,8 @@ export const useLandingBox = (): UseLandingBoxResult => {
     }
   };
 
-  const getLandingBoxHandler = (data: string) => handleLandingBoxRequest(getLandingBox, data);
-  const updateLandingBoxHandler = (data: LandingBoxData) => handleLandingBoxRequest(updateLandingBox, data);
+  const getLandingBoxHandler = (aui: string): Promise<void> => handleLandingBoxRequest(aui);
+  const updateLandingBoxHandler = (aui: string, data: LandingBoxData): Promise<void> => handleLandingBoxRequest(aui, data);
 
   return {
     isLoading,

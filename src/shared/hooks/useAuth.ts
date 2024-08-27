@@ -19,11 +19,10 @@ export const useAuth = (): UseAuthResult => {
   const { user, setUser, clearAuth } = useAuthStore();
 
   const handleAuthSuccess = (response: AuthResponse) => {
-    const { authToken, ...userData } = response.data;
-    console.log("authToken from useAuth: ", authToken); //authToken 없음
-    setUser(userData);
-    localStorage.setItem('userData', JSON.stringify(userData));
-    // localStorage.setItem('authToken', JSON.stringify(authToken));  // Todo
+    const { data, authToken } = response;
+    setUser(data);
+    localStorage.setItem('userData', JSON.stringify(data));
+    localStorage.setItem('authToken', authToken);
   };
 
 
@@ -49,6 +48,7 @@ export const useAuth = (): UseAuthResult => {
   const logout = () => {
     clearAuth();
     localStorage.removeItem('userData');
+    localStorage.removeItem('authToken');
   };
 
   return {

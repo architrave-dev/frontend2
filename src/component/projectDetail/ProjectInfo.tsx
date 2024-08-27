@@ -4,29 +4,31 @@ import styled from 'styled-components';
 interface ProjectInfoProps {
   initialCustomName: string;
   initialCustomValue: string;
+  changeValue: (value: string) => void | null;
   isEditMode: boolean;
 }
 
-const ProjectInfo: React.FC<ProjectInfoProps> = ({ initialCustomName, initialCustomValue, isEditMode }) => {
-  const [customName, setCustomName] = useState(initialCustomName);
-  const [customValue, setCustomValue] = useState(initialCustomValue);
-
+const ProjectInfo: React.FC<ProjectInfoProps> = ({
+  initialCustomName,
+  initialCustomValue,
+  changeValue,
+  isEditMode }) => {
 
   return (
     <ProjectInfoItem>
       {isEditMode ? (
         <>
           <NameInput
-            value={customName}
-            onChange={(e) => setCustomName(e.target.value)} />
+            value={initialCustomName}
+            onChange={(e) => changeValue(e.target.value)} />
           <ValueInput
-            value={customValue}
-            onChange={(e) => setCustomValue(e.target.value)} />
+            value={initialCustomValue}
+            onChange={(e) => changeValue(e.target.value)} />
         </>
       ) : (
         <>
-          <NameSection>{customName}</NameSection>
-          <ValueSection>{customValue}</ValueSection>
+          <NameSection>{initialCustomName}</NameSection>
+          <ValueSection>{initialCustomValue}</ValueSection>
         </>
       )}
     </ProjectInfoItem>

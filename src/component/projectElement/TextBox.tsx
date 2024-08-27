@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { TextBoxAlignment, TextBoxData } from '../../shared/store/projectStore';
+import { TextBoxAlignment, TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 
 
 export interface TextBoxProps {
@@ -11,45 +11,109 @@ export interface TextBoxProps {
 
 const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, data: initialData }) => {
   const { isEditMode } = useEditMode();
-  const [textBoxAlignment, setTextBoxAlignment] = useState(initialTexBoxAlignment);
-  const [content, setContent] = useState(initialData.content);
-  const [isDeleted, setIsDeleted] = useState(initialData.isDeleted);
+  const { projectElementList, setProjectElementList } = useProjectElementListStore();
+  const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleAlignmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTextBoxAlignment(e.target.value as TextBoxAlignment);
-  };
+  const handleAlignmentChange = (value: TextBoxAlignment) => {
+    const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
+    if (targetElement) {
+      //updatedProjectElements에 있다면
+      const updatedProjectElementList = updatedProjectElements.map(each =>
+        each.updateTextBoxReq?.id === initialData.id ? { ...each, textBoxAlignment: value } : each
+      )
+      setUpdatedProjectElements(updatedProjectElementList);
+    } else {
+      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
+      if (!target) return;
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-  };
-
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = 'auto';
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+      const newUpdateProjectElementReq: UpdateProjectElementReq = {
+        ...target,
+        textBoxAlignment: value
+      };
+      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
     }
-  }, [content]);
+    const updatedProjectElementList = projectElementList.map(each =>
+      each.textBox?.id === initialData.id ? { ...each, textBoxAlignment: value } : each
+    );
+    setProjectElementList(updatedProjectElementList);
+  };
+
+
+  const handlechange = (field: keyof TextBoxData, value: string) => {
+    const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
+    if (targetElement) {
+      //updatedProjectElements에 있다면
+      const updatedProjectElementList = updatedProjectElements.map(each =>
+        each.updateTextBoxReq?.id === initialData.id ? { ...each, updateTextBoxReq: { ...each.updateTextBoxReq, [field]: value } as UpdateTextBoxReq } : each
+      )
+      setUpdatedProjectElements(updatedProjectElementList);
+    } else {
+      //updatedProjectElements에 없다면
+      const target = projectElementList.find(pe => pe.textBox?.id === initialData.id);
+
+      if (!target) return;
+      const targetTextBox = target.textBox;
+      if (!targetTextBox) return;
+      //target으로 UpdateProjectElementReq 를 생성 후 
+      const convetedToProjectElementReq: UpdateProjectElementReq = {
+        id: target.id,
+        updateWorkReq: null,
+        workAlignment: null,
+        updateTextBoxReq: {
+          id: targetTextBox.id,
+          content: targetTextBox.content,
+          isDeleted: targetTextBox.isDeleted
+        },
+        textBoxAlignment: target.textBoxAlignment,
+        dividerType: null,
+        peOrder: target.peOrder
+      }
+      const newUpdateProjectElementReq: UpdateProjectElementReq = {
+        ...convetedToProjectElementReq,
+        updateTextBoxReq: {
+          ...convetedToProjectElementReq.updateTextBoxReq,
+          [field]: value
+        } as UpdateTextBoxReq
+      };
+
+      //projectElementList에서 id로 찾고
+      //updatedProjectElements에 추가한다.
+      setUpdatedProjectElements([...updatedProjectElements, { ...newUpdateProjectElementReq }]);
+    }
+
+    const updatedProjectElementList = projectElementList.map(each =>
+      each.textBox?.id === initialData.id ? { ...each, textBox: { ...each.textBox, [field]: value } as TextBoxData } : each
+    );
+    setProjectElementList(updatedProjectElementList);
+  }
+
+  // useEffect(() => {
+  //   if (textAreaRef.current) {
+  //     textAreaRef.current.style.height = 'auto';
+  //     textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+  //   }
+  // }, [content]);
 
   return (
     <TextBoxWrapper>
       {isEditMode ? (
         <>
-          <AlignmentSelect value={textBoxAlignment || ''} onChange={handleAlignmentChange}>
+          <AlignmentSelect value={initialTexBoxAlignment || TextBoxAlignment.CENTER} onChange={(e) => handleAlignmentChange(e.target.value as TextBoxAlignment)}>
             <option value={TextBoxAlignment.LEFT}>Left</option>
             <option value={TextBoxAlignment.CENTER}>Center</option>
             <option value={TextBoxAlignment.RIGHT}>Right</option>
           </AlignmentSelect>
           <TextArea
             ref={textAreaRef}
-            $textBoxAlignment={textBoxAlignment}
-            value={content}
-            onChange={handleContentChange}
+            $textBoxAlignment={initialTexBoxAlignment}
+            value={initialData.content}
+            onChange={(e) => handlechange("content", e.target.value)}
             rows={1}
           />
         </>
       ) : (
-        <TextBoxContent $textBoxAlignment={textBoxAlignment}>{content}</TextBoxContent>
+        <TextBoxContent $textBoxAlignment={initialTexBoxAlignment}>{initialData.content}</TextBoxContent>
       )}
     </TextBoxWrapper>
   );

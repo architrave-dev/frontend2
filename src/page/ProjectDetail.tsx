@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import RepresentImg from '../component/projectDetail/RepresentImg';
 import ProjectElementList from '../component/projectDetail/ProjectElementList';
 import ProjectDetailContainer from '../component/projectDetail/ProjectDetailContainer';
 import { useParams } from 'react-router-dom';
@@ -9,12 +8,14 @@ import { useAuth } from '../shared/hooks/useAuth';
 import { UserData } from '../shared/store/authStore';
 import { useProjectDetail } from '../shared/hooks/useProjectDetail';
 import { useAui } from '../shared/hooks/useAui';
+import { useEditMode } from '../shared/hooks/useEditMode';
 
 
 const ProjectDetail: React.FC = () => {
   const { AUI, projectTitle } = useParams<{ AUI: string, projectTitle: string }>();
   useAuiValidation(AUI);
   const { user, setUser } = useAuth();
+  const { isEditMode, setEditMode } = useEditMode();
 
   useEffect(() => {
     if (user) {
@@ -31,16 +32,12 @@ const ProjectDetail: React.FC = () => {
   }, [user]);
 
   const { aui } = useAui();
-  const { isLoading, project, getProjectDetail } = useProjectDetail();
+  const { isLoading, project, getProject } = useProjectDetail();
 
   useEffect(() => {
     const getProjectWithApi = async () => {
       if (aui && projectTitle) {
-        try {
-          await getProjectDetail(aui, projectTitle);
-        } catch (error) {
-          console.error('get ProjectDetail failed:', error);
-        }
+        await getProject(aui, projectTitle);
       }
     }
     getProjectWithApi();
@@ -51,9 +48,14 @@ const ProjectDetail: React.FC = () => {
   }, [project]);
 
 
+  useEffect(() => {
+    if (isEditMode) {
+      setEditMode(false);
+    }
+  }, []);
+
   return (
     <ProjectDetailPage>
-      <RepresentImg />
       <ProjectDetailContainer />
       <ProjectElementList />
     </ProjectDetailPage>

@@ -25,7 +25,8 @@ export interface LoginData {
 }
 
 export interface AuthResponse {
-  data: UserData & { authToken: string };
+  data: UserData;
+  authToken: string
 }
 
 export interface ErrorResponse {
@@ -45,7 +46,11 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
 export const login = async (data: LoginData): Promise<AuthResponse> => {
   try {
     const response = await authApi.post<AuthResponse>('/api/v1/auth/login', data);
-    return response.data;
+    const authToken = response.headers['authorization'] || null;
+    return {
+      ...response.data,
+      authToken
+    };
   } catch (error) {
     throw handleApiError(error);
   }

@@ -5,10 +5,11 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useLandingBox } from '../../shared/hooks/useLandingBox';
 import defaultImg from '../../asset/project/launches_header_desktop.jpg';
 import { useAui } from '../../shared/hooks/useAui';
+import { LandingBoxData } from '../../shared/store/landingBoxStore';
 
 
 const LandingBox: React.FC = () => {
-  const { isEditMode } = useEditMode();
+  const { isEditMode, setEditMode } = useEditMode();
   const { isLoading, landingBox, getLandingBox, updateLandingBox } = useLandingBox();
 
   const [isUploading, setIsUploading] = useState(false);
@@ -67,6 +68,33 @@ const LandingBox: React.FC = () => {
     fileInputRef.current?.click();
   };
 
+  const isChanged = (initialData: LandingBoxData, currentData: LandingBoxData): boolean => {
+    return (
+      initialData.title !== currentData.title ||
+      initialData.description !== currentData.description ||
+      initialData.originUrl !== currentData.originUrl
+    );
+  };
+
+
+  const handleConfirm = async () => {
+    if (!landingBox) return;
+
+    if (!(backgroundImageUrl && title && description)) {
+      return;
+    }
+    const updatedData: LandingBoxData = {
+      id: landingBox.id,
+      originUrl: backgroundImageUrl,
+      title: title,
+      description: description,
+      isDeleted: false,
+    };
+
+    await updateLandingBox(aui, updatedData);
+    setEditMode(false);
+  };
+
   return (
     <Container $backgroundimage={backgroundImageUrl ? backgroundImageUrl : defaultImg}>
       {isEditMode ? (
@@ -91,6 +119,16 @@ const LandingBox: React.FC = () => {
             onChange={handleDescriptionChange}
             placeholder="Enter description"
           />
+          {backgroundImageUrl && title && description &&
+            isChanged(landingBox, {
+              id: landingBox.id,
+              originUrl: backgroundImageUrl,
+              title: title,
+              description: description,
+              isDeleted: false,
+            }) ?
+            <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
+          }
         </>
       ) : (
         <>
@@ -174,6 +212,18 @@ const ReplaceImageButton = styled.button`
 
 const HiddenFileInput = styled.input`
   display: none;
+`;
+
+const ConfirmButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
 `;
 
 
