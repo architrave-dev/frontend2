@@ -7,13 +7,21 @@ import { useAuiValidation } from '../shared/hooks/useAuiValidation';
 import { useAuth } from '../shared/hooks/useAuth';
 import { UserData } from '../shared/store/authStore';
 import ProjectList from '../component/project/ProjectList';
+import { useEditMode } from '../shared/hooks/useEditMode';
 
 
 const Projects: React.FC = () => {
   const { AUI } = useParams<{ AUI: string }>();
   useAuiValidation(AUI);
 
+  const { isEditMode, setEditMode } = useEditMode();
   const { user, setUser } = useAuth();
+
+  useEffect(() => {
+    if (isEditMode) {
+      setEditMode(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -38,6 +46,7 @@ const Projects: React.FC = () => {
   );
 }
 const ProjectsPage = styled.div`
+  width: 100%;
   height: 100%;
   overflow-y: scroll;
   &::-webkit-scrollbar {
