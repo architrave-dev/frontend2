@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { WorkAlignment, WorkData, convertSizeToString } from '../../shared/store/projectStore';
+import { ProjectElementData, SizeData, UpdateProjectElementReq, UpdateWorkReq, WorkAlignment, WorkData, convertSizeToString, convertStringToSize, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -10,12 +10,8 @@ export interface WorkProps {
 
 const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: initialData }) => {
   const { isEditMode } = useEditMode();
-  const [image, setImage] = useState(initialData.originImgUrl);
-  const [title, setTitle] = useState(initialData.title);
-  const [description, setDescription] = useState(initialData.description);
-  const [material, setMaterial] = useState(initialData.material);
-  const [size, setSize] = useState(convertSizeToString(initialData.size));
-  const [prodYear, setProdYear] = useState(initialData.prodYear);
+  const { projectElementList, setProjectElementList } = useProjectElementListStore();
+  const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = () => {
@@ -29,7 +25,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result as string);
+        handlechange('originImgUrl', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -39,13 +35,64 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     fileInputRef.current?.click();
   };
 
+  const handlechange = (field: keyof WorkData, value: string | SizeData) => {
+    const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
+    if (targetElement) {
+      //updatedProjectElements에 있다면
+      const updatedProjectElementList = updatedProjectElements.map(each =>
+        each.updateWorkReq?.id === initialData.id ? { ...each, updateWorkReq: { ...each.updateWorkReq, [field]: value } as UpdateWorkReq } : each
+      )
+      setUpdatedProjectElements(updatedProjectElementList);
+    } else {
+      //updatedProjectElements에 없다면
+      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
+
+      if (!target) return;
+      const targetWork = target.work;
+      if (!targetWork) return;
+      //target으로 UpdateProjectElementReq 를 생성 후 
+      const convetedToProjectElementReq: UpdateProjectElementReq = {
+        id: target.id,
+        updateWorkReq: {
+          id: targetWork.id,
+          originImgUrl: targetWork.originImgUrl,
+          thumbnailUrl: targetWork.thumbnailUrl,
+          title: targetWork.title,
+          description: targetWork.description,
+          size: targetWork.size,
+          material: targetWork.material,
+          prodYear: targetWork.prodYear,
+          isDeleted: targetWork.isDeleted
+        },
+        workAlignment: target.workAlignment,
+        updateTextBoxReq: null,
+        textBoxAlignment: null,
+        dividerType: null,
+        peOrder: target.peOrder
+      }
+      //projectElementList에서 id로 찾고
+      //updatedProjectElements에 추가한다.
+      const newUpdateProjectElementReq: UpdateProjectElementReq = {
+        ...convetedToProjectElementReq,
+        updateWorkReq: {
+          ...convetedToProjectElementReq.updateWorkReq,
+          [field]: value
+        } as UpdateWorkReq
+      };
+      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
+    }
+    const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
+      each.work?.id === initialData.id ? { ...each, work: { ...each.work, [field]: value } as WorkData } : each
+    )
+    setProjectElementList(updatedProjectElementList);
+  }
 
   return (
     <WorkWrapper>
       {isEditMode ? (
         <>
           <ImgWrapper>
-            <WorkImage src={image} alt={title} onClick={handleImageClick} />
+            <WorkImage src={initialData.originImgUrl} alt={initialData.title} onClick={handleImageClick} />
             <ReplaceImageButton onClick={triggerFileInput}>
               이미지 교체
             </ReplaceImageButton>
@@ -58,31 +105,31 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
           </ImgWrapper>
           <TitleTextAreaWrpper>
             <TitleInput
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={initialData.title}
+              onChange={(e) => handlechange("title", e.target.value)}
               placeholder="Title"
             />
             <Textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={initialData.description}
+              onChange={(e) => handlechange("description", e.target.value)}
               placeholder="Description"
             />
           </TitleTextAreaWrpper>
           <WorkInfoEdit>
             <Input
-              value={material}
-              onChange={(e) => setMaterial(e.target.value)}
+              value={initialData.material}
+              onChange={(e) => handlechange("material", e.target.value)}
               placeholder="Material"
             />
             <Input
-              value={size}
-              onChange={(e) => setSize(e.target.value)}
+              value={convertSizeToString(initialData.size)}
+              onChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
               placeholder="Size"
             />
             <Input
               type="number"
-              value={prodYear}
-              onChange={(e) => setProdYear(e.target.value)}
+              value={initialData.prodYear}
+              onChange={(e) => handlechange("prodYear", e.target.value)}
               placeholder="Year"
             />
           </WorkInfoEdit>
@@ -90,14 +137,14 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
       ) : (
         <>
           <ImgWrapper>
-            <WorkImage src={image} alt={title} />
+            <WorkImage src={initialData.originImgUrl} alt={initialData.title} />
           </ImgWrapper>
-          <Title>[{title}]</Title>
-          <Description>{description}</Description>
+          <Title>[{initialData.title}]</Title>
+          <Description>{initialData.description}</Description>
           <WorkInfo>
-            <Material>{material},</Material>
-            <Size>{size},</Size>
-            <ProdYear>{prodYear}</ProdYear>
+            <Material>{initialData.material},</Material>
+            <Size>{convertSizeToString(initialData.size)},</Size>
+            <ProdYear>{initialData.prodYear}</ProdYear>
           </WorkInfo>
         </>
       )}

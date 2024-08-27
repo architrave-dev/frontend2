@@ -1,64 +1,57 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import Work from './Work';
-import TextBox from './TextBox';
-import Divider, { DividerType } from '../../shared/Divider';
-import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import { useEditMode } from '../../shared/hooks/useEditMode';
+import WorkTemp from './WorkTemp';
+import TextBoxTemp from './TextBoxTemp';
+import { DividerType } from '../../shared/Divider';
+import { CreateTextBoxReq, CreateWorkReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import DividerTemp from './DividerTemp';
 
 
-export type ProjectElementProps = {
-  id: string;
+export type ProjectElementTempProps = {
+  tempId: string;
+  projectId: string;
   projectElementType: ProjectElementType;
-  work: WorkData | null;
+  work: CreateWorkReq | null;
   workAlignment: WorkAlignment | null;
-  textBox: TextBoxData | null;
+  textBox: CreateTextBoxReq | null;
   textBoxAlignment: TextBoxAlignment | null;
   dividerType: DividerType | null;
   // order: string;
 };
 
-const ProjectElement: React.FC<ProjectElementProps> = ({
-  id, //projectElementId
+const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
+  tempId,
   projectElementType,
   work,
   workAlignment,
   textBox,
   textBoxAlignment,
   dividerType
-  // order,
 }) => {
-  const { isEditMode } = useEditMode();
-  const { removedProjectElements, setRemovedProjectElements } = useProjectElementListStoreForUpdate();
-  const [isDeleted, setIsDeleted] = useState(false);
+  const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
   const contentRouter = () => {
     switch (projectElementType) {
       case ProjectElementType.WORK:
-        return work && <Work alignment={workAlignment} data={work} />;
+        return work && <WorkTemp tempId={tempId} alignment={workAlignment} data={work} />;
       case ProjectElementType.TEXTBOX:
-        return textBox && <TextBox alignment={textBoxAlignment} data={textBox} />;
+        return textBox && <TextBoxTemp tempId={tempId} alignment={textBoxAlignment} data={textBox} />;
       case ProjectElementType.DIVIDER:
-        return dividerType && <Divider dividerType={dividerType} />;
+        return dividerType && <DividerTemp tempId={tempId} dividerType={dividerType} />;
       default:
         return null;
     }
   }
-
   const handleDelete = () => {
-    setIsDeleted(true);
-    const newRemovedElement: RemoveProjectElementReq = { id: id };
-    setRemovedProjectElements([...removedProjectElements, newRemovedElement]);
-  }
+    const filteredList = createdProjectElements.filter((each) => each.tempId !== tempId);
+    setCreatedProjectElements(filteredList);
+  };
 
   return (
     <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
-      {isEditMode ?
-        <DeleteButton onClick={handleDelete} disabled={isDeleted}>
-          Delete
-        </DeleteButton>
-        : <></>
-      }
+      <DeleteButton onClick={handleDelete}>
+        Delete
+      </DeleteButton>
     </ProjectElementListWrapper>
   );
 }
@@ -97,10 +90,11 @@ const DeleteButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  &:disabled {
-    background-color: #ff9999;
-    cursor: not-allowed;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #ff3333;
   }
 `;
 
-export default ProjectElement;
+export default ProjectElementTemp;

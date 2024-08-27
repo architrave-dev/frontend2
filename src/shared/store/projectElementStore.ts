@@ -1,0 +1,178 @@
+import { create } from 'zustand';
+import { UserData } from './authStore';
+import { DividerType } from '../Divider';
+import { UpdateProjectElementListReq } from '../api/projectElementApi';
+
+export enum TextBoxAlignment {
+  LEFT = 'LEFT',
+  CENTER = 'CENTER',
+  RIGHT = 'RIGHT',
+}
+
+export enum WorkAlignment {
+  LEFT = 'LEFT',
+  CENTER = 'CENTER',
+  RIGHT = 'RIGHT',
+}
+
+export enum ProjectElementType {
+  WORK = 'WORK',
+  TEXTBOX = 'TEXTBOX',
+  DIVIDER = 'DIVIDER',
+}
+
+export const convertSizeToString = (value: SizeData): string => {
+  if (value.depth) {
+    return `${value.width}x${value.height}x${value.depth}`;
+  } else {
+    return `${value.width}x${value.height}`;
+  }
+}
+
+export const convertStringToSize = (value: string): SizeData => {
+  const dimensions = value.split('x').map(dim => dim.trim());
+
+  if (dimensions.length < 2 || dimensions.length > 3) {
+    throw new Error('Invalid size string format. Expected "widthxheight" or "widthxheightxdepth"');
+  }
+
+  const result: SizeData = {
+    width: dimensions[0],
+    height: dimensions[1]
+  };
+
+  if (dimensions.length === 3) {
+    result.depth = dimensions[2];
+  }
+
+  return result;
+}
+
+// export const convertProjectElementReqToUpdateProjectElementReq = (): UpdateProjectElementReq => {
+
+// }
+
+export interface SizeData {
+  width: string;
+  height: string;
+  depth?: string;
+}
+
+export interface WorkData {
+  id: string;
+  member: UserData;
+  originImgUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  description: string;
+  size: SizeData;
+  material: string,
+  prodYear: string,
+  isDeleted: boolean
+}
+
+export interface TextBoxData {
+  id: string;
+  content: string;
+  isDeleted: boolean;
+}
+
+export interface ProjectElementData {
+  id: string;
+  projectElementType: ProjectElementType;
+  peOrder: string;
+  work: WorkData | null;
+  workAlignment: WorkAlignment | null;
+  textBox: TextBoxData | null;
+  textBoxAlignment: TextBoxAlignment | null;
+  dividerType: DividerType | null;
+}
+
+export interface CreateWorkReq {
+  originImgUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  description: string;
+  size: SizeData;
+  material: string,
+  prodYear: string
+}
+
+export interface CreateTextBoxReq {
+  content: string;
+}
+
+export interface CreateProjectElementReq {
+  tempId: string;
+  projectId: string;
+  projectElementType: ProjectElementType;
+  createWorkReq: CreateWorkReq | null;
+  workAlignment: WorkAlignment | null;
+  createTextBoxReq: CreateTextBoxReq | null,
+  textBoxAlignment: TextBoxAlignment | null;
+  dividerType: DividerType | null;
+  peOrder: string;
+}
+
+export interface UpdateWorkReq {
+  id: string;
+  originImgUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  description: string;
+  size: SizeData;
+  material: string,
+  prodYear: string,
+  isDeleted: boolean
+}
+
+export interface UpdateTextBoxReq {
+  id: string;
+  content: string;
+  isDeleted: boolean;
+}
+
+export interface UpdateProjectElementReq {
+  id: string;
+  updateWorkReq?: UpdateWorkReq | null;
+  workAlignment?: WorkAlignment | null;
+  updateTextBoxReq?: UpdateTextBoxReq | null,
+  textBoxAlignment?: TextBoxAlignment | null;
+  dividerType?: DividerType | null;
+  peOrder: string;
+}
+
+export interface RemoveProjectElementReq {
+  id: string;
+}
+
+interface ProjectElementListState {
+  projectElementList: ProjectElementData[];
+  setProjectElementList: (projectElementList: ProjectElementData[]) => void;
+}
+
+
+export const useProjectElementListStore = create<ProjectElementListState>((set) => ({
+  projectElementList: [],
+  setProjectElementList: (projectElementList) => set({ projectElementList }),
+}));
+
+interface ProjectElementListStateForUpdate {
+  createdProjectElements: CreateProjectElementReq[];
+  setCreatedProjectElements: (createProjectElements: CreateProjectElementReq[]) => void;
+  updatedProjectElements: UpdateProjectElementReq[];
+  setUpdatedProjectElements: (updatedProjectElements: UpdateProjectElementReq[]) => void;
+  removedProjectElements: RemoveProjectElementReq[];
+  setRemovedProjectElements: (removeProjectElements: RemoveProjectElementReq[]) => void;
+  clearAll: () => void;
+}
+
+export const useProjectElementListStoreForUpdate = create<ProjectElementListStateForUpdate>((set) => ({
+  createdProjectElements: [],
+  setCreatedProjectElements: (createdProjectElements) => set({ createdProjectElements }),
+  updatedProjectElements: [],
+  setUpdatedProjectElements: (updatedProjectElements) => set({ updatedProjectElements }),
+  removedProjectElements: [],
+  setRemovedProjectElements: (removedProjectElements) => set({ removedProjectElements }),
+  clearAll: () => set({ createdProjectElements: [], updatedProjectElements: [], removedProjectElements: [] })
+}));
