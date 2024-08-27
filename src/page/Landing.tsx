@@ -8,7 +8,6 @@ const Landing: React.FC = () => {
   return (
     <LandingContainer>
       <LandingLogo />
-      <Space />
       <SearchBar />
     </LandingContainer>
   );

@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     width: 100vw;
     height: 100vh;
     margin: 0px;
-    background-color: #EECFBB; /*for dev*/
+    // background-color: #EECFBB; /*for dev*/
   }
 
   h1, h2, p {

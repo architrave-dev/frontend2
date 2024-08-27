@@ -7,6 +7,7 @@ const theme: DefaultTheme = {
     color_Gray_03: '#4d4d4d',
     color_Gray_04: '#7d7d7d',
     color_Gray_05: '#b3b3b3',
+    color_Gray_06: '#F0F0F0',
     color_White: '#ffffff',
     color_Alpha_01: 'rgba(0, 0, 0, 0.6)',
     color_Alpha_02: 'rgba(0, 0, 0, 0.2)',

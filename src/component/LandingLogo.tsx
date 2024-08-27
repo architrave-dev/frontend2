@@ -12,7 +12,7 @@ const LandingLogo: React.FC = () => {
 
 const MainLogoContainer = styled.header`
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 `;
 
 const MainLogo = styled.img`
