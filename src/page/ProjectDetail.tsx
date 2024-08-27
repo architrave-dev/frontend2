@@ -18,21 +18,19 @@ const ProjectDetail: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
 
   useEffect(() => {
-    if (user) {
-      console.log("UserData from store: ", user);
-    } else {
+    if (!user) {
       const userFromStorage = localStorage.getItem('userData');
       if (userFromStorage) {
         const parsedUserData: UserData = JSON.parse(userFromStorage);
         setUser(parsedUserData);
       } else {
-        console.log("there is no login data");
+        console.error("there is no login data");
       }
     }
   }, [user]);
 
   const { aui } = useAui();
-  const { isLoading, project, getProject } = useProjectDetail();
+  const { isLoading, getProject } = useProjectDetail();
 
   useEffect(() => {
     const getProjectWithApi = async () => {
@@ -42,11 +40,6 @@ const ProjectDetail: React.FC = () => {
     }
     getProjectWithApi();
   }, [aui, projectTitle]);
-
-  useEffect(() => {
-    console.log("project in ProjectDetail: ", project);
-  }, [project]);
-
 
   useEffect(() => {
     if (isEditMode) {

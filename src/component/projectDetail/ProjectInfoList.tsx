@@ -32,16 +32,6 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
     setCreateInfoList([...createInfoList, newInfo]);
   };
 
-  useEffect(() => {
-    console.log("================================= start");
-    console.log("projectInfoList: ", projectInfoList);
-    console.log("createInfoList: ", createInfoList);
-    console.log("updateInfoList: ", updateInfoList);
-    console.log("removeInfoList: ", removeInfoList);
-    console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end");
-
-  }, [projectInfoList, createInfoList, updateInfoList, removeInfoList]);
-
 
   return (
     <ProjectInfoListComp>

@@ -21,20 +21,7 @@ const ProjectElementList: React.FC = () => {
   const { createdProjectElements, setCreatedProjectElements, updatedProjectElements, removedProjectElements } = useProjectElementListStoreForUpdate();
   const { aui } = useAui();
 
-  // useEffect(() => {
-  //   console.log("================================= start");
-  //   console.log("projectElementList: ", projectElementList);
-  //   console.log("createdProjectElements: ", createdProjectElements);
-  //   console.log("updatedProjectElements: ", updatedProjectElements);
-  //   console.log("removedProjectElements: ", removedProjectElements);
-  //   console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end");
-
-  // }, [projectElementList, createdProjectElements, updateProjectElementList, removedProjectElements]);
-
-
   useEffect(() => {
-    console.log("aui: ", AUI);
-    console.log("projectTitle: ", projectTitle);
     const getProjectElementListWithApi = async () => {
       if (aui && projectTitle) {
         try {
@@ -89,7 +76,6 @@ const ProjectElementList: React.FC = () => {
       updatedProjectElements: updatedProjectElements,
       removedProjectElements: removedProjectElements
     }
-    console.log("updatedData: ", updatedData);
 
     await updateProjectElementList(aui, updatedData);
     setEditMode(false);

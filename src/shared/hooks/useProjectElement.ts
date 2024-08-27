@@ -20,7 +20,6 @@ export const useProjectElement = (): UseProjectElementResult => {
 
   const handleProjectElementSuccess = (response: ProjectElementListResponse) => {
     const projectElementListData = response.data;
-    // console.log("projectListData from useProjectElement: ", projectElementListData);
     setProjectElementList(projectElementListData);
     clearAll();
   };

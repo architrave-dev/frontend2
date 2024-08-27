@@ -22,7 +22,6 @@ export const useProjectDetail = (): UseProjectResult => {
 
   const handleProjectSuccess = (response: ProjectResponse) => {
     const projectData = response.data;
-    console.log("projectData from useProjectDetail: ", projectData);
     setProject(projectData);
     setProjectInfoList(projectData.projectInfoList);
     clearAll();

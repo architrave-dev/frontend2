@@ -24,15 +24,13 @@ const Projects: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      console.log("UserData from store: ", user);
-    } else {
+    if (!user) {
       const userFromStorage = localStorage.getItem('userData');
       if (userFromStorage) {
         const parsedUserData: UserData = JSON.parse(userFromStorage);
         setUser(parsedUserData);
       } else {
-        console.log("there is no login data");
+        console.error("there is no login data");
       }
     }
   }, [user]);

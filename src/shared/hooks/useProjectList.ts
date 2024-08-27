@@ -18,13 +18,11 @@ export const useProjectList = (): UseProjectListResult => {
 
   const handleProjectListSuccess = (response: ProjectListResponse) => {
     const projectListData = response.data;
-    console.log("projectListData from useProjectList: ", projectListData);
     setProjects(projectListData);
   };
 
   const handleCreateProjectSuccess = (response: CreatedProjectResponse) => {
     const createdProjectData = response.data;
-    console.log("projectData from useProjectList: ", createdProjectData);
     setProjects([...projects, createdProjectData]);
   };
 
