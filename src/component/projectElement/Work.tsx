@@ -25,7 +25,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        handlechange('originImgUrl', reader.result as string);
+        handlechange('originUrl', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -55,7 +55,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
         id: target.id,
         updateWorkReq: {
           id: targetWork.id,
-          originImgUrl: targetWork.originImgUrl,
+          originUrl: targetWork.originUrl,
           thumbnailUrl: targetWork.thumbnailUrl,
           title: targetWork.title,
           description: targetWork.description,
@@ -92,7 +92,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
       {isEditMode ? (
         <>
           <ImgWrapper>
-            <WorkImage src={initialData.originImgUrl} alt={initialData.title} onClick={handleImageClick} />
+            <WorkImage src={initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
             <ReplaceImageButton onClick={triggerFileInput}>
               이미지 교체
             </ReplaceImageButton>
@@ -137,7 +137,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
       ) : (
         <>
           <ImgWrapper>
-            <WorkImage src={initialData.originImgUrl} alt={initialData.title} />
+            <WorkImage src={initialData.originUrl} alt={initialData.title} />
           </ImgWrapper>
           <Title>[{initialData.title}]</Title>
           <Description>{initialData.description}</Description>

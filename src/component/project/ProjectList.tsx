@@ -32,7 +32,7 @@ const ProjectList: React.FC = () => {
           projectId={each.id}
           initialTitle={each.title}
           initialDescription={each.description}
-          initialImage={each.originImgUrl}
+          initialImage={each.originUrl}
         />
       ))}
     </ProjectSimpleList>

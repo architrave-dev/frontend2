@@ -57,7 +57,7 @@ const ProjectElementList: React.FC = () => {
       projectElementType: elementType,
       createWorkReq: elementType === ProjectElementType.WORK ?
         {
-          originImgUrl: defaultImg,
+          originUrl: defaultImg,
           thumbnailUrl: defaultImg,
           title: "New Work",
           description: "This is New Work",

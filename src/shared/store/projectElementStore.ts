@@ -61,7 +61,7 @@ export interface SizeData {
 export interface WorkData {
   id: string;
   member: UserData;
-  originImgUrl: string;
+  originUrl: string;
   thumbnailUrl: string;
   title: string;
   description: string;
@@ -89,7 +89,7 @@ export interface ProjectElementData {
 }
 
 export interface CreateWorkReq {
-  originImgUrl: string;
+  originUrl: string;
   thumbnailUrl: string;
   title: string;
   description: string;
@@ -116,7 +116,7 @@ export interface CreateProjectElementReq {
 
 export interface UpdateWorkReq {
   id: string;
-  originImgUrl: string;
+  originUrl: string;
   thumbnailUrl: string;
   title: string;
   description: string;

@@ -23,7 +23,7 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        handlechange('originImgUrl', reader.result as string);
+        handlechange('originUrl', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -44,7 +44,7 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
   return (
     <WorkWrapper>
       <ImgWrapper>
-        <WorkImage src={initialData.originImgUrl} alt={initialData.title} onClick={handleImageClick} />
+        <WorkImage src={initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
         <ReplaceImageButton onClick={triggerFileInput}>
           이미지 교체
         </ReplaceImageButton>
