@@ -95,11 +95,18 @@ const ProjectElementList: React.FC = () => {
     setEditMode(false);
   }
 
+  const isChanged = (): boolean => {
+    return (
+      createdProjectElements.length > 0 ||
+      updatedProjectElements.length > 0 ||
+      removedProjectElements.length > 0
+    );
+  }
+
   return (
     <ProjectElementListComp>
-      {isEditMode
+      {isEditMode && isChanged()
         // && projectElementList
-        // && isChanged(project) 
         ? <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
       }
       {projectElementList.map((each, index) => (
