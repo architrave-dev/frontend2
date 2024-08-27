@@ -45,7 +45,7 @@ const UserComp: React.FC = () => {
       {user && user.aui === aui && (
         <EditToggle
           onClick={toggleEditMode}>
-          {isEditMode ? 'Complete' : 'Edit'}
+          {isEditMode ? 'Done' : 'Edit'}
         </EditToggle>
       )}
     </UserArticle>
@@ -54,7 +54,7 @@ const UserComp: React.FC = () => {
 
 const UserArticle = styled.article`
   width: calc(14vw);
-  max-width: 100px;
+  max-width: 120px;
 
   display: flex;
   flex-direction: row-reverse;
@@ -73,6 +73,8 @@ const ArtistName = styled.div`
 `;
 
 const EditToggle = styled.div`
+  width: 50px;
+  text-align: center;
   text-decoration: none;
   &:hover {
     text-decoration: ${({ theme }) => theme.fontWeight.decoration};

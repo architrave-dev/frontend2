@@ -33,7 +33,7 @@ const Navigation: React.FC = () => {
 }
 
 const NavigationComp = styled.nav`
-  width: calc(62vw);
+  width: calc(60vw);
   
   display: flex;
   align-items: center;
