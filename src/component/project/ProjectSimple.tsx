@@ -47,7 +47,7 @@ const ProjectSimpleComp = styled.div<{ $isEditMode: boolean }>`
   align-items: center;
   justify-content: space-between; 
   margin-bottom: 20px;
-  background-color: #EECFBB;
+  // background-color: #EECFBB; /*for dev*/
   cursor: ${props => props.$isEditMode ? "auto" : "pointer"}
 `;
 
@@ -57,8 +57,8 @@ const ProjectSimpleInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-end;
-  padding: 20px;
+  align-items: flex-start;
+  padding: 20px 20px 20px 6vw;
 `;
 const ProjectSimpleTitle = styled.h2`
   margin-bottom: 10px;

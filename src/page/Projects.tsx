@@ -38,7 +38,6 @@ const Projects: React.FC = () => {
   return (
     <ProjectsPage>
       <LandingBox />
-      <Space />
       <ProjectList />
     </ProjectsPage>
   );

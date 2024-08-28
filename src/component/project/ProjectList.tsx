@@ -6,6 +6,7 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { CreateProjectReq, createProject } from '../../shared/api/projectApi';
 import { useNavigate } from 'react-router-dom';
+import Space from '../../shared/Space';
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
@@ -44,11 +45,13 @@ const ProjectList: React.FC = () => {
 
   return (
     <ProjectSimpleList>
-      {isEditMode && (
-        <CreateProjectButton onClick={handleCreateProject}>
-          Create Project
-        </CreateProjectButton>
-      )}
+      <Space >
+        {isEditMode &&
+          <CreateProjectButton onClick={handleCreateProject}>
+            Create Project
+          </CreateProjectButton>
+        }
+      </Space>
       {projects.map((each, idx) => (
         <ProjectSimple
           key={idx}
@@ -63,6 +66,7 @@ const ProjectList: React.FC = () => {
 }
 
 const ProjectSimpleList = styled.section`
+  margin-bottom: 6vh;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
@@ -70,10 +74,13 @@ const ProjectSimpleList = styled.section`
 `;
 
 const CreateProjectButton = styled.button`
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  margin-bottom: 16px;
+  width: 50vw;
+  height: 30px;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_05};
+  }
 `;
 
 export default ProjectList;

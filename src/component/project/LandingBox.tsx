@@ -153,11 +153,12 @@ const Container = styled.div<{ $backgroundimage: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 40px 60px;
+  padding: 40px 6vw;
 `;
 
 const Title = styled.h1`
   max-width: 60vw;
+  padding: 0.5rem;
   font-size: ${({ theme }) => theme.fontSize.font_H01};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   margin-bottom: 20px;
@@ -165,7 +166,9 @@ const Title = styled.h1`
 
 const Description = styled.p`
   max-width: 70vw;
-
+  min-height: 10vh;
+  margin-bottom: 20px;
+  padding: 0.5rem;
   font-size: ${({ theme }) => theme.fontSize.font_B01};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;
@@ -173,7 +176,7 @@ const Description = styled.p`
 const Input = styled.input`
   width: 70%;
   padding: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 18px;
   font-size: ${({ theme }) => theme.fontSize.font_H01};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   background: transparent;
@@ -184,9 +187,9 @@ const Input = styled.input`
 
 const TextArea = styled.textarea`
   width: 60%;
-  min-height: 80px;
+  min-height: 10vh;
+  margin-bottom: 20px;
   padding: 0.5rem;
-  margin-bottom: 1rem;
   background: transparent;
   border: none;
   border-bottom: 2px solid #fff;
