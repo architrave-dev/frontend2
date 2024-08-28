@@ -81,17 +81,18 @@ const ProjectInfoFlex: React.FC<ProjectInfoProps> = ({
 
 const ProjectInfoItem = styled.div<{ $isDeleted: boolean }>`
   display: flex;
-  margin-bottom: 10px;
+  height: 40px;
   opacity: ${({ $isDeleted }) => $isDeleted ? 0.3 : 1};
 `;
 
 const NameInput = styled.input`
-  width: 12vw;
+  width: 18vw;
   margin-right: 20px;
+  margin-bottom: 8px;
   padding: 5px;
   background: transparent;
   border: none;
-  border-bottom: 2px solid #fff;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
@@ -100,10 +101,11 @@ const NameInput = styled.input`
 
 const ValueInput = styled.input`
   width: 50vw;  
+  margin-bottom: 8px;
   padding: 5px;
   background: transparent;
   border: none;
-  border-bottom: 2px solid #fff;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
@@ -111,15 +113,14 @@ const ValueInput = styled.input`
 `;
 
 const DeleteButton = styled.button`
-  margin-left: 10px;
+  margin-bottom: 8px;
+  margin-left: 24px;
   padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.color_Gray_02};
+  color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
   &:disabled {
-    background-color: #ff9999;
+    background-color: ${({ theme }) => theme.colors.color_Gray_04};
     cursor: not-allowed;
   }
 `;
@@ -127,6 +128,8 @@ const DeleteButton = styled.button`
 const NameSection = styled.div`
   width: 18vw;
   padding: 5px;
+  margin-right: 20px;
+  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
@@ -135,6 +138,7 @@ const NameSection = styled.div`
 const ValueSection = styled.div`
   width: 60vw;
   padding: 5px;
+  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.medium};

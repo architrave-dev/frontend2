@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 interface ProjectInfoProps {
@@ -37,16 +37,16 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
 
 const ProjectInfoItem = styled.div`
   display: flex;
-  margin-bottom: 10px;
 `;
 
 const NameInput = styled.input`
-  width: 12vw;
+  width: 18vw;
   margin-right: 20px;
+  margin-bottom: 8px;
   padding: 5px;
   background: transparent;
   border: none;
-  border-bottom: 2px solid #fff;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
@@ -54,11 +54,12 @@ const NameInput = styled.input`
 `;
 
 const ValueInput = styled.input`
-  width: 50vw;  
+  width: 50vw; 
+  margin-bottom: 8px; 
   padding: 5px;
   background: transparent;
   border: none;
-  border-bottom: 2px solid #fff;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
@@ -69,6 +70,8 @@ const ValueInput = styled.input`
 const NameSection = styled.div`
   width: 18vw;
   padding: 5px;
+  margin-right: 20px;
+  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
@@ -77,6 +80,7 @@ const NameSection = styled.div`
 const ValueSection = styled.div`
   width: 60vw;
   padding: 5px;
+  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.medium};

@@ -3,21 +3,23 @@ import styled from 'styled-components';
 
 interface SpaceProps {
   children?: React.ReactNode;
+  $align?: string;
+  $height?: string;
 }
 
-const Space: React.FC<SpaceProps> = ({ children }) => {
+const Space: React.FC<SpaceProps> = ({ children, $align, $height }) => {
   return (
-    <SpaceComp>
+    <SpaceComp $align={$align} $height={$height} >
       {children}
     </SpaceComp>
   );
 }
 
-const SpaceComp = styled.div`
+const SpaceComp = styled.div<{ $align?: string, $height?: string }>`
   width: 100%;
-  height: 50px;
+  height: ${({ $height }) => $height !== undefined ? $height : '50px'};
   display: flex;
-  justify-content: center;
+  justify-content: ${({ $align }) => $align !== undefined ? $align : 'center'};
   align-items: center;
 `
 

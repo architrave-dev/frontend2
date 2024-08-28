@@ -127,14 +127,17 @@ const ProjectDetailWrapper = styled.article`
 
 const ConfirmButton = styled.button`
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: ${({ theme }) => theme.colors.color_White};
+  bottom: calc(8vh + 16px);
+  right: calc(10vw);
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: none;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   cursor: pointer;
   font-size: 1rem;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  }
 `;
 
 export default ProjectDetailContainer;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import ProjectInfo from '../../component/projectDetail/ProjectInfo';
@@ -7,6 +7,7 @@ import ProjectInfoFlex from './ProjectInfoFlex';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import ProjectInfoTemp from './ProjectInfoTemp';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
+import Space from '../../shared/Space';
 
 interface ProjectInfoListProps {
   date: string;
@@ -21,7 +22,7 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
   const { isEditMode } = useEditMode();
   const { isLoading, project } = useProjectDetail();
   const { projectInfoList } = useProjectInfoListStore();
-  const { createInfoList, setCreateInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
+  const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
 
   const handleCreateInfo = () => {
     const newInfo: CreateProjectInfoReq = {
@@ -59,20 +60,8 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
           initialCustomValue={each.customValue}
         />
       ))}
-      {isEditMode && (
+      {isEditMode &&
         <>
-          <ProjectInfo
-            initialCustomName="Date"
-            initialCustomValue={date}
-            changeValue={setDate}
-            isEditMode={isEditMode}
-          />
-          <ProjectInfo
-            initialCustomName="Support"
-            initialCustomValue={supportedBy}
-            changeValue={setSupportedBy}
-            isEditMode={isEditMode}
-          />
           {createInfoList.map((each) => (
             <ProjectInfoTemp
               key={each.tempId}
@@ -81,31 +70,31 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
               initialCustomValue={each.customValue}
             />
           ))}
+        </>
+      }
+      <Space $align={"center"} $height={"calc(6vw)"}>
+        {isEditMode &&
           <CreateButton onClick={handleCreateInfo}>
             Create ProjectInfo
           </CreateButton>
-        </>
-      )}
+        }
+      </Space>
     </ProjectInfoListComp>
   );
 }
 
 const ProjectInfoListComp = styled.article`
-  margin-bottom: calc(6vw);
 `;
+
 const CreateButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+  font-size: 1rem;
 
   &:hover {
-    background-color: #45a049;
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
   }
 `;
 
