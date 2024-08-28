@@ -22,7 +22,7 @@ const LogoComp = styled.article`
 `;
 
 const LogoImg = styled.img`
-  width: calc(10vw);
+  width: calc(14vw);
 `;
 
 export default Logo;
