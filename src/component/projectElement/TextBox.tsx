@@ -13,7 +13,8 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
   const { isEditMode } = useEditMode();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleAlignmentChange = (value: TextBoxAlignment) => {
     const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
@@ -88,12 +89,18 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
     setProjectElementList(updatedProjectElementList);
   }
 
-  // useEffect(() => {
-  //   if (textAreaRef.current) {
-  //     textAreaRef.current.style.height = 'auto';
-  //     textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
-  //   }
-  // }, [content]);
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      console.log("textarea.scrollHeight: ", `${textarea.scrollHeight}`)
+      textarea.style.height = 'auto'; // 초기화
+      textarea.style.height = `${textarea.scrollHeight}px`; // scrollHeight를 기준으로 높이 설정
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [initialData.content]);
 
   return (
     <TextBoxWrapper>
@@ -105,7 +112,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
             <option value={TextBoxAlignment.RIGHT}>Right</option>
           </AlignmentSelect>
           <TextArea
-            ref={textAreaRef}
+            ref={textareaRef}
             $textBoxAlignment={initialTexBoxAlignment}
             value={initialData.content}
             onChange={(e) => handlechange("content", e.target.value)}
@@ -120,36 +127,47 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
 }
 
 const TextBoxWrapper = styled.div`
+  position: relative;
+  min-height: 80px;
 `;
 
 const AlignmentSelect = styled.select`
-  margin-bottom: 10px;
-  padding: 5px;
+  position: absolute;
+  top: -40px;
+  width: 100px;
+  padding: 2px;
   font-size: ${({ theme }) => theme.fontSize.font_B04};
   color: ${({ theme }) => theme.colors.color_Gray_03};
   background-color: transparent;
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-  border-radius: 4px;
+  border-radius: 1px;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const TextArea = styled.textarea<{ $textBoxAlignment: TextBoxAlignment | null }>`
   width: 100%;
-  min-height: 120px;
-  padding: 8px;
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
+  padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
   background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   resize: none;
   overflow: hidden;
   text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
+  &:focus {
+    outline: none;
+  }
 `;
 
 const TextBoxContent = styled.p<{ $textBoxAlignment: TextBoxAlignment | null }>`
-  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};  
+  padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
+  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};  
 `;
 
 const getAlignment = (alignment: TextBoxAlignment | null): string => {

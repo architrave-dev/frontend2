@@ -127,7 +127,7 @@ const ProjectDetailWrapper = styled.article`
 
 const ConfirmButton = styled.button`
   position: absolute;
-  bottom: calc(8vh + 16px);
+  bottom: calc(8vh);
   right: calc(10vw);
   padding: 0.5rem 1rem;
   background-color: ${({ theme }) => theme.colors.color_White};
