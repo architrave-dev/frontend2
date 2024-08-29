@@ -185,7 +185,7 @@ const WorkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  // background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 const ImgWrapper = styled.div`
   position: relative;

@@ -61,10 +61,10 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
   width: 100%;
   padding: ${({ $elementType }) => {
     switch ($elementType) {
-      case ProjectElementType.WORK:
-        return null;
-      default:
+      case ProjectElementType.TEXTBOX:
         return '0 calc(10vw)';
+      default:
+        return null;
     }
   }};
   

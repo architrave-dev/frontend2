@@ -120,7 +120,7 @@ const WorkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  // background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 const ImgWrapper = styled.div`
   position: relative;
@@ -147,7 +147,7 @@ const WorkInfo = styled.div`
 
 const Input = styled.input`
   height: 18px;
-  width: 100px;
+  width: 120px;
   padding: 0 8px;
   text-align: center;
   color: ${({ theme }) => theme.colors.color_Gray_04};
