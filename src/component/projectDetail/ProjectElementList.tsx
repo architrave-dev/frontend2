@@ -10,7 +10,7 @@ import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi'
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
-import defaultImg from '../../asset/project/mars.png';
+import defaultImg from '../../asset/project/default_1.png';
 import Space from '../../shared/Space';
 
 

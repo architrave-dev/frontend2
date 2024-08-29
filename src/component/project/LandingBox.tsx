@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { uploadToS3 } from '../../shared/aws/s3Upload';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useLandingBox } from '../../shared/hooks/useLandingBox';
-import defaultImg from '../../asset/project/launches_header_desktop.jpg';
+import defaultImg from '../../asset/project/default_1.png';
 import { useAui } from '../../shared/hooks/useAui';
 import { LandingBoxData } from '../../shared/store/landingBoxStore';
 
@@ -166,7 +166,7 @@ const Title = styled.h1`
 
 const Description = styled.p`
   max-width: 70vw;
-  min-height: 10vh;
+  min-height: 6vh;
   margin-bottom: 20px;
   padding: 0.5rem;
   font-size: ${({ theme }) => theme.fontSize.font_B01};
