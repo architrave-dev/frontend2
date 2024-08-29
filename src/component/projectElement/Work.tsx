@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { ProjectElementData, SizeData, UpdateProjectElementReq, UpdateWorkReq, WorkAlignment, WorkData, convertSizeToString, convertStringToSize, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { uploadToS3 } from '../../shared/aws/s3Upload';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -13,6 +14,8 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleImageClick = () => {
     if (isEditMode && fileInputRef.current) {
@@ -20,14 +23,23 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     }
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        handlechange('originUrl', reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setIsUploading(true);
+      try {
+        // const reader = new FileReader();
+        // reader.onloadend = () => {
+        //   handlechange('originUrl', reader.result as string);
+        // };
+        // reader.readAsDataURL(file);
+        const imageUrl = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!);
+        handlechange('originUrl', imageUrl);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -87,6 +99,19 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     setProjectElementList(updatedProjectElementList);
   }
 
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      console.log("textarea.scrollHeight: ", `${textarea.scrollHeight}`)
+      textarea.style.height = 'auto'; // 초기화
+      textarea.style.height = `${textarea.scrollHeight}px`; // scrollHeight를 기준으로 높이 설정
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [initialData.description]);
+
   return (
     <WorkWrapper>
       {isEditMode ? (
@@ -94,7 +119,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
           <ImgWrapper>
             <WorkImage src={initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
             <ReplaceImageButton onClick={triggerFileInput}>
-              이미지 교체
+              {isUploading ? 'Uploading...' : 'Replace Image'}
             </ReplaceImageButton>
             <HiddenFileInput
               type="file"
@@ -103,49 +128,52 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
               accept="image/*"
             />
           </ImgWrapper>
-          <TitleTextAreaWrpper>
+          <TitleInfoWrpper>
             <TitleInput
               value={initialData.title}
               onChange={(e) => handlechange("title", e.target.value)}
               placeholder="Title"
             />
             <Textarea
+              ref={textareaRef}
               value={initialData.description}
               onChange={(e) => handlechange("description", e.target.value)}
               placeholder="Description"
             />
-          </TitleTextAreaWrpper>
-          <WorkInfoEdit>
-            <Input
-              value={initialData.material}
-              onChange={(e) => handlechange("material", e.target.value)}
-              placeholder="Material"
-            />
-            <Input
-              value={convertSizeToString(initialData.size)}
-              onChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
-              placeholder="Size"
-            />
-            <Input
-              type="number"
-              value={initialData.prodYear}
-              onChange={(e) => handlechange("prodYear", e.target.value)}
-              placeholder="Year"
-            />
-          </WorkInfoEdit>
+            <WorkInfo>
+              <Input
+                value={initialData.material}
+                onChange={(e) => handlechange("material", e.target.value)}
+                placeholder="Material"
+              />
+              <Input
+                value={convertSizeToString(initialData.size)}
+                onChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
+                placeholder="Size"
+              />
+              <Input
+                type="number"
+                value={initialData.prodYear}
+                onChange={(e) => handlechange("prodYear", e.target.value)}
+                placeholder="Year"
+              />
+            </WorkInfo>
+          </TitleInfoWrpper>
         </>
       ) : (
         <>
           <ImgWrapper>
             <WorkImage src={initialData.originUrl} alt={initialData.title} />
           </ImgWrapper>
-          <Title>[{initialData.title}]</Title>
-          <Description>{initialData.description}</Description>
-          <WorkInfo>
-            <Material>{initialData.material},</Material>
-            <Size>{convertSizeToString(initialData.size)},</Size>
-            <ProdYear>{initialData.prodYear}</ProdYear>
-          </WorkInfo>
+          <TitleInfoWrpper>
+            <Title>[ {initialData.title} ]</Title>
+            <Description>{initialData.description}</Description>
+            <WorkInfo>
+              <Info>{initialData.material},</Info>
+              <Info>{convertSizeToString(initialData.size)},</Info>
+              <Info>{initialData.prodYear}</Info>
+            </WorkInfo>
+          </TitleInfoWrpper>
         </>
       )}
     </WorkWrapper>
@@ -157,6 +185,7 @@ const WorkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 const ImgWrapper = styled.div`
   position: relative;
@@ -169,94 +198,88 @@ const WorkImage = styled.img`
   object-fit: contain;
 `;
 
+const TitleInfoWrpper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const WorkInfo = styled.div`
+  display: flex;
+  gap: 4px;
+`;
+
+const Info = styled.div`
+  height: 18px;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  font-size: ${({ theme }) => theme.fontSize.font_B04};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  text-align: center;
+`;
+
+const Input = styled.input`
+  height: 18px;
+  width: 100px;
+  padding: 0 8px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  font-size: ${({ theme }) => theme.fontSize.font_B04};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  outline: none;
+`;
+
 const Title = styled.h2`
   width: 100%;
-  padding: 0 calc(10vw);
-  margin-bottom: 4px;
+  height: 18px;
+  padding: 0px 8px;
+  margin-bottom: 3px;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  text-align: center;
+`;
+
+const TitleInput = styled.input`
+  width: 100%;
+  height: 19px;
+  padding: 4px 8px;
+  margin-bottom: 2px;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
+  line-height: ${({ theme }) => theme.fontSize.font_B03};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  outline: none;
+  text-align: center;
+`;
+
+
+const Description = styled.div`
+  height: 18px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: center;
-`;
-
-const Description = styled.div`
-  width: 100%;
-  padding: 0 calc(10vw);
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  text-align: center;
-  margin-bottom: 4px;
+  margin-bottom: 1px;
 `
-const WorkInfoEdit = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between; 
-  padding: 0 calc(10vw);
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  text-align: center;
-`;
-
-const WorkInfo = styled.div`
-  width: 100%;
-  padding: 0 calc(10vw);
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  text-align: center;
-`;
-
-const Material = styled.span`
-  margin-right: 4px;
-`;
-const Size = styled.span`
-  margin-right: 4px;
-`;
-const ProdYear = styled.span``;
-
-const TitleTextAreaWrpper = styled.div`
-  width: 100%;
-  padding: 0 calc(10vw);
-`
-
-const TitleInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 8px;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-`;
-
-const Input = styled.input`
-  width: 200px;
-  padding: 8px;
-  margin-bottom: 8px;
-  text-align: center;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-`;
 
 const Textarea = styled.textarea`
   width: 100%;
-  min-height: 100px;
-  padding: 8px;
-  margin-bottom: 8px;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
+  height: 18px;
+  font-size: ${({ theme }) => theme.fontSize.font_B03};
   color: ${({ theme }) => theme.colors.color_Gray_04};
   background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   outline: none;
-  resize: vertical;
+  text-align: center;
+  resize: none; 
+  overflow: hidden;
 `;
 
 const ReplaceImageButton = styled.button`

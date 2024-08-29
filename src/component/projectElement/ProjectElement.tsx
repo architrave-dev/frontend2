@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
 import Divider, { DividerType } from '../../shared/Divider';
-import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 
 
@@ -64,6 +64,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
 }
 
 const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType }>`
+  position: relative;
   width: 100%;
   padding: ${({ $elementType }) => {
     switch ($elementType) {
@@ -90,15 +91,15 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
 `;
 
 const DeleteButton = styled.button`
-  margin-left: 10px;
+  height: 32px;
+  position: absolute;
+  right: 0px;
   padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.color_Gray_02};
+  color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
   &:disabled {
-    background-color: #ff9999;
+    background-color: ${({ theme }) => theme.colors.color_Gray_04};
     cursor: not-allowed;
   }
 `;

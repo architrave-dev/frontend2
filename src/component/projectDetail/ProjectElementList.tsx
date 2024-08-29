@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import ProjectElement from '../../component/projectElement/ProjectElement';
 import { useProjectElement } from '../../shared/hooks/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
 import { useParams } from 'react-router-dom';
-import { CreateProjectElementReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateProjectElementReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi';
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
 import defaultImg from '../../asset/project/mars.png';
+import Space from '../../shared/Space';
 
 
 const ProjectElementList: React.FC = () => {
@@ -123,11 +124,13 @@ const ProjectElementList: React.FC = () => {
               dividerType={each.dividerType}
             />
           ))}
-          <CreateButtonGroup>
-            <CreateButton onClick={() => handleCreateElement(ProjectElementType.WORK)}>이미지</CreateButton>
-            <CreateButton onClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}>텍스트</CreateButton>
-            <CreateButton onClick={() => handleCreateElement(ProjectElementType.DIVIDER)}>구분선</CreateButton>
-          </CreateButtonGroup>
+          <Space $align={"center"} $height={"calc(6vw)"}>
+            <CreateButtonGroup>
+              <CreateButton onClick={() => handleCreateElement(ProjectElementType.WORK)}>Work</CreateButton>
+              <CreateButton onClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}>Text</CreateButton>
+              <CreateButton onClick={() => handleCreateElement(ProjectElementType.DIVIDER)}>Divider</CreateButton>
+            </CreateButtonGroup>
+          </Space>
         </>
       )}
     </ProjectElementListComp>
@@ -163,22 +166,20 @@ const ConfirmButton = styled.button`
 const CreateButtonGroup = styled.div`
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 20px;
 `;
 
 const CreateButton = styled.button`
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  width: 100px;
+  padding: 0.5rem 1rem;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #45a049;
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
   }
 `;
 
