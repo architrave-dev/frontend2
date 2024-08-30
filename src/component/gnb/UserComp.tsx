@@ -22,6 +22,10 @@ const UserComp: React.FC = () => {
   };
 
   const handleUserAction = () => {
+    if (isEditMode) {
+      alert("You are in edit mode.");
+      return;
+    }
     if (user) {
       compareAuiLoggedInAui(user);
     } else {
