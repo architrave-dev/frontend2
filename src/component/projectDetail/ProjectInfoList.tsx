@@ -92,7 +92,7 @@ const CreateButton = styled.button`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   cursor: pointer;
   font-size: 1rem;
-
+  transition: background-color 0.3s;
   &:hover {
     background-color: ${({ theme }) => theme.colors.color_Gray_06};
   }

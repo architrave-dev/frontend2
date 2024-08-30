@@ -194,12 +194,15 @@ const ReplaceImageButton = styled.button`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: ${({ theme }) => theme.colors.color_Alpha_03};
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: none;
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Alpha_04};
+  }
 `;
 
 const HiddenFileInput = styled.input`

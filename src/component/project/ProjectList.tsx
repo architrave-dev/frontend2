@@ -78,8 +78,9 @@ const CreateProjectButton = styled.button`
   height: 30px;
   background-color: ${({ theme }) => theme.colors.color_White};
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  transition: background-color 0.3s;
   &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_05};
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
   }
 `;
 
