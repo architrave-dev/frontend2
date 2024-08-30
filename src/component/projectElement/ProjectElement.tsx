@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
 import Divider, { DividerType } from '../../shared/Divider';
-import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 
 
@@ -29,8 +29,8 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   // order,
 }) => {
   const { isEditMode } = useEditMode();
-  const { removedProjectElements, setRemovedProjectElements } = useProjectElementListStoreForUpdate();
-  const [isDeleted, setIsDeleted] = useState(false);
+  const { projectElementList, setProjectElementList } = useProjectElementListStore();
+  const { updatedProjectElements, setUpdatedProjectElements, removedProjectElements, setRemovedProjectElements } = useProjectElementListStoreForUpdate();
   const contentRouter = () => {
     switch (projectElementType) {
       case ProjectElementType.WORK:
@@ -45,7 +45,15 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   }
 
   const handleDelete = () => {
-    setIsDeleted(true);
+    const targetElement = updatedProjectElements.find(each => each.id === id);
+    if (targetElement) {
+      const updatedInfoList = updatedProjectElements.filter((each) => each.id !== id)
+      setUpdatedProjectElements(updatedInfoList);
+    }
+
+    const updatedProjectInfoList = projectElementList.filter((each) => each.id !== id)
+    setProjectElementList(updatedProjectInfoList);
+
     const newRemovedElement: RemoveProjectElementReq = { id: id };
     setRemovedProjectElements([...removedProjectElements, newRemovedElement]);
   }
@@ -53,12 +61,11 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   return (
     <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
-      {isEditMode ?
-        <DeleteButton onClick={handleDelete} disabled={isDeleted}>
+      {isEditMode && (
+        <DeleteButton onClick={handleDelete}>
           Delete
         </DeleteButton>
-        : <></>
-      }
+      )}
     </ProjectElementListWrapper>
   );
 }
@@ -98,10 +105,6 @@ const DeleteButton = styled.button`
   background-color: ${({ theme }) => theme.colors.color_Gray_02};
   color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.color_Gray_04};
-    cursor: not-allowed;
-  }
 `;
 
 export default ProjectElement;

@@ -10,7 +10,6 @@ import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi'
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
-import defaultImg from '../../asset/project/default_1.png';
 import Space from '../../shared/Space';
 
 
@@ -45,8 +44,8 @@ const ProjectElementList: React.FC = () => {
       projectElementType: elementType,
       createWorkReq: elementType === ProjectElementType.WORK ?
         {
-          originUrl: defaultImg,
-          thumbnailUrl: defaultImg,
+          originUrl: '',
+          thumbnailUrl: '',
           title: "New Work",
           description: "This is New Work",
           size: {
@@ -92,9 +91,8 @@ const ProjectElementList: React.FC = () => {
 
   return (
     <ProjectElementListComp>
-      {isEditMode && isChanged()
-        // && projectElementList
-        ? <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
+      {isEditMode && isChanged() ?
+        <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
       }
       {projectElementList.map((each, index) => (
         <ProjectElement
@@ -106,7 +104,6 @@ const ProjectElementList: React.FC = () => {
           textBox={each.textBox}
           textBoxAlignment={each.textBoxAlignment}
           dividerType={each.dividerType}
-        // order={each.order}
         />
       ))}
       {isEditMode && (
