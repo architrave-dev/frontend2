@@ -166,7 +166,7 @@ const Title = styled.h1`
 
 const Description = styled.p`
   max-width: 70vw;
-  min-height: 6vh;
+  min-height: 7vh;
   margin-bottom: 20px;
   padding: 0.5rem;
   font-size: ${({ theme }) => theme.fontSize.font_B01};

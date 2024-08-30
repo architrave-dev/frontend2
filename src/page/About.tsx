@@ -1,10 +1,9 @@
 import React from 'react';
+import NotYet from '../component/NotYet';
 
 const About: React.FC = () => {
   return (
-    <div>
-      <h1>About Page</h1>
-    </div>
+    <NotYet />
   );
 }
 
