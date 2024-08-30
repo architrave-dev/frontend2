@@ -27,8 +27,8 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
   const handleCreateInfo = () => {
     const newInfo: CreateProjectInfoReq = {
       tempId: Math.floor(Math.random() * 100) + "",
-      customName: 'New Info',
-      customValue: 'New value'
+      customName: '',
+      customValue: ''
     };
     setCreateInfoList([...createInfoList, newInfo]);
   };

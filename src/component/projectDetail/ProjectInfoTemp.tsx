@@ -34,7 +34,7 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
       <NameInput
         value={initialCustomName}
         onChange={(e) => handlechange("customName", e.target.value)}
-        placeholder="Enter name"
+        placeholder="Enter info"
       />
       <ValueInput
         value={initialCustomValue}

@@ -59,10 +59,12 @@ const ProjectInfoFlex: React.FC<ProjectInfoProps> = ({
         <>
           <NameInput
             value={initialCustomName}
+            placeholder='Enter info'
             onChange={(e) => handlechange("customName", e.target.value)}
           />
           <ValueInput
             value={initialCustomValue}
+            placeholder='Enter value'
             onChange={(e) => handlechange("customValue", e.target.value)}
           />
           <DeleteButton onClick={handleDelete} disabled={isDeleted}>

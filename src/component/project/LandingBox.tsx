@@ -96,7 +96,7 @@ const LandingBox: React.FC = () => {
   };
 
   return (
-    <Container $backgroundimage={backgroundImageUrl ? backgroundImageUrl : defaultImg}>
+    <Container $backgroundimage={backgroundImageUrl === '' ? defaultImg : backgroundImageUrl}>
       {isEditMode ? (
         <>
           <ReplaceImageButton onClick={triggerFileInput} disabled={isUploading}>
@@ -140,7 +140,7 @@ const LandingBox: React.FC = () => {
   );
 };
 
-const Container = styled.div<{ $backgroundimage: string }>`
+const Container = styled.div<{ $backgroundimage: string | undefined }>`
   position: relative;
 
   background-image: url(${props => props.$backgroundimage});
