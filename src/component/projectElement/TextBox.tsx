@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { TextBoxAlignment, TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
@@ -14,7 +14,6 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
 
   const handleAlignmentChange = (value: TextBoxAlignment) => {
     const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
@@ -77,7 +76,6 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
           [field]: value
         } as UpdateTextBoxReq
       };
-
       //projectElementList에서 id로 찾고
       //updatedProjectElements에 추가한다.
       setUpdatedProjectElements([...updatedProjectElements, { ...newUpdateProjectElementReq }]);
@@ -89,18 +87,10 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
     setProjectElementList(updatedProjectElementList);
   }
 
-  const adjustTextareaHeight = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      console.log("textarea.scrollHeight: ", `${textarea.scrollHeight}`)
-      textarea.style.height = 'auto'; // 초기화
-      textarea.style.height = `${textarea.scrollHeight}px`; // scrollHeight를 기준으로 높이 설정
-    }
-  };
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [initialData.content]);
+  const calculateRows = (content: string): number => {
+    const lineBreaks = content.split('\n').length;
+    return Math.max(lineBreaks, 1); // Ensure at least 1 row
+  }
 
   return (
     <TextBoxWrapper>
@@ -116,11 +106,17 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
             $textBoxAlignment={initialTexBoxAlignment}
             value={initialData.content}
             onChange={(e) => handlechange("content", e.target.value)}
-            rows={1}
+            rows={calculateRows(initialData.content)}
           />
         </>
       ) : (
-        <TextBoxContent $textBoxAlignment={initialTexBoxAlignment}>{initialData.content}</TextBoxContent>
+        <TextBoxContent $textBoxAlignment={initialTexBoxAlignment}>
+          {initialData.content.split('\n').map((line, index) => (
+            <React.Fragment key={index}>
+              {line}<br />
+            </React.Fragment>
+          ))}
+        </TextBoxContent>
       )}
     </TextBoxWrapper>
   );

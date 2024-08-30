@@ -27,6 +27,10 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
     setCreatedProjectElements(newCreatedProjectElements);
   }
 
+  const calculateRows = (content: string): number => {
+    const lineBreaks = content.split('\n').length;
+    return Math.max(lineBreaks, 1); // Ensure at least 1 row
+  }
 
   return (
     <TextBoxWrapper>
@@ -40,7 +44,7 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
         $textBoxAlignment={initialTexBoxAlignment}
         value={initialData.content}
         onChange={(e) => handlechange("content", e.target.value)}
-        rows={1}
+        rows={calculateRows(initialData.content)}
       />
     </TextBoxWrapper>
   );
