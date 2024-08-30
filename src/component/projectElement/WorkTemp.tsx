@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { CreateProjectElementReq, CreateWorkReq, SizeData, WorkAlignment, convertSizeToString, convertStringToSize, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { uploadToS3 } from '../../shared/aws/s3Upload';
+import defaultImg from '../../asset/project/default_1.png';
 
 export interface WorkProps {
   tempId: string;
@@ -26,11 +27,6 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
     if (file) {
       setIsUploading(true);
       try {
-        // const reader = new FileReader();
-        // reader.onloadend = () => {
-        //   handlechange('originUrl', reader.result as string);
-        // };
-        // reader.readAsDataURL(file);
         const imageUrl = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!);
         handlechange('originUrl', imageUrl);
       } catch (error) {
@@ -69,7 +65,7 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
   return (
     <WorkWrapper>
       <ImgWrapper>
-        <WorkImage src={initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
+        <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
         <ReplaceImageButton onClick={triggerFileInput}>
           {isUploading ? 'Uploading...' : 'Replace Image'}
         </ReplaceImageButton>
