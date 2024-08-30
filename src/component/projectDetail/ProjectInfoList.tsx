@@ -1,26 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import ProjectInfo from '../../component/projectDetail/ProjectInfo';
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
-import ProjectInfoFlex from './ProjectInfoFlex';
+import ProjectInfo from './ProjectInfo';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import ProjectInfoTemp from './ProjectInfoTemp';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import Space from '../../shared/Space';
 
-interface ProjectInfoListProps {
-  date: string;
-  setDate: (value: string) => void;
-  supportedBy: string;
-  setSupportedBy: (value: string) => void;
-}
-
-const ProjectInfoList: React.FC<ProjectInfoListProps> = (
-  { date, setDate, supportedBy, setSupportedBy }
-) => {
+const ProjectInfoList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { isLoading, project } = useProjectDetail();
+  const { isLoading } = useProjectDetail();
   const { projectInfoList } = useProjectInfoListStore();
   const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
 
@@ -36,30 +26,14 @@ const ProjectInfoList: React.FC<ProjectInfoListProps> = (
 
   return (
     <ProjectInfoListComp>
-      {project?.startDate && project?.endDate &&
+      {projectInfoList && projectInfoList.map((each, index) =>
         <ProjectInfo
-          initialCustomName="Date"
-          initialCustomValue={date}
-          changeValue={setDate}
-          isEditMode={isEditMode}
-        />
-      }
-      {project?.supportedBy &&
-        <ProjectInfo
-          initialCustomName="Support"
-          initialCustomValue={supportedBy}
-          changeValue={setSupportedBy}
-          isEditMode={isEditMode}
-        />
-      }
-      {projectInfoList && projectInfoList.map((each, index) => (
-        <ProjectInfoFlex
           key={index}
           projectInfoId={each.id}
           initialCustomName={each.customName}
           initialCustomValue={each.customValue}
         />
-      ))}
+      )}
       {isEditMode &&
         <>
           {createInfoList.map((each) => (

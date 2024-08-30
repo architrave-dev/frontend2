@@ -18,8 +18,6 @@ const ProjectDetailContainer: React.FC = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [backgroundImageUrl, setBackgroundImageUrl] = useState("");
-  const [supportedBy, setSupprotedBy] = useState("");
-  const [date, setDate] = useState("");
 
   const { createInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
 
@@ -38,12 +36,6 @@ const ProjectDetailContainer: React.FC = () => {
       setTitle(project.title);
       setDescription(project.description);
       setBackgroundImageUrl(project.originUrl);
-      setSupprotedBy(project.supportedBy ? project.supportedBy : ' ');
-      setDate(
-        (project.startDate && project.endDate) ?
-          removeTime(project.startDate) + " ~ " + removeTime(project.endDate)
-          : getToday() + ' ~ ' + getToday()
-      )
     }
   }, [project]);
 
@@ -56,9 +48,6 @@ const ProjectDetailContainer: React.FC = () => {
       thumbnailUrl: backgroundImageUrl,
       title: title,
       description: description,
-      startDate: date.split(" ~ ")[0],
-      endDate: date.split(" ~ ")[1],
-      supportedBy: supportedBy,
       createdProjectInfoList: createInfoList,
       updatedProjectInfoList: updateInfoList,
       removedProjectInfoList: removeInfoList,
@@ -77,9 +66,6 @@ const ProjectDetailContainer: React.FC = () => {
       thumbnailUrl: backgroundImageUrl,
       title: title,
       description: description,
-      startDate: date.split(" ~ ")[0],
-      endDate: date.split(" ~ ")[1],
-      supportedBy: supportedBy,
       createdProjectInfoList: createInfoList,
       updatedProjectInfoList: updateInfoList,
       removedProjectInfoList: removeInfoList,
@@ -88,9 +74,6 @@ const ProjectDetailContainer: React.FC = () => {
     return (
       initialData.originUrl !== currentData.originUrl ||
       initialData.title !== currentData.title ||
-      initialData.startDate !== currentData.startDate ||
-      initialData.endDate !== currentData.endDate ||
-      initialData.supportedBy !== currentData.supportedBy ||
       (currentData.createdProjectInfoList?.length ?? 0) > 0 ||
       (currentData.updatedProjectInfoList?.length ?? 0) > 0 ||
       (currentData.removedProjectInfoList?.length ?? 0) > 0
@@ -107,12 +90,7 @@ const ProjectDetailContainer: React.FC = () => {
       <ProjectDetailWrapper>
         <ProjectTitle title={title} setTitle={setTitle} />
         <Divider dividerType={DividerType.PLAIN} />
-        <ProjectInfoList
-          date={date}
-          setDate={setDate}
-          supportedBy={supportedBy}
-          setSupportedBy={setSupprotedBy}
-        />
+        <ProjectInfoList />
       </ProjectDetailWrapper>
     </ProjectDetailContainerComp>
   );

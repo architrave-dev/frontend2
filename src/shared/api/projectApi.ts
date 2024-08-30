@@ -51,9 +51,6 @@ export interface UpdateProjectReq {
   thumbnailUrl?: string;
   title?: string;
   description?: string;
-  startDate?: string;
-  endDate?: string;
-  supportedBy?: string;
   createdProjectInfoList?: CreateProjectInfoReq[];
   updatedProjectInfoList?: UpdatedProjectInfoReq[];
   removedProjectInfoList?: RemoveProjectInfoReq[];
