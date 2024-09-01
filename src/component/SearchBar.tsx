@@ -32,10 +32,10 @@ const SearchBar: React.FC = () => {
           value={aui}
           onChange={(e) => setAui(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="작가 이름을 검색해 주세요."
+          placeholder="Enter Artist ID"
         />
         <Button onClick={handleSearch}>
-          {isLoading ? '검색 중...' : '검색'}
+          {isLoading ? 'Search...' : 'Search'}
         </Button>
       </InputWrapper>
       {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
