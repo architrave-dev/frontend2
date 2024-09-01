@@ -1,6 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { CreateProjectElementReq, CreateWorkReq, SizeData, WorkAlignment, convertSizeToString, convertStringToSize, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { uploadToS3 } from '../../shared/aws/s3Upload';
+import defaultImg from '../../asset/project/default_1.png';
 
 export interface WorkProps {
   tempId: string;
@@ -11,6 +13,8 @@ export interface WorkProps {
 const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -18,14 +22,18 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
     }
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        handlechange('originUrl', reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setIsUploading(true);
+      try {
+        const imageUrl = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!);
+        handlechange('originUrl', imageUrl);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -41,12 +49,25 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
     setCreatedProjectElements(newCreatedProjectElements);
   }
 
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      console.log("textarea.scrollHeight: ", `${textarea.scrollHeight}`)
+      textarea.style.height = 'auto'; // 초기화
+      textarea.style.height = `${textarea.scrollHeight}px`; // scrollHeight를 기준으로 높이 설정
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [initialData.description]);
+
   return (
     <WorkWrapper>
       <ImgWrapper>
-        <WorkImage src={initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
+        <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
         <ReplaceImageButton onClick={triggerFileInput}>
-          이미지 교체
+          {isUploading ? 'Uploading...' : 'Replace Image'}
         </ReplaceImageButton>
         <HiddenFileInput
           type="file"
@@ -55,36 +76,37 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
           accept="image/*"
         />
       </ImgWrapper>
-      <TitleTextAreaWrpper>
+      <TitleInfoWrpper>
         <TitleInput
           value={initialData.title}
           onChange={(e) => handlechange("title", e.target.value)}
           placeholder="Title"
         />
         <Textarea
+          ref={textareaRef}
           value={initialData.description}
           onChange={(e) => handlechange("description", e.target.value)}
           placeholder="Description"
         />
-      </TitleTextAreaWrpper>
-      <WorkInfoEdit>
-        <Input
-          value={initialData.material}
-          onChange={(e) => handlechange("material", e.target.value)}
-          placeholder="Material"
-        />
-        <Input
-          value={convertSizeToString(initialData.size)}
-          onChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
-          placeholder="Size"
-        />
-        <Input
-          type="number"
-          value={initialData.prodYear}
-          onChange={(e) => handlechange("prodYear", e.target.value)}
-          placeholder="Year"
-        />
-      </WorkInfoEdit>
+        <WorkInfo>
+          <Input
+            value={initialData.material}
+            onChange={(e) => handlechange("material", e.target.value)}
+            placeholder="Material"
+          />
+          <Input
+            value={convertSizeToString(initialData.size)}
+            onChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
+            placeholder="Size"
+          />
+          <Input
+            type="number"
+            value={initialData.prodYear}
+            onChange={(e) => handlechange("prodYear", e.target.value)}
+            placeholder="Year"
+          />
+        </WorkInfo>
+      </TitleInfoWrpper>
     </WorkWrapper>
   );
 };
@@ -94,6 +116,7 @@ const WorkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  // background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 const ImgWrapper = styled.div`
   position: relative;
@@ -106,58 +129,60 @@ const WorkImage = styled.img`
   object-fit: contain;
 `;
 
-const WorkInfoEdit = styled.div`
+const TitleInfoWrpper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between; 
-  padding: 0 calc(10vw);
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  text-align: center;
-`;
-
-const TitleTextAreaWrpper = styled.div`
-  width: 100%;
-  padding: 0 calc(10vw);
+  flex-direction: column;
+  align-items: center;
 `
 
-const TitleInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 8px;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
+const WorkInfo = styled.div`
+  display: flex;
+  gap: 4px;
 `;
 
 const Input = styled.input`
-  width: 200px;
-  padding: 8px;
-  margin-bottom: 8px;
+  height: 18px;
+  width: 120px;
+  padding: 0 8px;
   text-align: center;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
   color: ${({ theme }) => theme.colors.color_Gray_04};
+  font-size: ${({ theme }) => theme.fontSize.font_B04};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
   background-color: transparent;
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   outline: none;
+`;
+
+const TitleInput = styled.input`
+  width: 100%;
+  height: 19px;
+  padding: 4px 8px;
+  margin-bottom: 2px;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
+  line-height: ${({ theme }) => theme.fontSize.font_B03};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  outline: none;
+  text-align: center;
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
-  min-height: 100px;
-  padding: 8px;
-  margin-bottom: 8px;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
+  height: 18px;
+  font-size: ${({ theme }) => theme.fontSize.font_B03};
   color: ${({ theme }) => theme.colors.color_Gray_04};
   background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   outline: none;
-  resize: vertical;
+  text-align: center;
+  resize: none; 
+  overflow: hidden;
 `;
 
 const ReplaceImageButton = styled.button`
@@ -165,12 +190,15 @@ const ReplaceImageButton = styled.button`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: ${({ theme }) => theme.colors.color_Alpha_03};
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: none;
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Alpha_04};
+  }
 `;
 
 const HiddenFileInput = styled.input`

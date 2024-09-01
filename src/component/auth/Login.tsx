@@ -20,7 +20,7 @@ const Login: React.FC = () => {
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
-      setEmailError('올바른 이메일 주소를 입력해주세요.');
+      setEmailError('Invalid email format');
       return false;
     }
     setEmailError('');
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
 
   const validatePassword = (password: string) => {
     if (password.length < 4) {
-      setPasswordError('비밀번호는 4자 이상이어야 합니다.');
+      setPasswordError('Invalid password, min-length: 4');
       return false;
     }
     setPasswordError('');
@@ -52,10 +52,10 @@ const Login: React.FC = () => {
 
   return (
     <LoginComp>
-      <Title>로그인</Title>
+      <Title>Login</Title>
       <form onSubmit={handleSubmit}>
         <div>
-          <Label htmlFor="email">이메일</Label>
+          <Label htmlFor="email">Email</Label>
           <InputWrapper>
             <Input
               id="email"
@@ -63,7 +63,7 @@ const Login: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => validateEmail(email)}
-              placeholder="이메일을 입력해 주세요."
+              placeholder="username@email.com"
               $hasError={!!emailError}
             />
             {emailError && <ErrorIcon>!</ErrorIcon>}
@@ -71,7 +71,7 @@ const Login: React.FC = () => {
           <ErrorText>{emailError}</ErrorText>
         </div>
         <div>
-          <Label htmlFor="password">비밀번호</Label>
+          <Label htmlFor="password">Password</Label>
           <InputWrapper>
             <Input
               id="password"
@@ -79,7 +79,7 @@ const Login: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onBlur={() => validatePassword(password)}
-              placeholder="비밀번호를 입력해 주세요."
+              placeholder="Password"
               $hasError={!!passwordError}
             />
             {passwordError && <ErrorIcon>!</ErrorIcon>}
@@ -89,9 +89,9 @@ const Login: React.FC = () => {
         {apiError && <ErrorText>{apiError}</ErrorText>}
         <ButtonContainer>
           <SubmitButton type="submit" $isValid={isValid()} disabled={isLoading}>
-            {isLoading ? '로그인 중...' : '로그인'}
+            {isLoading ? 'Login...' : 'Login'}
           </SubmitButton>
-          <CancelButton type="button" onClick={() => setModalType(ModalType.NONE)}>취소</CancelButton>
+          <CancelButton type="button" onClick={() => setModalType(ModalType.NONE)}>Cancel</CancelButton>
         </ButtonContainer>
       </form>
     </LoginComp>

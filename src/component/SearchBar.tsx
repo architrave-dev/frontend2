@@ -32,10 +32,10 @@ const SearchBar: React.FC = () => {
           value={aui}
           onChange={(e) => setAui(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="작가 이름을 검색해 주세요."
+          placeholder="Enter Artist ID"
         />
         <Button onClick={handleSearch}>
-          {isLoading ? '검색 중...' : '검색'}
+          {isLoading ? 'Search...' : 'Search'}
         </Button>
       </InputWrapper>
       {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
@@ -47,7 +47,6 @@ const SearchWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  // justify-content: center;
 `;
 
 const InputWrapper = styled.div`
@@ -59,19 +58,9 @@ const Input = styled.input`
   width: 400px;
   padding: 10px;
   font-size: ${({ theme }) => theme.fontSize.font_B02};
-  border: 1px solid #ccc;
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   outline: none;
-  background-color: #f5f5f5;
-
-  &:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-  }
-
-  &:disabled {
-    background-color: #e9ecef;
-    cursor: not-allowed;
-  }
+  background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 
 const Button = styled.button`
@@ -79,33 +68,21 @@ const Button = styled.button`
   padding: 10px 20px;
   font-size: ${({ theme }) => theme.fontSize.font_B02};
   border: none;
-  background-color: #000;
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.color_Gray_01};
+  color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
-  
-  // &:hover {
-  //   background-color: #333;
-  // }
 
-  &:hover:not(:disabled) {
-    background-color: #0056b3;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
-  }
-
-  &:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_03};
   }
 `;
 
-const ErrorMessage = styled.p`
-  color: #dc3545;
+const ErrorMessage = styled.div`
+  width: 100%;
+  color: ${({ theme }) => theme.colors.color_alert_red};
   margin-top: 10px;
   font-size: ${({ theme }) => theme.fontSize.font_B03};
+  text-align: left;
 `;
 
 export default SearchBar;

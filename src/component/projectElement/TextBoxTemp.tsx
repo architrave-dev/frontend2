@@ -27,6 +27,10 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
     setCreatedProjectElements(newCreatedProjectElements);
   }
 
+  const calculateRows = (content: string): number => {
+    const lineBreaks = content.split('\n').length;
+    return Math.max(lineBreaks, 1); // Ensure at least 1 row
+  }
 
   return (
     <TextBoxWrapper>
@@ -40,36 +44,46 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
         $textBoxAlignment={initialTexBoxAlignment}
         value={initialData.content}
         onChange={(e) => handlechange("content", e.target.value)}
-        rows={1}
+        rows={calculateRows(initialData.content)}
       />
     </TextBoxWrapper>
   );
 }
 
 const TextBoxWrapper = styled.div`
+  position: relative;
+  min-height: 80px;
 `;
 
 const AlignmentSelect = styled.select`
-  margin-bottom: 10px;
-  padding: 5px;
+  position: absolute;
+  top: -40px;
+  width: 100px;
+  padding: 2px;
   font-size: ${({ theme }) => theme.fontSize.font_B04};
   color: ${({ theme }) => theme.colors.color_Gray_03};
   background-color: transparent;
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-  border-radius: 4px;
+  border-radius: 1px;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const TextArea = styled.textarea<{ $textBoxAlignment: TextBoxAlignment | null }>`
   width: 100%;
-  min-height: 120px;
-  padding: 8px;
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
+  padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
+  font-size: ${({ theme }) => theme.fontSize.font_B02};
   background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   resize: none;
   overflow: hidden;
   text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
+  &:focus {
+    outline: none;
+  }
 `;
 
 

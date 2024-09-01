@@ -22,6 +22,10 @@ const UserComp: React.FC = () => {
   };
 
   const handleUserAction = () => {
+    if (isEditMode) {
+      alert("You are in edit mode.");
+      return;
+    }
     if (user) {
       compareAuiLoggedInAui(user);
     } else {
@@ -39,24 +43,25 @@ const UserComp: React.FC = () => {
 
   return (
     <UserArticle>
-      {user && user.aui === aui && (
-        <EditToggle
-          onClick={toggleEditMode}>
-          {isEditMode ? 'Complete' : 'Edit'}
-        </EditToggle>
-      )}
       <ArtistName onClick={handleUserAction}>
         {extractUsernameFromAui(aui)}
       </ArtistName>
+      {user && user.aui === aui && (
+        <EditToggle
+          onClick={toggleEditMode}>
+          {isEditMode ? 'Done' : 'Edit'}
+        </EditToggle>
+      )}
     </UserArticle>
   );
 }
 
 const UserArticle = styled.article`
   width: calc(14vw);
-  max-width: 100px;
+  max-width: 120px;
 
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between; 
 
@@ -72,6 +77,8 @@ const ArtistName = styled.div`
 `;
 
 const EditToggle = styled.div`
+  width: 50px;
+  text-align: center;
   text-decoration: none;
   &:hover {
     text-decoration: ${({ theme }) => theme.fontWeight.decoration};

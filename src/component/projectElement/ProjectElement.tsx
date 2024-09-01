@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
@@ -29,8 +29,8 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   // order,
 }) => {
   const { isEditMode } = useEditMode();
-  const { removedProjectElements, setRemovedProjectElements } = useProjectElementListStoreForUpdate();
-  const [isDeleted, setIsDeleted] = useState(false);
+  const { projectElementList, setProjectElementList } = useProjectElementListStore();
+  const { updatedProjectElements, setUpdatedProjectElements, removedProjectElements, setRemovedProjectElements } = useProjectElementListStoreForUpdate();
   const contentRouter = () => {
     switch (projectElementType) {
       case ProjectElementType.WORK:
@@ -45,7 +45,15 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   }
 
   const handleDelete = () => {
-    setIsDeleted(true);
+    const targetElement = updatedProjectElements.find(each => each.id === id);
+    if (targetElement) {
+      const updatedInfoList = updatedProjectElements.filter((each) => each.id !== id)
+      setUpdatedProjectElements(updatedInfoList);
+    }
+
+    const updatedProjectInfoList = projectElementList.filter((each) => each.id !== id)
+    setProjectElementList(updatedProjectInfoList);
+
     const newRemovedElement: RemoveProjectElementReq = { id: id };
     setRemovedProjectElements([...removedProjectElements, newRemovedElement]);
   }
@@ -53,24 +61,24 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   return (
     <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
-      {isEditMode ?
-        <DeleteButton onClick={handleDelete} disabled={isDeleted}>
+      {isEditMode && (
+        <DeleteButton onClick={handleDelete}>
           Delete
         </DeleteButton>
-        : <></>
-      }
+      )}
     </ProjectElementListWrapper>
   );
 }
 
 const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType }>`
+  position: relative;
   width: 100%;
   padding: ${({ $elementType }) => {
     switch ($elementType) {
-      case ProjectElementType.WORK:
-        return null;
-      default:
+      case ProjectElementType.TEXTBOX:
         return '0 calc(10vw)';
+      default:
+        return null;
     }
   }};
   
@@ -90,17 +98,13 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
 `;
 
 const DeleteButton = styled.button`
-  margin-left: 10px;
+  height: 32px;
+  position: absolute;
+  right: 0px;
   padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.color_Gray_02};
+  color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
-  &:disabled {
-    background-color: #ff9999;
-    cursor: not-allowed;
-  }
 `;
 
 export default ProjectElement;

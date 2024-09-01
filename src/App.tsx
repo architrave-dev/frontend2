@@ -31,11 +31,12 @@ const App: React.FC = () => {
 
 
 const AppComp = styled.div`
+  position: relative;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #FAF0E4;  /*for dev*/
+  // background-color: #FAF0E4;  /*for dev*/
 `;
 
 export default App;

@@ -18,7 +18,6 @@ export const useLandingBox = (): UseLandingBoxResult => {
 
   const handleLandingBoxSuccess = (response: LandingBoxResponse) => {
     const landingBoxData = response.data;
-    console.log("landingBoxData from useLandingBox: ", landingBoxData);
     setLandingBox(landingBoxData);
   };
 

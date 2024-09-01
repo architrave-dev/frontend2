@@ -9,9 +9,6 @@ export interface ProjectData {
   description: string;
   originUrl: string;
   thumbnailUrl: string;
-  startDate: string;
-  endDate: string;
-  supportedBy: string;
   projectInfoList: ProjectInfoData[];
   projectElementList: ProjectElementData[];
   isDeleted: boolean;

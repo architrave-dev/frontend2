@@ -7,10 +7,12 @@ const theme: DefaultTheme = {
     color_Gray_03: '#4d4d4d',
     color_Gray_04: '#7d7d7d',
     color_Gray_05: '#b3b3b3',
+    color_Gray_06: '#F0F0F0',
     color_White: '#ffffff',
     color_Alpha_01: 'rgba(0, 0, 0, 0.6)',
     color_Alpha_02: 'rgba(0, 0, 0, 0.2)',
     color_Alpha_03: 'rgba(255, 255, 255, 0.3)',
+    color_Alpha_04: 'rgba(255, 255, 255, 0.6)',
     color_alert_green: "#4CAF50",
     color_alert_red: '#FA4545'
   },

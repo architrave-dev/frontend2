@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import WorkTemp from './WorkTemp';
 import TextBoxTemp from './TextBoxTemp';
 import { DividerType } from '../../shared/Divider';
-import { CreateTextBoxReq, CreateWorkReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateTextBoxReq, CreateWorkReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import DividerTemp from './DividerTemp';
 
 
@@ -57,13 +57,14 @@ const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
 }
 
 const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType }>`
+  position: relative;
   width: 100%;
   padding: ${({ $elementType }) => {
     switch ($elementType) {
-      case ProjectElementType.WORK:
-        return null;
-      default:
+      case ProjectElementType.TEXTBOX:
         return '0 calc(10vw)';
+      default:
+        return null;
     }
   }};
   
@@ -83,17 +84,16 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
 `;
 
 const DeleteButton = styled.button`
-  margin-left: 10px;
+  height: 32px;
+  position: absolute;
+  right: 0px;
   padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.color_Gray_02};
+  color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #ff3333;
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.color_Gray_04};
+    cursor: not-allowed;
   }
 `;
 

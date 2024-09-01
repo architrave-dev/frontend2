@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import ProjectElement from '../../component/projectElement/ProjectElement';
 import { useProjectElement } from '../../shared/hooks/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
 import { useParams } from 'react-router-dom';
-import { CreateProjectElementReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateProjectElementReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi';
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
-import defaultImg from '../../asset/project/mars.png';
+import Space from '../../shared/Space';
 
 
 const ProjectElementList: React.FC = () => {
@@ -21,20 +21,7 @@ const ProjectElementList: React.FC = () => {
   const { createdProjectElements, setCreatedProjectElements, updatedProjectElements, removedProjectElements } = useProjectElementListStoreForUpdate();
   const { aui } = useAui();
 
-  // useEffect(() => {
-  //   console.log("================================= start");
-  //   console.log("projectElementList: ", projectElementList);
-  //   console.log("createdProjectElements: ", createdProjectElements);
-  //   console.log("updatedProjectElements: ", updatedProjectElements);
-  //   console.log("removedProjectElements: ", removedProjectElements);
-  //   console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end");
-
-  // }, [projectElementList, createdProjectElements, updateProjectElementList, removedProjectElements]);
-
-
   useEffect(() => {
-    console.log("aui: ", AUI);
-    console.log("projectTitle: ", projectTitle);
     const getProjectElementListWithApi = async () => {
       if (aui && projectTitle) {
         try {
@@ -57,8 +44,8 @@ const ProjectElementList: React.FC = () => {
       projectElementType: elementType,
       createWorkReq: elementType === ProjectElementType.WORK ?
         {
-          originUrl: defaultImg,
-          thumbnailUrl: defaultImg,
+          originUrl: '',
+          thumbnailUrl: '',
           title: "New Work",
           description: "This is New Work",
           size: {
@@ -89,7 +76,6 @@ const ProjectElementList: React.FC = () => {
       updatedProjectElements: updatedProjectElements,
       removedProjectElements: removedProjectElements
     }
-    console.log("updatedData: ", updatedData);
 
     await updateProjectElementList(aui, updatedData);
     setEditMode(false);
@@ -105,9 +91,8 @@ const ProjectElementList: React.FC = () => {
 
   return (
     <ProjectElementListComp>
-      {isEditMode && isChanged()
-        // && projectElementList
-        ? <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
+      {isEditMode && isChanged() ?
+        <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
       }
       {projectElementList.map((each, index) => (
         <ProjectElement
@@ -119,7 +104,6 @@ const ProjectElementList: React.FC = () => {
           textBox={each.textBox}
           textBoxAlignment={each.textBoxAlignment}
           dividerType={each.dividerType}
-        // order={each.order}
         />
       ))}
       {isEditMode && (
@@ -137,11 +121,13 @@ const ProjectElementList: React.FC = () => {
               dividerType={each.dividerType}
             />
           ))}
-          <CreateButtonGroup>
-            <CreateButton onClick={() => handleCreateElement(ProjectElementType.WORK)}>이미지</CreateButton>
-            <CreateButton onClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}>텍스트</CreateButton>
-            <CreateButton onClick={() => handleCreateElement(ProjectElementType.DIVIDER)}>구분선</CreateButton>
-          </CreateButtonGroup>
+          <Space $align={"center"} $height={"calc(6vw)"}>
+            <CreateButtonGroup>
+              <CreateButton onClick={() => handleCreateElement(ProjectElementType.WORK)}>Work</CreateButton>
+              <CreateButton onClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}>Text</CreateButton>
+              <CreateButton onClick={() => handleCreateElement(ProjectElementType.DIVIDER)}>Divider</CreateButton>
+            </CreateButtonGroup>
+          </Space>
         </>
       )}
     </ProjectElementListComp>
@@ -154,8 +140,7 @@ const ProjectElementListComp = styled.article`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 120px;
-  padding: 0 calc(10vw);
+  padding: 0 calc(10vw) calc(8vh) calc(10vw);
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
@@ -164,35 +149,36 @@ const ProjectElementListComp = styled.article`
 
 const ConfirmButton = styled.button`
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: ${({ theme }) => theme.colors.color_White};
+  bottom: calc(8vh);
+  right: calc(10vw);
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: none;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   cursor: pointer;
   font-size: 1rem;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  }
 `;
 
 const CreateButtonGroup = styled.div`
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 20px;
 `;
 
 const CreateButton = styled.button`
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  width: 100px;
+  padding: 0.5rem 1rem;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #45a049;
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
   }
 `;
 

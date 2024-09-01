@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { uploadToS3 } from '../../shared/aws/s3Upload';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useLandingBox } from '../../shared/hooks/useLandingBox';
-import defaultImg from '../../asset/project/launches_header_desktop.jpg';
+import defaultImg from '../../asset/project/default_1.png';
 import { useAui } from '../../shared/hooks/useAui';
 import { LandingBoxData } from '../../shared/store/landingBoxStore';
 
@@ -96,7 +96,7 @@ const LandingBox: React.FC = () => {
   };
 
   return (
-    <Container $backgroundimage={backgroundImageUrl ? backgroundImageUrl : defaultImg}>
+    <Container $backgroundimage={backgroundImageUrl === '' ? defaultImg : backgroundImageUrl}>
       {isEditMode ? (
         <>
           <ReplaceImageButton onClick={triggerFileInput} disabled={isUploading}>
@@ -140,7 +140,7 @@ const LandingBox: React.FC = () => {
   );
 };
 
-const Container = styled.div<{ $backgroundimage: string }>`
+const Container = styled.div<{ $backgroundimage: string | undefined }>`
   position: relative;
 
   background-image: url(${props => props.$backgroundimage});
@@ -153,11 +153,12 @@ const Container = styled.div<{ $backgroundimage: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 40px 60px;
+  padding: 40px 6vw;
 `;
 
 const Title = styled.h1`
   max-width: 60vw;
+  padding: 0.5rem;
   font-size: ${({ theme }) => theme.fontSize.font_H01};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   margin-bottom: 20px;
@@ -165,7 +166,9 @@ const Title = styled.h1`
 
 const Description = styled.p`
   max-width: 70vw;
-
+  min-height: 7vh;
+  margin-bottom: 20px;
+  padding: 0.5rem;
   font-size: ${({ theme }) => theme.fontSize.font_B01};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;
@@ -173,7 +176,7 @@ const Description = styled.p`
 const Input = styled.input`
   width: 70%;
   padding: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 18px;
   font-size: ${({ theme }) => theme.fontSize.font_H01};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   background: transparent;
@@ -184,9 +187,9 @@ const Input = styled.input`
 
 const TextArea = styled.textarea`
   width: 60%;
-  min-height: 80px;
+  min-height: 10vh;
+  margin-bottom: 20px;
   padding: 0.5rem;
-  margin-bottom: 1rem;
   background: transparent;
   border: none;
   border-bottom: 2px solid #fff;
@@ -202,12 +205,15 @@ const ReplaceImageButton = styled.button`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: ${({ theme }) => theme.colors.color_Alpha_03};
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: none;
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Alpha_04};
+  }
 `;
 
 const HiddenFileInput = styled.input`
