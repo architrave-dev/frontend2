@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ProjectInfoData, useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/api/projectApi';
+import DeleteButton from '../../shared/component/DeleteButton';
 
 interface ProjectInfoProps {
   projectInfoId: string;
@@ -77,9 +78,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
             placeholder='Enter value'
             onChange={(e) => handlechange("customValue", e.target.value)}
           />
-          <DeleteButton onClick={handleDelete}>
-            Delete
-          </DeleteButton>
+          <DeleteButton handleDelete={handleDelete} />
         </>
       ) : (
         <>
@@ -121,15 +120,6 @@ const ValueInput = styled.input`
   color: ${({ theme }) => theme.colors.color_Gray_03};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
-`;
-
-const DeleteButton = styled.button`
-  margin-bottom: 8px;
-  margin-left: 24px;
-  padding: 5px 10px;
-  background-color: ${({ theme }) => theme.colors.color_Gray_02};
-  color: ${({ theme }) => theme.colors.color_White};
-  cursor: pointer;
 `;
 
 const NameSection = styled.div`

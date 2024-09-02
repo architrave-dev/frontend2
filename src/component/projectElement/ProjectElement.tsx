@@ -5,6 +5,7 @@ import TextBox from './TextBox';
 import Divider, { DividerType } from '../../shared/Divider';
 import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import DeleteButton from '../../shared/component/DeleteButton';
 
 
 export type ProjectElementProps = {
@@ -61,11 +62,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   return (
     <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
-      {isEditMode && (
-        <DeleteButton onClick={handleDelete}>
-          Delete
-        </DeleteButton>
-      )}
+      {isEditMode && <DeleteButton handleDelete={handleDelete} />}
     </ProjectElementListWrapper>
   );
 }
@@ -95,16 +92,6 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
         return 'calc(12vh)';
     }
   }};
-`;
-
-const DeleteButton = styled.button`
-  height: 32px;
-  position: absolute;
-  right: 0px;
-  padding: 5px 10px;
-  background-color: ${({ theme }) => theme.colors.color_Gray_02};
-  color: ${({ theme }) => theme.colors.color_White};
-  cursor: pointer;
 `;
 
 export default ProjectElement;

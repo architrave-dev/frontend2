@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
+import DeleteButton from '../../shared/component/DeleteButton';
 
 interface ProjectInfoTempProps {
   tempId: string;
@@ -41,9 +42,7 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
         onChange={(e) => handlechange("customValue", e.target.value)}
         placeholder="Enter value"
       />
-      <DeleteButton onClick={handleDelete}>
-        Delete
-      </DeleteButton>
+      <DeleteButton handleDelete={handleDelete} />
     </ProjectInfoItem>
   );
 };
@@ -80,17 +79,5 @@ const ValueInput = styled.input`
   font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;
 
-const DeleteButton = styled.button`
-  margin-bottom: 8px;
-  margin-left: 24px;
-  padding: 5px 10px;
-  background-color: ${({ theme }) => theme.colors.color_Gray_02};
-  color: ${({ theme }) => theme.colors.color_White};
-  cursor: pointer;
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.color_Gray_04};
-    cursor: not-allowed;
-  }
-`;
 
 export default ProjectInfoTemp;
