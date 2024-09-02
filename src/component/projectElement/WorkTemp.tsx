@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { CreateProjectElementReq, CreateWorkReq, SizeData, WorkAlignment, convertSizeToString, convertStringToSize, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import { uploadToS3 } from '../../shared/aws/s3Upload';
+import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
 
 export interface WorkProps {
@@ -10,37 +10,9 @@ export interface WorkProps {
   data: CreateWorkReq;
 }
 
-const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, data: initialData }) => {
+const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
-
-  const handleImageClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setIsUploading(true);
-      try {
-        const imageUrl = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!);
-        handlechange('originUrl', imageUrl);
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      } finally {
-        setIsUploading(false);
-      }
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
-
 
   const handlechange = (field: keyof CreateWorkReq, value: string | SizeData) => {
     const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
@@ -65,16 +37,8 @@ const Work: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, da
   return (
     <WorkWrapper>
       <ImgWrapper>
-        <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} onClick={handleImageClick} />
-        <ReplaceImageButton onClick={triggerFileInput}>
-          {isUploading ? 'Uploading...' : 'Replace Image'}
-        </ReplaceImageButton>
-        <HiddenFileInput
-          type="file"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-          accept="image/*"
-        />
+        <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} />
+        <ReplaceImageButton setBackgroundImageUrl={(imageUrl: string) => handlechange('originUrl', imageUrl)} />
       </ImgWrapper>
       <TitleInfoWrpper>
         <TitleInput
@@ -185,24 +149,5 @@ const Textarea = styled.textarea`
   overflow: hidden;
 `;
 
-const ReplaceImageButton = styled.button`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: ${({ theme }) => theme.colors.color_Alpha_03};
-  padding: 0.5rem 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Alpha_04};
-  }
-`;
 
-const HiddenFileInput = styled.input`
-  display: none;
-`;
-
-export default Work;
+export default WorkTemp;
