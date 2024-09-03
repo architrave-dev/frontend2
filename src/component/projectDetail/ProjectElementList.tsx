@@ -11,6 +11,7 @@ import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
 import Space from '../../shared/Space';
+import CreateButton from '../../shared/component/CreateButton';
 
 
 const ProjectElementList: React.FC = () => {
@@ -123,9 +124,9 @@ const ProjectElementList: React.FC = () => {
           ))}
           <Space $align={"center"} $height={"calc(6vw)"}>
             <CreateButtonGroup>
-              <CreateButton onClick={() => handleCreateElement(ProjectElementType.WORK)}>Work</CreateButton>
-              <CreateButton onClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}>Text</CreateButton>
-              <CreateButton onClick={() => handleCreateElement(ProjectElementType.DIVIDER)}>Divider</CreateButton>
+              <CreateButton name={"Work"} handleCreate={() => handleCreateElement(ProjectElementType.WORK)} />
+              <CreateButton name={"Text"} handleCreate={() => handleCreateElement(ProjectElementType.TEXTBOX)} />
+              <CreateButton name={"Divider"} handleCreate={() => handleCreateElement(ProjectElementType.DIVIDER)} />
             </CreateButtonGroup>
           </Space>
         </>
@@ -167,23 +168,6 @@ const CreateButtonGroup = styled.div`
   justify-content: center;
   gap: 20px;
 `;
-
-const CreateButton = styled.button`
-  width: 100px;
-  padding: 0.5rem 1rem;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_06};
-  }
-`;
-
-
-
 
 
 export default ProjectElementList;
