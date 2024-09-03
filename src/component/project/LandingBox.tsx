@@ -6,6 +6,7 @@ import defaultImg from '../../asset/project/default_1.png';
 import { useAui } from '../../shared/hooks/useAui';
 import { LandingBoxData } from '../../shared/store/landingBoxStore';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
+import ConfirmButton from '../../shared/component/ConfirmButton';
 
 
 const LandingBox: React.FC = () => {
@@ -97,8 +98,8 @@ const LandingBox: React.FC = () => {
               title: title,
               description: description,
               isDeleted: false,
-            }) ?
-            <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
+            }) &&
+            <ConfirmButton handleConfirm={handleConfirm} />
           }
         </>
       ) : (
@@ -168,18 +169,6 @@ const TextArea = styled.textarea`
   font-size: ${({ theme }) => theme.fontSize.font_B01};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   resize: vertical;
-`;
-
-const ConfirmButton = styled.button`
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
 `;
 
 

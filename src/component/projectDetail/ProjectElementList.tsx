@@ -12,6 +12,7 @@ import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
 import Space from '../../shared/Space';
 import CreateButton from '../../shared/component/CreateButton';
+import ConfirmButton from '../../shared/component/ConfirmButton';
 
 
 const ProjectElementList: React.FC = () => {
@@ -92,8 +93,8 @@ const ProjectElementList: React.FC = () => {
 
   return (
     <ProjectElementListComp>
-      {isEditMode && isChanged() ?
-        <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
+      {isEditMode && isChanged() &&
+        <ConfirmButton handleConfirm={handleConfirm} />
       }
       {projectElementList.map((each, index) => (
         <ProjectElement
@@ -145,21 +146,6 @@ const ProjectElementListComp = styled.article`
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
-  }
-`;
-
-const ConfirmButton = styled.button`
-  position: absolute;
-  bottom: calc(8vh);
-  right: calc(10vw);
-  padding: 0.5rem 1rem;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  cursor: pointer;
-  font-size: 1rem;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_06};
   }
 `;
 
