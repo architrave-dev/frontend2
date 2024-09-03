@@ -16,7 +16,7 @@ const ConfirmBtn = styled.button`
   bottom: calc(8vh);
   right: calc(10vw);
   padding: 0.5rem 1rem;
-  background-color: ${({ theme }) => theme.colors.color_White};
+  background-color: ${({ theme }) => theme.colors.color_Alpha_04};
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   cursor: pointer;
   font-size: 1rem;

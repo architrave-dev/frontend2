@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import DeleteButton from '../../shared/component/DeleteButton';
+import InfoInput, { InputType } from '../../shared/component/InfoInput';
 
 interface ProjectInfoTempProps {
   tempId: string;
@@ -32,15 +33,17 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 
   return (
     <ProjectInfoItem>
-      <NameInput
+      <InfoInput
+        type={InputType.NAME_NEW}
         value={initialCustomName}
-        onChange={(e) => handlechange("customName", e.target.value)}
-        placeholder="Enter info"
+        placeholder={'Enter info'}
+        handlechange={(e) => handlechange("customName", e.target.value)}
       />
-      <ValueInput
+      <InfoInput
+        type={InputType.VALUE_NEW}
         value={initialCustomValue}
-        onChange={(e) => handlechange("customValue", e.target.value)}
-        placeholder="Enter value"
+        placeholder={'Enter value'}
+        handlechange={(e) => handlechange("customValue", e.target.value)}
       />
       <DeleteButton handleDelete={handleDelete} />
     </ProjectInfoItem>
@@ -50,33 +53,7 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 const ProjectInfoItem = styled.div`
   display: flex;
   height: 40px;
-`;
-
-const NameInput = styled.input`
-  width: 18vw;
-  margin-right: 20px;
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-`;
-
-const ValueInput = styled.input`
-  width: 50vw;
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  gap: 20px;
 `;
 
 

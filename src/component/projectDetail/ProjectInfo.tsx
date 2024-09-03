@@ -4,6 +4,7 @@ import { ProjectInfoData, useProjectInfoListStore, useProjectInfoListStoreForUpd
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/api/projectApi';
 import DeleteButton from '../../shared/component/DeleteButton';
+import InfoInput, { InputType } from '../../shared/component/InfoInput';
 
 interface ProjectInfoProps {
   projectInfoId: string;
@@ -65,18 +66,20 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   }
 
   return (
-    <ProjectInfoItem>
+    <ProjectInfoItem $isEditMode={isEditMode}>
       {isEditMode ? (
         <>
-          <NameInput
+          <InfoInput
+            type={InputType.NAME}
             value={initialCustomName}
-            placeholder='Enter info'
-            onChange={(e) => handlechange("customName", e.target.value)}
+            placeholder={'Enter info'}
+            handlechange={(e) => handlechange("customName", e.target.value)}
           />
-          <ValueInput
+          <InfoInput
+            type={InputType.VALUE}
             value={initialCustomValue}
-            placeholder='Enter value'
-            onChange={(e) => handlechange("customValue", e.target.value)}
+            placeholder={'Enter value'}
+            handlechange={(e) => handlechange("customValue", e.target.value)}
           />
           <DeleteButton handleDelete={handleDelete} />
         </>
@@ -90,43 +93,16 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   );
 }
 
-const ProjectInfoItem = styled.div`
+const ProjectInfoItem = styled.div<{ $isEditMode: boolean }>`
   display: flex;
   height: 40px;
-`;
-
-const NameInput = styled.input`
-  width: 18vw;
-  margin-right: 20px;
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-`;
-
-const ValueInput = styled.input`
-  width: 50vw;  
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  gap: 20px;
+  margin-bottom: ${({ $isEditMode }) => $isEditMode ? '8px' : '10px'};
 `;
 
 const NameSection = styled.div`
   width: 18vw;
   padding: 5px;
-  margin-right: 20px;
-  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
@@ -135,7 +111,6 @@ const NameSection = styled.div`
 const ValueSection = styled.div`
   width: 60vw;
   padding: 5px;
-  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
