@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { CreateProjectElementReq, CreateTextBoxReq, TextBoxAlignment, TextBoxData, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateProjectElementReq, CreateTextBoxReq, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
 
 
 export interface TextBoxProps {
@@ -34,11 +35,10 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
 
   return (
     <TextBoxWrapper>
-      <AlignmentSelect value={initialTexBoxAlignment || ''} onChange={(e) => handleAlignmentChange(e.target.value as TextBoxAlignment)}>
-        <option value={TextBoxAlignment.LEFT}>Left</option>
-        <option value={TextBoxAlignment.CENTER}>Center</option>
-        <option value={TextBoxAlignment.RIGHT}>Right</option>
-      </AlignmentSelect>
+      <SelectBox
+        value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
+        selectType={SelectType.TEXTBOX_ALIGNMENT}
+        handleChange={handleAlignmentChange} />
       <TextArea
         ref={textAreaRef}
         $textBoxAlignment={initialTexBoxAlignment}
@@ -53,21 +53,6 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
 const TextBoxWrapper = styled.div`
   position: relative;
   min-height: 80px;
-`;
-
-const AlignmentSelect = styled.select`
-  position: absolute;
-  top: -40px;
-  width: 100px;
-  padding: 2px;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-  border-radius: 1px;
-  &:focus {
-    outline: none;
-  }
 `;
 
 const TextArea = styled.textarea<{ $textBoxAlignment: TextBoxAlignment | null }>`

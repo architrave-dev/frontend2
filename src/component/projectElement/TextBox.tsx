@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { TextBoxAlignment, TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
 
 
 export interface TextBoxProps {
@@ -18,19 +19,23 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
   const handleAlignmentChange = (value: TextBoxAlignment) => {
     const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
     if (targetElement) {
-      //updatedProjectElements에 있다면
       const updatedProjectElementList = updatedProjectElements.map(each =>
         each.updateTextBoxReq?.id === initialData.id ? { ...each, textBoxAlignment: value } : each
       )
       setUpdatedProjectElements(updatedProjectElementList);
     } else {
-      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
+      const target = projectElementList.find(pe => pe.textBox?.id === initialData.id);
       if (!target) return;
 
       const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...target,
-        textBoxAlignment: value
-      };
+        id: target.id,
+        updateWorkReq: null,
+        workAlignment: null,
+        updateTextBoxReq: initialData,
+        textBoxAlignment: value,
+        dividerType: null,
+        peOrder: target.peOrder
+      }
       setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
     }
     const updatedProjectElementList = projectElementList.map(each =>
@@ -96,11 +101,10 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
     <TextBoxWrapper>
       {isEditMode ? (
         <>
-          <AlignmentSelect value={initialTexBoxAlignment || TextBoxAlignment.CENTER} onChange={(e) => handleAlignmentChange(e.target.value as TextBoxAlignment)}>
-            <option value={TextBoxAlignment.LEFT}>Left</option>
-            <option value={TextBoxAlignment.CENTER}>Center</option>
-            <option value={TextBoxAlignment.RIGHT}>Right</option>
-          </AlignmentSelect>
+          <SelectBox
+            value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
+            selectType={SelectType.TEXTBOX_ALIGNMENT}
+            handleChange={handleAlignmentChange} />
           <TextArea
             ref={textareaRef}
             $textBoxAlignment={initialTexBoxAlignment}
@@ -123,48 +127,33 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
 }
 
 const TextBoxWrapper = styled.div`
-  position: relative;
-  min-height: 80px;
-`;
-
-const AlignmentSelect = styled.select`
-  position: absolute;
-  top: -40px;
-  width: 100px;
-  padding: 2px;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-  border-radius: 1px;
-  &:focus {
-    outline: none;
-  }
-`;
+      position: relative;
+      min-height: 80px;
+      `;
 
 const TextArea = styled.textarea<{ $textBoxAlignment: TextBoxAlignment | null }>`
-  width: 100%;
-  padding: 8px 0px;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  resize: none;
-  overflow: hidden;
-  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
-  &:focus {
-    outline: none;
+      width: 100%;
+      padding: 8px 0px;
+      color: ${({ theme }) => theme.colors.color_Gray_03};
+      font-size: ${({ theme }) => theme.fontSize.font_B02};
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+      resize: none;
+      overflow: hidden;
+      text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
+      &:focus {
+        outline: none;
   }
-`;
+      `;
 
 const TextBoxContent = styled.p<{ $textBoxAlignment: TextBoxAlignment | null }>`
-  padding: 8px 0px;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};  
-`;
+      padding: 8px 0px;
+      color: ${({ theme }) => theme.colors.color_Gray_03};
+      font-size: ${({ theme }) => theme.fontSize.font_B02};
+      font-weight: ${({ theme }) => theme.fontWeight.regular};
+      text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
+      `;
 
 const getAlignment = (alignment: TextBoxAlignment | null): string => {
   switch (alignment) {
