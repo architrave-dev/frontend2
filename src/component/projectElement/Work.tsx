@@ -5,6 +5,7 @@ import { ProjectElementData, SizeData, UpdateProjectElementReq, UpdateWorkReq, W
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
 import { WorkAlignment } from '../../shared/component/SelectBox';
+import WorkInput from '../../shared/component/WorkInput';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -104,21 +105,23 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
               placeholder="Description"
             />
             <WorkInfo>
-              <Input
+              <WorkInput
+                type={"text"}
                 value={initialData.material}
-                onChange={(e) => handlechange("material", e.target.value)}
-                placeholder="Material"
+                placeholder={"Material"}
+                handleChange={(e) => handlechange("material", e.target.value)}
               />
-              <Input
+              <WorkInput
+                type={"text"}
                 value={convertSizeToString(initialData.size)}
-                onChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
-                placeholder="Size"
+                placeholder={"Size"}
+                handleChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
               />
-              <Input
-                type="number"
+              <WorkInput
+                type={"number"}
                 value={initialData.prodYear}
-                onChange={(e) => handlechange("prodYear", e.target.value)}
-                placeholder="Year"
+                placeholder={"Year"}
+                handleChange={(e) => handlechange("prodYear", e.target.value)}
               />
             </WorkInfo>
           </TitleInfoWrpper>
@@ -178,20 +181,6 @@ const Info = styled.div`
   font-size: ${({ theme }) => theme.fontSize.font_B04};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: center;
-`;
-
-const Input = styled.input`
-  height: 18px;
-  width: 100px;
-  padding: 0 8px;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
 `;
 
 const Title = styled.h2`
