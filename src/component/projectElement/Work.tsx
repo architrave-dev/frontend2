@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { ProjectElementData, SizeData, UpdateProjectElementReq, UpdateWorkReq, WorkData, convertSizeToString, convertStringToSize, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
@@ -6,6 +6,7 @@ import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
 import { WorkAlignment } from '../../shared/component/SelectBox';
 import WorkInput from '../../shared/component/WorkInput';
+import WorkTextArea from '../../shared/component/WorkTextArea';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -16,8 +17,6 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
   const { isEditMode } = useEditMode();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
 
   const handlechange = (field: keyof WorkData, value: string | SizeData) => {
     const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
@@ -71,19 +70,6 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     setProjectElementList(updatedProjectElementList);
   }
 
-  const adjustTextareaHeight = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      console.log("textarea.scrollHeight: ", `${textarea.scrollHeight}`)
-      textarea.style.height = 'auto'; // 초기화
-      textarea.style.height = `${textarea.scrollHeight}px`; // scrollHeight를 기준으로 높이 설정
-    }
-  };
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [initialData.description]);
-
   return (
     <WorkWrapper>
       {isEditMode ? (
@@ -98,11 +84,10 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
               onChange={(e) => handlechange("title", e.target.value)}
               placeholder="Title"
             />
-            <Textarea
-              ref={textareaRef}
-              value={initialData.description}
-              onChange={(e) => handlechange("description", e.target.value)}
-              placeholder="Description"
+            <WorkTextArea
+              content={initialData.description}
+              handleChange={(e) => handlechange("description", e.target.value)}
+              placeholder={"Description"}
             />
             <WorkInfo>
               <WorkInput
@@ -219,19 +204,5 @@ const Description = styled.div`
   text-align: center;
   margin-bottom: 1px;
 `
-
-const Textarea = styled.textarea`
-  width: 100%;
-  height: 18px;
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  text-align: center;
-  resize: none; 
-  overflow: hidden;
-`;
 
 export default Work;
