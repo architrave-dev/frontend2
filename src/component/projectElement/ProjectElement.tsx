@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
 import Divider, { DividerType } from '../../shared/Divider';
-import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { ProjectElementType, RemoveProjectElementReq, TextBoxData, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import DeleteButton from '../../shared/component/DeleteButton';
+import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
 
 
 export type ProjectElementProps = {

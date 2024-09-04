@@ -5,7 +5,7 @@ import ProjectElement from '../../component/projectElement/ProjectElement';
 import { useProjectElement } from '../../shared/hooks/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
 import { useParams } from 'react-router-dom';
-import { CreateProjectElementReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateProjectElementReq, ProjectElementType, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi';
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
@@ -13,6 +13,7 @@ import { DividerType } from '../../shared/Divider';
 import Space from '../../shared/Space';
 import CreateButton from '../../shared/component/CreateButton';
 import ConfirmButton from '../../shared/component/ConfirmButton';
+import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
 
 
 const ProjectElementList: React.FC = () => {
