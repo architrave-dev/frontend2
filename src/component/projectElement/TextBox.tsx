@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
-import TextBoxArea, { getAlignment } from '../../shared/component/TextBoxArea';
+import ReuseTextArea, { TextArea, getAlignment } from '../../shared/component/ReuseTextArea';
 
 
 export interface TextBoxProps {
@@ -100,7 +100,9 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
             value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
             selectType={SelectType.TEXTBOX_ALIGNMENT}
             handleChange={handleAlignmentChange} />
-          <TextBoxArea
+          <ReuseTextArea
+            type={TextArea.TEXTBOX}
+            placeholder={"text"}
             alignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}
             content={initialData.content}
             handleChange={(e) => handlechange("content", e.target.value)}

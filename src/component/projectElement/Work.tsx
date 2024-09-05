@@ -6,7 +6,7 @@ import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
 import { WorkAlignment } from '../../shared/component/SelectBox';
 import WorkInput from '../../shared/component/WorkInput';
-import WorkTextArea from '../../shared/component/WorkTextArea';
+import ReuseTextArea, { TextArea } from '../../shared/component/ReuseTextArea';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -84,7 +84,9 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
               onChange={(e) => handlechange("title", e.target.value)}
               placeholder="Title"
             />
-            <WorkTextArea
+            <ReuseTextArea
+              type={TextArea.WORK}
+              alignment={initialWorkAlignment || WorkAlignment.CENTER}
               content={initialData.description}
               handleChange={(e) => handlechange("description", e.target.value)}
               placeholder={"Description"}

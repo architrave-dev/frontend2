@@ -1,7 +1,7 @@
 import React from 'react';
 import { CreateProjectElementReq, CreateTextBoxReq, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
-import TextBoxArea from '../../shared/component/TextBoxArea';
+import ReuseTextArea, { TextArea } from '../../shared/component/ReuseTextArea';
 import { TextBoxWrapper } from './TextBox';
 
 
@@ -34,7 +34,9 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
         value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
         selectType={SelectType.TEXTBOX_ALIGNMENT}
         handleChange={handleAlignmentChange} />
-      <TextBoxArea
+      <ReuseTextArea
+        type={TextArea.TEXTBOX}
+        placeholder={"text"}
         alignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}
         content={initialData.content}
         handleChange={(e) => handlechange("content", e.target.value)}
