@@ -4,7 +4,7 @@ import { ProjectInfoData, useProjectInfoListStore, useProjectInfoListStoreForUpd
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/api/projectApi';
 import DeleteButton from '../../shared/component/DeleteButton';
-import InfoInput, { InputType } from '../../shared/component/InfoInput';
+import ReuseInput, { ReuseInputType } from '../../shared/component/ReuseInput';
 
 interface ProjectInfoProps {
   projectInfoId: string;
@@ -21,7 +21,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   const { updateInfoList, setUpdateInfoList, removeInfoList, setRemoveInfoList } = useProjectInfoListStoreForUpdate();
 
 
-  const handlechange = (field: keyof UpdatedProjectInfoReq, value: string) => {
+  const handleChange = (field: keyof UpdatedProjectInfoReq, value: string) => {
 
     const targetElement = updateInfoList.find(info => info.id === projectInfoId);
     if (targetElement) {
@@ -69,17 +69,17 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
     <ProjectInfoItem $isEditMode={isEditMode}>
       {isEditMode ? (
         <>
-          <InfoInput
-            type={InputType.NAME}
+          <ReuseInput
+            type={ReuseInputType.NAME}
             value={initialCustomName}
             placeholder={'Enter info'}
-            handlechange={(e) => handlechange("customName", e.target.value)}
+            handleChange={(e) => handleChange("customName", e.target.value)}
           />
-          <InfoInput
-            type={InputType.VALUE}
+          <ReuseInput
+            type={ReuseInputType.VALUE}
             value={initialCustomValue}
             placeholder={'Enter value'}
-            handlechange={(e) => handlechange("customValue", e.target.value)}
+            handleChange={(e) => handleChange("customValue", e.target.value)}
           />
           <DeleteButton handleDelete={handleDelete} />
         </>

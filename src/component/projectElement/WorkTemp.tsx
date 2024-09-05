@@ -4,8 +4,8 @@ import { CreateProjectElementReq, CreateWorkReq, SizeData, convertSizeToString, 
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
 import { WorkAlignment } from '../../shared/component/SelectBox';
-import WorkInput from '../../shared/component/WorkInput';
 import ReuseTextArea, { TextArea } from '../../shared/component/ReuseTextArea';
+import ReuseInput, { ReuseInputType } from '../../shared/component/ReuseInput';
 
 export interface WorkProps {
   tempId: string;
@@ -43,20 +43,20 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
           placeholder={"Description"}
         />
         <WorkInfo>
-          <WorkInput
-            type={"text"}
+          <ReuseInput
+            type={ReuseInputType.WORK}
             value={initialData.material}
             placeholder={"Material"}
             handleChange={(e) => handlechange("material", e.target.value)}
           />
-          <WorkInput
-            type={"text"}
+          <ReuseInput
+            type={ReuseInputType.WORK}
             value={convertSizeToString(initialData.size)}
             placeholder={"Size"}
             handleChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
           />
-          <WorkInput
-            type={"number"}
+          <ReuseInput
+            type={ReuseInputType.WORK}
             value={initialData.prodYear}
             placeholder={"Year"}
             handleChange={(e) => handlechange("prodYear", e.target.value)}

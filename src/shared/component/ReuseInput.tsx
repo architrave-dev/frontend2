@@ -1,54 +1,56 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export enum InputType {
+export enum ReuseInputType {
   NAME = 'NAME',
   VALUE = 'VALUE',
   NAME_NEW = 'NAME_NEW',
   VALUE_NEW = 'VALUE_NEW',
+  WORK = 'WORK'
 }
 
-interface InfoInputProps {
-  type: InputType;
+interface ReuseInputProps {
+  type: ReuseInputType;
   value: string;
   placeholder: string;
-  handlechange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InfoInput: React.FC<InfoInputProps> = ({
+const ReuseInput: React.FC<ReuseInputProps> = ({
   type,
   value,
   placeholder,
-  handlechange }) => {
-
+  handleChange }) => {
   return (
     <InfoInputComp
       $type={type}
       value={value}
       placeholder={placeholder}
-      onChange={handlechange}
+      onChange={handleChange}
     />
   );
 }
 
-const InfoInputComp = styled.input<{ $type: InputType }>`
+const InfoInputComp = styled.input<{ $type: ReuseInputType }>`
   width: ${({ $type }) => {
     switch ($type) {
-      case InputType.NAME:
-      case InputType.NAME_NEW:
+      case ReuseInputType.NAME:
+      case ReuseInputType.NAME_NEW:
         return '18vw';
+      case ReuseInputType.WORK:
+        return '100px';
       default:
         return '50vw';
     }
   }};
-  padding: 5px;
+  padding: 0px 8px;
   background: transparent;
   border: none;
-  box-sizing: border-box;
   border-bottom: 2px solid ${({ theme, $type }) => {
     switch ($type) {
-      case InputType.NAME_NEW:
-      case InputType.VALUE_NEW:
+      case ReuseInputType.NAME_NEW:
+      case ReuseInputType.VALUE_NEW:
+      case ReuseInputType.WORK:
         return theme.colors.color_Gray_05;
       default:
         return theme.colors.color_Gray_06;
@@ -56,8 +58,15 @@ const InfoInputComp = styled.input<{ $type: InputType }>`
   }};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
+  font-size: ${({ theme, $type }) => {
+    switch ($type) {
+      case ReuseInputType.WORK:
+        return theme.fontSize.font_B04;
+      default:
+        return theme.fontSize.font_B03
+    }
+  }};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
 
-export default InfoInput;
+export default ReuseInput;

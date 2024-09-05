@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import DeleteButton from '../../shared/component/DeleteButton';
-import InfoInput, { InputType } from '../../shared/component/InfoInput';
+import ReuseInput, { ReuseInputType } from '../../shared/component/ReuseInput';
 
 interface ProjectInfoTempProps {
   tempId: string;
@@ -19,7 +19,7 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
   const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
 
 
-  const handlechange = (field: keyof CreateProjectInfoReq, value: string) => {
+  const handleChange = (field: keyof CreateProjectInfoReq, value: string) => {
     const newCreateInfoList: CreateProjectInfoReq[] = createInfoList.map(each =>
       each.tempId === tempId ? { ...each, [field]: value } : each
     )
@@ -33,17 +33,17 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 
   return (
     <ProjectInfoItem>
-      <InfoInput
-        type={InputType.NAME_NEW}
+      <ReuseInput
+        type={ReuseInputType.NAME_NEW}
         value={initialCustomName}
         placeholder={'Enter info'}
-        handlechange={(e) => handlechange("customName", e.target.value)}
+        handleChange={(e) => handleChange("customName", e.target.value)}
       />
-      <InfoInput
-        type={InputType.VALUE_NEW}
+      <ReuseInput
+        type={ReuseInputType.VALUE_NEW}
         value={initialCustomValue}
         placeholder={'Enter value'}
-        handlechange={(e) => handlechange("customValue", e.target.value)}
+        handleChange={(e) => handleChange("customValue", e.target.value)}
       />
       <DeleteButton handleDelete={handleDelete} />
     </ProjectInfoItem>
