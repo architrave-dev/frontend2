@@ -120,7 +120,13 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
           </ImgWrapper>
           <TitleInfoWrpper>
             <Title>[ {initialData.title} ]</Title>
-            <Description>{initialData.description}</Description>
+            <Description>
+              {initialData.description.split('\n').map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}<br />
+                </React.Fragment>
+              ))}
+            </Description>
             <WorkInfo>
               <Info>{initialData.material},</Info>
               <Info>{convertSizeToString(initialData.size)},</Info>
@@ -199,7 +205,7 @@ const TitleInput = styled.input`
 
 
 const Description = styled.div`
-  height: 18px;
+  padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   font-size: ${({ theme }) => theme.fontSize.font_B03};
   font-weight: ${({ theme }) => theme.fontWeight.regular};

@@ -126,7 +126,7 @@ export const TextBoxWrapper = styled.div`
       min-height: 80px;
       `;
 
-const TextBoxContent = styled.p<{ $textBoxAlignment: TextBoxAlignment }>`
+const TextBoxContent = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
       padding: 8px 0px;
       color: ${({ theme }) => theme.colors.color_Gray_03};
       font-size: ${({ theme }) => theme.fontSize.font_B02};
