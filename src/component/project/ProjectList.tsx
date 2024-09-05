@@ -30,15 +30,16 @@ const ProjectList: React.FC = () => {
   }, [aui]);
 
   const handleCreate = async () => {
+    const newTitle = 'new_Project_' + (projects.length + 1)
     const newDummyProject: CreateProjectReq = {
       originUrl: process.env.REACT_APP_DEFAULT_IMG || '',
       thumbnailUrl: process.env.REACT_APP_DEFAULT_IMG || '',
-      title: 'new_Project',
+      title: newTitle,
       description: 'This is a new project.'
     };
     try {
       await createProject(aui, newDummyProject);
-      navigate(`/${aui}/projects/new_Project`);
+      navigate(`/${aui}/projects/` + newTitle);
     } catch (error) {
       console.error('create Project failed:', error);
     }
