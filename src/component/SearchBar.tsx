@@ -57,32 +57,31 @@ const InputWrapper = styled.div`
 const Input = styled.input`
   width: 400px;
   padding: 10px;
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   outline: none;
   background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 const Button = styled.button`
   width: 140px;
   padding: 10px 20px;
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
   border: none;
   background-color: ${({ theme }) => theme.colors.color_Gray_01};
   color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
-
   &:hover {
     background-color: ${({ theme }) => theme.colors.color_Gray_03};
-  }
+    }
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 const ErrorMessage = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.color_alert_red};
   margin-top: 10px;
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
   text-align: left;
+  ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 export default SearchBar;

@@ -38,15 +38,13 @@ const TitleInput = styled.input`
   border: none;
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   outline: none;
-  font-size: ${({ theme }) => theme.fontSize.font_H015};
-  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
+  ${({ theme }) => theme.typography.H_015};
 `;
 
 const TitleDisplay = styled.h1`
   padding: 5px;
-  font-size: ${({ theme }) => theme.fontSize.font_H015};
-  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
   margin-bottom: calc(2vh);
+  ${({ theme }) => theme.typography.H_015};
 `;
 
 export default ProjectTitle;

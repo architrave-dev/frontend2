@@ -42,19 +42,25 @@ const ReuseTextArea: React.FC<TextBoxAreaProps> = ({ type, alignment, placeholde
 }
 
 const TextAreaComp = styled.textarea<{ $type: TextAreaType, $alignment: Alignment }>`
-      width: 100%;
-      padding: 8px 0px;
-      color: ${({ $type, theme }) => $type === TextArea.WORK ?
+  width: 100%;
+  padding: 8px 0px;
+  color: ${({ $type, theme }) => $type === TextArea.WORK ?
     theme.colors.color_Gray_04 : theme.colors.color_Gray_03};
-      font-size: ${({ $type, theme }) => $type === TextArea.WORK ?
-    theme.fontSize.font_B03 : theme.fontSize.font_B02};
-      background-color: transparent;
-      border: none;
-      border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-      resize: none;
-      overflow: hidden;
-      text-align: ${({ $alignment }) => getAlignment($alignment)};
-      `;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  resize: none;
+  overflow: hidden;
+  text-align: ${({ $alignment }) => getAlignment($alignment)};
+  ${({ theme, $type }) => {
+    switch ($type) {
+      case TextArea.WORK:
+        return theme.typography.Body_03_1;
+      default:
+        return theme.typography.Body_02_1;
+    }
+  }}
+`;
 
 export const getAlignment = (alignment: Alignment): string => {
   switch (alignment) {

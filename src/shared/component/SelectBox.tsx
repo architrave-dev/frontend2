@@ -66,11 +66,12 @@ const SelectBox = <T extends SelectValue>({
 const Select = styled.select`
   width: 100px;
   padding: 2px;
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
   color: ${({ theme }) => theme.colors.color_Gray_03};
   background-color: transparent;
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   border-radius: 1px;
+  ${({ theme }) => theme.typography.Body_04};
+
   &:focus {
     outline: none;
   }

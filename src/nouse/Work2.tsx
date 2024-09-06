@@ -79,18 +79,16 @@ const WorkTitle = styled.h2`
   padding: 0 calc(10vw);
   margin-bottom: 4px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: center;
+  ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 const WorkDescription = styled.p`
   width: 100%;
   padding: 0 calc(10vw);
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: center;
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 

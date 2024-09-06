@@ -129,9 +129,8 @@ export const TextBoxWrapper = styled.div`
 const TextBoxContent = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
       padding: 8px 0px;
       color: ${({ theme }) => theme.colors.color_Gray_03};
-      font-size: ${({ theme }) => theme.fontSize.font_B02};
-      font-weight: ${({ theme }) => theme.fontWeight.regular};
       text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
+      ${({ theme }) => theme.typography.Body_02_2};
       `;
 
 export default TextBox;

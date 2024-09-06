@@ -129,32 +129,29 @@ const Container = styled.div<{ $backgroundimage: string | undefined }>`
 `;
 
 const Title = styled.h1`
-  max-width: 60vw;
-  padding: 0.5rem;
-  font-size: ${({ theme }) => theme.fontSize.font_H01};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  margin-bottom: 20px;
+max-width: 60vw;
+padding: 0.5rem;
+margin-bottom: 20px;
+${({ theme }) => theme.typography.H_01};
 `;
 
 const Description = styled.p`
-  max-width: 70vw;
-  min-height: 7vh;
-  margin-bottom: 20px;
-  padding: 0.5rem;
-  font-size: ${({ theme }) => theme.fontSize.font_B01};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+max-width: 70vw;
+min-height: 7vh;
+margin-bottom: 20px;
+padding: 0.5rem;
+${({ theme }) => theme.typography.Body_01};
 `;
 
 const Input = styled.input`
   width: 70%;
   padding: 0.5rem;
   margin-bottom: 18px;
-  font-size: ${({ theme }) => theme.fontSize.font_H01};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
   background: transparent;
   border: none;
   border-bottom: 2px solid #fff;
   outline: none;
+  ${({ theme }) => theme.typography.H_01};
 `;
 
 const TextArea = styled.textarea`
@@ -166,9 +163,7 @@ const TextArea = styled.textarea`
   border: none;
   border-bottom: 2px solid #fff;
   outline: none;
-  font-size: ${({ theme }) => theme.fontSize.font_B01};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  resize: vertical;
+  ${({ theme }) => theme.typography.Body_01};
 `;
 
 

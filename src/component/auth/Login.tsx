@@ -105,9 +105,8 @@ const LoginComp = styled.div`
 
 const Title = styled.h2`
   margin-bottom: 44px;
-  font-size: ${({ theme }) => theme.fontSize.font_B01};
-  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
   color: ${({ theme }) => theme.colors.color_Gray_02};
+  ${({ theme }) => theme.typography.Body_01_1};
 `;
 
 const InputWrapper = styled.div`
@@ -119,9 +118,8 @@ const InputWrapper = styled.div`
 const Label = styled.label`
   display: block;
   margin-bottom: 10px;
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_03_1};
 `
 
 const Input = styled.input<{ $hasError: boolean }>`
@@ -141,14 +139,14 @@ const ErrorIcon = styled.span`
   right: 17px;
   bottom: 17px;
   color: ${({ theme }) => theme.colors.color_alert_red};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const ErrorText = styled.p`
   color: ${({ theme }) => theme.colors.color_alert_red};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
   margin-bottom: 10px;
   min-height: 18px; // Ensures consistent height even when empty
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const ButtonContainer = styled.div`

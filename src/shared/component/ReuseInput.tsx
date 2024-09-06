@@ -58,15 +58,14 @@ const InfoInputComp = styled.input<{ $type: ReuseInputType }>`
   }};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme, $type }) => {
+  ${({ theme, $type }) => {
     switch ($type) {
       case ReuseInputType.WORK:
-        return theme.fontSize.font_B04;
+        return theme.typography.Body_04;
       default:
-        return theme.fontSize.font_B03
+        return theme.typography.Body_03_2;
     }
-  }};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  }}
 `;
 
 export default ReuseInput;

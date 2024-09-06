@@ -49,8 +49,7 @@ const NameInput = styled.input`
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 const ValueInput = styled.input`
@@ -62,8 +61,7 @@ const ValueInput = styled.input`
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   outline: none;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  ${({ theme }) => theme.typography.Body_03_1};
 `;
 
 
@@ -73,8 +71,7 @@ const NameSection = styled.div`
   margin-right: 20px;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 const ValueSection = styled.div`
@@ -82,8 +79,7 @@ const ValueSection = styled.div`
   padding: 5px;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  ${({ theme }) => theme.typography.Body_03_1};
 `;
 
 export default ProjectInfo;

@@ -171,9 +171,8 @@ const WorkInfo = styled.div`
 const Info = styled.div`
   height: 18px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: center;
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const Title = styled.h2`
@@ -182,9 +181,8 @@ const Title = styled.h2`
   padding: 0px 8px;
   margin-bottom: 3px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: center;
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 const TitleInput = styled.input`
@@ -193,24 +191,22 @@ const TitleInput = styled.input`
   padding: 4px 8px;
   margin-bottom: 2px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
   line-height: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   background-color: transparent;
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   outline: none;
   text-align: center;
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 
 const Description = styled.div`
   padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: center;
   margin-bottom: 1px;
+  ${({ theme }) => theme.typography.Body_03_2};
 `
 
 export default Work;

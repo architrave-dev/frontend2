@@ -45,11 +45,15 @@ const theme: DefaultTheme = {
       font-size: ${props => props.theme.fontSize.font_H02};
       font-weight: ${props => props.theme.fontWeight.bold};
     `,
-    Body_01: css`
+    Body_01_1: css`
+      font-size: ${props => props.theme.fontSize.font_B01};
+      font-weight: ${props => props.theme.fontWeight.semi_bold};
+    `,
+    Body_01_2: css`
       font-size: ${props => props.theme.fontSize.font_B01};
       font-weight: ${props => props.theme.fontWeight.medium};
     `,
-    Body_01_U: css`
+    Body_01_2U: css`
       font-size: ${props => props.theme.fontSize.font_B01};
       font-weight: ${props => props.theme.fontWeight.medium};
       font-decoration: ${props => props.theme.fontWeight.decoration};

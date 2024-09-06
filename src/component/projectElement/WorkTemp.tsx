@@ -103,14 +103,13 @@ const TitleInput = styled.input`
   padding: 4px 8px;
   margin-bottom: 2px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
   line-height: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   background-color: transparent;
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   outline: none;
   text-align: center;
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 
