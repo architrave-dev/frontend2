@@ -6,7 +6,8 @@ import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
 import { WorkAlignment } from '../../shared/component/SelectBox';
 import ReuseTextArea, { TextArea } from '../../shared/component/ReuseTextArea';
-import ReuseInput, { ReuseInputType } from '../../shared/component/ReuseInput';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -79,10 +80,11 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
             <ReplaceImageButton setBackgroundImageUrl={(imageUrl: string) => handlechange('originUrl', imageUrl)} />
           </ImgWrapper>
           <TitleInfoWrpper>
-            <TitleInput
+            <HeadlessInput
               value={initialData.title}
-              onChange={(e) => handlechange("title", e.target.value)}
+              handleChange={(e) => handlechange("title", e.target.value)}
               placeholder="Title"
+              StyledInput={InputWorkTitle}
             />
             <ReuseTextArea
               type={TextArea.WORK}
@@ -92,23 +94,23 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
               placeholder={"Description"}
             />
             <WorkInfo>
-              <ReuseInput
-                type={ReuseInputType.WORK}
+              <HeadlessInput
                 value={initialData.material}
                 placeholder={"Material"}
                 handleChange={(e) => handlechange("material", e.target.value)}
+                StyledInput={InputWork}
               />
-              <ReuseInput
-                type={ReuseInputType.WORK}
+              <HeadlessInput
                 value={convertSizeToString(initialData.size)}
                 placeholder={"Size"}
                 handleChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
+                StyledInput={InputWork}
               />
-              <ReuseInput
-                type={ReuseInputType.WORK}
+              <HeadlessInput
                 value={initialData.prodYear}
                 placeholder={"Year"}
                 handleChange={(e) => handlechange("prodYear", e.target.value)}
+                StyledInput={InputWork}
               />
             </WorkInfo>
           </TitleInfoWrpper>

@@ -4,7 +4,8 @@ import { ProjectInfoData, useProjectInfoListStore, useProjectInfoListStoreForUpd
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/api/projectApi';
 import DeleteButton from '../../shared/component/DeleteButton';
-import ReuseInput, { ReuseInputType } from '../../shared/component/ReuseInput';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
 
 interface ProjectInfoProps {
   projectInfoId: string;
@@ -69,17 +70,17 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
     <ProjectInfoItem $isEditMode={isEditMode}>
       {isEditMode ? (
         <>
-          <ReuseInput
-            type={ReuseInputType.NAME}
+          <HeadlessInput
             value={initialCustomName}
-            placeholder={'Enter info'}
+            placeholder={"Enter info"}
             handleChange={(e) => handleChange("customName", e.target.value)}
+            StyledInput={InputName}
           />
-          <ReuseInput
-            type={ReuseInputType.VALUE}
+          <HeadlessInput
             value={initialCustomValue}
-            placeholder={'Enter value'}
+            placeholder={"Enter value"}
             handleChange={(e) => handleChange("customValue", e.target.value)}
+            StyledInput={InputValue}
           />
           <DeleteButton handleDelete={handleDelete} />
         </>

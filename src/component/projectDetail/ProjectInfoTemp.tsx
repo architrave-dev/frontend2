@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import DeleteButton from '../../shared/component/DeleteButton';
-import ReuseInput, { ReuseInputType } from '../../shared/component/ReuseInput';
+import { InputNameNew, InputValueNew } from '../../shared/component/headless/input/InputBody';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 
 interface ProjectInfoTempProps {
   tempId: string;
@@ -33,17 +34,17 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 
   return (
     <ProjectInfoItem>
-      <ReuseInput
-        type={ReuseInputType.NAME_NEW}
+      <HeadlessInput
         value={initialCustomName}
-        placeholder={'Enter info'}
+        placeholder={"Enter info"}
         handleChange={(e) => handleChange("customName", e.target.value)}
+        StyledInput={InputNameNew}
       />
-      <ReuseInput
-        type={ReuseInputType.VALUE_NEW}
+      <HeadlessInput
         value={initialCustomValue}
-        placeholder={'Enter value'}
+        placeholder={"Enter value"}
         handleChange={(e) => handleChange("customValue", e.target.value)}
+        StyledInput={InputValueNew}
       />
       <DeleteButton handleDelete={handleDelete} />
     </ProjectInfoItem>
