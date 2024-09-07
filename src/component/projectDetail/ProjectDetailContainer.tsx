@@ -10,6 +10,8 @@ import { useAui } from '../../shared/hooks/useAui';
 import RepresentImg from './RepresentImg';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { ProjectData } from '../../shared/store/projectStore';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -20,16 +22,6 @@ const ProjectDetailContainer: React.FC = () => {
   const [backgroundImageUrl, setBackgroundImageUrl] = useState("");
 
   const { createInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
-
-  const removeTime = (localDateTime: string): string => {
-    return localDateTime.split('T')[0];
-  }
-  const getToday = (): string => {
-    const now = new Date();
-    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const formattedDate = date.toISOString().split('T')[0]; // '0000-00-00' 형식으로 포맷팅
-    return formattedDate;
-  }
 
   useEffect(() => {
     if (project) {
@@ -83,8 +75,12 @@ const ProjectDetailContainer: React.FC = () => {
 
   return (
     <ProjectDetailContainerComp>
-      {isEditMode && project && isChanged(project) ?
-        <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
+      {isEditMode && project && isChanged(project) &&
+        <HeadlessBtn
+          value={"Confirm"}
+          handleClick={handleConfirm}
+          StyledBtn={BtnConfirm}
+        />
       }
       <RepresentImg backgroundImg={backgroundImageUrl} setBackgroundImg={setBackgroundImageUrl} />
       <ProjectDetailWrapper>
@@ -101,21 +97,6 @@ const ProjectDetailContainerComp = styled.section`
 `;
 const ProjectDetailWrapper = styled.article`
   padding: calc(8vh) calc(10vw);
-`;
-
-const ConfirmButton = styled.button`
-  position: absolute;
-  bottom: calc(8vh);
-  right: calc(10vw);
-  padding: 0.5rem 1rem;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  cursor: pointer;
-  font-size: 1rem;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_06};
-  }
 `;
 
 export default ProjectDetailContainer;

@@ -7,6 +7,8 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { CreateProjectReq, createProject } from '../../shared/api/projectApi';
 import { useNavigate } from 'react-router-dom';
 import Space from '../../shared/Space';
+import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
@@ -28,16 +30,17 @@ const ProjectList: React.FC = () => {
     getProjectListTemp();
   }, [aui]);
 
-  const handleCreateProject = async () => {
+  const handleCreate = async () => {
+    const newTitle = 'new_Project_' + (projects.length + 1)
     const newDummyProject: CreateProjectReq = {
       originUrl: process.env.REACT_APP_DEFAULT_IMG || '',
       thumbnailUrl: process.env.REACT_APP_DEFAULT_IMG || '',
-      title: 'new_Project',
+      title: newTitle,
       description: 'This is a new project.'
     };
     try {
       await createProject(aui, newDummyProject);
-      navigate(`/${aui}/projects/new_Project`);
+      navigate(`/${aui}/projects/` + newTitle);
     } catch (error) {
       console.error('create Project failed:', error);
     }
@@ -47,9 +50,11 @@ const ProjectList: React.FC = () => {
     <ProjectSimpleList>
       <Space >
         {isEditMode &&
-          <CreateProjectButton onClick={handleCreateProject}>
-            Create Project
-          </CreateProjectButton>
+          <HeadlessBtn
+            value={"Create Project"}
+            handleClick={handleCreate}
+            StyledBtn={BtnCreateWide}
+          />
         }
       </Space>
       {projects.map((each, idx) => (
@@ -70,17 +75,6 @@ const ProjectSimpleList = styled.section`
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
-  }
-`;
-
-const CreateProjectButton = styled.button`
-  width: 50vw;
-  height: 30px;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  transition: background-color 0.3s;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_06};
   }
 `;
 

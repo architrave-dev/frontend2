@@ -3,8 +3,11 @@ import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
 import Divider, { DividerType } from '../../shared/Divider';
-import { ProjectElementType, RemoveProjectElementReq, TextBoxAlignment, TextBoxData, WorkAlignment, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { ProjectElementType, RemoveProjectElementReq, TextBoxData, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 
 
 export type ProjectElementProps = {
@@ -61,11 +64,13 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   return (
     <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
-      {isEditMode && (
-        <DeleteButton onClick={handleDelete}>
-          Delete
-        </DeleteButton>
-      )}
+      {isEditMode &&
+        <HeadlessBtn
+          value={"Delete"}
+          handleClick={handleDelete}
+          StyledBtn={BtnDelete}
+        />
+      }
     </ProjectElementListWrapper>
   );
 }
@@ -95,16 +100,6 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
         return 'calc(12vh)';
     }
   }};
-`;
-
-const DeleteButton = styled.button`
-  height: 32px;
-  position: absolute;
-  right: 0px;
-  padding: 5px 10px;
-  background-color: ${({ theme }) => theme.colors.color_Gray_02};
-  color: ${({ theme }) => theme.colors.color_White};
-  cursor: pointer;
 `;
 
 export default ProjectElement;

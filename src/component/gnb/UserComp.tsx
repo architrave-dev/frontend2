@@ -64,8 +64,7 @@ const UserArticle = styled.article`
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between; 
-
-  font-size: ${({ theme }) => theme.fontSize.font_B01};
+  ${({ theme }) => theme.typography.Body_01_2};
 `;
 
 const ArtistName = styled.div`

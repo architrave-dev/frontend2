@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'styled-components';
+import { DefaultTheme, css } from 'styled-components';
 
 const theme: DefaultTheme = {
   colors: {
@@ -31,6 +31,53 @@ const theme: DefaultTheme = {
     medium: '500',
     regular: '400',
     decoration: 'underline'
+  },
+  typography: {
+    H_01: css`
+      font-size: ${props => props.theme.fontSize.font_H01};
+      font-weight: ${props => props.theme.fontWeight.bold};
+    `,
+    H_015: css`
+      font-size: ${props => props.theme.fontSize.font_H015};
+      font-weight: ${props => props.theme.fontWeight.bold};
+    `,
+    H_02: css`
+      font-size: ${props => props.theme.fontSize.font_H02};
+      font-weight: ${props => props.theme.fontWeight.bold};
+    `,
+    Body_01_1: css`
+      font-size: ${props => props.theme.fontSize.font_B01};
+      font-weight: ${props => props.theme.fontWeight.semi_bold};
+    `,
+    Body_01_2: css`
+      font-size: ${props => props.theme.fontSize.font_B01};
+      font-weight: ${props => props.theme.fontWeight.medium};
+    `,
+    Body_01_2U: css`
+      font-size: ${props => props.theme.fontSize.font_B01};
+      font-weight: ${props => props.theme.fontWeight.medium};
+      font-decoration: ${props => props.theme.fontWeight.decoration};
+    `,
+    Body_02_1: css`
+      font-size: ${props => props.theme.fontSize.font_B02};
+      font-weight: ${props => props.theme.fontWeight.medium};
+    `,
+    Body_02_2: css`
+      font-size: ${props => props.theme.fontSize.font_B02};
+      font-weight: ${props => props.theme.fontWeight.regular};
+    `,
+    Body_03_1: css`
+      font-size: ${props => props.theme.fontSize.font_B03};
+      font-weight: ${props => props.theme.fontWeight.medium};
+    `,
+    Body_03_2: css`
+      font-size: ${props => props.theme.fontSize.font_B03};
+      font-weight: ${props => props.theme.fontWeight.regular};
+    `,
+    Body_04: css`
+      font-size: ${props => props.theme.fontSize.font_B04};
+      font-weight: ${props => props.theme.fontWeight.regular};
+    `,
   }
 };
 

@@ -5,12 +5,15 @@ import ProjectElement from '../../component/projectElement/ProjectElement';
 import { useProjectElement } from '../../shared/hooks/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
 import { useParams } from 'react-router-dom';
-import { CreateProjectElementReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateProjectElementReq, ProjectElementType, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi';
 import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
 import Space from '../../shared/Space';
+import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
+import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 
 const ProjectElementList: React.FC = () => {
@@ -91,8 +94,12 @@ const ProjectElementList: React.FC = () => {
 
   return (
     <ProjectElementListComp>
-      {isEditMode && isChanged() ?
-        <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton> : null
+      {isEditMode && isChanged() &&
+        <HeadlessBtn
+          value={"Confirm"}
+          handleClick={handleConfirm}
+          StyledBtn={BtnConfirm}
+        />
       }
       {projectElementList.map((each, index) => (
         <ProjectElement
@@ -123,9 +130,21 @@ const ProjectElementList: React.FC = () => {
           ))}
           <Space $align={"center"} $height={"calc(6vw)"}>
             <CreateButtonGroup>
-              <CreateButton onClick={() => handleCreateElement(ProjectElementType.WORK)}>Work</CreateButton>
-              <CreateButton onClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}>Text</CreateButton>
-              <CreateButton onClick={() => handleCreateElement(ProjectElementType.DIVIDER)}>Divider</CreateButton>
+              <HeadlessBtn
+                value={"Work"}
+                handleClick={() => handleCreateElement(ProjectElementType.WORK)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Text"}
+                handleClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Divider"}
+                handleClick={() => handleCreateElement(ProjectElementType.DIVIDER)}
+                StyledBtn={BtnCreate}
+              />
             </CreateButtonGroup>
           </Space>
         </>
@@ -147,43 +166,11 @@ const ProjectElementListComp = styled.article`
   }
 `;
 
-const ConfirmButton = styled.button`
-  position: absolute;
-  bottom: calc(8vh);
-  right: calc(10vw);
-  padding: 0.5rem 1rem;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  cursor: pointer;
-  font-size: 1rem;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_06};
-  }
-`;
-
 const CreateButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   gap: 20px;
 `;
-
-const CreateButton = styled.button`
-  width: 100px;
-  padding: 0.5rem 1rem;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_06};
-  }
-`;
-
-
-
 
 
 export default ProjectElementList;

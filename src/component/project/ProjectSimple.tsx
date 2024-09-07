@@ -63,14 +63,12 @@ const ProjectSimpleInfo = styled.div`
 const ProjectSimpleTitle = styled.h2`
   margin-bottom: 10px;
   text-align: end;
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  font-size: ${({ theme }) => theme.fontSize.font_H02};
+  ${({ theme }) => theme.typography.H_02};
 `;
 
 const ProjectSimpleDescription = styled.div`
   text-align: end;
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  font-size: ${({ theme }) => theme.fontSize.font_B01};
+  ${({ theme }) => theme.typography.Body_01};
 `;
 
 const ProjectRepresent = styled.div<{ $backgroundimage: string }>`

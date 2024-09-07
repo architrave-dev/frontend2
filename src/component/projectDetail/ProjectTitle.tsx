@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputTitle } from '../../shared/component/headless/input/InputBody';
 
 interface ProjectTitleProps {
   title: string;
@@ -17,36 +19,24 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({ title, setTitle }) => {
   return (
     <>
       {isEditMode ? (
-        <TitleInput
-          value={title}
-          onChange={handleTitleChange}
-          placeholder="Enter title"
+        <HeadlessInput
+          type={'text'}
+          value={title ? title : ''}
+          handleChange={handleTitleChange}
+          placeholder={"Enter title"}
+          StyledInput={InputTitle}
         />
       ) : (
         <TitleDisplay>{title}</TitleDisplay>
       )}
     </>
   );
-
 }
-
-const TitleInput = styled.input`
-  width: 100%;
-  margin-bottom: calc(2vh - 2px);
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
-  outline: none;
-  font-size: ${({ theme }) => theme.fontSize.font_H015};
-  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
-`;
 
 const TitleDisplay = styled.h1`
   padding: 5px;
-  font-size: ${({ theme }) => theme.fontSize.font_H015};
-  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
   margin-bottom: calc(2vh);
+  ${({ theme }) => theme.typography.H_015};
 `;
 
 export default ProjectTitle;

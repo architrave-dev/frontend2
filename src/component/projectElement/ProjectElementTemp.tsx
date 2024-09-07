@@ -3,8 +3,11 @@ import styled from 'styled-components';
 import WorkTemp from './WorkTemp';
 import TextBoxTemp from './TextBoxTemp';
 import { DividerType } from '../../shared/Divider';
-import { CreateTextBoxReq, CreateWorkReq, ProjectElementType, TextBoxAlignment, WorkAlignment, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateTextBoxReq, CreateWorkReq, ProjectElementType, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import DividerTemp from './DividerTemp';
+import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 
 
 export type ProjectElementTempProps = {
@@ -49,9 +52,11 @@ const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
   return (
     <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
-      <DeleteButton onClick={handleDelete}>
-        Delete
-      </DeleteButton>
+      <HeadlessBtn
+        value={"Delete"}
+        handleClick={handleDelete}
+        StyledBtn={BtnDelete}
+      />
     </ProjectElementListWrapper>
   );
 }
@@ -81,20 +86,6 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
         return 'calc(12vh)';
     }
   }};
-`;
-
-const DeleteButton = styled.button`
-  height: 32px;
-  position: absolute;
-  right: 0px;
-  padding: 5px 10px;
-  background-color: ${({ theme }) => theme.colors.color_Gray_02};
-  color: ${({ theme }) => theme.colors.color_White};
-  cursor: pointer;
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.color_Gray_04};
-    cursor: not-allowed;
-  }
 `;
 
 export default ProjectElementTemp;

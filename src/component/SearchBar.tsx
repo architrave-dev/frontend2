@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useMember } from '../shared/hooks/useMember';
 import { useNavigate } from 'react-router-dom';
+import HeadlessInput from '../shared/component/headless/input/HeadlessInput';
+import { InputBox } from '../shared/component/headless/input/InputBody';
 
 
 const SearchBar: React.FC = () => {
@@ -27,12 +29,13 @@ const SearchBar: React.FC = () => {
   return (
     <SearchWrapper>
       <InputWrapper>
-        <Input
+        <HeadlessInput
           type="text"
           value={aui}
-          onChange={(e) => setAui(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Enter Artist ID"
+          handleChange={(e) => setAui(e.target.value)}
+          handleKeyBoard={handleKeyDown}
+          placeholder={"Enter Artist ID"}
+          StyledInput={InputBox}
         />
         <Button onClick={handleSearch}>
           {isLoading ? 'Search...' : 'Search'}
@@ -54,35 +57,25 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
-const Input = styled.input`
-  width: 400px;
-  padding: 10px;
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  background-color: ${({ theme }) => theme.colors.color_Gray_06};
-`;
-
 const Button = styled.button`
   width: 140px;
   padding: 10px 20px;
-  font-size: ${({ theme }) => theme.fontSize.font_B02};
   border: none;
   background-color: ${({ theme }) => theme.colors.color_Gray_01};
   color: ${({ theme }) => theme.colors.color_White};
   cursor: pointer;
-
   &:hover {
     background-color: ${({ theme }) => theme.colors.color_Gray_03};
-  }
+    }
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 const ErrorMessage = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.color_alert_red};
   margin-top: 10px;
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
   text-align: left;
+  ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 export default SearchBar;

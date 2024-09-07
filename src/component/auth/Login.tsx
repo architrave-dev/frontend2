@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useAuth';
 import { ModalType, useModalStore } from '../../shared/store/modalStore';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputAuth } from '../../shared/component/headless/input/InputBody';
 
 
 const Login: React.FC = () => {
@@ -56,15 +58,13 @@ const Login: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <Label htmlFor="email">Email</Label>
-          <InputWrapper>
-            <Input
-              id="email"
-              type="email"
+          <InputWrapper onBlur={() => validateEmail(email)}>
+            <HeadlessInput
+              type={"text"}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => validateEmail(email)}
-              placeholder="username@email.com"
-              $hasError={!!emailError}
+              handleChange={(e) => setEmail(e.target.value)}
+              placeholder={"username@email.com"}
+              StyledInput={InputAuth}
             />
             {emailError && <ErrorIcon>!</ErrorIcon>}
           </InputWrapper>
@@ -72,15 +72,13 @@ const Login: React.FC = () => {
         </div>
         <div>
           <Label htmlFor="password">Password</Label>
-          <InputWrapper>
-            <Input
-              id="password"
-              type="password"
+          <InputWrapper onBlur={() => validatePassword(password)}>
+            <HeadlessInput
+              type={"password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={() => validatePassword(password)}
-              placeholder="Password"
-              $hasError={!!passwordError}
+              handleChange={(e) => setPassword(e.target.value)}
+              placeholder={"Password"}
+              StyledInput={InputAuth}
             />
             {passwordError && <ErrorIcon>!</ErrorIcon>}
           </InputWrapper>
@@ -105,9 +103,8 @@ const LoginComp = styled.div`
 
 const Title = styled.h2`
   margin-bottom: 44px;
-  font-size: ${({ theme }) => theme.fontSize.font_B01};
-  font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
   color: ${({ theme }) => theme.colors.color_Gray_02};
+  ${({ theme }) => theme.typography.Body_01_1};
 `;
 
 const InputWrapper = styled.div`
@@ -119,36 +116,23 @@ const InputWrapper = styled.div`
 const Label = styled.label`
   display: block;
   margin-bottom: 10px;
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
   color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_03_1};
 `
-
-const Input = styled.input<{ $hasError: boolean }>`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid ${props => props.$hasError ? 'red' : '#ccc'};
-  border-radius: 1px;
-  &:focus {
-    border: 1px solid ${({ theme }) => theme.colors.color_Gray_02};
-    outline: none;
-  }
-`;
 
 const ErrorIcon = styled.span`
   position: absolute;
   right: 17px;
   bottom: 17px;
   color: ${({ theme }) => theme.colors.color_alert_red};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const ErrorText = styled.p`
   color: ${({ theme }) => theme.colors.color_alert_red};
-  font-size: ${({ theme }) => theme.fontSize.font_B04};
   margin-bottom: 10px;
   min-height: 18px; // Ensures consistent height even when empty
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const ButtonContainer = styled.div`

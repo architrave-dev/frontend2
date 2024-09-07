@@ -2,18 +2,9 @@ import { create } from 'zustand';
 import { UserData } from './authStore';
 import { DividerType } from '../Divider';
 import { UpdateProjectElementListReq } from '../api/projectElementApi';
+import { TextBoxAlignment, WorkAlignment } from '../component/SelectBox';
 
-export enum TextBoxAlignment {
-  LEFT = 'LEFT',
-  CENTER = 'CENTER',
-  RIGHT = 'RIGHT',
-}
 
-export enum WorkAlignment {
-  LEFT = 'LEFT',
-  CENTER = 'CENTER',
-  RIGHT = 'RIGHT',
-}
 
 export enum ProjectElementType {
   WORK = 'WORK',

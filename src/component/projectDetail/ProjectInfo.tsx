@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { ProjectInfoData, useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/api/projectApi';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 
 interface ProjectInfoProps {
   projectInfoId: string;
@@ -19,7 +23,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   const { updateInfoList, setUpdateInfoList, removeInfoList, setRemoveInfoList } = useProjectInfoListStoreForUpdate();
 
 
-  const handlechange = (field: keyof UpdatedProjectInfoReq, value: string) => {
+  const handleChange = (field: keyof UpdatedProjectInfoReq, value: string) => {
 
     const targetElement = updateInfoList.find(info => info.id === projectInfoId);
     if (targetElement) {
@@ -64,22 +68,26 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   }
 
   return (
-    <ProjectInfoItem>
+    <ProjectInfoItem $isEditMode={isEditMode}>
       {isEditMode ? (
         <>
-          <NameInput
+          <HeadlessInput
             value={initialCustomName}
-            placeholder='Enter info'
-            onChange={(e) => handlechange("customName", e.target.value)}
+            placeholder={"Enter info"}
+            handleChange={(e) => handleChange("customName", e.target.value)}
+            StyledInput={InputName}
           />
-          <ValueInput
+          <HeadlessInput
             value={initialCustomValue}
-            placeholder='Enter value'
-            onChange={(e) => handlechange("customValue", e.target.value)}
+            placeholder={"Enter value"}
+            handleChange={(e) => handleChange("customValue", e.target.value)}
+            StyledInput={InputValue}
           />
-          <DeleteButton onClick={handleDelete}>
-            Delete
-          </DeleteButton>
+          <HeadlessBtn
+            value={"Delete"}
+            handleClick={handleDelete}
+            StyledBtn={BtnDelete}
+          />
         </>
       ) : (
         <>
@@ -91,64 +99,25 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   );
 }
 
-const ProjectInfoItem = styled.div`
+const ProjectInfoItem = styled.div<{ $isEditMode: boolean }>`
   display: flex;
   height: 40px;
-`;
-
-const NameInput = styled.input`
-  width: 18vw;
-  margin-right: 20px;
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-`;
-
-const ValueInput = styled.input`
-  width: 50vw;  
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-`;
-
-const DeleteButton = styled.button`
-  margin-bottom: 8px;
-  margin-left: 24px;
-  padding: 5px 10px;
-  background-color: ${({ theme }) => theme.colors.color_Gray_02};
-  color: ${({ theme }) => theme.colors.color_White};
-  cursor: pointer;
+  gap: 20px;
+  margin-bottom: ${({ $isEditMode }) => $isEditMode ? '8px' : '10px'};
 `;
 
 const NameSection = styled.div`
   width: 18vw;
   padding: 5px;
-  margin-right: 20px;
-  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 const ValueSection = styled.div`
   width: 60vw;
   padding: 5px;
-  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  ${({ theme }) => theme.typography.Body_03_1};
 `;
 
 export default ProjectInfo;

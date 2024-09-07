@@ -7,6 +7,8 @@ import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../..
 import ProjectInfoTemp from './ProjectInfoTemp';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import Space from '../../shared/Space';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 
 const ProjectInfoList: React.FC = () => {
   const { isEditMode } = useEditMode();
@@ -48,9 +50,11 @@ const ProjectInfoList: React.FC = () => {
       }
       <Space $align={"center"} $height={"calc(6vw)"}>
         {isEditMode &&
-          <CreateButton onClick={handleCreateInfo}>
-            Create ProjectInfo
-          </CreateButton>
+          <HeadlessBtn
+            value={"Info"}
+            handleClick={handleCreateInfo}
+            StyledBtn={BtnCreate}
+          />
         }
       </Space>
     </ProjectInfoListComp>
@@ -58,18 +62,6 @@ const ProjectInfoList: React.FC = () => {
 }
 
 const ProjectInfoListComp = styled.article`
-`;
-
-const CreateButton = styled.button`
-  padding: 0.5rem 1rem;
-  background-color: ${({ theme }) => theme.colors.color_White};
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Gray_06};
-  }
 `;
 
 export default ProjectInfoList;

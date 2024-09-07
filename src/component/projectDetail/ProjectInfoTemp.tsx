@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
+import { InputNameNew, InputValueNew } from '../../shared/component/headless/input/InputBody';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 
 interface ProjectInfoTempProps {
   tempId: string;
@@ -17,7 +21,7 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
   const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
 
 
-  const handlechange = (field: keyof CreateProjectInfoReq, value: string) => {
+  const handleChange = (field: keyof CreateProjectInfoReq, value: string) => {
     const newCreateInfoList: CreateProjectInfoReq[] = createInfoList.map(each =>
       each.tempId === tempId ? { ...each, [field]: value } : each
     )
@@ -31,19 +35,23 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 
   return (
     <ProjectInfoItem>
-      <NameInput
+      <HeadlessInput
         value={initialCustomName}
-        onChange={(e) => handlechange("customName", e.target.value)}
-        placeholder="Enter info"
+        placeholder={"Enter info"}
+        handleChange={(e) => handleChange("customName", e.target.value)}
+        StyledInput={InputNameNew}
       />
-      <ValueInput
+      <HeadlessInput
         value={initialCustomValue}
-        onChange={(e) => handlechange("customValue", e.target.value)}
-        placeholder="Enter value"
+        placeholder={"Enter value"}
+        handleChange={(e) => handleChange("customValue", e.target.value)}
+        StyledInput={InputValueNew}
       />
-      <DeleteButton onClick={handleDelete}>
-        Delete
-      </DeleteButton>
+      <HeadlessBtn
+        value={"Delete"}
+        handleClick={handleDelete}
+        StyledBtn={BtnDelete}
+      />
     </ProjectInfoItem>
   );
 };
@@ -51,46 +59,8 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 const ProjectInfoItem = styled.div`
   display: flex;
   height: 40px;
+  gap: 20px;
 `;
 
-const NameInput = styled.input`
-  width: 18vw;
-  margin-right: 20px;
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.regular};
-`;
-
-const ValueInput = styled.input`
-  width: 50vw;
-  margin-bottom: 8px;
-  padding: 5px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  font-size: ${({ theme }) => theme.fontSize.font_B03};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-`;
-
-const DeleteButton = styled.button`
-  margin-bottom: 8px;
-  margin-left: 24px;
-  padding: 5px 10px;
-  background-color: ${({ theme }) => theme.colors.color_Gray_02};
-  color: ${({ theme }) => theme.colors.color_White};
-  cursor: pointer;
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.color_Gray_04};
-    cursor: not-allowed;
-  }
-`;
 
 export default ProjectInfoTemp;

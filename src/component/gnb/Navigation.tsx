@@ -48,7 +48,7 @@ const NavList = styled.ul`
 
 const NavItem = styled.li`
   margin: 0 20px;
-  font-size: ${({ theme }) => theme.fontSize.font_B01};
+  ${({ theme }) => theme.typography.Body_01_2};
 `;
 
 const StyledLink = styled(Link) <{ $isActive: boolean }>`
