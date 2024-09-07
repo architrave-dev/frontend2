@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
-import ReuseTextArea, { TextArea, getAlignment } from '../../shared/component/ReuseTextArea';
+import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
+import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 
 
 export interface TextBoxProps {
@@ -100,12 +101,12 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
             value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
             selectType={SelectType.TEXTBOX_ALIGNMENT}
             handleChange={handleAlignmentChange} />
-          <ReuseTextArea
-            type={TextArea.TEXTBOX}
-            placeholder={"text"}
+          <HeadlessTextArea
             alignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}
             content={initialData.content}
+            placeholder={"text"}
             handleChange={(e) => handlechange("content", e.target.value)}
+            StyledTextArea={TextAreaTextBox}
           />
         </>
       ) : (

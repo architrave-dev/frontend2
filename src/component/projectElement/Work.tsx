@@ -5,9 +5,10 @@ import { ProjectElementData, SizeData, UpdateProjectElementReq, UpdateWorkReq, W
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
 import { WorkAlignment } from '../../shared/component/SelectBox';
-import ReuseTextArea, { TextArea } from '../../shared/component/ReuseTextArea';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
+import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
+import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -86,12 +87,12 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
               placeholder="Title"
               StyledInput={InputWorkTitle}
             />
-            <ReuseTextArea
-              type={TextArea.WORK}
+            <HeadlessTextArea
               alignment={initialWorkAlignment || WorkAlignment.CENTER}
               content={initialData.description}
-              handleChange={(e) => handlechange("description", e.target.value)}
               placeholder={"Description"}
+              handleChange={(e) => handlechange("description", e.target.value)}
+              StyledTextArea={TextAreaWork}
             />
             <WorkInfo>
               <HeadlessInput

@@ -1,13 +1,14 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { TextBoxAlignment, WorkAlignment } from './SelectBox';
+import { TextBoxAlignment, WorkAlignment } from '../../SelectBox';
+import { getAlignment } from './TextAreaBody';
 
-export enum TextArea {
+enum TextArea {
   WORK = 'WORK',
   TEXTBOX = 'TEXTBOX'
 }
 
-export interface TextBoxAreaProps {
+interface TextBoxAreaProps {
   type: TextAreaType;
   alignment: Alignment;
   content: string;
@@ -61,21 +62,5 @@ const TextAreaComp = styled.textarea<{ $type: TextAreaType, $alignment: Alignmen
     }
   }}
 `;
-
-export const getAlignment = (alignment: Alignment): string => {
-  switch (alignment) {
-    case TextBoxAlignment.LEFT:
-    case WorkAlignment.LEFT:
-      return 'left';
-    case TextBoxAlignment.CENTER:
-    case WorkAlignment.CENTER:
-      return 'center';
-    case TextBoxAlignment.RIGHT:
-    case WorkAlignment.RIGHT:
-      return 'right';
-    default:
-      return 'center';
-  }
-};
 
 export default ReuseTextArea;
