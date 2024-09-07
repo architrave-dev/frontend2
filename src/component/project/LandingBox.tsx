@@ -10,6 +10,8 @@ import ConfirmButton from '../../shared/component/ConfirmButton';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextBoxAlignment } from '../../shared/component/SelectBox';
 import { TextAreaBilboard } from '../../shared/component/headless/textarea/TextAreaBody';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputBilboard } from '../../shared/component/headless/input/InputBody';
 
 
 const LandingBox: React.FC = () => {
@@ -83,11 +85,12 @@ const LandingBox: React.FC = () => {
       {isEditMode ? (
         <>
           <ReplaceImageButton setBackgroundImageUrl={setBackgroundImageUrl} />
-          <Input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="Enter title"
+          <HeadlessInput
+            type={'text'}
+            value={title ? title : ''}
+            handleChange={handleTitleChange}
+            placeholder={"Enter title"}
+            StyledInput={InputBilboard}
           />
           <HeadlessTextArea
             alignment={TextBoxAlignment.LEFT}
@@ -146,17 +149,6 @@ min-height: 7vh;
 margin-bottom: 20px;
 padding: 0.5rem;
 ${({ theme }) => theme.typography.Body_01};
-`;
-
-const Input = styled.input`
-  width: 70%;
-  padding: 0.5rem;
-  margin-bottom: 18px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid #fff;
-  outline: none;
-  ${({ theme }) => theme.typography.H_01};
 `;
 
 

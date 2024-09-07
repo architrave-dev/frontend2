@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useMember } from '../shared/hooks/useMember';
 import { useNavigate } from 'react-router-dom';
+import HeadlessInput from '../shared/component/headless/input/HeadlessInput';
+import { InputBox } from '../shared/component/headless/input/InputBody';
 
 
 const SearchBar: React.FC = () => {
@@ -27,12 +29,13 @@ const SearchBar: React.FC = () => {
   return (
     <SearchWrapper>
       <InputWrapper>
-        <Input
+        <HeadlessInput
           type="text"
           value={aui}
-          onChange={(e) => setAui(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Enter Artist ID"
+          handleChange={(e) => setAui(e.target.value)}
+          handleKeyBoard={handleKeyDown}
+          placeholder={"Enter Artist ID"}
+          StyledInput={InputBox}
         />
         <Button onClick={handleSearch}>
           {isLoading ? 'Search...' : 'Search'}
@@ -52,15 +55,6 @@ const SearchWrapper = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   width: 100%;
-`;
-
-const Input = styled.input`
-  width: 400px;
-  padding: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  background-color: ${({ theme }) => theme.colors.color_Gray_06};
-  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 const Button = styled.button`

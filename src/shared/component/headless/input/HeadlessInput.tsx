@@ -7,7 +7,8 @@ interface HeadlessInputProps {
   value: string;
   placeholder: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  StyledInput: StyledInputComponent
+  handleKeyBoard?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  StyledInput: StyledInputComponent;
 }
 
 const HeadlessInput: React.FC<HeadlessInputProps> = ({

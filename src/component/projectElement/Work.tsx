@@ -188,22 +188,6 @@ const Title = styled.h2`
   ${({ theme }) => theme.typography.Body_02_2};
 `;
 
-const TitleInput = styled.input`
-  width: 100%;
-  height: 19px;
-  padding: 4px 8px;
-  margin-bottom: 2px;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  line-height: ${({ theme }) => theme.fontSize.font_B03};
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  outline: none;
-  text-align: center;
-  ${({ theme }) => theme.typography.Body_02_2};
-`;
-
-
 const Description = styled.div`
   padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
