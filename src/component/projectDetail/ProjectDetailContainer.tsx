@@ -10,7 +10,8 @@ import { useAui } from '../../shared/hooks/useAui';
 import RepresentImg from './RepresentImg';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { ProjectData } from '../../shared/store/projectStore';
-import ConfirmButton from '../../shared/component/ConfirmButton';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -75,7 +76,11 @@ const ProjectDetailContainer: React.FC = () => {
   return (
     <ProjectDetailContainerComp>
       {isEditMode && project && isChanged(project) &&
-        <ConfirmButton handleConfirm={handleConfirm} />
+        <HeadlessBtn
+          value={"Confirm"}
+          handleClick={handleConfirm}
+          StyledBtn={BtnConfirm}
+        />
       }
       <RepresentImg backgroundImg={backgroundImageUrl} setBackgroundImg={setBackgroundImageUrl} />
       <ProjectDetailWrapper>

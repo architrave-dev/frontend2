@@ -11,9 +11,9 @@ import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import { DividerType } from '../../shared/Divider';
 import Space from '../../shared/Space';
-import CreateButton from '../../shared/component/CreateButton';
-import ConfirmButton from '../../shared/component/ConfirmButton';
 import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
+import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 
 const ProjectElementList: React.FC = () => {
@@ -95,7 +95,11 @@ const ProjectElementList: React.FC = () => {
   return (
     <ProjectElementListComp>
       {isEditMode && isChanged() &&
-        <ConfirmButton handleConfirm={handleConfirm} />
+        <HeadlessBtn
+          value={"Confirm"}
+          handleClick={handleConfirm}
+          StyledBtn={BtnConfirm}
+        />
       }
       {projectElementList.map((each, index) => (
         <ProjectElement
@@ -126,9 +130,21 @@ const ProjectElementList: React.FC = () => {
           ))}
           <Space $align={"center"} $height={"calc(6vw)"}>
             <CreateButtonGroup>
-              <CreateButton name={"Work"} handleCreate={() => handleCreateElement(ProjectElementType.WORK)} />
-              <CreateButton name={"Text"} handleCreate={() => handleCreateElement(ProjectElementType.TEXTBOX)} />
-              <CreateButton name={"Divider"} handleCreate={() => handleCreateElement(ProjectElementType.DIVIDER)} />
+              <HeadlessBtn
+                value={"Work"}
+                handleClick={() => handleCreateElement(ProjectElementType.WORK)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Text"}
+                handleClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Divider"}
+                handleClick={() => handleCreateElement(ProjectElementType.DIVIDER)}
+                StyledBtn={BtnCreate}
+              />
             </CreateButtonGroup>
           </Space>
         </>

@@ -5,8 +5,9 @@ import TextBoxTemp from './TextBoxTemp';
 import { DividerType } from '../../shared/Divider';
 import { CreateTextBoxReq, CreateWorkReq, ProjectElementType, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import DividerTemp from './DividerTemp';
-import DeleteButton from '../../shared/component/DeleteButton';
 import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 
 
 export type ProjectElementTempProps = {
@@ -51,7 +52,11 @@ const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
   return (
     <ProjectElementListWrapper $elementType={projectElementType}>
       {contentRouter()}
-      <DeleteButton handleDelete={handleDelete} />
+      <HeadlessBtn
+        value={"Delete"}
+        handleClick={handleDelete}
+        StyledBtn={BtnDelete}
+      />
     </ProjectElementListWrapper>
   );
 }

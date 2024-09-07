@@ -7,7 +7,8 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { CreateProjectReq, createProject } from '../../shared/api/projectApi';
 import { useNavigate } from 'react-router-dom';
 import Space from '../../shared/Space';
-import CreateButton from '../../shared/component/CreateButton';
+import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
@@ -48,7 +49,13 @@ const ProjectList: React.FC = () => {
   return (
     <ProjectSimpleList>
       <Space >
-        {isEditMode && <CreateButton name={"Create Project"} handleCreate={handleCreate} wide={true} />}
+        {isEditMode &&
+          <HeadlessBtn
+            value={"Create Project"}
+            handleClick={handleCreate}
+            StyledBtn={BtnCreateWide}
+          />
+        }
       </Space>
       {projects.map((each, idx) => (
         <ProjectSimple

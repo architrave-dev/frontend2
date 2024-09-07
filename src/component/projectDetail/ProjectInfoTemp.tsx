@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
-import DeleteButton from '../../shared/component/DeleteButton';
 import { InputNameNew, InputValueNew } from '../../shared/component/headless/input/InputBody';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 
 interface ProjectInfoTempProps {
   tempId: string;
@@ -46,7 +47,11 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
         handleChange={(e) => handleChange("customValue", e.target.value)}
         StyledInput={InputValueNew}
       />
-      <DeleteButton handleDelete={handleDelete} />
+      <HeadlessBtn
+        value={"Delete"}
+        handleClick={handleDelete}
+        StyledBtn={BtnDelete}
+      />
     </ProjectInfoItem>
   );
 };

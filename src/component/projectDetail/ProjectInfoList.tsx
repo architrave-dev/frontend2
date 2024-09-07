@@ -7,7 +7,8 @@ import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../..
 import ProjectInfoTemp from './ProjectInfoTemp';
 import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import Space from '../../shared/Space';
-import CreateButton from '../../shared/component/CreateButton';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 
 const ProjectInfoList: React.FC = () => {
   const { isEditMode } = useEditMode();
@@ -48,7 +49,13 @@ const ProjectInfoList: React.FC = () => {
         </>
       }
       <Space $align={"center"} $height={"calc(6vw)"}>
-        {isEditMode && <CreateButton name={"Info"} handleCreate={handleCreateInfo} />}
+        {isEditMode &&
+          <HeadlessBtn
+            value={"Info"}
+            handleClick={handleCreateInfo}
+            StyledBtn={BtnCreate}
+          />
+        }
       </Space>
     </ProjectInfoListComp>
   );

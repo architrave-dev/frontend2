@@ -6,12 +6,13 @@ import defaultImg from '../../asset/project/default_1.png';
 import { useAui } from '../../shared/hooks/useAui';
 import { LandingBoxData } from '../../shared/store/landingBoxStore';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import ConfirmButton from '../../shared/component/ConfirmButton';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextBoxAlignment } from '../../shared/component/SelectBox';
 import { TextAreaBilboard } from '../../shared/component/headless/textarea/TextAreaBody';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputBilboard } from '../../shared/component/headless/input/InputBody';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 
 
 const LandingBox: React.FC = () => {
@@ -107,7 +108,11 @@ const LandingBox: React.FC = () => {
               description: description,
               isDeleted: false,
             }) &&
-            <ConfirmButton handleConfirm={handleConfirm} />
+            <HeadlessBtn
+              value={"Confirm"}
+              handleClick={handleConfirm}
+              StyledBtn={BtnConfirm}
+            />
           }
         </>
       ) : (
