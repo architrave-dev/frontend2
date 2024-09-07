@@ -15,6 +15,14 @@ const commonTextAreaStyles = css`
     outline: none;
   }
 `;
+export const TextAreaBilboard = styled.textarea<{ $alignment: Alignment }>`
+  ${commonTextAreaStyles}
+  width: 60%;
+  min-height: 7vh;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_White};
+  text-align: ${({ $alignment }) => getAlignment($alignment)};
+  ${({ theme }) => theme.typography.Body_01};
+`;
 
 export const TextAreaWork = styled.textarea<{ $alignment: Alignment }>`
   ${commonTextAreaStyles}

@@ -7,6 +7,9 @@ import { useAui } from '../../shared/hooks/useAui';
 import { LandingBoxData } from '../../shared/store/landingBoxStore';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import ConfirmButton from '../../shared/component/ConfirmButton';
+import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
+import { TextBoxAlignment } from '../../shared/component/SelectBox';
+import { TextAreaBilboard } from '../../shared/component/headless/textarea/TextAreaBody';
 
 
 const LandingBox: React.FC = () => {
@@ -86,10 +89,12 @@ const LandingBox: React.FC = () => {
             onChange={handleTitleChange}
             placeholder="Enter title"
           />
-          <TextArea
-            value={description}
-            onChange={handleDescriptionChange}
-            placeholder="Enter description"
+          <HeadlessTextArea
+            alignment={TextBoxAlignment.LEFT}
+            content={description ? description : ''}
+            placeholder={"Enter description"}
+            handleChange={handleDescriptionChange}
+            StyledTextArea={TextAreaBilboard}
           />
           {backgroundImageUrl && title && description &&
             isChanged(landingBox, {
@@ -152,18 +157,6 @@ const Input = styled.input`
   border-bottom: 2px solid #fff;
   outline: none;
   ${({ theme }) => theme.typography.H_01};
-`;
-
-const TextArea = styled.textarea`
-  width: 60%;
-  min-height: 7vh;
-  margin-bottom: 20px;
-  padding: 0.5rem;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid #fff;
-  outline: none;
-  ${({ theme }) => theme.typography.Body_01};
 `;
 
 
