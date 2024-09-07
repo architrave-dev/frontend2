@@ -1,46 +1,59 @@
-# Getting Started with Create React App
+# Architrave Frontend Repository.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Seamless Portfolio / Archive for Artist
 
-## Available Scripts
+Architrave is a portfolio web service that empowers contemporary artists\
+to directly manage their projects and works.
 
-In the project directory, you can run:
+## Now Status
+MVP-1 released.\
+URL: [http://architrave-mvp1-bucket.s3-website.ap-northeast-2.amazonaws.com](http://architrave-mvp1-bucket.s3-website.ap-northeast-2.amazonaws.com)
 
-### `npm start`
+Contact us for a test Artist ID
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## User Test Result - 1
+- 5 people in Art industry
+- Positive feedback
+  - Super convenient.
+  - Elegant design, and the artwork stands out more.
+  - Looking forward to seeing the other pages / features.
+- Negative feedback
+	- Many artists today manage perfectly well without a website.
+	- Would they pay for one?
+	- Artists prefer websites that can represent their unique charactor.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Key Features
+### MVP-1
+| Component         | Description                                                                        | CRUD                 |
+|-------------------|------------------------------------------------------------------------------------|----------------------|
+| Auth              | Login                                                                              | -                    |
+| Billboard         | Announcement or Set the Mood                                                       | Read, Update         |
+| Project           | -                                                                                  | Create, Read, Update |
+| ProjectInfo       | Detailed project descriptions                                                      | Create, Read, Update |
+| ProjectElement    | Project main content includes Work, TextBox, and Divider                           | Create, Read, Update |
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
+- React with TypeScript
+- Styled-components
+- Zustand
+- Axios
+- AWS S3 for deployment
 
-### `npm run build`
+[Why?](https://github.com/architrave-dev/frontend2/wiki/%EC%9D%98%EC%82%AC%EA%B2%B0%EC%A0%95-%EB%AA%A9%EB%A1%9D)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Considerations
+- [Headless components for flexible and Accessible](https://github.com/architrave-dev/frontend2/wiki/Headless-component-with-DI)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Using <img> tag vs background images
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contact
+| Position    | Name                       | Email                 |
+|-------------|----------------------------|-----------------------|
+| PM          | Kim Youngdong              | nfs82young@gmail.com  |
+| Frontend    | Kim Youngdong              | nfs82young@gmail.com  |
+| Backend     | Kim Youngdong              | nfs82young@gmail.com  |
+| Design      | Jung Joohee                | jjh62128@gmail.com    |
+| Design      | Choi Jihee                 | zhee4820@gmail.com    |
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
