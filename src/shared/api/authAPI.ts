@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { UserData } from '../store/authStore';
+import { UserDataWithRefreshToken } from '../store/authStore';
 
 
 const config = getConfig();
@@ -23,10 +23,13 @@ export interface LoginData {
   email: string;
   password: string;
 }
+export interface RefreshData {
+  refreshToken: string;
+}
 
 export interface AuthResponse {
-  data: UserData;
-  authToken: string
+  data: UserDataWithRefreshToken;
+  authToken: string;
 }
 
 export interface ErrorResponse {
@@ -55,6 +58,20 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
     throw handleApiError(error);
   }
 };
+
+export const refresh = async (data: RefreshData): Promise<AuthResponse> => {
+  try {
+    const response = await authApi.post<AuthResponse>('/api/v1/auth/refresh', data);
+    const authToken = response.headers['authorization'] || null;
+    return {
+      ...response.data,
+      authToken
+    };
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
 
 const handleApiError = (error: unknown): Error => {
   if (axios.isAxiosError(error)) {

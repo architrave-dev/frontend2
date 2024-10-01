@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserData, useAuthStore } from '../store/authStore';
-import { signUp, login, SignUpData, LoginData, AuthResponse } from '../api/authAPI';
+import { signUp, login, SignUpData, LoginData, AuthResponse, RefreshData, refresh } from '../api/authAPI';
 
 
 interface UseAuthResult {
@@ -10,6 +10,7 @@ interface UseAuthResult {
   setUser: (user: UserData) => void;
   signUp: (data: SignUpData) => Promise<void>;
   login: (data: LoginData) => Promise<void>;
+  refresh: (data: RefreshData) => Promise<void>;
   logout: () => void;
 }
 
@@ -20,13 +21,21 @@ export const useAuth = (): UseAuthResult => {
 
   const handleAuthSuccess = (response: AuthResponse) => {
     const { data, authToken } = response;
-    setUser(data);
-    localStorage.setItem('userData', JSON.stringify(data));
+    const onlyUserData: UserData = {
+      id: data.id,
+      email: data.email,
+      username: data.username,
+      aui: data.aui,
+      role: data.role
+    };
+    setUser(onlyUserData);
+    localStorage.setItem('userData', JSON.stringify(onlyUserData));
     localStorage.setItem('authToken', authToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
   };
 
 
-  const handleAuthRequest = async <T extends SignUpData | LoginData>(
+  const handleAuthRequest = async <T extends SignUpData | LoginData | RefreshData>(
     authFunction: (data: T) => Promise<AuthResponse>,
     data: T
   ) => {
@@ -44,11 +53,13 @@ export const useAuth = (): UseAuthResult => {
 
   const signUpHandler = (data: SignUpData) => handleAuthRequest(signUp, data);
   const loginHandler = (data: LoginData) => handleAuthRequest(login, data);
+  const refreshHandler = (data: RefreshData) => handleAuthRequest(refresh, data);
 
   const logout = () => {
     clearAuth();
     localStorage.removeItem('userData');
     localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
   };
 
   return {
@@ -58,6 +69,7 @@ export const useAuth = (): UseAuthResult => {
     setUser,
     signUp: signUpHandler,
     login: loginHandler,
+    refresh: refreshHandler,
     logout,
   };
 }
