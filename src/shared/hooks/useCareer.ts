@@ -46,7 +46,7 @@ export const useCareer = (): UseCareerResult => {
   };
 
   const getCareerHandler = (aui: string) => handleCareerRequest(aui);
-  const updateProjectDetailHandler = (aui: string, data: UpdatedCareerListReq) => handleCareerRequest(aui, data);
+  const updateCareerHandler = (aui: string, data: UpdatedCareerListReq) => handleCareerRequest(aui, data);
 
 
   return {
@@ -54,6 +54,6 @@ export const useCareer = (): UseCareerResult => {
     error,
     careerList: careers,
     getCareerList: getCareerHandler,
-    updateCareerList: updateProjectDetailHandler,
+    updateCareerList: updateCareerHandler,
   };
 };

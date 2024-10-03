@@ -43,8 +43,8 @@ export const useLandingBox = (): UseLandingBoxResult => {
     }
   };
 
-  const getLandingBoxHandler = (aui: string): Promise<void> => handleLandingBoxRequest(aui);
-  const updateLandingBoxHandler = (aui: string, data: LandingBoxData): Promise<void> => handleLandingBoxRequest(aui, data);
+  const getLandingBoxHandler = (aui: string) => handleLandingBoxRequest(aui);
+  const updateLandingBoxHandler = (aui: string, data: LandingBoxData) => handleLandingBoxRequest(aui, data);
 
   return {
     isLoading,
