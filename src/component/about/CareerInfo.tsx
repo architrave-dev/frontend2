@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { UpdateCareerReq } from '../../shared/store/careerStore';
+import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
 
 interface CareerInfoProps {
   careerId: string;
@@ -32,20 +33,21 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
               value={initialYearFrom.toString()}
               placeholder={"Enter YearFrom"}
               handleChange={(e) => handleChange("yearFrom", e.target.value)}
-              StyledInput={Year}
+              StyledInput={InputName}
             />
+            <span> - </span>
             <HeadlessInput
               value={initialYearTo.toString()}
               placeholder={"Enter YearTo"}
               handleChange={(e) => handleChange("yearTo", e.target.value)}
-              StyledInput={Year}
+              StyledInput={InputName}
             />
           </YearSection>
           <HeadlessInput
             value={initialContent}
             placeholder={"Enter value"}
             handleChange={(e) => handleChange("content", e.target.value)}
-            StyledInput={Content}
+            StyledInput={InputValue}
           />
         </>
       ) : (

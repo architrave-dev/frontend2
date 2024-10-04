@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchBar from '../component/SearchBar';
 import LandingLogo from '../component/LandingLogo';
-import Space from '../shared/Space';
 
 const Landing: React.FC = () => {
   return (

@@ -108,11 +108,11 @@ const CareerList: React.FC = () => {
 }
 
 const CareerListComp = styled.section`
-  margin-bottom: 6vh;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 6vw;
 `;
 
 const Section = styled.div`
