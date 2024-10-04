@@ -7,6 +7,9 @@ export interface UserData {
   aui: string;
   role: string;
 }
+export interface UserDataWithRefreshToken extends UserData {
+  refreshToken: string;
+}
 
 interface AuthState {
   user: UserData | null;
@@ -21,7 +24,6 @@ type AuthStore = AuthState & AuthActions;
 
 export const useAuthStore = create<AuthStore>()((set) => ({
   user: null,
-
   setUser: (user) => set({ user }),
   clearAuth: () => set({ user: null }),
 }));
