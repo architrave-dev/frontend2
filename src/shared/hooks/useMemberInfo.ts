@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MemberInfoResponse, getMemberInfo, updateMemberInfo } from '../api/memberInfoApi';
-import { MemberInfoData, useMemberInfoStore } from '../store/memberInfoStore';
+import { MemberInfoData, useMemberInfoStore, useMemberInfoStoreForUpdate } from '../store/memberInfoStore';
 
 
 interface UseMemberInfoResult {
@@ -15,11 +15,13 @@ export const useMemberInfo = (): UseMemberInfoResult => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { memberInfo, setMemberInfo } = useMemberInfoStore();
+  const { setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
 
 
   const handleMemberInfoSuccess = (response: MemberInfoResponse) => {
-    const MemberInfoData = response.data;
-    setMemberInfo(MemberInfoData);
+    const memberInfoData = response.data;
+    setMemberInfo(memberInfoData);
+    setUpdateMemberInfoDto(memberInfoData);
   };
 
   const handleMemberInfoRequest = async (

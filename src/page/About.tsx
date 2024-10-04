@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import MemberInfo from '../component/about/MemberInfo';
 import CareerList from '../component/about/CareerList';
-import ArtistCard from '../component/about/ArtistCard';
 
 const About: React.FC = () => {
   return (
     <AboutContainer>
+      <MemberInfo />
       <CareerList />
     </AboutContainer>
   );
@@ -15,9 +16,13 @@ export default About;
 
 
 const AboutContainer = styled.div`
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

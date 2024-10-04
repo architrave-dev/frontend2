@@ -9,13 +9,13 @@ export enum CountryType {
 
 export interface MemberInfoData {
   id: number;
-  originUrl?: string | null;
+  originUrl: string;
   name: string;
-  year?: number;
-  country?: CountryType;
-  email?: string;
-  contact?: string;
-  description?: string;
+  year: number;
+  country: CountryType;
+  email: string;
+  contact: string;
+  description: string;
 }
 // 각종 SNS(인스타, 유튜브, 트위터 등등)
 
@@ -27,4 +27,14 @@ interface MemberInfoState {
 export const useMemberInfoStore = create<MemberInfoState>((set) => ({
   memberInfo: null,
   setMemberInfo: (memberInfo) => set({ memberInfo }),
+}));
+
+interface MemberInfoStateForUpdate {
+  updateMemberInfoDto: MemberInfoData | null;
+  setUpdateMemberInfoDto: (updateMemberInfoDto: MemberInfoData) => void;
+}
+
+export const useMemberInfoStoreForUpdate = create<MemberInfoStateForUpdate>((set) => ({
+  updateMemberInfoDto: null,
+  setUpdateMemberInfoDto: (updateMemberInfoDto) => set({ updateMemberInfoDto })
 }));
