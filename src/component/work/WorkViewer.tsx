@@ -6,17 +6,17 @@ import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/
 import defaultImg from '../../asset/project/default_1.png';
 import MemberInfoEach from '../about/MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import { WorkData } from '../../shared/store/WorkListStore';
+import { CreateWorkReq, WorkData } from '../../shared/store/WorkListStore';
 import { convertSizeToString, convertStringToSize } from '../../shared/store/projectElementStore';
 import Divider, { DividerType } from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useWorkList';
-import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
+import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
-  const { updateWork } = useWorkList();
+  const { updateWork, createWork } = useWorkList();
   const { activeWork, setActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
 
@@ -46,10 +46,26 @@ const WorkViewer: React.FC = () => {
     setEditMode(false);
   };
 
+  const handleCreateWork = () => {
+    const newWork: CreateWorkReq = {
+      originUrl: process.env.REACT_APP_DEFAULT_IMG || '',
+      thumbnailUrl: process.env.REACT_APP_DEFAULT_IMG || '',
+      title: "New Work",
+      description: "This is New Work",
+      size: {
+        width: "000",
+        height: "000"
+      },
+      material: "material",
+      prodYear: new Date().getFullYear().toString()
+    }
+    createWork(aui, newWork);
+  };
+
   return (
     <WorkViewComp>
       <ImgWrapper>
-        <WorkImage src={defaultImg} alt={updatedActiveWork.title} />
+        <WorkImage src={updatedActiveWork.originUrl === '' ? defaultImg : updatedActiveWork.originUrl} alt={updatedActiveWork.title} />
         <ReplaceImageButton setBackgroundImageUrl={(imageUrl: string) => handleChange('originUrl', imageUrl)} />
       </ImgWrapper>
       <Divider dividerType={DividerType.PLAIN} />
@@ -58,6 +74,13 @@ const WorkViewer: React.FC = () => {
       <MemberInfoEach name={"Material"} value={updatedActiveWork.material} handleChange={(e) => handleChange('material', e.target.value)} />
       <MemberInfoEach name={"Year"} value={updatedActiveWork.prodYear} handleChange={(e) => handleChange('prodYear', e.target.value)} />
       <MemberInfoEach name={"Description"} value={updatedActiveWork.description} handleChange={(e) => handleChange('prodYear', e.target.value)} />
+
+      {isEditMode &&
+        <HeadlessBtn
+          value={"Create"}
+          handleClick={handleCreateWork}
+          StyledBtn={BtnCreate}
+        />}
       {isEditMode && isChanged(activeWork, updatedActiveWork) &&
         <HeadlessBtn
           value={"Confirm"}
@@ -66,7 +89,6 @@ const WorkViewer: React.FC = () => {
         />
       }
     </WorkViewComp>
-
   );
 }
 

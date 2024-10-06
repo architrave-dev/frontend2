@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { UpdateWorkReq, WorkData } from '../store/WorkListStore';
+import { CreateWorkReq, UpdateWorkReq, WorkData } from '../store/WorkListStore';
 
 const config = getConfig();
 
@@ -14,6 +14,10 @@ const workListApi = axios.create({
 
 export interface WorkListResponse {
   data: WorkData[];
+}
+
+export interface WorkResponse {
+  data: WorkData;
 }
 
 export interface ErrorResponse {
@@ -31,13 +35,27 @@ export const getWorkList = async (aui: string): Promise<WorkListResponse> => {
   }
 };
 
-export const updateWork = async (aui: string, data: UpdateWorkReq): Promise<WorkListResponse> => {
+export const updateWork = async (aui: string, data: UpdateWorkReq): Promise<WorkResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workListApi.put<WorkListResponse>(`/api/v1/work?aui=${aui}`, data, {
+    const response = await workListApi.put<WorkResponse>(`/api/v1/work?aui=${aui}`, data, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+export const createWork = async (aui: string, data: CreateWorkReq): Promise<WorkResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await workListApi.post<WorkResponse>(`/api/v1/work?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

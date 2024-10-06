@@ -18,6 +18,7 @@ export interface WorkData {
   prodYear: string,
   //genre : drawing, painting, Sculpture, Installation, Video, Photo, 
   //Sketch or Research
+  //Price: 
 }
 
 export interface CreateWorkReq {

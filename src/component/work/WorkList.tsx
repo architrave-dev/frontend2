@@ -6,6 +6,7 @@ import WorkInfo from './WorkInfo';
 import ColumnInfo from './ColumnInfo';
 import { SortOrder } from '../../shared/component/SelectBox';
 import SortStation, { sortWorkList } from './SortStation';
+import { WorkData } from '../../shared/store/WorkListStore';
 
 const WorkList: React.FC = () => {
   const { isLoading, error, workList, getWorkList } = useWorkList();
@@ -30,11 +31,14 @@ const WorkList: React.FC = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading works: {error}</div>;
 
+  const sortedWorkList = Array.isArray(workList) ? sortWorkList(workList, sortOrder) : [];
+
+
   return (
     <WorkListComp>
       <SortStation setSortOrder={setSortOrder} />
       <ColumnInfo />
-      {sortWorkList(workList, sortOrder).map((each) =>
+      {sortedWorkList.map((each: WorkData) =>
         <WorkInfo key={each.id} data={each} />
       )}
     </WorkListComp>
