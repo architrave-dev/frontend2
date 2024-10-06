@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { UserData } from './authStore';
 
 
 export interface SizeData {
@@ -17,6 +16,8 @@ export interface WorkData {
   size: SizeData;
   material: string,
   prodYear: string,
+  //genre : drawing, painting, Sculpture, Installation, Video, Photo, 
+  //Sketch or Research
 }
 
 export interface CreateWorkReq {
