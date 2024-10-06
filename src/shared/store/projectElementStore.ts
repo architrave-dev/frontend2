@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { UserData } from './authStore';
 import { DividerType } from '../Divider';
-import { UpdateProjectElementListReq } from '../api/projectElementApi';
 import { TextBoxAlignment, WorkAlignment } from '../component/SelectBox';
 
 
@@ -10,6 +9,14 @@ export enum ProjectElementType {
   WORK = 'WORK',
   TEXTBOX = 'TEXTBOX',
   DIVIDER = 'DIVIDER',
+}
+
+export const getAreaFromSize = (value: SizeData): number => {
+  if (value.depth) {
+    return Number.parseInt(value.width) * Number.parseInt(value.height) * Number.parseInt(value.depth);
+  } else {
+    return Number.parseInt(value.width) * Number.parseInt(value.height);
+  }
 }
 
 export const convertSizeToString = (value: SizeData): string => {
