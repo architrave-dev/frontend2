@@ -86,3 +86,13 @@ export const InputAuth = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_02_2};
 `;
+
+export const InputWorkName = styled.input`
+  ${commonInputBoxStyles}
+  width: 100%;
+  padding: 3px;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  border: none;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
+  ${({ theme }) => theme.typography.Body_03_2};
+`;

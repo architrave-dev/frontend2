@@ -93,7 +93,7 @@ const WorkViewer: React.FC = () => {
 }
 
 const WorkViewComp = styled.section`
-  width: 50vw;
+  width: 35vw;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -105,14 +105,27 @@ const WorkViewComp = styled.section`
 
 const ImgWrapper = styled.div`
   position: relative;
+  height: 60vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 16px;
 `
 
 const WorkImage = styled.img`
   max-width: 100%;
-  max-height: 90vh;
-  margin-bottom: 16px;
+  max-height: 100%;
   object-fit: contain;
 `;
+
+const BtnContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 30px;
+`
 
 const Description = styled.div`
   padding: 8px 0px;

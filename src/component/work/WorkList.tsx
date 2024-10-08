@@ -46,7 +46,7 @@ const WorkList: React.FC = () => {
 }
 
 const WorkListComp = styled.section`
-  width: 50vw;
+  width: 65vw;
   height: 100%;
   display: flex;
   flex-direction: column;

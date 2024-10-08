@@ -69,7 +69,7 @@ const SortStation: React.FC<SortStationProps> = (
 
 const SortingStation = styled.article`
   width: 100%;
-  height: 100px;
+  height: 60px;
 
   display: flex;
 `;
