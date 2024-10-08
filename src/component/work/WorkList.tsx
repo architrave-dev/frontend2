@@ -7,18 +7,36 @@ import ColumnInfo from './ColumnInfo';
 import { SortOrder } from '../../shared/component/SelectBox';
 import SortStation, { sortWorkList } from './SortStation';
 import { WorkData } from '../../shared/store/WorkListStore';
+import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 
 const WorkList: React.FC = () => {
   const { isLoading, error, workList, getWorkList } = useWorkList();
   const { aui } = useAui();
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.TITLE_ASC);
+  const { setActiveWork } = useWorkViewStore();
+  const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
 
+  const setDefaultWorkView = () => {
+    const defaultWork: WorkData = {
+      id: '',
+      originUrl: '',
+      thumbnailUrl: '',
+      title: 'Select Work',
+      description: '-',
+      size: { width: '000', height: '000' },
+      material: '',
+      prodYear: ''
+    };
+    setActiveWork(defaultWork);
+    setUpdatedActiveWork(defaultWork);
+  }
   useEffect(() => {
     const getWorkListWithApi = async () => {
       if (aui) {
         try {
           console.log("getting work List...")
           await getWorkList(aui);
+          setDefaultWorkView();
         } catch (error) {
           console.error('get WorkList failed:', error);
         }

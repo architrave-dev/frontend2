@@ -11,17 +11,16 @@ import { convertSizeToString, convertStringToSize } from '../../shared/store/pro
 import Divider, { DividerType } from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useWorkList';
-import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import { BtnWorkDelete } from '../../shared/component/headless/button/BtnBody';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
-  const { updateWork, createWork } = useWorkList();
-  const { activeWork, setActiveWork } = useWorkViewStore();
+  const { updateWork, createWork, deleteWork } = useWorkList();
+  const { activeWork, setActiveWork, clearActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
 
   if (!activeWork || !updatedActiveWork) return null;
-
 
   const handleChange = (field: keyof WorkData, value: string) => {
     if (field == 'size')
@@ -42,11 +41,14 @@ const WorkViewer: React.FC = () => {
   };
 
   const handleConfirm = async () => {
+    if (!isChanged(activeWork, updatedActiveWork)) {
+      return;
+    }
     await updateWork(aui, updatedActiveWork);
     setEditMode(false);
   };
 
-  const handleCreateWork = () => {
+  const handleCreateWork = async () => {
     const newWork: CreateWorkReq = {
       originUrl: process.env.REACT_APP_DEFAULT_IMG || '',
       thumbnailUrl: process.env.REACT_APP_DEFAULT_IMG || '',
@@ -59,7 +61,15 @@ const WorkViewer: React.FC = () => {
       material: "material",
       prodYear: new Date().getFullYear().toString()
     }
-    createWork(aui, newWork);
+    await createWork(aui, newWork);
+  };
+
+  const handleDelete = async (title: string) => {
+    if (window.confirm("Are you sure you want to delete this work?")) {
+      await deleteWork(aui, { id: updatedActiveWork.id });
+      clearActiveWork();
+      setEditMode(false);
+    }
   };
 
   return (
@@ -76,17 +86,28 @@ const WorkViewer: React.FC = () => {
       <MemberInfoEach name={"Description"} value={updatedActiveWork.description} handleChange={(e) => handleChange('prodYear', e.target.value)} />
 
       {isEditMode &&
-        <HeadlessBtn
-          value={"Create"}
-          handleClick={handleCreateWork}
+        <BtnContainer>
+          {/* <HeadlessBtn
+          value={"Full"}
+          handleClick={handleDelete}
           StyledBtn={BtnCreate}
-        />}
-      {isEditMode && isChanged(activeWork, updatedActiveWork) &&
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
+        /> */}
+          <HeadlessBtn
+            value={"Create"}
+            handleClick={handleCreateWork}
+            StyledBtn={BtnWorkDelete}
+          />
+          <HeadlessBtn
+            value={"Confirm"}
+            handleClick={handleConfirm}
+            StyledBtn={BtnWorkDelete}
+          />
+          <HeadlessBtn
+            value={"Delete"}
+            handleClick={() => handleDelete(updatedActiveWork.title)}
+            StyledBtn={BtnWorkDelete}
+          />
+        </BtnContainer>
       }
     </WorkViewComp>
   );
