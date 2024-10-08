@@ -41,7 +41,9 @@ export interface UpdateWorkReq {
   material: string,
   prodYear: string
 }
-
+export interface DeleteWorkReq {
+  id: string;
+}
 interface WorkListState {
   workList: WorkData[];
   setWorkList: (workList: WorkData[]) => void;

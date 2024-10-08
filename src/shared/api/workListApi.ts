@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { CreateWorkReq, UpdateWorkReq, WorkData } from '../store/WorkListStore';
+import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq, WorkData } from '../store/WorkListStore';
 
 const config = getConfig();
 
@@ -18,6 +18,10 @@ export interface WorkListResponse {
 
 export interface WorkResponse {
   data: WorkData;
+}
+
+export interface DeleteResponse {
+  data: string;
 }
 
 export interface ErrorResponse {
@@ -56,6 +60,20 @@ export const createWork = async (aui: string, data: CreateWorkReq): Promise<Work
       throw new Error('Authentication required');
     }
     const response = await workListApi.post<WorkResponse>(`/api/v1/work?aui=${aui}`, data, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+export const deleteWork = async (aui: string, data: DeleteWorkReq): Promise<DeleteResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await workListApi.delete<DeleteResponse>(`/api/v1/work?aui=${aui}&id=${data.id}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
