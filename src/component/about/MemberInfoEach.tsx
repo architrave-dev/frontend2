@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import { InputValue } from '../../shared/component/headless/input/InputBody';
+import { InputWorkName } from '../../shared/component/headless/input/InputBody';
 
 
 
@@ -17,9 +17,6 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
 }) => {
 
   const { isEditMode } = useEditMode();
-  if (!value) {
-    return null;
-  }
   return (
     <Info>
       <NameSection>{name}:</NameSection>
@@ -28,7 +25,7 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
           value={value.toString()}
           placeholder={"Enter value"}
           handleChange={handleChange}
-          StyledInput={InputValue}
+          StyledInput={InputWorkName}
         /> :
         <ValueSection>{value}</ValueSection>
       }
@@ -41,7 +38,7 @@ const Info = styled.div`
 `;
 
 const NameSection = styled.div`
-  width: 100px;
+  width: 120px;
   padding: 5px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
@@ -50,6 +47,7 @@ const NameSection = styled.div`
 `;
 
 const ValueSection = styled.div`
+  width: 100%;
   padding: 5px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_1};

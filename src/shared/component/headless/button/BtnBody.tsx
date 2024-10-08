@@ -55,3 +55,13 @@ export const BtnConfirm = styled.button`
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
+
+export const BtnWorkDelete = styled.button`
+  ${commonBtnStyles}
+  background-color: ${({ theme }) => theme.colors.color_White};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  }
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_03_2};
+`;

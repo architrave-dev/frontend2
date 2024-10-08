@@ -6,6 +6,7 @@ export enum SelectType {
   TEXTBOX_ALIGNMENT = 'TEXTBOX_ALIGNMENT',
   WORK_ALIGNMENT = 'WORK_ALIGNMENT',
   WORK_SIZE = 'WORK_SIZE',
+  SORT_ORDER = 'SORT_ORDER'
 }
 
 export enum TextBoxAlignment {
@@ -24,14 +25,22 @@ export enum WorkSize {
   MEDIUM = 'MEDIUM',
   SMALL = 'SMALL',
 }
-
+export enum SortOrder {
+  TITLE_ASC = 'TITLE_ASC',
+  TITLE_DESC = 'TITLE_DESC',
+  SIZE_ASC = 'SIZE_ASC',
+  SIZE_DESC = 'SIZE_DESC',
+  YEAR_ASC = 'YEAR_ASC',
+  YEAR_DESC = 'YEAR_DESC',
+}
 const selectOptions = {
   [SelectType.TEXTBOX_ALIGNMENT]: Object.values(TextBoxAlignment),
   [SelectType.WORK_ALIGNMENT]: Object.values(WorkAlignment),
   [SelectType.WORK_SIZE]: Object.values(WorkSize),
+  [SelectType.SORT_ORDER]: Object.values(SortOrder),
 };
 
-type SelectValue = TextBoxAlignment | WorkAlignment | WorkSize;
+type SelectValue = TextBoxAlignment | WorkAlignment | WorkSize | SortOrder;
 
 interface SelectBoxProps<T extends SelectValue> {
   value: T;
