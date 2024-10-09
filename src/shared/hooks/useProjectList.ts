@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ProjectSimpleData, useProjectListStore } from '../store/projectListStore';
-import { CreateProjectReq, CreatedProjectResponse, ProjectListResponse, ProjectResponse, createProject, getProjectList } from '../api/projectApi';
+import { CreateProjectReq, CreatedProjectResponse, ProjectListResponse, createProject, getProjectList } from '../api/projectApi';
 
 
 interface UseProjectListResult {

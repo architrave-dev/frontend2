@@ -30,7 +30,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   const handleUpdateWorkRequest = (response: WorkResponse) => {
     const data = response.data;
-    const newWorkList = workList.map((each) => each.id == data.id ? data : each);
+    const newWorkList = workList.map((each) => each.id === data.id ? data : each);
     setWorkList(newWorkList);
   };
 

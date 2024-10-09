@@ -21,7 +21,7 @@ const LandingBox: React.FC = () => {
   const [title, setTitle] = useState(landingBox?.title);
   const [description, setDescription] = useState(landingBox?.description);
   const [backgroundImageUrl, setBackgroundImageUrl] = useState(landingBox?.originUrl);
-
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState(landingBox?.thumbnailUrl);
   const { aui } = useAui();
 
   useEffect(() => {
@@ -66,26 +66,31 @@ const LandingBox: React.FC = () => {
   const handleConfirm = async () => {
     if (!landingBox) return;
 
-    if (!(backgroundImageUrl && title && description)) {
+    if (!(backgroundImageUrl && thumbnailImageUrl && title && description)) {
       return;
     }
     const updatedData: LandingBoxData = {
       id: landingBox.id,
       originUrl: backgroundImageUrl,
+      thumbnailUrl: thumbnailImageUrl,
       title: title,
-      description: description,
-      isDeleted: false,
+      description: description
     };
 
     await updateLandingBox(aui, updatedData);
     setEditMode(false);
   };
 
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    setBackgroundImageUrl(originUrl);
+    setThumbnailImageUrl(thumbnailUrl);
+  }
+
   return (
     <Container $backgroundimage={backgroundImageUrl === '' ? defaultImg : backgroundImageUrl}>
       {isEditMode ? (
         <>
-          <ReplaceImageButton setBackgroundImageUrl={setBackgroundImageUrl} />
+          <ReplaceImageButton setImageUrl={setOriginThumbnailUrl} />
           <HeadlessInput
             type={'text'}
             value={title ? title : ''}
@@ -100,13 +105,13 @@ const LandingBox: React.FC = () => {
             handleChange={handleDescriptionChange}
             StyledTextArea={TextAreaBilboard}
           />
-          {backgroundImageUrl && title && description &&
+          {backgroundImageUrl && thumbnailImageUrl && title && description &&
             isChanged(landingBox, {
               id: landingBox.id,
               originUrl: backgroundImageUrl,
+              thumbnailUrl: thumbnailImageUrl,
               title: title,
-              description: description,
-              isDeleted: false,
+              description: description
             }) &&
             <HeadlessBtn
               value={"Confirm"}

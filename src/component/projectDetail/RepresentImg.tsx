@@ -3,20 +3,26 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 
-interface ProjectTitleProps {
+interface RepresentImgProps {
   backgroundImg: string;
   setBackgroundImg: (value: string) => void;
+  setThumbnailImg: (value: string) => void;
 }
 
-const RepresentImg: React.FC<ProjectTitleProps> = ({
-  backgroundImg, setBackgroundImg
+const RepresentImg: React.FC<RepresentImgProps> = ({
+  backgroundImg, setBackgroundImg, setThumbnailImg
 }) => {
   const { isEditMode } = useEditMode();
+
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    setBackgroundImg(originUrl);
+    setThumbnailImg(thumbnailUrl);
+  }
 
   return (
     <RepresentImgContainer $backgroundImg={backgroundImg}>
       {isEditMode && (
-        <ReplaceImageButton setBackgroundImageUrl={setBackgroundImg} />
+        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
       )}
     </RepresentImgContainer>
   );

@@ -20,6 +20,7 @@ const ProjectDetailContainer: React.FC = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [backgroundImageUrl, setBackgroundImageUrl] = useState("");
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState("");
 
   const { createInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
 
@@ -28,6 +29,7 @@ const ProjectDetailContainer: React.FC = () => {
       setTitle(project.title);
       setDescription(project.description);
       setBackgroundImageUrl(project.originUrl);
+      setThumbnailImageUrl(project.thumbnailUrl);
     }
   }, [project]);
 
@@ -37,13 +39,12 @@ const ProjectDetailContainer: React.FC = () => {
     const updatedData: UpdateProjectReq = {
       id: project.id,
       originUrl: backgroundImageUrl,
-      thumbnailUrl: backgroundImageUrl,
+      thumbnailUrl: thumbnailImageUrl,
       title: title,
       description: description,
       createdProjectInfoList: createInfoList,
       updatedProjectInfoList: updateInfoList,
       removedProjectInfoList: removeInfoList,
-      isDeleted: false,
     };
 
     await updateProject(aui, updatedData);
@@ -55,13 +56,12 @@ const ProjectDetailContainer: React.FC = () => {
     const currentData = {
       id: initialData.id,
       originUrl: backgroundImageUrl,
-      thumbnailUrl: backgroundImageUrl,
+      thumbnailUrl: thumbnailImageUrl,
       title: title,
       description: description,
       createdProjectInfoList: createInfoList,
       updatedProjectInfoList: updateInfoList,
-      removedProjectInfoList: removeInfoList,
-      isDeleted: false
+      removedProjectInfoList: removeInfoList
     };
     return (
       initialData.originUrl !== currentData.originUrl ||
@@ -82,7 +82,11 @@ const ProjectDetailContainer: React.FC = () => {
           StyledBtn={BtnConfirm}
         />
       }
-      <RepresentImg backgroundImg={backgroundImageUrl} setBackgroundImg={setBackgroundImageUrl} />
+      <RepresentImg
+        backgroundImg={backgroundImageUrl}
+        setBackgroundImg={setBackgroundImageUrl}
+        setThumbnailImg={setThumbnailImageUrl}
+      />
       <ProjectDetailWrapper>
         <ProjectTitle title={title} setTitle={setTitle} />
         <Divider dividerType={DividerType.PLAIN} />
