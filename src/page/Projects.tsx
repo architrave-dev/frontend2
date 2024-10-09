@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import LandingBox from '../component/project/LandingBox';
-import Space from '../shared/Space';
 import { useParams } from 'react-router-dom';
 import { useAuiValidation } from '../shared/hooks/useAuiValidation';
 import { useAuth } from '../shared/hooks/useAuth';

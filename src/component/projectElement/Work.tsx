@@ -20,7 +20,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
 
-  const handlechange = (field: keyof WorkData, value: string | SizeData) => {
+  const handleChange = (field: keyof WorkData, value: string | SizeData) => {
     const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
     if (targetElement) {
       //updatedProjectElements에 있다면
@@ -82,7 +82,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
           <TitleInfoWrpper>
             <HeadlessInput
               value={initialData.title}
-              handleChange={(e) => handlechange("title", e.target.value)}
+              handleChange={(e) => handleChange("title", e.target.value)}
               placeholder="Title"
               StyledInput={InputWorkTitle}
             />
@@ -90,26 +90,26 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
               alignment={initialWorkAlignment || WorkAlignment.CENTER}
               content={initialData.description}
               placeholder={"Description"}
-              handleChange={(e) => handlechange("description", e.target.value)}
+              handleChange={(e) => handleChange("description", e.target.value)}
               StyledTextArea={TextAreaWork}
             />
             <WorkInfo>
               <HeadlessInput
                 value={initialData.material}
                 placeholder={"Material"}
-                handleChange={(e) => handlechange("material", e.target.value)}
+                handleChange={(e) => handleChange("material", e.target.value)}
                 StyledInput={InputWork}
               />
               <HeadlessInput
                 value={convertSizeToString(initialData.size)}
                 placeholder={"Size"}
-                handleChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
+                handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
                 StyledInput={InputWork}
               />
               <HeadlessInput
                 value={initialData.prodYear}
                 placeholder={"Year"}
-                handleChange={(e) => handlechange("prodYear", e.target.value)}
+                handleChange={(e) => handleChange("prodYear", e.target.value)}
                 StyledInput={InputWork}
               />
             </WorkInfo>

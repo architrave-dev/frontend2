@@ -18,7 +18,7 @@ export interface WorkProps {
 const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
 
-  const handlechange = (field: keyof CreateWorkReq, value: string | SizeData) => {
+  const handleChange = (field: keyof CreateWorkReq, value: string | SizeData) => {
     const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
       each.tempId === tempId ? { ...each, createWorkReq: { ...each.createWorkReq, [field]: value } as CreateWorkReq } : each
     )
@@ -34,7 +34,7 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
       <TitleInfoWrpper>
         <HeadlessInput
           value={initialData.title}
-          handleChange={(e) => handlechange("title", e.target.value)}
+          handleChange={(e) => handleChange("title", e.target.value)}
           placeholder="Title"
           StyledInput={InputWorkTitle}
         />
@@ -42,26 +42,26 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
           alignment={initialWorkAlignment || WorkAlignment.CENTER}
           content={initialData.description}
           placeholder={"Description"}
-          handleChange={(e) => handlechange("description", e.target.value)}
+          handleChange={(e) => handleChange("description", e.target.value)}
           StyledTextArea={TextAreaWork}
         />
         <WorkInfo>
           <HeadlessInput
             value={initialData.material}
             placeholder={"Material"}
-            handleChange={(e) => handlechange("material", e.target.value)}
+            handleChange={(e) => handleChange("material", e.target.value)}
             StyledInput={InputWork}
           />
           <HeadlessInput
             value={convertSizeToString(initialData.size)}
             placeholder={"Size"}
-            handleChange={(e) => handlechange("size", convertStringToSize(e.target.value))}
+            handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
             StyledInput={InputWork}
           />
           <HeadlessInput
             value={initialData.prodYear}
             placeholder={"Year"}
-            handleChange={(e) => handlechange("prodYear", e.target.value)}
+            handleChange={(e) => handleChange("prodYear", e.target.value)}
             StyledInput={InputWork}
           />
         </WorkInfo>
