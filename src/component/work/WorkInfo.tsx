@@ -32,7 +32,7 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
     <WorkInfoComp onClick={handleClick}>
       <ContentWrapper $isActive={isActive}>
         <ThumbnailBlock>
-          <WorkImage src={data.originUrl === '' ? defaultImg : data.originUrl} alt={data.title} />
+          <WorkImage src={data.thumbnailUrl === '' ? defaultImg : data.thumbnailUrl} alt={data.title} />
         </ThumbnailBlock>
         <TitleBlock>{data.title}</TitleBlock>
         <SizeBlock>{convertSizeToString(data.size)}</SizeBlock>

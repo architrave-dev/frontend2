@@ -5,7 +5,7 @@ import { useEditMode } from '../hooks/useEditMode';
 import { useAui } from '../hooks/useAui';
 
 export interface ReplaceImageButtonProps {
-  setImageUrl: (value1: string, value2: string) => void;
+  setImageUrl: (thumbnailUrl: string, originUrl: string) => void;
 }
 
 const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ setImageUrl }) => {
@@ -21,7 +21,7 @@ const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ setImageUrl }) 
       setIsUploading(true);
       try {
         const { originUrl, thumbnailUrl } = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!, aui);
-        setImageUrl(originUrl, thumbnailUrl);
+        setImageUrl(thumbnailUrl, originUrl);
       } catch (error) {
         console.error("Error uploading image:", error);
       } finally {

@@ -32,6 +32,7 @@ const WorkViewer: React.FC = () => {
   const isChanged = (initialData: WorkData, currentData: WorkData): boolean => {
     return (
       initialData.originUrl !== currentData.originUrl ||
+      initialData.thumbnailUrl !== currentData.thumbnailUrl ||
       initialData.title !== currentData.title ||
       initialData.size !== currentData.size ||
       initialData.material !== currentData.material ||
@@ -73,8 +74,11 @@ const WorkViewer: React.FC = () => {
   };
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    handleChange('thumbnailUrl', thumbnailUrl);
-    handleChange('originUrl', originUrl);
+    setUpdatedActiveWork({
+      ...updatedActiveWork,
+      originUrl,
+      thumbnailUrl,
+    });
   }
 
   return (
@@ -138,11 +142,16 @@ const ImgWrapper = styled.div`
   justify-content: center;
 
   margin-bottom: 16px;
+  background-color: #ffedbf;
 `
 
 const WorkImage = styled.img`
-  max-width: 100%;
-  max-height: 100%;
+  //부모 크기에 맞춤
+  width: 100%;
+  height: 100%; 
+  //이미지 크기에 맞춤
+  // max-width: 100%; 
+  // max-height: 100%;
   object-fit: contain;
 `;
 
