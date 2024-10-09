@@ -19,7 +19,7 @@ export const useAuth = (): UseAuthResult => {
   const [error, setError] = useState<string | null>(null);
   const { user, setUser, clearAuth } = useAuthStore();
 
-  const handleAuthSuccess = (response: AuthResponse) => {
+  const handleLoginSuccess = (response: AuthResponse) => {
     const { data, authToken } = response;
     const onlyUserData: UserData = {
       id: data.id,
@@ -34,16 +34,37 @@ export const useAuth = (): UseAuthResult => {
     localStorage.setItem('refreshToken', data.refreshToken);
   };
 
+  const handleRefreshSuccess = (response: AuthResponse) => {
+    const { data, authToken } = response;
+    console.log("data: ", data);
+    localStorage.setItem('authToken', authToken);
+  };
+
+  const handleSignupSuccess = (response: AuthResponse) => {
+    const { data } = response;
+    console.log('data: ', data);
+  };
+
 
   const handleAuthRequest = async <T extends SignUpData | LoginData | RefreshData>(
-    authFunction: (data: T) => Promise<AuthResponse>,
+    action: 'signup' | 'login' | 'refresh',
     data: T
   ) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await authFunction(data);
-      handleAuthSuccess(response);
+      switch (action) {
+        case 'signup':
+          handleSignupSuccess(await signUp(data as SignUpData));
+          break;
+        case 'refresh':
+          handleRefreshSuccess(await refresh(data as RefreshData));
+          break;
+        case 'login':
+        default:
+          handleLoginSuccess(await login(data as LoginData));
+          break;
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
@@ -51,9 +72,9 @@ export const useAuth = (): UseAuthResult => {
     }
   };
 
-  const signUpHandler = (data: SignUpData) => handleAuthRequest(signUp, data);
-  const loginHandler = (data: LoginData) => handleAuthRequest(login, data);
-  const refreshHandler = (data: RefreshData) => handleAuthRequest(refresh, data);
+  const signUpHandler = (data: SignUpData) => handleAuthRequest('signup', data);
+  const loginHandler = (data: LoginData) => handleAuthRequest('login', data);
+  const refreshHandler = (data: RefreshData) => handleAuthRequest('refresh', data);
 
   const logout = () => {
     clearAuth();

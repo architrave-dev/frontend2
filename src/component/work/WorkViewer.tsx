@@ -23,7 +23,7 @@ const WorkViewer: React.FC = () => {
   if (!activeWork || !updatedActiveWork) return null;
 
   const handleChange = (field: keyof WorkData, value: string) => {
-    if (field == 'size')
+    if (field === 'size')
       setUpdatedActiveWork({ ...updatedActiveWork, [field]: convertStringToSize(value) });
     else
       setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
