@@ -68,8 +68,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
         workAlignment: null,
         updateTextBoxReq: {
           id: targetTextBox.id,
-          content: targetTextBox.content,
-          isDeleted: targetTextBox.isDeleted
+          content: targetTextBox.content
         },
         textBoxAlignment: target.textBoxAlignment,
         dividerType: null,

@@ -54,7 +54,6 @@ export interface UpdateProjectReq {
   createdProjectInfoList?: CreateProjectInfoReq[];
   updatedProjectInfoList?: UpdatedProjectInfoReq[];
   removedProjectInfoList?: RemoveProjectInfoReq[];
-  isDeleted: boolean;
 }
 
 export interface CreateProjectReq {

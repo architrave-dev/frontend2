@@ -11,7 +11,6 @@ export interface ProjectData {
   thumbnailUrl: string;
   projectInfoList: ProjectInfoData[];
   projectElementList: ProjectElementData[];
-  isDeleted: boolean;
 }
 
 interface ProjectState {

@@ -46,8 +46,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
           description: targetWork.description,
           size: targetWork.size,
           material: targetWork.material,
-          prodYear: targetWork.prodYear,
-          isDeleted: targetWork.isDeleted
+          prodYear: targetWork.prodYear
         },
         workAlignment: target.workAlignment,
         updateTextBoxReq: null,

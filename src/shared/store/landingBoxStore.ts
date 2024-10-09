@@ -5,7 +5,6 @@ export interface LandingBoxData {
   originUrl: string;
   title: string;
   description: string;
-  isDeleted: boolean;
 }
 interface LandingBoxState {
   landingBox: LandingBoxData | null;

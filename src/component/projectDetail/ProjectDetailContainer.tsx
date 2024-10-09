@@ -43,7 +43,6 @@ const ProjectDetailContainer: React.FC = () => {
       createdProjectInfoList: createInfoList,
       updatedProjectInfoList: updateInfoList,
       removedProjectInfoList: removeInfoList,
-      isDeleted: false,
     };
 
     await updateProject(aui, updatedData);
@@ -60,8 +59,7 @@ const ProjectDetailContainer: React.FC = () => {
       description: description,
       createdProjectInfoList: createInfoList,
       updatedProjectInfoList: updateInfoList,
-      removedProjectInfoList: removeInfoList,
-      isDeleted: false
+      removedProjectInfoList: removeInfoList
     };
     return (
       initialData.originUrl !== currentData.originUrl ||

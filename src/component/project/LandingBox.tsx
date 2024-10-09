@@ -73,8 +73,7 @@ const LandingBox: React.FC = () => {
       id: landingBox.id,
       originUrl: backgroundImageUrl,
       title: title,
-      description: description,
-      isDeleted: false,
+      description: description
     };
 
     await updateLandingBox(aui, updatedData);
@@ -105,8 +104,7 @@ const LandingBox: React.FC = () => {
               id: landingBox.id,
               originUrl: backgroundImageUrl,
               title: title,
-              description: description,
-              isDeleted: false,
+              description: description
             }) &&
             <HeadlessBtn
               value={"Confirm"}

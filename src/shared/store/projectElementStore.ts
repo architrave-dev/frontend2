@@ -66,13 +66,11 @@ export interface WorkData {
   size: SizeData;
   material: string,
   prodYear: string,
-  isDeleted: boolean
 }
 
 export interface TextBoxData {
   id: string;
   content: string;
-  isDeleted: boolean;
 }
 
 export interface ProjectElementData {
@@ -120,14 +118,12 @@ export interface UpdateWorkReq {
   description: string;
   size: SizeData;
   material: string,
-  prodYear: string,
-  isDeleted: boolean
+  prodYear: string
 }
 
 export interface UpdateTextBoxReq {
   id: string;
   content: string;
-  isDeleted: boolean;
 }
 
 export interface UpdateProjectElementReq {
