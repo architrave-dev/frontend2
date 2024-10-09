@@ -25,11 +25,15 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
     setCreatedProjectElements(newCreatedProjectElements);
   }
 
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    handleChange('thumbnailUrl', thumbnailUrl);
+    handleChange('originUrl', originUrl);
+  }
   return (
     <WorkWrapper>
       <ImgWrapper>
         <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} />
-        <ReplaceImageButton setBackgroundImageUrl={(imageUrl: string) => handlechange('originUrl', imageUrl)} />
+        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
       </ImgWrapper>
       <TitleInfoWrpper>
         <HeadlessInput

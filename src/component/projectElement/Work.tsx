@@ -71,13 +71,18 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     setProjectElementList(updatedProjectElementList);
   }
 
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    handleChange('thumbnailUrl', thumbnailUrl);
+    handleChange('originUrl', originUrl);
+  }
+
   return (
     <WorkWrapper>
       {isEditMode ? (
         <>
           <ImgWrapper>
             <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} />
-            <ReplaceImageButton setBackgroundImageUrl={(imageUrl: string) => handlechange('originUrl', imageUrl)} />
+            <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
           </ImgWrapper>
           <TitleInfoWrpper>
             <HeadlessInput

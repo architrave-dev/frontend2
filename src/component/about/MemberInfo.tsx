@@ -38,6 +38,10 @@ const MemberInfo: React.FC = () => {
   const handleChange = (field: keyof MemberInfoData, value: string | number) => {
     setUpdateMemberInfoDto({ ...updateMemberInfoDto, [field]: value });
   }
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    handleChange('thumbnailUrl', thumbnailUrl);
+    handleChange('originUrl', originUrl);
+  }
 
   const isChanged = (initialData: MemberInfoData, currentData: MemberInfoData): boolean => {
     return (
@@ -63,7 +67,7 @@ const MemberInfo: React.FC = () => {
     <MemberInfoComp>
       <ProfileAndInfo>
         <Profile $backgroundimage={updateMemberInfoDto.originUrl === '' ? defaultImg : updateMemberInfoDto.originUrl} >
-          <ReplaceImageButton setBackgroundImageUrl={(imageUrl: string) => handleChange('originUrl', imageUrl)} />
+          <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
         </Profile>
         <InfoContainer>
           <MemberInfoEach name={"Name"} value={updateMemberInfoDto.name} handleChange={(e) => handleChange('name', e.target.value)} />

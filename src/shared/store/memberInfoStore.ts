@@ -10,6 +10,7 @@ export enum CountryType {
 export interface MemberInfoData {
   id: number;
   originUrl: string;
+  thumbnailUrl: string;
   name: string;
   year: number;
   country: CountryType;

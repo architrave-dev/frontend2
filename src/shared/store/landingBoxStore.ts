@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export interface LandingBoxData {
   id: number;
   originUrl: string;
+  thumbnailUrl: string;
   title: string;
   description: string;
 }

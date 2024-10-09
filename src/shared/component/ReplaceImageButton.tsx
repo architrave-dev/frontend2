@@ -2,13 +2,15 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { uploadToS3 } from '../aws/s3Upload';
 import { useEditMode } from '../hooks/useEditMode';
+import { useAui } from '../hooks/useAui';
 
 export interface ReplaceImageButtonProps {
-  setBackgroundImageUrl: (value: string) => void;
+  setImageUrl: (value1: string, value2: string) => void;
 }
 
-const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ setBackgroundImageUrl }) => {
+const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ setImageUrl }) => {
   const { isEditMode } = useEditMode();
+  const { aui } = useAui();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -18,8 +20,8 @@ const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ setBackgroundIm
     if (file) {
       setIsUploading(true);
       try {
-        const imageUrl = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!);
-        setBackgroundImageUrl(imageUrl);
+        const { originUrl, thumbnailUrl } = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!, aui);
+        setImageUrl(originUrl, thumbnailUrl);
       } catch (error) {
         console.error("Error uploading image:", error);
       } finally {

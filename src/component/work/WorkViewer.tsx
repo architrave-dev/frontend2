@@ -72,11 +72,16 @@ const WorkViewer: React.FC = () => {
     }
   };
 
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    handleChange('thumbnailUrl', thumbnailUrl);
+    handleChange('originUrl', originUrl);
+  }
+
   return (
     <WorkViewComp>
       <ImgWrapper>
         <WorkImage src={updatedActiveWork.originUrl === '' ? defaultImg : updatedActiveWork.originUrl} alt={updatedActiveWork.title} />
-        <ReplaceImageButton setBackgroundImageUrl={(imageUrl: string) => handleChange('originUrl', imageUrl)} />
+        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
       </ImgWrapper>
       <Divider dividerType={DividerType.PLAIN} />
       <MemberInfoEach name={"Title"} value={updatedActiveWork.title} handleChange={(e) => handleChange('title', e.target.value)} />
