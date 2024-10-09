@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import LandingBox from '../component/project/LandingBox';
 import ProjectList from '../component/project/ProjectList';
-import { useInitializePage } from '../shared/hooks/useInitializePage';
+import { useInitPage } from '../shared/hooks/useInitPage';
 
 
 const Projects: React.FC = () => {
-  useInitializePage();
+  useInitPage();
 
   return (
     <ProjectsPage>

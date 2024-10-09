@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import MemberInfo from '../component/about/MemberInfo';
 import CareerList from '../component/about/CareerList';
-import { useInitializePage } from '../shared/hooks/useInitializePage';
+import { useInitPage } from '../shared/hooks/useInitPage';
 
 const About: React.FC = () => {
-  useInitializePage();
+  useInitPage();
 
   return (
     <AboutContainer>

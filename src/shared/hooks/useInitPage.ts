@@ -6,7 +6,7 @@ import { useAuth } from './useAuth';
 import { useEditMode } from './useEditMode';
 
 
-export const useInitializePage = () => {
+export const useInitPage = () => {
   const { AUI } = useParams<{ AUI: string }>();
   useAuiValidation(AUI);
 
