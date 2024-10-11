@@ -9,7 +9,7 @@ import { CareerType, CreateCareerReq, useCareerListStoreForUpdate } from '../../
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, error, careerList, getCareerList, updateCareerList } = useCareer();
+  const { isLoading, careerList, getCareerList, updateCareerList } = useCareer();
   const { createdCareers, setCreatedCareers, updatedCareers, removedCareers } = useCareerListStoreForUpdate();
   const { aui } = useAui();
 
@@ -95,9 +95,6 @@ const CareerList: React.FC = () => {
   // 로딩 및 에러 상태를 처리합니다.
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>Error loading careers: {error}</div>;
   }
 
   return (

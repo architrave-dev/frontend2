@@ -8,7 +8,7 @@ import { InputAuth } from '../../shared/component/headless/input/InputBody';
 
 const Login: React.FC = () => {
   const setModalType = useModalStore((state) => state.setModalType);
-  const { isLoading, error: apiError, login } = useAuth();
+  const { isLoading, login } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -84,7 +84,7 @@ const Login: React.FC = () => {
           </InputWrapper>
           <ErrorText>{passwordError}</ErrorText>
         </div>
-        {apiError && <ErrorText>{apiError}</ErrorText>}
+        {/* {apiError && <ErrorText>{apiError}</ErrorText>} */}
         <ButtonContainer>
           <SubmitButton type="submit" $isValid={isValid()} disabled={isLoading}>
             {isLoading ? 'Login...' : 'Login'}

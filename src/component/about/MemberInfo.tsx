@@ -16,7 +16,7 @@ import defaultImg from '../../asset/project/default_1.png';
 
 const MemberInfo: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, error, memberInfo, getMemberInfo, updateMemberInfo } = useMemberInfo();
+  const { isLoading, memberInfo, getMemberInfo, updateMemberInfo } = useMemberInfo();
   const { updateMemberInfoDto, setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
 
   const { aui } = useAui();

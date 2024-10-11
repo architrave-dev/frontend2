@@ -16,7 +16,7 @@ import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
-  const { isLoading, error, project, updateProject } = useProjectDetail();
+  const { isLoading, project, updateProject } = useProjectDetail();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [backgroundImageUrl, setBackgroundImageUrl] = useState("");

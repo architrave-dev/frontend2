@@ -20,7 +20,7 @@ const ProjectElementList: React.FC = () => {
   const { AUI, projectTitle } = useParams<{ AUI: string, projectTitle: string }>();
   const { isEditMode, setEditMode } = useEditMode();
   const { project } = useProjectDetail();
-  const { isLoading, error, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
+  const { isLoading, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
   const { createdProjectElements, setCreatedProjectElements, updatedProjectElements, removedProjectElements } = useProjectElementListStoreForUpdate();
   const { aui } = useAui();
 
