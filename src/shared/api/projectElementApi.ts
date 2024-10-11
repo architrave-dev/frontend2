@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { CreateProjectElementReq, ProjectElementData, RemoveProjectElementReq, UpdateProjectElementReq } from '../store/projectElementStore';
+import { ErrorResponse } from './workListApi';
 
 const config = getConfig();
 
@@ -21,11 +22,6 @@ export interface UpdateProjectElementListReq {
 
 export interface ProjectElementListResponse {
   data: ProjectElementData[];
-}
-
-export interface ErrorResponse {
-  errorCode: string;
-  timestamp: string;
 }
 
 

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { ProjectElementListResponse, UpdateProjectElementListReq, getProjectElementList, updateProjectElementList } from '../api/projectElementApi';
 import { ProjectElementData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../store/projectElementStore';
+import { useGlobalErrStore } from '../store/errorStore';
+import { convertStringToErrorCode } from '../api/errorCode';
 
 
 interface UseProjectElementResult {
   isLoading: boolean;
-  error: string | null;
   projectElementList: ProjectElementData[];
   getProjectElementList: (aui: string, title: string) => Promise<void>;
   updateProjectElementList: (aui: string, data: UpdateProjectElementListReq) => Promise<void>;
@@ -13,7 +14,7 @@ interface UseProjectElementResult {
 
 export const useProjectElement = (): UseProjectElementResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { clearAll } = useProjectElementListStoreForUpdate();
 
@@ -26,11 +27,12 @@ export const useProjectElement = (): UseProjectElementResult => {
 
   const handleProjectElementRequest = async (
     aui: string,
+    action: 'get' | 'update',
     title: string | null,
     data?: UpdateProjectElementListReq
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       if (data) {
         const response = await updateProjectElementList(aui, data);
@@ -40,19 +42,24 @@ export const useProjectElement = (): UseProjectElementResult => {
         handleProjectElementSuccess(response);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleProjectElementRequest(aui, action, title, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getProjectElementHandler = (aui: string, projectTitle: string) => handleProjectElementRequest(aui, projectTitle);
-  const updateProjectDetailHandler = (aui: string, data: UpdateProjectElementListReq) => handleProjectElementRequest(aui, null, data);
+  const getProjectElementHandler = (aui: string, projectTitle: string) => handleProjectElementRequest(aui, 'get', projectTitle);
+  const updateProjectDetailHandler = (aui: string, data: UpdateProjectElementListReq) => handleProjectElementRequest(aui, 'update', null, data);
 
 
   return {
     isLoading,
-    error,
     projectElementList,
     getProjectElementList: getProjectElementHandler,
     updateProjectElementList: updateProjectDetailHandler,

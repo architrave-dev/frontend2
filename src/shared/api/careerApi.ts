@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { CareerData, CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../store/careerStore';
+import { ErrorResponse } from './workListApi';
 
 const config = getConfig();
 
@@ -20,11 +21,6 @@ export interface UpdatedCareerListReq {
 
 export interface CareerListResponse {
   data: CareerData[];
-}
-
-export interface ErrorResponse {
-  errorCode: string;
-  timestamp: string;
 }
 
 

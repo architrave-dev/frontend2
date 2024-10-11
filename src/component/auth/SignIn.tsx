@@ -7,7 +7,7 @@ const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const { isLoading, error, signUp } = useAuth();
+  const { isLoading, signUp } = useAuth();
   const setModalType = useModalStore((state) => state.setModalType);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,7 +18,7 @@ const SignIn: React.FC = () => {
   return (
     <SignUpComp>
       <Title>회원가입</Title>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
       <form onSubmit={handleSubmit}>
         <InputField
           type="email"

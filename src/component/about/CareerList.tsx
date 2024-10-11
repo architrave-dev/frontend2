@@ -9,20 +9,17 @@ import { CareerType, CreateCareerReq, useCareerListStoreForUpdate } from '../../
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, error, careerList, getCareerList, updateCareerList } = useCareer();
+  const { isLoading, careerList, getCareerList, updateCareerList } = useCareer();
   const { createdCareers, setCreatedCareers, updatedCareers, removedCareers } = useCareerListStoreForUpdate();
   const { aui } = useAui();
 
   useEffect(() => {
     const getCareerListWithApi = async () => {
-      if (aui) {
-        try {
-          console.log("getting career List...")
-          await getCareerList(aui);
-        } catch (error) {
-          console.error('get CareerList failed:', error);
-        }
-      }
+      if (!aui) return;
+      try {
+        console.log("getting career List...")
+        await getCareerList(aui);
+      } catch (error) { }
     }
     getCareerListWithApi();
   }, [aui]);
@@ -46,9 +43,12 @@ const CareerList: React.FC = () => {
       updateCareerReqList: updatedCareers,
       removeCareerReqList: removedCareers
     }
-
-    await updateCareerList(aui, updatedData);
-    setEditMode(false);
+    try {
+      await updateCareerList(aui, updatedData);
+    } catch (err) {
+    } finally {
+      setEditMode(false);
+    }
   }
 
   const isChanged = (): boolean => {
@@ -95,9 +95,6 @@ const CareerList: React.FC = () => {
   // 로딩 및 에러 상태를 처리합니다.
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>Error loading careers: {error}</div>;
   }
 
   return (

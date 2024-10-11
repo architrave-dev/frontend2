@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { UserDataWithRefreshToken } from '../store/authStore';
+import { ErrorResponse } from './workListApi';
 
 
 const config = getConfig();
@@ -30,11 +31,6 @@ export interface RefreshData {
 export interface AuthResponse {
   data: UserDataWithRefreshToken;
   authToken: string;
-}
-
-export interface ErrorResponse {
-  message: string;
-  timestamp: string;
 }
 
 export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
@@ -77,7 +73,7 @@ const handleApiError = (error: unknown): Error => {
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError<ErrorResponse>;
     if (axiosError.response?.data) {
-      return new Error(axiosError.response.data.message);
+      return new Error(axiosError.response.data.errorCode);
     }
   }
   return new Error('An unexpected error occurred');

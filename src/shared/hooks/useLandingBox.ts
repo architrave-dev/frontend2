@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { LandingBoxData, useLandingBoxStore } from '../store/landingBoxStore';
 import { LandingBoxResponse, getLandingBox, updateLandingBox } from '../api/landingBoxApi';
+import { useGlobalErrStore } from '../store/errorStore';
+import { convertStringToErrorCode } from '../api/errorCode';
 
 
 interface UseLandingBoxResult {
   isLoading: boolean;
-  error: string | null;
   landingBox: LandingBoxData | null;
   getLandingBox: (aui: string) => Promise<void>;
   updateLandingBox: (aui: string, data: LandingBoxData) => Promise<void>;
@@ -13,7 +14,7 @@ interface UseLandingBoxResult {
 
 export const useLandingBox = (): UseLandingBoxResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { landingBox, setLandingBox } = useLandingBoxStore();
 
   const handleLandingBoxSuccess = (response: LandingBoxResponse) => {
@@ -23,10 +24,11 @@ export const useLandingBox = (): UseLandingBoxResult => {
 
   const handleLandingBoxRequest = async (
     aui: string,
+    action: 'get' | 'update',
     data?: LandingBoxData
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       if (!data) {
         const response = await getLandingBox(aui);
@@ -37,18 +39,23 @@ export const useLandingBox = (): UseLandingBoxResult => {
       }
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleLandingBoxRequest(aui, action, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getLandingBoxHandler = (aui: string) => handleLandingBoxRequest(aui);
-  const updateLandingBoxHandler = (aui: string, data: LandingBoxData) => handleLandingBoxRequest(aui, data);
+  const getLandingBoxHandler = (aui: string) => handleLandingBoxRequest(aui, 'get');
+  const updateLandingBoxHandler = (aui: string, data: LandingBoxData) => handleLandingBoxRequest(aui, 'update', data);
 
   return {
     isLoading,
-    error,
     landingBox,
     getLandingBox: getLandingBoxHandler,
     updateLandingBox: updateLandingBoxHandler

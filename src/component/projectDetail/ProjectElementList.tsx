@@ -20,7 +20,7 @@ const ProjectElementList: React.FC = () => {
   const { AUI, projectTitle } = useParams<{ AUI: string, projectTitle: string }>();
   const { isEditMode, setEditMode } = useEditMode();
   const { project } = useProjectDetail();
-  const { isLoading, error, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
+  const { isLoading, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
   const { createdProjectElements, setCreatedProjectElements, updatedProjectElements, removedProjectElements } = useProjectElementListStoreForUpdate();
   const { aui } = useAui();
 
@@ -29,9 +29,7 @@ const ProjectElementList: React.FC = () => {
       if (aui && projectTitle) {
         try {
           await getProjectElementList(aui, projectTitle);
-        } catch (error) {
-          console.error('get ProjectElementList failed:', error);
-        }
+        } catch (error) { }
       }
     }
     getProjectElementListWithApi();
@@ -79,9 +77,13 @@ const ProjectElementList: React.FC = () => {
       updatedProjectElements: updatedProjectElements,
       removedProjectElements: removedProjectElements
     }
+    try {
+      await updateProjectElementList(aui, updatedData);
+    } catch (err) {
+    } finally {
+      setEditMode(false);
+    }
 
-    await updateProjectElementList(aui, updatedData);
-    setEditMode(false);
   }
 
   const isChanged = (): boolean => {

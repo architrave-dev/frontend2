@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
+import { ErrorResponse } from './workListApi';
 
 
 const config = getConfig();
@@ -16,11 +17,6 @@ export interface MemberResponse {
   data: string;
 }
 
-export interface ErrorResponse {
-  message: string;
-  timestamp: string;
-}
-
 export const checkAui = async (aui: string): Promise<MemberResponse> => {
   try {
     const response = await memberApi.get<MemberResponse>(`/api/v1/member?aui=${aui}`);
@@ -34,7 +30,7 @@ const handleApiError = (error: unknown): Error => {
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError<ErrorResponse>;
     if (axiosError.response?.data) {
-      return new Error(axiosError.response.data.message);
+      return new Error(axiosError.response.data.errorCode);
     }
   }
   return new Error('An unexpected error occurred');

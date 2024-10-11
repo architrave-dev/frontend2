@@ -2,8 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import WorkList from '../component/work/WorkList';
 import WorkViewer from '../component/work/WorkViewer';
+import { useInitPage } from '../shared/hooks/useInitPage';
 
 const Works: React.FC = () => {
+  useInitPage();
+
   return (
     <WorkContainer>
       <WorkList />

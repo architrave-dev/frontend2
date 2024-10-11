@@ -3,32 +3,14 @@ import styled from 'styled-components';
 import ProjectElementList from '../component/projectDetail/ProjectElementList';
 import ProjectDetailContainer from '../component/projectDetail/ProjectDetailContainer';
 import { useParams } from 'react-router-dom';
-import { useAuiValidation } from '../shared/hooks/useAuiValidation';
-import { useAuth } from '../shared/hooks/useAuth';
-import { UserData } from '../shared/store/authStore';
 import { useProjectDetail } from '../shared/hooks/useProjectDetail';
 import { useAui } from '../shared/hooks/useAui';
-import { useEditMode } from '../shared/hooks/useEditMode';
+import { useInitPage } from '../shared/hooks/useInitPage';
 
 
 const ProjectDetail: React.FC = () => {
-  const { AUI, projectTitle } = useParams<{ AUI: string, projectTitle: string }>();
-  useAuiValidation(AUI);
-  const { user, setUser } = useAuth();
-  const { isEditMode, setEditMode } = useEditMode();
-
-  useEffect(() => {
-    if (!user) {
-      const userFromStorage = localStorage.getItem('userData');
-      if (userFromStorage) {
-        const parsedUserData: UserData = JSON.parse(userFromStorage);
-        setUser(parsedUserData);
-      } else {
-        console.error("there is no login data");
-      }
-    }
-  }, [user]);
-
+  useInitPage();
+  const { projectTitle } = useParams<{ projectTitle: string }>();
   const { aui } = useAui();
   const { isLoading, getProject } = useProjectDetail();
 
@@ -40,12 +22,6 @@ const ProjectDetail: React.FC = () => {
     }
     getProjectWithApi();
   }, [aui, projectTitle]);
-
-  useEffect(() => {
-    if (isEditMode) {
-      setEditMode(false);
-    }
-  }, []);
 
   return (
     <ProjectDetailPage>

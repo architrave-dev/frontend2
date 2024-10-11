@@ -3,11 +3,12 @@ import { WorkListResponse, getWorkList, updateWork, createWork, WorkResponse, De
 import { CreateWorkReq, DeleteWorkReq, useWorkListStore } from '../store/WorkListStore';
 import { UpdateWorkReq, WorkData } from '../store/WorkListStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../store/WorkViewStore';
+import { convertStringToErrorCode } from '../api/errorCode';
+import { useGlobalErrStore } from '../store/errorStore';
 
 
 interface UseWorkListResult {
   isLoading: boolean;
-  error: string | null;
   workList: WorkData[];
   getWorkList: (aui: string) => Promise<void>;
   updateWork: (aui: string, data: UpdateWorkReq) => Promise<void>;
@@ -17,28 +18,27 @@ interface UseWorkListResult {
 
 export const useWorkList = (): UseWorkListResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
   const { setActiveWork } = useWorkViewStore();
   const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
-
 
   const handleGetWorkSuccess = (response: WorkListResponse) => {
     const data = response.data;
     setWorkList(data);
   };
 
-  const handleUpdateWorkRequest = (response: WorkResponse) => {
+  const handleUpdateWorkSuccess = (response: WorkResponse) => {
     const data = response.data;
     const newWorkList = workList.map((each) => each.id === data.id ? data : each);
     setWorkList(newWorkList);
   };
 
-  const handleDeleteWorkRequest = (response: DeleteResponse) => {
+  const handleDeleteWorkSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
   };
 
-  const handleCreatWorkRequest = (response: WorkResponse) => {
+  const handleCreatWorkSuccess = (response: WorkResponse) => {
     const data = response.data;
     setWorkList([...workList, data]);
     setActiveWork(data);
@@ -51,18 +51,18 @@ export const useWorkList = (): UseWorkListResult => {
     data?: UpdateWorkReq | CreateWorkReq | DeleteWorkReq
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       switch (action) {
         case 'delete':
-          handleDeleteWorkRequest(await deleteWork(aui, data as DeleteWorkReq));
+          handleDeleteWorkSuccess(await deleteWork(aui, data as DeleteWorkReq));
           getWorkHandler(aui);
           break;
         case 'update':
-          handleUpdateWorkRequest(await updateWork(aui, data as UpdateWorkReq));
+          handleUpdateWorkSuccess(await updateWork(aui, data as UpdateWorkReq));
           break;
         case 'create':
-          handleCreatWorkRequest(await createWork(aui, data as CreateWorkReq));
+          handleCreatWorkSuccess(await createWork(aui, data as CreateWorkReq));
           break;
         case 'get':
         default:
@@ -70,7 +70,13 @@ export const useWorkList = (): UseWorkListResult => {
           break;
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleWorkRequest(aui, action, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -84,7 +90,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   return {
     isLoading,
-    error,
+    // error: errCode,
     workList,
     getWorkList: getWorkHandler,
     updateWork: updateWorkHandler,
@@ -92,3 +98,4 @@ export const useWorkList = (): UseWorkListResult => {
     deleteWork: deleteWorkHandler,
   };
 };
+
