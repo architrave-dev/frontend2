@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { MemberInfoData } from '../store/memberInfoStore';
+import { ErrorResponse } from './workListApi';
 
 const config = getConfig();
 
@@ -14,11 +15,6 @@ const memberInfoApi = axios.create({
 
 export interface MemberInfoResponse {
   data: MemberInfoData;
-}
-
-export interface ErrorResponse {
-  errorCode: string;
-  timestamp: string;
 }
 
 
