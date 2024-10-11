@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
 import ProjectInfo from './ProjectInfo';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import ProjectInfoTemp from './ProjectInfoTemp';
@@ -12,7 +11,6 @@ import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 
 const ProjectInfoList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { isLoading } = useProjectDetail();
   const { projectInfoList } = useProjectInfoListStore();
   const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
 

@@ -32,15 +32,12 @@ const WorkList: React.FC = () => {
   }
   useEffect(() => {
     const getWorkListWithApi = async () => {
-      if (aui) {
-        try {
-          console.log("getting work List...")
-          await getWorkList(aui);
-          setDefaultWorkView();
-        } catch (error) {
-          console.error('get WorkList failed:', error);
-        }
-      }
+      if (!aui) return;
+      try {
+        console.log("getting work List...")
+        await getWorkList(aui);
+        setDefaultWorkView();
+      } catch (error) { }
     }
     getWorkListWithApi();
   }, [aui]);

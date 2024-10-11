@@ -25,12 +25,13 @@ const LandingBox: React.FC = () => {
   const { aui } = useAui();
 
   useEffect(() => {
-    if (!aui) return;
-    try {
-      getLandingBox(aui);
-    } catch (error) {
-      console.error('get LandingBox failed:', error);
+    const getLandingBoxWithApi = async () => {
+      if (!aui) return;
+      try {
+        await getLandingBox(aui);
+      } catch (error) { }
     }
+    getLandingBoxWithApi();
   }, [aui]);
 
   useEffect(() => {
@@ -76,9 +77,12 @@ const LandingBox: React.FC = () => {
       title: title,
       description: description
     };
-
-    await updateLandingBox(aui, updatedData);
-    setEditMode(false);
+    try {
+      await updateLandingBox(aui, updatedData);
+    } catch (err) {
+    } finally {
+      setEditMode(false);
+    }
   };
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {

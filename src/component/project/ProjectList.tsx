@@ -19,13 +19,10 @@ const ProjectList: React.FC = () => {
 
   useEffect(() => {
     const getProjectListTemp = async () => {
-      if (aui) {
-        try {
-          await getProjectList(aui);
-        } catch (error) {
-          console.error('get ProjectList failed:', error);
-        }
-      }
+      if (!aui) return;
+      try {
+        await getProjectList(aui);
+      } catch (error) { }
     }
     getProjectListTemp();
   }, [aui]);
@@ -41,9 +38,7 @@ const ProjectList: React.FC = () => {
     try {
       await createProject(aui, newDummyProject);
       navigate(`/${aui}/projects/` + newTitle);
-    } catch (error) {
-      console.error('create Project failed:', error);
-    }
+    } catch (error) { }
   };
 
   return (

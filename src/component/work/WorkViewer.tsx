@@ -45,8 +45,12 @@ const WorkViewer: React.FC = () => {
     if (!isChanged(activeWork, updatedActiveWork)) {
       return;
     }
-    await updateWork(aui, updatedActiveWork);
-    setEditMode(false);
+    try {
+      await updateWork(aui, updatedActiveWork);
+    } catch (err) {
+    } finally {
+      setEditMode(false);
+    }
   };
 
   const handleCreateWork = async () => {
@@ -62,14 +66,21 @@ const WorkViewer: React.FC = () => {
       material: "material",
       prodYear: new Date().getFullYear().toString()
     }
-    await createWork(aui, newWork);
+    try {
+      await createWork(aui, newWork);
+    } catch (err) { };
   };
 
-  const handleDelete = async (title: string) => {
+  const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this work?")) {
-      await deleteWork(aui, { id: updatedActiveWork.id });
-      clearActiveWork();
-      setEditMode(false);
+      try {
+        await deleteWork(aui, { id: updatedActiveWork.id });
+      } catch (err) {
+      } finally {
+        clearActiveWork();
+        setEditMode(false);
+      }
+
     }
   };
 
@@ -113,7 +124,7 @@ const WorkViewer: React.FC = () => {
           />
           <HeadlessBtn
             value={"Delete"}
-            handleClick={() => handleDelete(updatedActiveWork.title)}
+            handleClick={handleDelete}
             StyledBtn={BtnWorkDelete}
           />
         </BtnContainer>

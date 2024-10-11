@@ -15,14 +15,11 @@ const CareerList: React.FC = () => {
 
   useEffect(() => {
     const getCareerListWithApi = async () => {
-      if (aui) {
-        try {
-          console.log("getting career List...")
-          await getCareerList(aui);
-        } catch (error) {
-          console.error('get CareerList failed:', error);
-        }
-      }
+      if (!aui) return;
+      try {
+        console.log("getting career List...")
+        await getCareerList(aui);
+      } catch (error) { }
     }
     getCareerListWithApi();
   }, [aui]);
@@ -46,9 +43,12 @@ const CareerList: React.FC = () => {
       updateCareerReqList: updatedCareers,
       removeCareerReqList: removedCareers
     }
-
-    await updateCareerList(aui, updatedData);
-    setEditMode(false);
+    try {
+      await updateCareerList(aui, updatedData);
+    } catch (err) {
+    } finally {
+      setEditMode(false);
+    }
   }
 
   const isChanged = (): boolean => {

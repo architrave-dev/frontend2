@@ -47,8 +47,12 @@ const ProjectDetailContainer: React.FC = () => {
       removedProjectInfoList: removeInfoList,
     };
 
-    await updateProject(aui, updatedData);
-    setEditMode(false);
+    try {
+      await updateProject(aui, updatedData);
+    } catch (err) {
+    } finally {
+      setEditMode(false);
+    }
   };
 
   // const isChanged = (initialData: ProjectData, currentData: UpdateProjectReq): boolean => {

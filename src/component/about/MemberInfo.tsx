@@ -22,12 +22,14 @@ const MemberInfo: React.FC = () => {
   const { aui } = useAui();
 
   useEffect(() => {
-    if (!aui) return;
-    try {
-      getMemberInfo(aui);
-    } catch (error) {
-      console.error('get MemberInfo failed:', error);
+    const getMemberInfoWithApi = async () => {
+      if (!aui) return;
+      try {
+        console.log("getting work List...")
+        await getMemberInfo(aui);
+      } catch (error) { }
     }
+    getMemberInfoWithApi();
   }, [aui]);
 
 
@@ -58,9 +60,13 @@ const MemberInfo: React.FC = () => {
   const handleConfirm = async () => {
     if (!memberInfo) return;
     if (!updateMemberInfoDto) return;
+    try {
+      await updateMemberInfo(aui, updateMemberInfoDto);
+    } catch (err) {
+    } finally {
+      setEditMode(false);
+    }
 
-    await updateMemberInfo(aui, updateMemberInfoDto);
-    setEditMode(false);
   };
 
   return (
