@@ -8,8 +8,10 @@ import ProjectDetail from './page/ProjectDetail';
 import Works from './page/Works';
 import About from './page/About';
 import ErrorPage from './page/Error';
+import { useGlobalError } from './shared/hooks/useGlobalError';
 
 const App: React.FC = () => {
+  useGlobalError();
   return (
     <AppComp className="App">
       <Router>
