@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { ProjectData, useProjectStore } from '../store/projectStore';
 import { ProjectResponse, UpdateProjectReq, getProjectDetail, updateProject } from '../api/projectApi';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../store/projectInfoListStore';
+import { useGlobalErrStore } from '../store/errorStore';
+import { convertStringToErrorCode } from '../api/errorCode';
 
 
 interface UseProjectResult {
   isLoading: boolean;
-  error: string | null;
   project: ProjectData | null;
   getProject: (aui: string, title: string) => Promise<void>;
   updateProject: (aui: string, data: UpdateProjectReq) => Promise<void>;
@@ -14,7 +15,7 @@ interface UseProjectResult {
 
 export const useProjectDetail = (): UseProjectResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { project, setProject } = useProjectStore();
   const { setProjectInfoList } = useProjectInfoListStore()
   const { clearAll } = useProjectInfoListStoreForUpdate()
@@ -29,11 +30,12 @@ export const useProjectDetail = (): UseProjectResult => {
 
   const handleProjectRequest = async (
     aui: string,
+    action: 'get' | 'update',
     title: string | null,
     data?: UpdateProjectReq
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       if (data) {
         const response = await updateProject(aui, data);
@@ -43,19 +45,24 @@ export const useProjectDetail = (): UseProjectResult => {
         handleProjectSuccess(response);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleProjectRequest(aui, action, title, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getProjectHandler = (aui: string, title: string) => handleProjectRequest(aui, title);
-  const updateProjectHandler = (aui: string, data: UpdateProjectReq) => handleProjectRequest(aui, null, data);
+  const getProjectHandler = (aui: string, title: string) => handleProjectRequest(aui, 'get', title);
+  const updateProjectHandler = (aui: string, data: UpdateProjectReq) => handleProjectRequest(aui, 'update', null, data);
 
 
   return {
     isLoading,
-    error,
     project,
     getProject: getProjectHandler,
     updateProject: updateProjectHandler

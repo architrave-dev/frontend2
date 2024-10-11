@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { CareerListResponse, UpdatedCareerListReq, getCareerList, updateCareerList } from '../api/careerApi';
 import { CareerData, useCareerListStore, useCareerListStoreForUpdate } from '../store/careerStore';
+import { useGlobalErrStore } from '../store/errorStore';
+import { convertStringToErrorCode } from '../api/errorCode';
 
 
 interface UseCareerResult {
   isLoading: boolean;
-  error: string | null;
   careerList: CareerData[];
   getCareerList: (aui: string) => Promise<void>;
   updateCareerList: (aui: string, data: UpdatedCareerListReq) => Promise<void>;
@@ -13,7 +14,7 @@ interface UseCareerResult {
 
 export const useCareer = (): UseCareerResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { careers, setCareers } = useCareerListStore();
   const { clearAll } = useCareerListStoreForUpdate();
 
@@ -26,10 +27,11 @@ export const useCareer = (): UseCareerResult => {
 
   const handleCareerRequest = async (
     aui: string,
+    action: 'get' | 'update',
     data?: UpdatedCareerListReq
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       if (data) {
         const response = await updateCareerList(aui, data);
@@ -39,19 +41,24 @@ export const useCareer = (): UseCareerResult => {
         handleCareerSuccess(response);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleCareerRequest(aui, action, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getCareerHandler = (aui: string) => handleCareerRequest(aui);
-  const updateCareerHandler = (aui: string, data: UpdatedCareerListReq) => handleCareerRequest(aui, data);
+  const getCareerHandler = (aui: string) => handleCareerRequest(aui, 'get');
+  const updateCareerHandler = (aui: string, data: UpdatedCareerListReq) => handleCareerRequest(aui, 'update', data);
 
 
   return {
     isLoading,
-    error,
     careerList: careers,
     getCareerList: getCareerHandler,
     updateCareerList: updateCareerHandler,

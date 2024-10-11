@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { UserData, useAuthStore } from '../store/authStore';
 import { signUp, login, SignUpData, LoginData, AuthResponse, RefreshData, refresh } from '../api/authAPI';
+import { convertStringToErrorCode } from '../api/errorCode';
+import { useGlobalErrStore } from '../store/errorStore';
 
 
 interface UseAuthResult {
   isLoading: boolean;
-  error: string | null;
   user: UserData | null;
   setUser: (user: UserData) => void;
   signUp: (data: SignUpData) => Promise<void>;
@@ -16,7 +17,7 @@ interface UseAuthResult {
 
 export const useAuth = (): UseAuthResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { user, setUser, clearAuth } = useAuthStore();
 
   const handleLoginSuccess = (response: AuthResponse) => {
@@ -51,7 +52,7 @@ export const useAuth = (): UseAuthResult => {
     data: T
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       switch (action) {
         case 'signup':
@@ -66,7 +67,13 @@ export const useAuth = (): UseAuthResult => {
           break;
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleAuthRequest(action, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +92,6 @@ export const useAuth = (): UseAuthResult => {
 
   return {
     isLoading,
-    error,
     user,
     setUser,
     signUp: signUpHandler,

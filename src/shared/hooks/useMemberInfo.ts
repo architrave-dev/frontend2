@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { MemberInfoResponse, getMemberInfo, updateMemberInfo } from '../api/memberInfoApi';
 import { MemberInfoData, useMemberInfoStore, useMemberInfoStoreForUpdate } from '../store/memberInfoStore';
+import { useGlobalErrStore } from '../store/errorStore';
+import { convertStringToErrorCode } from '../api/errorCode';
 
 
 interface UseMemberInfoResult {
   isLoading: boolean;
-  error: string | null;
   memberInfo: MemberInfoData | null;
   getMemberInfo: (aui: string) => Promise<void>;
   updateMemberInfo: (aui: string, data: MemberInfoData) => Promise<void>;
@@ -13,7 +14,7 @@ interface UseMemberInfoResult {
 
 export const useMemberInfo = (): UseMemberInfoResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { memberInfo, setMemberInfo } = useMemberInfoStore();
   const { setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
 
@@ -26,10 +27,11 @@ export const useMemberInfo = (): UseMemberInfoResult => {
 
   const handleMemberInfoRequest = async (
     aui: string,
+    action: 'get' | 'update',
     data?: MemberInfoData
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       if (!data) {
         const response = await getMemberInfo(aui);
@@ -39,19 +41,24 @@ export const useMemberInfo = (): UseMemberInfoResult => {
         handleMemberInfoSuccess(response);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleMemberInfoRequest(aui, action, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getMemberInfoHandler = (aui: string) => handleMemberInfoRequest(aui);
-  const updateMemberInfoHandler = (aui: string, data: MemberInfoData) => handleMemberInfoRequest(aui, data);
+  const getMemberInfoHandler = (aui: string) => handleMemberInfoRequest(aui, 'get');
+  const updateMemberInfoHandler = (aui: string, data: MemberInfoData) => handleMemberInfoRequest(aui, 'update', data);
 
 
   return {
     isLoading,
-    error,
     memberInfo,
     getMemberInfo: getMemberInfoHandler,
     updateMemberInfo: updateMemberInfoHandler,

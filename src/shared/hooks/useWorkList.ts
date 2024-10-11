@@ -3,13 +3,12 @@ import { WorkListResponse, getWorkList, updateWork, createWork, WorkResponse, De
 import { CreateWorkReq, DeleteWorkReq, useWorkListStore } from '../store/WorkListStore';
 import { UpdateWorkReq, WorkData } from '../store/WorkListStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../store/WorkViewStore';
-import { ErrorCode } from '../api/errorCode';
-import { useAuth } from './useAuth';
+import { convertStringToErrorCode } from '../api/errorCode';
+import { useGlobalErrStore } from '../store/errorStore';
 
 
 interface UseWorkListResult {
   isLoading: boolean;
-  error: string | null;
   workList: WorkData[];
   getWorkList: (aui: string) => Promise<void>;
   updateWork: (aui: string, data: UpdateWorkReq) => Promise<void>;
@@ -19,11 +18,10 @@ interface UseWorkListResult {
 
 export const useWorkList = (): UseWorkListResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
   const { setActiveWork } = useWorkViewStore();
   const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
-  const { refresh } = useAuth();
 
   const handleGetWorkSuccess = (response: WorkListResponse) => {
     const data = response.data;
@@ -50,11 +48,10 @@ export const useWorkList = (): UseWorkListResult => {
   const handleWorkRequest = async (
     aui: string,
     action: 'get' | 'update' | 'create' | 'delete',
-    data?: UpdateWorkReq | CreateWorkReq | DeleteWorkReq,
-    retryCount: number = 0
+    data?: UpdateWorkReq | CreateWorkReq | DeleteWorkReq
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
       switch (action) {
         case 'delete':
@@ -74,22 +71,12 @@ export const useWorkList = (): UseWorkListResult => {
       }
     } catch (err) {
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      if (errCode === ErrorCode.ATX && retryCount < 1) {
-        console.log("refresh it!!");
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken != null) {
-          try {
-            await refresh({ refreshToken });
-            await handleWorkRequest(aui, action, data, retryCount + 1);
-            setError(null);
-            return;
-          } catch (refreshError) {
-            console.error("Error refreshing token:", refreshError);
-          }
-        }
-      }
-      // setError(err instanceof Error ? err.message : 'An unexpected error occurred');
-
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleWorkRequest(aui, action, data)
+      });
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -103,7 +90,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   return {
     isLoading,
-    error,
+    // error: errCode,
     workList,
     getWorkList: getWorkHandler,
     updateWork: updateWorkHandler,
