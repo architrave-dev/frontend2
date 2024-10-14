@@ -13,6 +13,7 @@ import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputBilboard } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
+import Loading from '../../shared/component/Loading';
 
 
 const LandingBox: React.FC = () => {
@@ -89,6 +90,9 @@ const LandingBox: React.FC = () => {
     setBackgroundImageUrl(originUrl);
     setThumbnailImageUrl(thumbnailUrl);
   }
+
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
 
   return (
     <Container $backgroundimage={backgroundImageUrl === '' ? defaultImg : backgroundImageUrl}>

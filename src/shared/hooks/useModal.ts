@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ModalType, useModalStore } from '../store/modalStore';
+import { ModalType, useModalStore } from '../store/portal/modalStore';
 
 
 export const useModal = () => {

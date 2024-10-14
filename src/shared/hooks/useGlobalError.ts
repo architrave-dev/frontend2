@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { useGlobalErrStore } from '../store/errorStore';
 import { ErrorCode } from '../api/errorCode';
 import { useAuth } from './useAuth';
+import { AlertPosition, AlertType, useStandardAlertStore } from '../store/portal/alertStore';
 
 export const useGlobalError = () => {
   const { managedErr, clearErr } = useGlobalErrStore();
+  const { setStandardAlert } = useStandardAlertStore();
   const { refresh, logout } = useAuth();
 
 
@@ -29,9 +31,15 @@ export const useGlobalError = () => {
 
   const handleRTX = async () => {
     console.log("handleRTX: refresh failed!!");
-    alert("Please Re Login.")
-    logout();
-    clearErr();
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Please Re Login.",
+      callBack: () => {
+        logout();
+        clearErr();
+      }
+    });
   }
 
   const handleGlobalErr = async () => {
@@ -48,8 +56,12 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.WEF:
       default:
-        alert("이상한 에러 발생");
-        clearErr();
+        setStandardAlert({
+          type: AlertType.ALERT,
+          position: AlertPosition.TOP,
+          content: "이상한 에러 발생.",
+          callBack: clearErr
+        })
         return;
     }
   }

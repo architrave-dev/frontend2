@@ -4,6 +4,7 @@ import SelectBox, { SelectType, SortOrder } from '../../shared/component/SelectB
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { WorkData } from '../../shared/store/WorkListStore';
 import { getAreaFromSize } from '../../shared/store/projectElementStore';
+import { AlertPosition, AlertType, useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 
 const compareValues = <T extends keyof WorkData>(a: WorkData[T], b: WorkData[T]): number => {
@@ -44,10 +45,15 @@ const SortStation: React.FC<SortStationProps> = (
   { setSortOrder }
 ) => {
   const { isEditMode } = useEditMode();
+  const { setStandardAlert } = useStandardAlertStore();
 
   const handleOrderChange = (value: SortOrder) => {
     if (isEditMode) {
-      alert("Exit edit mode.");
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "Exit edit mode."
+      })
       return;
     }
     console.log("We should order work list by ", value);
