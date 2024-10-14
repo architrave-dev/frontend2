@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { extractUsernameFromAui, useAuth } from '../../shared/hooks/useAuth';
 import { useModal } from '../../shared/hooks/useModal';
-import { ModalType } from '../../shared/store/modalStore';
+import { ModalType } from '../../shared/store/portal/modalStore';
 import { useAui } from '../../shared/hooks/useAui';
 import { UserData } from '../../shared/store/authStore';
+import { AlertPosition, AlertType, useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 const UserComp: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const UserComp: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { user, logout } = useAuth();
   const { openModal } = useModal();
+  const { setStandardAlert } = useStandardAlertStore();
 
 
   const toggleEditMode = () => {
@@ -23,7 +25,11 @@ const UserComp: React.FC = () => {
 
   const handleUserAction = () => {
     if (isEditMode) {
-      alert("You are in edit mode.");
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "You are in edit mode."
+      })
       return;
     }
     if (user) {
@@ -35,7 +41,12 @@ const UserComp: React.FC = () => {
 
   const compareAuiLoggedInAui = (user: UserData) => {
     if (aui && aui === user.aui) {
-      if (window.confirm("Do you want to log out?")) logout();
+      setStandardAlert({
+        type: AlertType.CONFIRM,
+        position: AlertPosition.TOP,
+        content: "Do you want to log out?",
+        callBack: logout
+      })
     } else {
       navigate(`/${aui}`);
     }

@@ -12,11 +12,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
   <ThemeProvider theme={theme}>
     <GlobalStyle />
     <App />
     <ModalTemplate />
     <AlertTemplate />
-  </React.StrictMode>
+  </ThemeProvider>
+  // </React.StrictMode>
 );

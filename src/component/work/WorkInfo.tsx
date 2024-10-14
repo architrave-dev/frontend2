@@ -5,6 +5,7 @@ import { convertSizeToString } from '../../shared/store/projectElementStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import defaultImg from '../../asset/project/default_1.png';
+import { AlertPosition, AlertType, useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 interface WorkInfoProps {
   data: WorkData;
@@ -14,10 +15,15 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
   const { isEditMode } = useEditMode();
   const { activeWork, setActiveWork } = useWorkViewStore();
   const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { setStandardAlert } = useStandardAlertStore();
 
   const handleClick = () => {
     if (isEditMode) {
-      alert("Exit edit mode.");
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "Exit edit mode."
+      })
       return;
     }
     setActiveWork(data);
