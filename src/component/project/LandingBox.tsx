@@ -76,7 +76,8 @@ const LandingBox: React.FC = () => {
       originUrl: backgroundImageUrl,
       thumbnailUrl: thumbnailImageUrl,
       title: title,
-      description: description
+      description: description,
+      isVisible: true
     };
     try {
       await updateLandingBox(aui, updatedData);
@@ -119,7 +120,8 @@ const LandingBox: React.FC = () => {
               originUrl: backgroundImageUrl,
               thumbnailUrl: thumbnailImageUrl,
               title: title,
-              description: description
+              description: description,
+              isVisible: true
             }) &&
             <HeadlessBtn
               value={"Confirm"}

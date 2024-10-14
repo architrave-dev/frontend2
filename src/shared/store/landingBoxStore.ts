@@ -6,6 +6,7 @@ export interface LandingBoxData {
   thumbnailUrl: string;
   title: string;
   description: string;
+  isVisible: boolean;
 }
 interface LandingBoxState {
   landingBox: LandingBoxData | null;
