@@ -58,7 +58,6 @@ export interface SizeData {
 
 export interface WorkData {
   id: string;
-  member: UserData;
   originUrl: string;
   thumbnailUrl: string;
   title: string;

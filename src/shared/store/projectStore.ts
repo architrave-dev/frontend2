@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { ProjectElementData } from './projectElementStore';
 import { ProjectInfoData } from './projectInfoListStore';
 
 
@@ -10,7 +9,6 @@ export interface ProjectData {
   originUrl: string;
   thumbnailUrl: string;
   projectInfoList: ProjectInfoData[];
-  projectElementList: ProjectElementData[];
 }
 
 interface ProjectState {
