@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { ProjectSimpleData, useProjectListStore } from '../store/projectListStore';
-import { CreateProjectReq, CreatedProjectResponse, ProjectListResponse, createProject, getProjectList } from '../api/projectApi';
-import { useGlobalErrStore } from '../store/errorStore';
-import { convertStringToErrorCode } from '../api/errorCode';
+import { ProjectSimpleData, useProjectListStore } from '../../store/projectListStore';
+import { CreateProjectReq, CreatedProjectResponse, ProjectListResponse, RemoveProjectReq, createProject, deleteProject, getProjectList } from '../../api/projectApi';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
+import { DeleteResponse } from '../../api/workListApi';
 
 
 interface UseProjectListResult {
@@ -10,6 +11,7 @@ interface UseProjectListResult {
   projects: ProjectSimpleData[];
   getProjectList: (aui: string) => Promise<void>;
   createProject: (aui: string, data: CreateProjectReq) => Promise<void>;
+  deleteProject: (aui: string, data: RemoveProjectReq) => Promise<void>;
 }
 
 export const useProjectList = (): UseProjectListResult => {
@@ -22,6 +24,10 @@ export const useProjectList = (): UseProjectListResult => {
     setProjects(projectListData);
   };
 
+  const handleDeleteProjectSuccess = (response: DeleteResponse) => {
+    console.log("deleted well");
+  };
+
   const handleCreateProjectSuccess = (response: CreatedProjectResponse) => {
     const createdProjectData = response.data;
     setProjects([...projects, createdProjectData]);
@@ -29,18 +35,23 @@ export const useProjectList = (): UseProjectListResult => {
 
   const handleProjectRequest = async (
     aui: string,
-    action: 'get' | 'create',
-    data?: CreateProjectReq
+    action: 'get' | 'create' | 'delete',
+    data?: CreateProjectReq | RemoveProjectReq
   ) => {
     setIsLoading(true);
     clearErr();
     try {
-      if (data) {
-        const response = await createProject(aui, data);
-        handleCreateProjectSuccess(response);
-      } else {
-        const response = await getProjectList(aui);
-        handleProjectListSuccess(response);
+      switch (action) {
+        case 'delete':
+          handleDeleteProjectSuccess(await deleteProject(aui, data as RemoveProjectReq));
+          break;
+        case 'create':
+          handleCreateProjectSuccess(await createProject(aui, data as CreateProjectReq));
+          break;
+        case 'get':
+        default:
+          handleProjectListSuccess(await getProjectList(aui));
+          break;
       }
     } catch (err) {
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
@@ -58,12 +69,14 @@ export const useProjectList = (): UseProjectListResult => {
 
   const getProjectListHandler = (aui: string) => handleProjectRequest(aui, 'get');
   const createProjectHandler = (aui: string, data: CreateProjectReq) => handleProjectRequest(aui, 'create', data);
+  const removeProjectHandler = (aui: string, data: RemoveProjectReq) => handleProjectRequest(aui, 'delete', data);
 
 
   return {
     isLoading,
     projects,
     getProjectList: getProjectListHandler,
-    createProject: createProjectHandler
+    createProject: createProjectHandler,
+    deleteProject: removeProjectHandler
   };
 };

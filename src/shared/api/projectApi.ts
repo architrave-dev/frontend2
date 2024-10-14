@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { ProjectSimpleData } from '../store/projectListStore';
 import { ProjectData } from '../store/projectStore';
-import { ErrorResponse } from './workListApi';
+import { DeleteResponse, ErrorResponse } from './workListApi';
 
 const config = getConfig();
 
@@ -62,6 +62,9 @@ export interface CreateProjectReq {
   title: string;
   description: string;
 }
+export interface RemoveProjectReq {
+  projectId: string;
+}
 
 export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
   try {
@@ -96,13 +99,27 @@ export const updateProject = async (aui: string, data: UpdateProjectReq): Promis
   }
 };
 
-export const createProject = async (aui: string, data: CreateProjectReq): Promise<CreatedProjectResponse> => {
+export const createProject = async (aui: string, data: CreateProjectReq): Promise<ProjectResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
     const response = await projectApi.post<ProjectResponse>(`/api/v1/project?aui=${aui}`, data, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+export const deleteProject = async (aui: string, data: RemoveProjectReq): Promise<DeleteResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await projectApi.post<DeleteResponse>(`/api/v1/project?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
