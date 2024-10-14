@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useLandingBox } from '../../shared/hooks/useLandingBox';
+import { useLandingBox } from '../../shared/hooks/useApi/useLandingBox';
 import defaultImg from '../../asset/project/default_1.png';
 import { useAui } from '../../shared/hooks/useAui';
 import { LandingBoxData } from '../../shared/store/landingBoxStore';

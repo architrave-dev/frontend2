@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useGlobalErrStore } from '../store/errorStore';
 import { ErrorCode } from '../api/errorCode';
-import { useAuth } from './useAuth';
+import { useAuth } from './useApi/useAuth';
 import { AlertPosition, AlertType, useStandardAlertStore } from '../store/portal/alertStore';
 
 export const useGlobalError = () => {

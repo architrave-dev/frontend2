@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAui } from './useAui';
-import { useMember } from './useMember';
+import { useMember } from './useApi/useMember';
 
 
 const isValidAui = (AUI: string | undefined): boolean => {

@@ -4,7 +4,7 @@ import ProjectTitle from '../../component/projectDetail/ProjectTitle';
 import Divider, { DividerType } from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
+import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { UpdateProjectReq } from '../../shared/api/projectApi';
 import { useAui } from '../../shared/hooks/useAui';
 import RepresentImg from './RepresentImg';

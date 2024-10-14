@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAui } from '../../shared/hooks/useAui';
-import { useMemberInfo } from '../../shared/hooks/useMemberInfo';
+import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
 import { MemberInfoData, useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';

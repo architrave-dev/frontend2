@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ProjectSimple from './ProjectSimple';
-import { useProjectList } from '../../shared/hooks/useProjectList';
+import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { CreateProjectReq, createProject } from '../../shared/api/projectApi';

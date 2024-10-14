@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useMember } from '../shared/hooks/useMember';
+import { useMember } from '../shared/hooks/useApi/useMember';
 import { useNavigate } from 'react-router-dom';
 import HeadlessInput from '../shared/component/headless/input/HeadlessInput';
 import { InputBox } from '../shared/component/headless/input/InputBody';

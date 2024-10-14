@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ProjectElementList from '../component/projectDetail/ProjectElementList';
 import ProjectDetailContainer from '../component/projectDetail/ProjectDetailContainer';
 import { useParams } from 'react-router-dom';
-import { useProjectDetail } from '../shared/hooks/useProjectDetail';
+import { useProjectDetail } from '../shared/hooks/useApi/useProjectDetail';
 import { useAui } from '../shared/hooks/useAui';
 import { useInitPage } from '../shared/hooks/useInitPage';
 

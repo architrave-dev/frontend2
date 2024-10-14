@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { extractUsernameFromAui, useAuth } from '../../shared/hooks/useAuth';
+import { extractUsernameFromAui, useAuth } from '../../shared/hooks/useApi/useAuth';
 import { useModal } from '../../shared/hooks/useModal';
 import { ModalType } from '../../shared/store/portal/modalStore';
 import { useAui } from '../../shared/hooks/useAui';

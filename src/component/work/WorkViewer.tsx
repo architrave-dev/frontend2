@@ -10,7 +10,7 @@ import { CreateWorkReq, WorkData } from '../../shared/store/WorkListStore';
 import { convertSizeToString, convertStringToSize } from '../../shared/store/projectElementStore';
 import Divider, { DividerType } from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { useWorkList } from '../../shared/hooks/useWorkList';
+import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkDelete } from '../../shared/component/headless/button/BtnBody';
 
 const WorkViewer: React.FC = () => {

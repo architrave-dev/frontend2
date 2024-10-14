@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAuth } from '../../shared/hooks/useAuth';
+import { useAuth } from '../../shared/hooks/useApi/useAuth';
 import { ModalType, useModalStore } from '../../shared/store/portal/modalStore';
 
 const SignIn: React.FC = () => {

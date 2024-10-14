@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuiValidation } from './useAuiValidation';
 import { UserData } from '../store/authStore';
-import { useAuth } from './useAuth';
+import { useAuth } from './useApi/useAuth';
 import { useEditMode } from './useEditMode';
 
 

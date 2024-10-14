@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { UserData, useAuthStore } from '../store/authStore';
-import { signUp, login, SignUpData, LoginData, AuthResponse, RefreshData, refresh } from '../api/authAPI';
-import { convertStringToErrorCode } from '../api/errorCode';
-import { useGlobalErrStore } from '../store/errorStore';
+import { UserData, useAuthStore } from '../../store/authStore';
+import { signUp, login, SignUpData, LoginData, AuthResponse, RefreshData, refresh } from '../../api/authAPI';
+import { convertStringToErrorCode } from '../../api/errorCode';
+import { useGlobalErrStore } from '../../store/errorStore';
 
 
 interface UseAuthResult {

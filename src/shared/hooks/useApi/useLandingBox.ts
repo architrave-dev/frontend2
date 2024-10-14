@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { LandingBoxData, useLandingBoxStore } from '../store/landingBoxStore';
-import { LandingBoxResponse, getLandingBox, updateLandingBox } from '../api/landingBoxApi';
-import { useGlobalErrStore } from '../store/errorStore';
-import { convertStringToErrorCode } from '../api/errorCode';
+import { LandingBoxData, useLandingBoxStore } from '../../store/landingBoxStore';
+import { LandingBoxResponse, getLandingBox, updateLandingBox } from '../../api/landingBoxApi';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
 
 
 interface UseLandingBoxResult {

@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { WorkListResponse, getWorkList, updateWork, createWork, WorkResponse, DeleteResponse, deleteWork } from '../api/workListApi';
-import { CreateWorkReq, DeleteWorkReq, useWorkListStore } from '../store/WorkListStore';
-import { UpdateWorkReq, WorkData } from '../store/WorkListStore';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../store/WorkViewStore';
-import { convertStringToErrorCode } from '../api/errorCode';
-import { useGlobalErrStore } from '../store/errorStore';
+import { WorkListResponse, getWorkList, updateWork, createWork, WorkResponse, DeleteResponse, deleteWork } from '../../api/workListApi';
+import { CreateWorkReq, DeleteWorkReq, useWorkListStore } from '../../store/WorkListStore';
+import { UpdateWorkReq, WorkData } from '../../store/WorkListStore';
+import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
+import { useGlobalErrStore } from '../../store/errorStore';
 
 
 interface UseWorkListResult {

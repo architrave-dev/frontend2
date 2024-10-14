@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { checkAui, MemberResponse } from '../api/memberApi';
+import { checkAui, MemberResponse } from '../../api/memberApi';
 
 
 interface UseMemberResult {

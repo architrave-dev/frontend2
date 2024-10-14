@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import CareerInfo from './CareerInfo';
-import { useCareer } from '../../shared/hooks/useCareer';
+import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { UpdatedCareerListReq } from '../../shared/api/careerApi';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
-import { useWorkList } from '../../shared/hooks/useWorkList';
+import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import WorkInfo from './WorkInfo';
 import ColumnInfo from './ColumnInfo';
 import { SortOrder } from '../../shared/component/SelectBox';

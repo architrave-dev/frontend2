@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { MemberInfoResponse, getMemberInfo, updateMemberInfo } from '../api/memberInfoApi';
-import { MemberInfoData, useMemberInfoStore, useMemberInfoStoreForUpdate } from '../store/memberInfoStore';
-import { useGlobalErrStore } from '../store/errorStore';
-import { convertStringToErrorCode } from '../api/errorCode';
+import { MemberInfoResponse, getMemberInfo, updateMemberInfo } from '../../api/memberInfoApi';
+import { MemberInfoData, useMemberInfoStore, useMemberInfoStoreForUpdate } from '../../store/memberInfoStore';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
 
 
 interface UseMemberInfoResult {

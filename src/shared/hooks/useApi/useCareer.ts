@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { CareerListResponse, UpdatedCareerListReq, getCareerList, updateCareerList } from '../api/careerApi';
-import { CareerData, useCareerListStore, useCareerListStoreForUpdate } from '../store/careerStore';
-import { useGlobalErrStore } from '../store/errorStore';
-import { convertStringToErrorCode } from '../api/errorCode';
+import { CareerListResponse, UpdatedCareerListReq, getCareerList, updateCareerList } from '../../api/careerApi';
+import { CareerData, useCareerListStore, useCareerListStoreForUpdate } from '../../store/careerStore';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
 
 
 interface UseCareerResult {
