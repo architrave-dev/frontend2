@@ -39,7 +39,10 @@ export interface UpdatedProjectInfoReq {
 export interface RemoveProjectInfoReq {
   id: string;
 }
-
+export interface IndexData {
+  id: string;
+  tempId: string;
+}
 
 export interface UpdateProjectReq {
   id: string;
@@ -47,6 +50,7 @@ export interface UpdateProjectReq {
   thumbnailUrl?: string;
   title?: string;
   description?: string;
+  piIndexList: IndexData[];
   createdProjectInfoList?: CreateProjectInfoReq[];
   updatedProjectInfoList?: UpdatedProjectInfoReq[];
   removedProjectInfoList?: RemoveProjectInfoReq[];

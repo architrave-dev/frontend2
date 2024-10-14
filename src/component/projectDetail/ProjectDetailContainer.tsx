@@ -43,6 +43,7 @@ const ProjectDetailContainer: React.FC = () => {
       thumbnailUrl: thumbnailImageUrl,
       title: title,
       description: description,
+      piIndexList: [],  //이걸 어쩌나...
       createdProjectInfoList: createInfoList,
       updatedProjectInfoList: updateInfoList,
       removedProjectInfoList: removeInfoList,

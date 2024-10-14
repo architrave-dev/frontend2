@@ -9,6 +9,7 @@ export interface ProjectData {
   originUrl: string;
   thumbnailUrl: string;
   projectInfoList: ProjectInfoData[];
+  piIndex: string;
 }
 
 interface ProjectState {
