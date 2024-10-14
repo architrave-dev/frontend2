@@ -65,7 +65,7 @@ const ReplaceImgBtn = styled.button`
   font-size: 1rem;
   transition: background-color 0.3s;
   &:hover {
-    background-color: ${({ theme }) => theme.colors.color_Alpha_04};
+    background-color: ${({ theme }) => theme.colors.color_Alpha_05};
   }
 `;
 

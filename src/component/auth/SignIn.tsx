@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useAuth';
-import { ModalType, useModalStore } from '../../shared/store/modalStore';
+import { ModalType, useModalStore } from '../../shared/store/portal/modalStore';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
