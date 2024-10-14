@@ -61,8 +61,7 @@ const ProjectElementList: React.FC = () => {
         content: "This is New TextBox"
       } : null,
       textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextBoxAlignment.CENTER : null,
-      dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null,
-      peOrder: (createdProjectElements.length + projectElementList.length).toString(),
+      dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
     };
 
     setCreatedProjectElements([...createdProjectElements, newElement]);

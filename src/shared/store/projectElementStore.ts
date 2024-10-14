@@ -76,7 +76,6 @@ export interface TextBoxData {
 export interface ProjectElementData {
   id: string;
   projectElementType: ProjectElementType;
-  peOrder: string;
   work: WorkData | null;
   workAlignment: WorkAlignment | null;
   textBox: TextBoxData | null;
@@ -107,7 +106,6 @@ export interface CreateProjectElementReq {
   createTextBoxReq: CreateTextBoxReq | null,
   textBoxAlignment: TextBoxAlignment | null;
   dividerType: DividerType | null;
-  peOrder: string;
 }
 
 export interface UpdateWorkReq {
@@ -133,7 +131,6 @@ export interface UpdateProjectElementReq {
   updateTextBoxReq?: UpdateTextBoxReq | null,
   textBoxAlignment?: TextBoxAlignment | null;
   dividerType?: DividerType | null;
-  peOrder: string;
 }
 
 export interface RemoveProjectElementReq {

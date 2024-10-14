@@ -34,8 +34,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
         workAlignment: null,
         updateTextBoxReq: initialData,
         textBoxAlignment: value,
-        dividerType: null,
-        peOrder: target.peOrder
+        dividerType: null
       }
       setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
     }
@@ -71,8 +70,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
           content: targetTextBox.content
         },
         textBoxAlignment: target.textBoxAlignment,
-        dividerType: null,
-        peOrder: target.peOrder
+        dividerType: null
       }
       const newUpdateProjectElementReq: UpdateProjectElementReq = {
         ...convetedToProjectElementReq,

@@ -51,8 +51,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
         workAlignment: target.workAlignment,
         updateTextBoxReq: null,
         textBoxAlignment: null,
-        dividerType: null,
-        peOrder: target.peOrder
+        dividerType: null
       }
       //projectElementList에서 id로 찾고
       //updatedProjectElements에 추가한다.
