@@ -12,6 +12,7 @@ import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfo
 import { ProjectData } from '../../shared/store/projectStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
+import Loading from '../../shared/component/Loading';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -76,6 +77,8 @@ const ProjectDetailContainer: React.FC = () => {
     );
   };
 
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
 
   return (
     <ProjectDetailContainerComp>

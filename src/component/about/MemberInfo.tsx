@@ -12,6 +12,7 @@ import { TextAreaBilboard } from '../../shared/component/headless/textarea/TextA
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import defaultImg from '../../asset/project/default_1.png';
+import Loading from '../../shared/component/Loading';
 
 
 const MemberInfo: React.FC = () => {
@@ -66,8 +67,10 @@ const MemberInfo: React.FC = () => {
     } finally {
       setEditMode(false);
     }
-
   };
+
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
 
   return (
     <MemberInfoComp>

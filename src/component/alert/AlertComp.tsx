@@ -6,14 +6,12 @@ import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 const AlertComp: React.FC = () => {
   const { standardAlert, clearAlert } = useStandardAlertStore();
 
-  const handleOK = async (e: React.FormEvent) => {
-    e.preventDefault();
+  if (!standardAlert) return null;
+
+  const handleOK = async () => {
     clearAlert();
   };
 
-  if (!standardAlert) {
-    return null;
-  }
   const handleCallback = () => {
     if (standardAlert.callBack) {
       standardAlert.callBack();

@@ -8,6 +8,7 @@ import { SortOrder } from '../../shared/component/SelectBox';
 import SortStation, { sortWorkList } from './SortStation';
 import { WorkData } from '../../shared/store/WorkListStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import Loading from '../../shared/component/Loading';
 
 const WorkList: React.FC = () => {
   const { isLoading, workList, getWorkList } = useWorkList();
@@ -42,8 +43,9 @@ const WorkList: React.FC = () => {
     getWorkListWithApi();
   }, [aui]);
 
-  // 로딩 및 에러 상태를 처리합니다.
-  if (isLoading) return <div>Loading...</div>;
+
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
 
   const sortedWorkList = Array.isArray(workList) ? sortWorkList(workList, sortOrder) : [];
 

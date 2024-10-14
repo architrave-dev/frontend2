@@ -6,6 +6,7 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { UpdatedCareerListReq } from '../../shared/api/careerApi';
 import { CareerType, CreateCareerReq, useCareerListStoreForUpdate } from '../../shared/store/careerStore';
+import Loading from '../../shared/component/Loading';
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -92,10 +93,8 @@ const CareerList: React.FC = () => {
     });
   };
 
-  // 로딩 및 에러 상태를 처리합니다.
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
 
   return (
     <CareerListComp>

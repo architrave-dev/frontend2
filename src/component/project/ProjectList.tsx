@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Space from '../../shared/Space';
 import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import Loading from '../../shared/component/Loading';
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();
@@ -40,6 +41,9 @@ const ProjectList: React.FC = () => {
       navigate(`/${aui}/projects/` + newTitle);
     } catch (error) { }
   };
+
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
 
   return (
     <ProjectSimpleList>
