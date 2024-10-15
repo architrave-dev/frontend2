@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProjectTitle from '../../component/projectDetail/ProjectTitle';
-import Divider, { DividerType } from '../../shared/Divider';
+import Divider from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
@@ -13,6 +13,7 @@ import { ProjectData } from '../../shared/store/projectStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
+import { DividerType } from '../../shared/enum/EnumRepository';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();

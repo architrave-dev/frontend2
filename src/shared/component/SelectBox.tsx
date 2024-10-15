@@ -20,6 +20,13 @@ export enum WorkAlignment {
   CENTER = 'CENTER',
   RIGHT = 'RIGHT',
 }
+
+export enum WorkDisplaySize {
+  BIG = 'BIG',
+  REGULAR = 'REGULAR',
+  SMALL = 'SMALL'
+}
+
 export enum WorkSize {
   BIG = 'BIG',
   MEDIUM = 'MEDIUM',

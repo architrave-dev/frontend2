@@ -1,11 +1,6 @@
 import { create } from 'zustand';
+import { CountryType } from '../enum/EnumRepository';
 
-export enum CountryType {
-  KR = 'KR',      //Korea
-  US = 'US',      //United States
-  UK = 'UK',      //United Kingdom
-  NL = 'NL'       //Netherlands
-}
 
 export interface MemberInfoData {
   id: number;

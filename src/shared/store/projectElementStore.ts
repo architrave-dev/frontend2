@@ -1,15 +1,7 @@
 import { create } from 'zustand';
-import { UserData } from './authStore';
-import { DividerType } from '../Divider';
-import { TextBoxAlignment, WorkAlignment } from '../component/SelectBox';
+import { TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../component/SelectBox';
+import { DividerType, ProjectElementType } from '../enum/EnumRepository';
 
-
-
-export enum ProjectElementType {
-  WORK = 'WORK',
-  TEXTBOX = 'TEXTBOX',
-  DIVIDER = 'DIVIDER',
-}
 
 export const getAreaFromSize = (value: SizeData): number => {
   if (value.depth) {
@@ -77,6 +69,7 @@ export interface ProjectElementData {
   projectElementType: ProjectElementType;
   work: WorkData | null;
   workAlignment: WorkAlignment | null;
+  workDisplaySize: WorkDisplaySize | null;
   textBox: TextBoxData | null;
   textBoxAlignment: TextBoxAlignment | null;
   dividerType: DividerType | null;
@@ -102,6 +95,7 @@ export interface CreateProjectElementReq {
   projectElementType: ProjectElementType;
   createWorkReq: CreateWorkReq | null;
   workAlignment: WorkAlignment | null;
+  workDisplaySize: WorkDisplaySize | null;
   createTextBoxReq: CreateTextBoxReq | null,
   textBoxAlignment: TextBoxAlignment | null;
   dividerType: DividerType | null;
@@ -127,6 +121,7 @@ export interface UpdateProjectElementReq {
   id: string;
   updateWorkReq?: UpdateWorkReq | null;
   workAlignment?: WorkAlignment | null;
+  workDisplaySize?: WorkDisplaySize | null;
   updateTextBoxReq?: UpdateTextBoxReq | null,
   textBoxAlignment?: TextBoxAlignment | null;
   dividerType?: DividerType | null;

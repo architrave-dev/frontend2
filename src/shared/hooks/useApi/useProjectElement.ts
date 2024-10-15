@@ -21,7 +21,9 @@ export const useProjectElement = (): UseProjectElementResult => {
 
   const handleProjectElementSuccess = (response: ProjectElementListResponse) => {
     const projectElementListData = response.data;
-    setProjectElementList(projectElementListData);
+    const peIndex = projectElementListData.peIndex;
+    console.log("peIndex: ", peIndex);
+    setProjectElementList(projectElementListData.projectElementList);
     clearAll();
   };
 

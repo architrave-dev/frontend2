@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { CreateProjectElementReq, ProjectElementData, RemoveProjectElementReq, UpdateProjectElementReq } from '../store/projectElementStore';
 import { ErrorResponse } from './workListApi';
+import { IndexData } from './projectApi';
 
 const config = getConfig();
 
@@ -15,13 +16,18 @@ const projectElementApi = axios.create({
 
 export interface UpdateProjectElementListReq {
   projectId: string;
+  peIndexList: IndexData[];
   createProjectElements?: CreateProjectElementReq[];
   updatedProjectElements?: UpdateProjectElementReq[];
   removedProjectElements?: RemoveProjectElementReq[];
 }
 
 export interface ProjectElementListResponse {
-  data: ProjectElementData[];
+  data: {
+    peIndex: string;
+    projectElementList: ProjectElementData[];
+  }
+
 }
 
 

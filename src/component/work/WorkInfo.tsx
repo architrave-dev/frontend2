@@ -5,7 +5,8 @@ import { convertSizeToString } from '../../shared/store/projectElementStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import defaultImg from '../../asset/project/default_1.png';
-import { AlertPosition, AlertType, useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 
 interface WorkInfoProps {
   data: WorkData;

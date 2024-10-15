@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { ModalType, useModalStore } from '../../shared/store/portal/modalStore';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputAuth } from '../../shared/component/headless/input/InputBody';
+import { ModalType } from '../../shared/enum/EnumRepository';
 
 
 const Login: React.FC = () => {

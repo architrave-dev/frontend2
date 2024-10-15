@@ -1,11 +1,7 @@
 import { create } from 'zustand';
+import { ModalType } from '../../enum/EnumRepository';
 
-export enum ModalType {
-  NONE = 'NONE',
-  SIGNIN = 'SIGNIN',
-  LOGIN = 'LOGIN',
-  ALERT = 'ALERT',
-}
+
 interface ModalState {
   modalType: ModalType;
 }

@@ -1,14 +1,7 @@
 import { create } from 'zustand';
+import { AlertPosition, AlertType } from '../../enum/EnumRepository';
 
-export enum AlertType {
-  NONE = 'NONE',
-  ALERT = 'ALERT',
-  CONFIRM = 'CONFIRM',
-}
-export enum AlertPosition {
-  TOP = 'TOP',
-  BOTTOM = 'BOTTOM'
-}
+
 export interface StandardAlert {
   type: AlertType | null;
   position: AlertPosition | null;

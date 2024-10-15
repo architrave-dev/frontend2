@@ -5,8 +5,9 @@ import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { UpdatedCareerListReq } from '../../shared/api/careerApi';
-import { CareerType, CreateCareerReq, useCareerListStoreForUpdate } from '../../shared/store/careerStore';
+import { CreateCareerReq, useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import Loading from '../../shared/component/Loading';
+import { CareerType } from '../../shared/enum/EnumRepository';
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();

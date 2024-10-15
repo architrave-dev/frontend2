@@ -1,13 +1,8 @@
 import React from 'react';
 import styled, { DefaultTheme, css } from 'styled-components';
+import { ReuseInputType } from '../../../enum/EnumRepository';
 
-export enum ReuseInputType {
-  NAME = 'NAME',
-  VALUE = 'VALUE',
-  NAME_NEW = 'NAME_NEW',
-  VALUE_NEW = 'VALUE_NEW',
-  WORK = 'WORK'
-}
+
 
 interface ReuseInputProps {
   type: ReuseInputType;

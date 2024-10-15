@@ -8,10 +8,11 @@ import MemberInfoEach from '../about/MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import { CreateWorkReq, WorkData } from '../../shared/store/WorkListStore';
 import { convertSizeToString, convertStringToSize } from '../../shared/store/projectElementStore';
-import Divider, { DividerType } from '../../shared/Divider';
+import Divider from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkDelete } from '../../shared/component/headless/button/BtnBody';
+import { DividerType } from '../../shared/enum/EnumRepository';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();

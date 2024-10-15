@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { ModalType, useModalStore } from '../store/portal/modalStore';
+import { useModalStore } from '../store/portal/modalStore';
+import { ModalType } from '../enum/EnumRepository';
 
 
 export const useModal = () => {

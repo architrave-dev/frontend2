@@ -5,15 +5,15 @@ import ProjectElement from '../../component/projectElement/ProjectElement';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
 import { useParams } from 'react-router-dom';
-import { CreateProjectElementReq, ProjectElementType, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { CreateProjectElementReq, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
-import { DividerType } from '../../shared/Divider';
 import Space from '../../shared/Space';
-import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
+import { TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/component/SelectBox';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { DividerType, ProjectElementType } from '../../shared/enum/EnumRepository';
 
 
 const ProjectElementList: React.FC = () => {
@@ -57,6 +57,7 @@ const ProjectElementList: React.FC = () => {
           prodYear: new Date().getFullYear().toString()
         } : null,
       workAlignment: elementType === ProjectElementType.WORK ? WorkAlignment.CENTER : null,
+      workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
       createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
         content: "This is New TextBox"
       } : null,
@@ -72,6 +73,7 @@ const ProjectElementList: React.FC = () => {
 
     const updatedData: UpdateProjectElementListReq = {
       projectId: project.id,
+      peIndexList: [],
       createProjectElements: createdProjectElements,
       updatedProjectElements: updatedProjectElements,
       removedProjectElements: removedProjectElements

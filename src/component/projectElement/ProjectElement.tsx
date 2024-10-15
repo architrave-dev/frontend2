@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
-import Divider, { DividerType } from '../../shared/Divider';
-import { ProjectElementType, RemoveProjectElementReq, TextBoxData, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import Divider from '../../shared/Divider';
+import { RemoveProjectElementReq, TextBoxData, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
+import { DividerType, ProjectElementType } from '../../shared/enum/EnumRepository';
 
 
 export type ProjectElementProps = {

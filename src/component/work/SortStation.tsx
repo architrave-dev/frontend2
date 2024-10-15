@@ -4,7 +4,8 @@ import SelectBox, { SelectType, SortOrder } from '../../shared/component/SelectB
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { WorkData } from '../../shared/store/WorkListStore';
 import { getAreaFromSize } from '../../shared/store/projectElementStore';
-import { AlertPosition, AlertType, useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 
 
 const compareValues = <T extends keyof WorkData>(a: WorkData[T], b: WorkData[T]): number => {

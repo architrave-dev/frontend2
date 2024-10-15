@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DividerType } from '../../shared/Divider';
+import { DividerType } from '../../shared/enum/EnumRepository';
 
 interface DividerProps {
   tempId: string;

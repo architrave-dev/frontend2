@@ -1,11 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { DividerType } from './enum/EnumRepository';
 
-export enum DividerType {
-  PLAIN = 'PLAIN',
-  DOTTED = 'DOTTED',
-  DASHED = 'DASHED',
-}
 
 export interface DividerProps {
   dividerType: DividerType;

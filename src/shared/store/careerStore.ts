@@ -1,14 +1,6 @@
 import { create } from 'zustand';
+import { CareerType } from '../enum/EnumRepository';
 
-export enum CareerType {
-  EDU = 'EDU',      //Education
-  PRZ = 'PRZ',      //Prize
-  PRS = 'PRS',      //Press
-  RSD = 'RSD',      //Residency
-  S_EXH = 'S_EXH',  //Solo Exhibition
-  G_EXH = 'G_EXH',  //Group Exhibition
-  RPS = 'RPS'       //Representation
-}
 
 export interface CareerData {
   id: string;
