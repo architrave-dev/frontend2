@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { LandingBoxData } from '../store/landingBoxStore';
-import { ErrorResponse } from './workListApi';
+import { ErrorResponse, LandingBoxResponse } from '../dto/ResDtoRepository';
+import { LandingBoxData } from '../dto/EntityRepository';
 
 
 const config = getConfig();
@@ -14,10 +14,6 @@ const langingBoxApi = axios.create({
   },
 });
 
-
-export interface LandingBoxResponse {
-  data: LandingBoxData;
-}
 
 export const getLandingBox = async (aui: string): Promise<LandingBoxResponse> => {
   try {

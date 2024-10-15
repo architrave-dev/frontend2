@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import SelectBox, { SelectType, SortOrder } from '../../shared/component/SelectBox';
+import SelectBox from '../../shared/component/SelectBox';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { WorkData } from '../../shared/store/WorkListStore';
-import { getAreaFromSize } from '../../shared/store/projectElementStore';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, SelectType, SortOrder } from '../../shared/enum/EnumRepository';
+import { WorkData, getAreaFromSize } from '../../shared/dto/EntityRepository';
 
 
 const compareValues = <T extends keyof WorkData>(a: WorkData[T], b: WorkData[T]): number => {

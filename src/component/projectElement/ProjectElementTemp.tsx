@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import WorkTemp from './WorkTemp';
 import TextBoxTemp from './TextBoxTemp';
-import { CreateTextBoxReq, CreateWorkReq, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import DividerTemp from './DividerTemp';
-import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { DividerType, ProjectElementType } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment } from '../../shared/enum/EnumRepository';
+import { CreateTextBoxReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export type ProjectElementTempProps = {

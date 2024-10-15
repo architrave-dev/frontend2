@@ -1,45 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { SelectType, SortOrder, TextBoxAlignment, WorkAlignment, WorkSize } from '../enum/EnumRepository';
 
 
-export enum SelectType {
-  TEXTBOX_ALIGNMENT = 'TEXTBOX_ALIGNMENT',
-  WORK_ALIGNMENT = 'WORK_ALIGNMENT',
-  WORK_SIZE = 'WORK_SIZE',
-  SORT_ORDER = 'SORT_ORDER'
-}
-
-export enum TextBoxAlignment {
-  LEFT = 'LEFT',
-  CENTER = 'CENTER',
-  RIGHT = 'RIGHT',
-}
-
-export enum WorkAlignment {
-  LEFT = 'LEFT',
-  CENTER = 'CENTER',
-  RIGHT = 'RIGHT',
-}
-
-export enum WorkDisplaySize {
-  BIG = 'BIG',
-  REGULAR = 'REGULAR',
-  SMALL = 'SMALL'
-}
-
-export enum WorkSize {
-  BIG = 'BIG',
-  MEDIUM = 'MEDIUM',
-  SMALL = 'SMALL',
-}
-export enum SortOrder {
-  TITLE_ASC = 'TITLE_ASC',
-  TITLE_DESC = 'TITLE_DESC',
-  SIZE_ASC = 'SIZE_ASC',
-  SIZE_DESC = 'SIZE_DESC',
-  YEAR_ASC = 'YEAR_ASC',
-  YEAR_DESC = 'YEAR_DESC',
-}
 const selectOptions = {
   [SelectType.TEXTBOX_ALIGNMENT]: Object.values(TextBoxAlignment),
   [SelectType.WORK_ALIGNMENT]: Object.values(WorkAlignment),

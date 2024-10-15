@@ -4,10 +4,10 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import ProjectInfo from './ProjectInfo';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import ProjectInfoTemp from './ProjectInfoTemp';
-import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import Space from '../../shared/Space';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import { CreateProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
 
 const ProjectInfoList: React.FC = () => {
   const { isEditMode } = useEditMode();

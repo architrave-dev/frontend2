@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ProjectInfoData, useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
+import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/api/projectApi';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
+import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
+import { ProjectInfoData } from '../../shared/dto/EntityRepository';
 
 interface ProjectInfoProps {
   projectInfoId: string;

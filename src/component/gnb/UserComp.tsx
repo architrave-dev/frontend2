@@ -5,9 +5,9 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { extractUsernameFromAui, useAuth } from '../../shared/hooks/useApi/useAuth';
 import { useModal } from '../../shared/hooks/useModal';
 import { useAui } from '../../shared/hooks/useAui';
-import { UserData } from '../../shared/store/authStore';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
+import { UserData } from '../../shared/dto/EntityRepository';
 
 const UserComp: React.FC = () => {
   const navigate = useNavigate();

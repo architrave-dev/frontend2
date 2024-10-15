@@ -1,9 +1,11 @@
 import React from 'react';
-import { CreateProjectElementReq, CreateTextBoxReq, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
+import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import SelectBox from '../../shared/component/SelectBox';
 import { TextBoxWrapper } from './TextBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
+import { SelectType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import { CreateProjectElementReq, CreateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export interface TextBoxProps {

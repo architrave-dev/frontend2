@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { ProjectSimpleData, useProjectListStore } from '../../store/projectListStore';
-import { CreateProjectReq, CreatedProjectResponse, ProjectListResponse, RemoveProjectReq, createProject, deleteProject, getProjectList } from '../../api/projectApi';
+import { useProjectListStore } from '../../store/projectListStore';
+import { createProject, deleteProject, getProjectList } from '../../api/projectApi';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
-import { DeleteResponse } from '../../api/workListApi';
+import { ProjectSimpleData } from '../../dto/EntityRepository';
+import { CreateProjectReq, RemoveProjectReq } from '../../dto/ReqDtoRepository';
+import { CreatedProjectResponse, DeleteResponse, ProjectListResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseProjectListResult {

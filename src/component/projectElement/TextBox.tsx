@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
+import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import SelectBox from '../../shared/component/SelectBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
+import { TextBoxData } from '../../shared/dto/EntityRepository';
+import { SelectType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import { UpdateProjectElementReq, UpdateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export interface TextBoxProps {

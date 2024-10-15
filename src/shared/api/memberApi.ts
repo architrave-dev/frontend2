@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { ErrorResponse } from './workListApi';
+import { ErrorResponse, MemberResponse } from '../dto/ResDtoRepository';
 
 
 const config = getConfig();
@@ -12,10 +12,6 @@ const memberApi = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-export interface MemberResponse {
-  data: string;
-}
 
 export const checkAui = async (aui: string): Promise<MemberResponse> => {
   try {

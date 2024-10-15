@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { TextBoxAlignment, WorkAlignment } from '../../SelectBox';
 import { getAlignment } from './TextAreaBody';
-import { TextArea } from '../../../enum/EnumRepository';
+import { TextArea, TextBoxAlignment, WorkAlignment } from '../../../enum/EnumRepository';
 
 
 interface TextBoxAreaProps {

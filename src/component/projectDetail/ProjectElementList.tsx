@@ -5,15 +5,14 @@ import ProjectElement from '../../component/projectElement/ProjectElement';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
 import { useParams } from 'react-router-dom';
-import { CreateProjectElementReq, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi';
+import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import Space from '../../shared/Space';
-import { TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/component/SelectBox';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { DividerType, ProjectElementType } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
 
 
 const ProjectElementList: React.FC = () => {

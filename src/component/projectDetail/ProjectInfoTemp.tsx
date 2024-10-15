@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
-import { CreateProjectInfoReq } from '../../shared/api/projectApi';
 import { InputNameNew, InputValueNew } from '../../shared/component/headless/input/InputBody';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
+import { CreateProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
 
 interface ProjectInfoTempProps {
   tempId: string;

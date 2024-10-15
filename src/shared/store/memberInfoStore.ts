@@ -1,19 +1,7 @@
 import { create } from 'zustand';
 import { CountryType } from '../enum/EnumRepository';
+import { MemberInfoData } from '../dto/EntityRepository';
 
-
-export interface MemberInfoData {
-  id: number;
-  originUrl: string;
-  thumbnailUrl: string;
-  name: string;
-  year: number;
-  country: CountryType;
-  email: string;
-  contact: string;
-  description: string;
-}
-// 각종 SNS(인스타, 유튜브, 트위터 등등)
 
 interface MemberInfoState {
   memberInfo: MemberInfoData | null;

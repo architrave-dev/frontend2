@@ -6,13 +6,13 @@ import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/
 import defaultImg from '../../asset/project/default_1.png';
 import MemberInfoEach from '../about/MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import { CreateWorkReq, WorkData } from '../../shared/store/WorkListStore';
-import { convertSizeToString, convertStringToSize } from '../../shared/store/projectElementStore';
 import Divider from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkDelete } from '../../shared/component/headless/button/BtnBody';
 import { DividerType } from '../../shared/enum/EnumRepository';
+import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
+import { CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();

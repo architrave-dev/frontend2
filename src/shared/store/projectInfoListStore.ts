@@ -1,11 +1,6 @@
 import { create } from 'zustand';
-import { CreateProjectInfoReq, RemoveProjectInfoReq } from '../api/projectApi';
-
-export interface ProjectInfoData {
-  id: string;
-  customName: string;
-  customValue: string;
-}
+import { ProjectInfoData } from '../dto/EntityRepository';
+import { CreateProjectInfoReq, RemoveProjectInfoReq } from '../dto/ReqDtoRepository';
 
 interface ProjectInfoListState {
   projectInfoList: ProjectInfoData[];

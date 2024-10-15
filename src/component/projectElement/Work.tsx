@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { ProjectElementData, SizeData, UpdateProjectElementReq, UpdateWorkReq, WorkData, convertSizeToString, convertStringToSize, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import defaultImg from '../../asset/project/default_1.png';
-import { WorkAlignment } from '../../shared/component/SelectBox';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
+import { WorkAlignment } from '../../shared/enum/EnumRepository';
+import { ProjectElementData, SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
+import { UpdateProjectElementReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;

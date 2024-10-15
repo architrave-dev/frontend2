@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { ProjectElementListResponse, UpdateProjectElementListReq, getProjectElementList, updateProjectElementList } from '../../api/projectElementApi';
-import { ProjectElementData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../store/projectElementStore';
+import { getProjectElementList, updateProjectElementList } from '../../api/projectElementApi';
+import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../store/projectElementStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
+import { ProjectElementData } from '../../dto/EntityRepository';
+import { UpdateProjectElementListReq } from '../../dto/ReqDtoRepository';
+import { ProjectElementListResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseProjectElementResult {

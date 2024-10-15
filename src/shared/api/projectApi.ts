@@ -1,8 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { ProjectSimpleData } from '../store/projectListStore';
-import { ProjectData } from '../store/projectStore';
-import { DeleteResponse, ErrorResponse } from './workListApi';
+import { DeleteResponse, ErrorResponse, ProjectListResponse, ProjectResponse } from '../dto/ResDtoRepository';
+import { CreateProjectReq, RemoveProjectReq, UpdateProjectReq } from '../dto/ReqDtoRepository';
 
 const config = getConfig();
 
@@ -14,57 +13,7 @@ const projectApi = axios.create({
   },
 });
 
-export interface ProjectListResponse {
-  data: ProjectSimpleData[];
-}
-export interface CreatedProjectResponse {
-  data: ProjectSimpleData;
-}
-export interface ProjectResponse {
-  data: ProjectData;
-}
 
-export interface CreateProjectInfoReq {
-  tempId: string;
-  customName: string;
-  customValue: string;
-}
-
-export interface UpdatedProjectInfoReq {
-  id: string;
-  customName: string;
-  customValue: string;
-}
-
-export interface RemoveProjectInfoReq {
-  id: string;
-}
-export interface IndexData {
-  id: string;
-  tempId: string;
-}
-
-export interface UpdateProjectReq {
-  id: string;
-  originUrl?: string;
-  thumbnailUrl?: string;
-  title?: string;
-  description?: string;
-  piIndexList: IndexData[];
-  createdProjectInfoList?: CreateProjectInfoReq[];
-  updatedProjectInfoList?: UpdatedProjectInfoReq[];
-  removedProjectInfoList?: RemoveProjectInfoReq[];
-}
-
-export interface CreateProjectReq {
-  originUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  description: string;
-}
-export interface RemoveProjectReq {
-  projectId: string;
-}
 
 export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
   try {

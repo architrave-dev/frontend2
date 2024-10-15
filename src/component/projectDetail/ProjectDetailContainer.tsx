@@ -5,15 +5,15 @@ import Divider from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import { UpdateProjectReq } from '../../shared/api/projectApi';
 import { useAui } from '../../shared/hooks/useAui';
 import RepresentImg from './RepresentImg';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
-import { ProjectData } from '../../shared/store/projectStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
 import { DividerType } from '../../shared/enum/EnumRepository';
+import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
+import { ProjectData } from '../../shared/dto/EntityRepository';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();

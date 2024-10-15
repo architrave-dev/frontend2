@@ -4,10 +4,10 @@ import CareerInfo from './CareerInfo';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { UpdatedCareerListReq } from '../../shared/api/careerApi';
-import { CreateCareerReq, useCareerListStoreForUpdate } from '../../shared/store/careerStore';
+import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import Loading from '../../shared/component/Loading';
 import { CareerType } from '../../shared/enum/EnumRepository';
+import { CreateCareerReq, UpdatedCareerListReq } from '../../shared/dto/ReqDtoRepository';
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();

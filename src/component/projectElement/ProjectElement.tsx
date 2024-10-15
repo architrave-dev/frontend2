@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
 import Divider from '../../shared/Divider';
-import { RemoveProjectElementReq, TextBoxData, WorkData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { DividerType, ProjectElementType } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment } from '../../shared/enum/EnumRepository';
+import { TextBoxData, WorkData } from '../../shared/dto/EntityRepository';
+import { RemoveProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export type ProjectElementProps = {
@@ -19,7 +20,6 @@ export type ProjectElementProps = {
   textBox: TextBoxData | null;
   textBoxAlignment: TextBoxAlignment | null;
   dividerType: DividerType | null;
-  // order: string;
 };
 
 const ProjectElement: React.FC<ProjectElementProps> = ({

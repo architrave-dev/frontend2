@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { UserDataWithRefreshToken } from '../store/authStore';
-import { ErrorResponse } from './workListApi';
+import { LoginReq, RefreshReq, SignUpReq } from '../dto/ReqDtoRepository';
+import { AuthResponse, ErrorResponse } from '../dto/ResDtoRepository';
 
 
 const config = getConfig();
@@ -14,26 +14,8 @@ const authApi = axios.create({
   },
 });
 
-export interface SignUpData {
-  email: string;
-  password: string;
-  username: string;
-}
 
-export interface LoginData {
-  email: string;
-  password: string;
-}
-export interface RefreshData {
-  refreshToken: string;
-}
-
-export interface AuthResponse {
-  data: UserDataWithRefreshToken;
-  authToken: string;
-}
-
-export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
+export const signUp = async (data: SignUpReq): Promise<AuthResponse> => {
   try {
     const response = await authApi.post<AuthResponse>('/api/v1/auth/signin', data);
     return response.data;
@@ -42,7 +24,7 @@ export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
   }
 };
 
-export const login = async (data: LoginData): Promise<AuthResponse> => {
+export const login = async (data: LoginReq): Promise<AuthResponse> => {
   try {
     const response = await authApi.post<AuthResponse>('/api/v1/auth/login', data);
     const authToken = response.headers['authorization'] || null;
@@ -55,7 +37,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
   }
 };
 
-export const refresh = async (data: RefreshData): Promise<AuthResponse> => {
+export const refresh = async (data: RefreshReq): Promise<AuthResponse> => {
   try {
     const response = await authApi.post<AuthResponse>('/api/v1/auth/refresh', data);
     const authToken = response.headers['authorization'] || null;

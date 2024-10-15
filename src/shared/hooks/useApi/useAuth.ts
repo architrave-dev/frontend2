@@ -1,17 +1,20 @@
 import { useState } from 'react';
-import { UserData, useAuthStore } from '../../store/authStore';
-import { signUp, login, SignUpData, LoginData, AuthResponse, RefreshData, refresh } from '../../api/authAPI';
+import { useAuthStore } from '../../store/authStore';
+import { signUp, login, refresh } from '../../api/authAPI';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { useGlobalErrStore } from '../../store/errorStore';
+import { UserData } from '../../dto/EntityRepository';
+import { LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
+import { AuthResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseAuthResult {
   isLoading: boolean;
   user: UserData | null;
   setUser: (user: UserData) => void;
-  signUp: (data: SignUpData) => Promise<void>;
-  login: (data: LoginData) => Promise<void>;
-  refresh: (data: RefreshData) => Promise<void>;
+  signUp: (data: SignUpReq) => Promise<void>;
+  login: (data: LoginReq) => Promise<void>;
+  refresh: (data: RefreshReq) => Promise<void>;
   logout: () => void;
 }
 
@@ -47,7 +50,7 @@ export const useAuth = (): UseAuthResult => {
   };
 
 
-  const handleAuthRequest = async <T extends SignUpData | LoginData | RefreshData>(
+  const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq>(
     action: 'signup' | 'login' | 'refresh',
     data: T
   ) => {
@@ -56,14 +59,14 @@ export const useAuth = (): UseAuthResult => {
     try {
       switch (action) {
         case 'signup':
-          handleSignupSuccess(await signUp(data as SignUpData));
+          handleSignupSuccess(await signUp(data as SignUpReq));
           break;
         case 'refresh':
-          handleRefreshSuccess(await refresh(data as RefreshData));
+          handleRefreshSuccess(await refresh(data as RefreshReq));
           break;
         case 'login':
         default:
-          handleLoginSuccess(await login(data as LoginData));
+          handleLoginSuccess(await login(data as LoginReq));
           break;
       }
     } catch (err) {
@@ -79,9 +82,9 @@ export const useAuth = (): UseAuthResult => {
     }
   };
 
-  const signUpHandler = (data: SignUpData) => handleAuthRequest('signup', data);
-  const loginHandler = (data: LoginData) => handleAuthRequest('login', data);
-  const refreshHandler = (data: RefreshData) => handleAuthRequest('refresh', data);
+  const signUpHandler = (data: SignUpReq) => handleAuthRequest('signup', data);
+  const loginHandler = (data: LoginReq) => handleAuthRequest('login', data);
+  const refreshHandler = (data: RefreshReq) => handleAuthRequest('refresh', data);
 
   const logout = () => {
     clearAuth();
