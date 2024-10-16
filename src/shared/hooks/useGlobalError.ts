@@ -48,7 +48,19 @@ export const useGlobalError = () => {
     setStandardAlert({
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
-      content: "InValid AUI.",
+      content: "No Data Like that.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
+  const handleNAU = async () => {
+    console.log("handleNAU: Wrong Password!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Authentication failed.",
       callBack: () => {
         clearErr();
       }
@@ -69,6 +81,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.NFR:
         await handleNFR();
+        break;
+      case ErrorCode.NAU:
+        await handleNAU();
         break;
       case ErrorCode.WEF:
       default:
