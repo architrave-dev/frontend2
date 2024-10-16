@@ -43,6 +43,18 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleNFR = async () => {
+    console.log("handleNFR: There is no data like that!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "InValid AUI.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
   const handleGlobalErr = async () => {
     if (managedErr === null) {
       return;
@@ -54,6 +66,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.ATX:
         await handleATX();
+        break;
+      case ErrorCode.NFR:
+        await handleNFR();
         break;
       case ErrorCode.WEF:
       default:

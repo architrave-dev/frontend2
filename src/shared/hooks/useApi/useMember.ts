@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { checkAui } from '../../api/memberApi';
 import { MemberResponse } from '../../dto/ResDtoRepository';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
 
 
 interface UseMemberResult {
   isLoading: boolean;
-  error: string | null;
   checkAui: (aui: string) => Promise<void>;
   result: boolean;
 }
 
 export const useMember = (): UseMemberResult => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { setManagedErr, clearErr } = useGlobalErrStore();
   const [result, setResult] = useState(false);
 
   const handleMemberSuccess = (response: MemberResponse) => {
@@ -20,28 +21,36 @@ export const useMember = (): UseMemberResult => {
     if (data === "ok") setResult(true);
   };
 
-  const handleMemberRequest = async <T extends string>(
-    memberFunction: (data: T) => Promise<MemberResponse>,
-    data: T
+  const handleMemberRequest = async (
+    action: 'get',
+    data?: string
   ) => {
     setIsLoading(true);
-    setError(null);
+    clearErr();
     try {
-      const response = await memberFunction(data);
-      handleMemberSuccess(response);
+      switch (action) {
+        case 'get':
+        default:
+          handleMemberSuccess(await checkAui(data as string));
+          break;
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const convertedErrCode = convertStringToErrorCode(errCode);
+      setManagedErr({
+        errCode: convertedErrCode,
+        retryFunction: () => handleMemberRequest(action, data)
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const checkAuiHandler = (aui: string) => handleMemberRequest(checkAui, aui);
+  const checkAuiHandler = (aui: string) => handleMemberRequest('get', aui);
 
 
   return {
     isLoading,
-    error,
     checkAui: checkAuiHandler,
     result
   };
