@@ -10,9 +10,10 @@ import Divider from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkDelete } from '../../shared/component/headless/button/BtnBody';
-import { DividerType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, DividerType } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -20,6 +21,7 @@ const WorkViewer: React.FC = () => {
   const { updateWork, createWork, deleteWork } = useWorkList();
   const { activeWork, setActiveWork, clearActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { setStandardAlert } = useStandardAlertStore();
 
   if (!activeWork || !updatedActiveWork) return null;
 
@@ -73,16 +75,21 @@ const WorkViewer: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this work?")) {
+    const callback = async () => {
       try {
-        await deleteWork(aui, { id: updatedActiveWork.id });
+        await deleteWork(aui, { workId: updatedActiveWork.id });
       } catch (err) {
       } finally {
         clearActiveWork();
         setEditMode(false);
       }
-
     }
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Are you sure you want to delete this work?",
+      callBack: callback
+    });
   };
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {

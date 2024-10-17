@@ -40,7 +40,7 @@ export interface UpdateWorkReq {
 }
 
 export interface DeleteWorkReq {
-  id: string;
+  workId: string;
 }
 
 //-------------- TextBox
