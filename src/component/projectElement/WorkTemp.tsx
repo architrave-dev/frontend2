@@ -30,8 +30,16 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
   }
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    handleChange('thumbnailUrl', thumbnailUrl);
-    handleChange('originUrl', originUrl);
+    const updatedCreatedProjectElements = createdProjectElements.map((each) =>
+      each.tempId === tempId ? {
+        ...each,
+        createWorkReq: {
+          ...each.createWorkReq,
+          thumbnailUrl,
+          originUrl,
+        } as CreateWorkReq
+      } : each);
+    setCreatedProjectElements(updatedCreatedProjectElements);
   }
 
   const handleSizeChange = (value: WorkDisplaySize) => {

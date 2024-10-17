@@ -76,8 +76,55 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
   }
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    handleChange('thumbnailUrl', thumbnailUrl);
-    handleChange('originUrl', originUrl);
+    const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
+    if (targetElement) {
+      //updatedProjectElements에 있다면
+      const updatedProjectElementList = updatedProjectElements.map(each =>
+        each.updateWorkReq?.id === initialData.id ? { ...each, updateWorkReq: { ...each.updateWorkReq, thumbnailUrl, originUrl } as UpdateWorkReq } : each
+      )
+      setUpdatedProjectElements(updatedProjectElementList);
+    } else {
+      //updatedProjectElements에 없다면
+      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
+
+      if (!target) return;
+      const targetWork = target.work;
+      if (!targetWork) return;
+      //target으로 UpdateProjectElementReq 를 생성 후??
+      const convetedToProjectElementReq: UpdateProjectElementReq = {
+        projectElementId: target.id,
+        updateWorkReq: {
+          id: targetWork.id,
+          originUrl: targetWork.originUrl,
+          thumbnailUrl: targetWork.thumbnailUrl,
+          title: targetWork.title,
+          description: targetWork.description,
+          size: targetWork.size,
+          material: targetWork.material,
+          prodYear: targetWork.prodYear
+        },
+        workAlignment: target.workAlignment,
+        workDisplaySize: target.workDisplaySize,
+        updateTextBoxReq: null,
+        textBoxAlignment: null,
+        dividerType: null
+      }
+      //projectElementList에서 id로 찾고
+      //updatedProjectElements에 추가한다.
+      const newUpdateProjectElementReq: UpdateProjectElementReq = {
+        ...convetedToProjectElementReq,
+        updateWorkReq: {
+          ...convetedToProjectElementReq.updateWorkReq,
+          thumbnailUrl,
+          originUrl
+        } as UpdateWorkReq
+      };
+      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
+    }
+    const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
+      each.work?.id === initialData.id ? { ...each, work: { ...each.work, thumbnailUrl, originUrl } as WorkData } : each
+    )
+    setProjectElementList(updatedProjectElementList);
   }
 
   const handleSizeChange = (value: WorkDisplaySize) => {

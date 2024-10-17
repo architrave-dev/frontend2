@@ -13,6 +13,7 @@ import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/Bt
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
+import Loading from '../../shared/component/Loading';
 
 
 const ProjectElementList: React.FC = () => {
@@ -93,6 +94,9 @@ const ProjectElementList: React.FC = () => {
       removedProjectElements.length > 0
     );
   }
+
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
 
   return (
     <ProjectElementListComp>
