@@ -35,6 +35,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
         id: target.id,
         updateWorkReq: null,
         workAlignment: null,
+        workDisplaySize: null,
         updateTextBoxReq: initialData,
         textBoxAlignment: value,
         dividerType: null

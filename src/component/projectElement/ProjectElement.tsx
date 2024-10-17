@@ -7,7 +7,7 @@ import { useProjectElementListStore, useProjectElementListStoreForUpdate } from 
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { TextBoxData, WorkData } from '../../shared/dto/EntityRepository';
 import { RemoveProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 
@@ -17,6 +17,7 @@ export type ProjectElementProps = {
   projectElementType: ProjectElementType;
   work: WorkData | null;
   workAlignment: WorkAlignment | null;
+  workDisplaySize: WorkDisplaySize | null;
   textBox: TextBoxData | null;
   textBoxAlignment: TextBoxAlignment | null;
   dividerType: DividerType | null;
@@ -27,6 +28,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   projectElementType,
   work,
   workAlignment,
+  workDisplaySize,
   textBox,
   textBoxAlignment,
   dividerType
@@ -38,7 +40,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   const contentRouter = () => {
     switch (projectElementType) {
       case ProjectElementType.WORK:
-        return work && <Work alignment={workAlignment} data={work} />;
+        return work && <Work alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBox alignment={textBoxAlignment} data={textBox} />;
       case ProjectElementType.DIVIDER:
@@ -49,16 +51,16 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   }
 
   const handleDelete = () => {
-    const targetElement = updatedProjectElements.find(each => each.id === id);
+    const targetElement = updatedProjectElements.find(each => each.projectElementId === id);
     if (targetElement) {
-      const updatedInfoList = updatedProjectElements.filter((each) => each.id !== id)
+      const updatedInfoList = updatedProjectElements.filter((each) => each.projectElementId !== id)
       setUpdatedProjectElements(updatedInfoList);
     }
 
     const updatedProjectInfoList = projectElementList.filter((each) => each.id !== id)
     setProjectElementList(updatedProjectInfoList);
 
-    const newRemovedElement: RemoveProjectElementReq = { id: id };
+    const newRemovedElement: RemoveProjectElementReq = { projectElementId: id };
     setRemovedProjectElements([...removedProjectElements, newRemovedElement]);
   }
 

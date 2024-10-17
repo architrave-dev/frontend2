@@ -83,11 +83,7 @@ export enum WorkDisplaySize {
   SMALL = 'SMALL'
 }
 
-export enum WorkSize {
-  BIG = 'BIG',
-  MEDIUM = 'MEDIUM',
-  SMALL = 'SMALL',
-}
+
 export enum SortOrder {
   TITLE_ASC = 'TITLE_ASC',
   TITLE_DESC = 'TITLE_DESC',

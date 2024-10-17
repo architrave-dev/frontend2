@@ -8,16 +8,18 @@ import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import { WorkAlignment } from '../../shared/enum/EnumRepository';
+import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { ProjectElementData, SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { UpdateProjectElementReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
+import SelectBox from '../../shared/component/SelectBox';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
+  displaySize: WorkDisplaySize | null;
   data: WorkData;
 }
 
-const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: initialData }) => {
+const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySize: initialDisplaySize, data: initialData }) => {
   const { isEditMode } = useEditMode();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
@@ -39,7 +41,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
       if (!targetWork) return;
       //target으로 UpdateProjectElementReq 를 생성 후 
       const convetedToProjectElementReq: UpdateProjectElementReq = {
-        id: target.id,
+        projectElementId: target.id,
         updateWorkReq: {
           id: targetWork.id,
           originUrl: targetWork.originUrl,
@@ -51,6 +53,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
           prodYear: targetWork.prodYear
         },
         workAlignment: target.workAlignment,
+        workDisplaySize: target.workDisplaySize,
         updateTextBoxReq: null,
         textBoxAlignment: null,
         dividerType: null
@@ -77,12 +80,47 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
     handleChange('originUrl', originUrl);
   }
 
+  const handleSizeChange = (value: WorkDisplaySize) => {
+    const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
+    if (targetElement) {
+      const updatedProjectElementList = updatedProjectElements.map(each =>
+        each.updateWorkReq?.id === initialData.id ? { ...each, workDisplaySize: value } : each
+      )
+      setUpdatedProjectElements(updatedProjectElementList);
+    } else {
+      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
+      if (!target) return;
+      const newUpdateProjectElementReq: UpdateProjectElementReq = {
+        projectElementId: target.id,
+        updateWorkReq: initialData,
+        workAlignment: null,
+        workDisplaySize: value,
+        updateTextBoxReq: null,
+        textBoxAlignment: null,
+        dividerType: null
+      }
+      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
+    }
+    const updatedProjectElementList = projectElementList.map(each =>
+      each.work?.id === initialData.id ? { ...each, workDisplaySize: value } : each
+    );
+    setProjectElementList(updatedProjectElementList);
+  };
+
   return (
     <WorkWrapper>
       {isEditMode ? (
         <>
+          <SelectBox
+            value={initialDisplaySize || WorkDisplaySize.BIG}
+            selectType={SelectType.WORK_SIZE}
+            handleChange={handleSizeChange} />
           <ImgWrapper>
-            <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} />
+            <WorkImage
+              src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
+              alt={initialData.title}
+              $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
+            />
             <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
           </ImgWrapper>
           <TitleInfoWrpper>
@@ -124,7 +162,11 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
       ) : (
         <>
           <ImgWrapper>
-            <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} />
+            <WorkImage
+              src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
+              alt={initialData.title}
+              $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
+            />
           </ImgWrapper>
           <TitleInfoWrpper>
             <Title>[ {initialData.title} ]</Title>
@@ -148,6 +190,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, data: init
 };
 
 const WorkWrapper = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -158,9 +201,19 @@ const ImgWrapper = styled.div`
   position: relative;
 `
 
-const WorkImage = styled.img`
+const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
   max-width: 100%;
-  max-height: 90vh;
+  max-height: ${({ $displaySize }) => {
+    switch ($displaySize) {
+      case WorkDisplaySize.SMALL:
+        return '20vh';
+      case WorkDisplaySize.REGULAR:
+        return '50vh';
+      case WorkDisplaySize.BIG:
+      default:
+        return '90vh';
+    }
+  }};
   margin-bottom: 16px;
   object-fit: contain;
 `;

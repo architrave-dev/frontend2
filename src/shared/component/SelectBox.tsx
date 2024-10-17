@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SelectType, SortOrder, TextBoxAlignment, WorkAlignment, WorkSize } from '../enum/EnumRepository';
+import { SelectType, SortOrder, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../enum/EnumRepository';
 
 
 const selectOptions = {
   [SelectType.TEXTBOX_ALIGNMENT]: Object.values(TextBoxAlignment),
   [SelectType.WORK_ALIGNMENT]: Object.values(WorkAlignment),
-  [SelectType.WORK_SIZE]: Object.values(WorkSize),
+  [SelectType.WORK_SIZE]: Object.values(WorkDisplaySize),
   [SelectType.SORT_ORDER]: Object.values(SortOrder),
 };
 
-type SelectValue = TextBoxAlignment | WorkAlignment | WorkSize | SortOrder;
+type SelectValue = TextBoxAlignment | WorkAlignment | WorkDisplaySize | SortOrder;
 
 interface SelectBoxProps<T extends SelectValue> {
   value: T;

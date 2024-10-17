@@ -110,6 +110,7 @@ const ProjectElementList: React.FC = () => {
           projectElementType={each.projectElementType}
           work={each.work}
           workAlignment={each.workAlignment}
+          workDisplaySize={each.workDisplaySize}
           textBox={each.textBox}
           textBoxAlignment={each.textBoxAlignment}
           dividerType={each.dividerType}
@@ -125,6 +126,7 @@ const ProjectElementList: React.FC = () => {
               projectElementType={each.projectElementType}
               work={each.createWorkReq}
               workAlignment={each.workAlignment}
+              workDisplaySize={each.workDisplaySize}
               textBox={each.createTextBoxReq}
               textBoxAlignment={each.textBoxAlignment}
               dividerType={each.dividerType}
