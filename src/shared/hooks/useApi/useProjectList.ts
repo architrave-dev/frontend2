@@ -46,6 +46,7 @@ export const useProjectList = (): UseProjectListResult => {
       switch (action) {
         case 'delete':
           handleDeleteProjectSuccess(await deleteProject(aui, data as RemoveProjectReq));
+          getProjectListHandler(aui);
           break;
         case 'create':
           handleCreateProjectSuccess(await createProject(aui, data as CreateProjectReq));

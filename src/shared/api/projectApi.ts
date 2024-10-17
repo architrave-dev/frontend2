@@ -14,7 +14,6 @@ const projectApi = axios.create({
 });
 
 
-
 export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
   try {
     const response = await projectApi.get<ProjectListResponse>('/api/v1/project/list?aui=' + aui);
@@ -68,7 +67,7 @@ export const deleteProject = async (aui: string, data: RemoveProjectReq): Promis
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await projectApi.post<DeleteResponse>(`/api/v1/project?aui=${aui}`, data, {
+    const response = await projectApi.delete<DeleteResponse>(`/api/v1/project?aui=${aui}&projectId=${data.projectId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
