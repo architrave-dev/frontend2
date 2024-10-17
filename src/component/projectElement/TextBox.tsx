@@ -32,7 +32,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
       if (!target) return;
 
       const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        id: target.id,
+        projectElementId: target.id,
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
@@ -66,7 +66,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
       if (!targetTextBox) return;
       //target으로 UpdateProjectElementReq 를 생성 후 
       const convetedToProjectElementReq: UpdateProjectElementReq = {
-        id: target.id,
+        projectElementId: target.id,
         updateWorkReq: null,
         workAlignment: null,
         updateTextBoxReq: {

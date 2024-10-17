@@ -111,7 +111,7 @@ export interface CreateProjectElementReq {
 }
 
 export interface UpdateProjectElementReq {
-  id: string;
+  projectElementId: string;
   updateWorkReq?: UpdateWorkReq | null;
   workAlignment?: WorkAlignment | null;
   workDisplaySize?: WorkDisplaySize | null;
@@ -121,7 +121,7 @@ export interface UpdateProjectElementReq {
 }
 
 export interface RemoveProjectElementReq {
-  id: string;
+  projectElementId: string;
 }
 
 export interface UpdateProjectElementListReq {
