@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import { UpdateCareerReq } from '../../shared/store/careerStore';
 import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
+import { UpdateCareerReq } from '../../shared/dto/ReqDtoRepository';
 
 interface CareerInfoProps {
   careerId: string;

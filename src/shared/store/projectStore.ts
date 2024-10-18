@@ -1,17 +1,6 @@
 import { create } from 'zustand';
-import { ProjectElementData } from './projectElementStore';
-import { ProjectInfoData } from './projectInfoListStore';
+import { ProjectData } from '../dto/EntityRepository';
 
-
-export interface ProjectData {
-  id: string;
-  title: string;
-  description: string;
-  originUrl: string;
-  thumbnailUrl: string;
-  projectInfoList: ProjectInfoData[];
-  projectElementList: ProjectElementData[];
-}
 
 interface ProjectState {
   project: ProjectData | null;

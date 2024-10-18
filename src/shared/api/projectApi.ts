@@ -1,8 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { ProjectSimpleData } from '../store/projectListStore';
-import { ProjectData } from '../store/projectStore';
-import { ErrorResponse } from './workListApi';
+import { DeleteResponse, ErrorResponse, ProjectListResponse, ProjectResponse } from '../dto/ResDtoRepository';
+import { CreateProjectReq, RemoveProjectReq, UpdateProjectReq } from '../dto/ReqDtoRepository';
 
 const config = getConfig();
 
@@ -14,50 +13,6 @@ const projectApi = axios.create({
   },
 });
 
-export interface ProjectListResponse {
-  data: ProjectSimpleData[];
-}
-export interface CreatedProjectResponse {
-  data: ProjectSimpleData;
-}
-export interface ProjectResponse {
-  data: ProjectData;
-}
-
-export interface CreateProjectInfoReq {
-  tempId: string;
-  customName: string;
-  customValue: string;
-}
-
-export interface UpdatedProjectInfoReq {
-  id: string;
-  customName: string;
-  customValue: string;
-}
-
-export interface RemoveProjectInfoReq {
-  id: string;
-}
-
-
-export interface UpdateProjectReq {
-  id: string;
-  originUrl?: string;
-  thumbnailUrl?: string;
-  title?: string;
-  description?: string;
-  createdProjectInfoList?: CreateProjectInfoReq[];
-  updatedProjectInfoList?: UpdatedProjectInfoReq[];
-  removedProjectInfoList?: RemoveProjectInfoReq[];
-}
-
-export interface CreateProjectReq {
-  originUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  description: string;
-}
 
 export const getProjectList = async (aui: string): Promise<ProjectListResponse> => {
   try {
@@ -92,13 +47,27 @@ export const updateProject = async (aui: string, data: UpdateProjectReq): Promis
   }
 };
 
-export const createProject = async (aui: string, data: CreateProjectReq): Promise<CreatedProjectResponse> => {
+export const createProject = async (aui: string, data: CreateProjectReq): Promise<ProjectResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
     const response = await projectApi.post<ProjectResponse>(`/api/v1/project?aui=${aui}`, data, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+export const deleteProject = async (aui: string, data: RemoveProjectReq): Promise<DeleteResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await projectApi.delete<DeleteResponse>(`/api/v1/project?aui=${aui}&projectId=${data.projectId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

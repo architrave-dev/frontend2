@@ -1,15 +1,6 @@
 import { create } from 'zustand';
+import { UserData } from '../dto/EntityRepository';
 
-export interface UserData {
-  id: number;
-  email: string;
-  username: string;
-  aui: string;
-  role: string;
-}
-export interface UserDataWithRefreshToken extends UserData {
-  refreshToken: string;
-}
 
 interface AuthState {
   user: UserData | null;

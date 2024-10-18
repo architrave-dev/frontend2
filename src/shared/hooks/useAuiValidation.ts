@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAui } from './useAui';
-import { useMember } from './useMember';
+import { useMember } from './useApi/useMember';
 
 
 const isValidAui = (AUI: string | undefined): boolean => {
@@ -15,7 +15,7 @@ export const useAuiValidation = (AUI: string | undefined) => {
   const navigate = useNavigate();
   const location = useLocation();
   const errorRoute = '/error';
-  const { error, checkAui } = useMember();
+  const { checkAui } = useMember();
 
   useEffect(() => {
     const handleAui = async () => {
@@ -35,12 +35,12 @@ export const useAuiValidation = (AUI: string | undefined) => {
     handleAui();
   }, [AUI, location.pathname, navigate]);
 
-  useEffect(() => {
-    if (error) {
-      navigate('/');
-    }
+  // useEffect(() => {
+  //   if (error) {
+  //     navigate('/');
+  //   }
 
-  }, [error]);
+  // }, [error]);
 
   return AUI;
 };

@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import WorkTemp from './WorkTemp';
 import TextBoxTemp from './TextBoxTemp';
-import { DividerType } from '../../shared/Divider';
-import { CreateTextBoxReq, CreateWorkReq, ProjectElementType, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import DividerTemp from './DividerTemp';
-import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
+import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { CreateTextBoxReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export type ProjectElementTempProps = {
@@ -16,10 +16,10 @@ export type ProjectElementTempProps = {
   projectElementType: ProjectElementType;
   work: CreateWorkReq | null;
   workAlignment: WorkAlignment | null;
+  workDisplaySize: WorkDisplaySize | null;
   textBox: CreateTextBoxReq | null;
   textBoxAlignment: TextBoxAlignment | null;
   dividerType: DividerType | null;
-  // order: string;
 };
 
 const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
@@ -27,6 +27,7 @@ const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
   projectElementType,
   work,
   workAlignment,
+  workDisplaySize,
   textBox,
   textBoxAlignment,
   dividerType
@@ -35,7 +36,7 @@ const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
   const contentRouter = () => {
     switch (projectElementType) {
       case ProjectElementType.WORK:
-        return work && <WorkTemp tempId={tempId} alignment={workAlignment} data={work} />;
+        return work && <WorkTemp tempId={tempId} alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBoxTemp tempId={tempId} alignment={textBoxAlignment} data={textBox} />;
       case ProjectElementType.DIVIDER:

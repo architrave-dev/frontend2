@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { TextBoxAlignment, WorkAlignment } from '../../SelectBox';
 import { Alignment } from './HeadlessTextArea';
+import { TextBoxAlignment, WorkAlignment } from '../../../enum/EnumRepository';
 
 
 const commonTextAreaStyles = css`

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useLandingBox } from '../../shared/hooks/useLandingBox';
+import { useLandingBox } from '../../shared/hooks/useApi/useLandingBox';
 import defaultImg from '../../asset/project/default_1.png';
 import { useAui } from '../../shared/hooks/useAui';
-import { LandingBoxData } from '../../shared/store/landingBoxStore';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
-import { TextBoxAlignment } from '../../shared/component/SelectBox';
 import { TextAreaBilboard } from '../../shared/component/headless/textarea/TextAreaBody';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputBilboard } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
+import { LandingBoxData } from '../../shared/dto/EntityRepository';
+import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
 
 
 const LandingBox: React.FC = () => {
@@ -76,7 +76,8 @@ const LandingBox: React.FC = () => {
       originUrl: backgroundImageUrl,
       thumbnailUrl: thumbnailImageUrl,
       title: title,
-      description: description
+      description: description,
+      isVisible: true
     };
     try {
       await updateLandingBox(aui, updatedData);
@@ -119,7 +120,8 @@ const LandingBox: React.FC = () => {
               originUrl: backgroundImageUrl,
               thumbnailUrl: thumbnailImageUrl,
               title: title,
-              description: description
+              description: description,
+              isVisible: true
             }) &&
             <HeadlessBtn
               value={"Confirm"}

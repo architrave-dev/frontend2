@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { WorkData } from './WorkListStore';
+import { WorkData } from '../dto/EntityRepository';
 
 
 interface WorkViewState {

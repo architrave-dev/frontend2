@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Portal from '../Portal';
 import Login from '../component/auth/Login';
 import Signin from '../component/auth/SignIn';
-import { ModalType, useModalStore } from './store/portal/modalStore';
+import { useModalStore } from './store/portal/modalStore';
+import { ModalType } from './enum/EnumRepository';
 
 
 const ModalTemplate: React.FC = () => {

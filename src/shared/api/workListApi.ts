@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq, WorkData } from '../store/WorkListStore';
+import { DeleteResponse, ErrorResponse, WorkListResponse, WorkResponse } from '../dto/ResDtoRepository';
+import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../dto/ReqDtoRepository';
 
 const config = getConfig();
 
@@ -11,24 +12,6 @@ const workListApi = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-export interface WorkListResponse {
-  data: WorkData[];
-}
-
-export interface WorkResponse {
-  data: WorkData;
-}
-
-export interface DeleteResponse {
-  data: string;
-}
-
-export interface ErrorResponse {
-  errorCode: string;
-  timestamp: string;
-}
-
 
 export const getWorkList = async (aui: string): Promise<WorkListResponse> => {
   try {
@@ -73,7 +56,7 @@ export const deleteWork = async (aui: string, data: DeleteWorkReq): Promise<Dele
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workListApi.delete<DeleteResponse>(`/api/v1/work?aui=${aui}&id=${data.id}`, {
+    const response = await workListApi.delete<DeleteResponse>(`/api/v1/work?aui=${aui}&workId=${data.workId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

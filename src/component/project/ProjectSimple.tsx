@@ -3,6 +3,12 @@ import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useNavigate } from 'react-router-dom';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
+import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
+import Loading from '../../shared/component/Loading';
 
 interface ProjectSimpleProps {
   projectId: string;
@@ -21,12 +27,34 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
 }) => {
   const { aui } = useAui();
   const { isEditMode } = useEditMode();
+  const { isLoading, deleteProject } = useProjectList();
+  const { setStandardAlert } = useStandardAlertStore();
   const navigate = useNavigate();
 
   const moveToProjectDetail = () => {
     if (isEditMode) return;
     navigate(`/${aui}/projects/${initialTitle}`);
   }
+
+  const handleDelete = async () => {
+    const callback = async () => {
+      try {
+        await deleteProject(aui, { projectId });
+      } catch (err) {
+      } finally {
+      }
+    }
+    setStandardAlert({
+      type: AlertType.CONFIRM,
+      position: AlertPosition.TOP,
+      content: "Are you sure you want to delete this project?\nThe related project elements will also be deleted.",
+      callBack: callback
+    });
+  }
+
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
+
   return (
     <ProjectSimpleComp $isEditMode={isEditMode} onClick={moveToProjectDetail}>
       <ProjectSimpleInfo>
@@ -34,6 +62,13 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
         <ProjectSimpleDescription>{initialDescription}</ProjectSimpleDescription>
       </ProjectSimpleInfo>
       <ProjectRepresent $backgroundimage={initialImage} />
+      {isEditMode &&
+        <HeadlessBtn
+          value={"Delete"}
+          handleClick={handleDelete}
+          StyledBtn={BtnDelete}
+        />
+      }
     </ProjectSimpleComp>
   );
 };

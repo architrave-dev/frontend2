@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { ProjectElementListResponse, UpdateProjectElementListReq, getProjectElementList, updateProjectElementList } from '../api/projectElementApi';
-import { ProjectElementData, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../store/projectElementStore';
-import { useGlobalErrStore } from '../store/errorStore';
-import { convertStringToErrorCode } from '../api/errorCode';
+import { getProjectElementList, updateProjectElementList } from '../../api/projectElementApi';
+import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../store/projectElementStore';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
+import { ProjectElementData } from '../../dto/EntityRepository';
+import { UpdateProjectElementListReq } from '../../dto/ReqDtoRepository';
+import { ProjectElementListResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseProjectElementResult {
@@ -21,7 +24,9 @@ export const useProjectElement = (): UseProjectElementResult => {
 
   const handleProjectElementSuccess = (response: ProjectElementListResponse) => {
     const projectElementListData = response.data;
-    setProjectElementList(projectElementListData);
+    const peIndex = projectElementListData.peIndex;
+    console.log("peIndex: ", peIndex);
+    setProjectElementList(projectElementListData.projectElementList);
     clearAll();
   };
 

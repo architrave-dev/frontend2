@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { CreateProjectElementReq, ProjectElementData, RemoveProjectElementReq, UpdateProjectElementReq } from '../store/projectElementStore';
-import { ErrorResponse } from './workListApi';
+import { ErrorResponse, ProjectElementListResponse } from '../dto/ResDtoRepository';
+import { UpdateProjectElementListReq } from '../dto/ReqDtoRepository';
 
 const config = getConfig();
 
@@ -12,18 +12,6 @@ const projectElementApi = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-export interface UpdateProjectElementListReq {
-  projectId: string;
-  createProjectElements?: CreateProjectElementReq[];
-  updatedProjectElements?: UpdateProjectElementReq[];
-  removedProjectElements?: RemoveProjectElementReq[];
-}
-
-export interface ProjectElementListResponse {
-  data: ProjectElementData[];
-}
-
 
 export const getProjectElementList = async (aui: string, projectTitle: string): Promise<ProjectElementListResponse> => {
   try {

@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { WorkData } from '../../shared/store/WorkListStore';
-import { convertSizeToString } from '../../shared/store/projectElementStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import defaultImg from '../../asset/project/default_1.png';
-import { AlertPosition, AlertType, useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { WorkData, convertSizeToString } from '../../shared/dto/EntityRepository';
 
 interface WorkInfoProps {
   data: WorkData;

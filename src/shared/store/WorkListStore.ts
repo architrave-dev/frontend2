@@ -1,49 +1,7 @@
 import { create } from 'zustand';
+import { WorkData } from '../dto/EntityRepository';
 
 
-export interface SizeData {
-  width: string;
-  height: string;
-  depth?: string;
-}
-
-export interface WorkData {
-  id: string;
-  originUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  description: string;
-  size: SizeData;
-  material: string,
-  prodYear: string,
-  //genre : drawing, painting, Sculpture, Installation, Video, Photo, 
-  //Sketch or Research
-  //Price: 
-}
-
-export interface CreateWorkReq {
-  originUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  description: string;
-  size: SizeData;
-  material: string,
-  prodYear: string
-}
-
-export interface UpdateWorkReq {
-  id: string;
-  originUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  description: string;
-  size: SizeData;
-  material: string,
-  prodYear: string
-}
-export interface DeleteWorkReq {
-  id: string;
-}
 interface WorkListState {
   workList: WorkData[];
   setWorkList: (workList: WorkData[]) => void;

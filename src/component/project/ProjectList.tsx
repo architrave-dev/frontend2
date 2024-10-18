@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ProjectSimple from './ProjectSimple';
-import { useProjectList } from '../../shared/hooks/useProjectList';
+import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { CreateProjectReq, createProject } from '../../shared/api/projectApi';
+import { createProject } from '../../shared/api/projectApi';
 import { useNavigate } from 'react-router-dom';
 import Space from '../../shared/Space';
 import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Loading from '../../shared/component/Loading';
+import { CreateProjectReq } from '../../shared/dto/ReqDtoRepository';
 
 const ProjectList: React.FC = () => {
   const navigate = useNavigate();

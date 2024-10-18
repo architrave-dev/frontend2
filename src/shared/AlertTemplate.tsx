@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { AlertType, useStandardAlertStore } from './store/portal/alertStore';
+import { useStandardAlertStore } from './store/portal/alertStore';
 import Alert from '../Alert';
 import AlertComp from '../component/alert/AlertComp';
 import ConfirmComp from '../component/alert/ConfirmComp';
+import { AlertType } from './enum/EnumRepository';
 
 
 

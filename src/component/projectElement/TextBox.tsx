@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { TextBoxData, UpdateProjectElementReq, UpdateTextBoxReq, useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import SelectBox, { SelectType, TextBoxAlignment } from '../../shared/component/SelectBox';
+import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import SelectBox from '../../shared/component/SelectBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
+import { TextBoxData } from '../../shared/dto/EntityRepository';
+import { SelectType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import { UpdateProjectElementReq, UpdateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export interface TextBoxProps {
@@ -29,13 +32,13 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
       if (!target) return;
 
       const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        id: target.id,
+        projectElementId: target.id,
         updateWorkReq: null,
         workAlignment: null,
+        workDisplaySize: null,
         updateTextBoxReq: initialData,
         textBoxAlignment: value,
-        dividerType: null,
-        peOrder: target.peOrder
+        dividerType: null
       }
       setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
     }
@@ -63,7 +66,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
       if (!targetTextBox) return;
       //target으로 UpdateProjectElementReq 를 생성 후 
       const convetedToProjectElementReq: UpdateProjectElementReq = {
-        id: target.id,
+        projectElementId: target.id,
         updateWorkReq: null,
         workAlignment: null,
         updateTextBoxReq: {
@@ -71,8 +74,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
           content: targetTextBox.content
         },
         textBoxAlignment: target.textBoxAlignment,
-        dividerType: null,
-        peOrder: target.peOrder
+        dividerType: null
       }
       const newUpdateProjectElementReq: UpdateProjectElementReq = {
         ...convetedToProjectElementReq,

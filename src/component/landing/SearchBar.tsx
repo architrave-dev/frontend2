@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useMember } from '../shared/hooks/useMember';
+import { useMember } from '../../shared/hooks/useApi/useMember';
 import { useNavigate } from 'react-router-dom';
-import HeadlessInput from '../shared/component/headless/input/HeadlessInput';
-import { InputBox } from '../shared/component/headless/input/InputBody';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputBox } from '../../shared/component/headless/input/InputBody';
 
 
 const SearchBar: React.FC = () => {
-  const [aui, setAui] = useState('');
-  const { isLoading, error, checkAui, result } = useMember();
+  const [searchString, setSearchString] = useState('');
+  const { isLoading, checkAui, result } = useMember();
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    if (!aui.trim()) return;
-    checkAui(aui);
+    if (!searchString.trim()) return;
+    checkAui(searchString);
   };
 
   useEffect(() => {
-    if (result) navigate(`/${aui}`)
+    if (result) navigate(`/${searchString}`)
   }, [result])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -31,8 +31,8 @@ const SearchBar: React.FC = () => {
       <InputWrapper>
         <HeadlessInput
           type="text"
-          value={aui}
-          handleChange={(e) => setAui(e.target.value)}
+          value={searchString}
+          handleChange={(e) => setSearchString(e.target.value)}
           handleKeyBoard={handleKeyDown}
           placeholder={"Enter Artist ID"}
           StyledInput={InputBox}
@@ -41,7 +41,6 @@ const SearchBar: React.FC = () => {
           {isLoading ? 'Search...' : 'Search'}
         </Button>
       </InputWrapper>
-      {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
     </SearchWrapper>
   );
 };
@@ -50,6 +49,7 @@ const SearchWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 30px;
 `;
 
 const InputWrapper = styled.div`
@@ -70,12 +70,5 @@ const Button = styled.button`
   ${({ theme }) => theme.typography.Body_02_2};
 `;
 
-const ErrorMessage = styled.div`
-  width: 100%;
-  color: ${({ theme }) => theme.colors.color_alert_red};
-  margin-top: 10px;
-  text-align: left;
-  ${({ theme }) => theme.typography.Body_03_2};
-`;
 
 export default SearchBar;

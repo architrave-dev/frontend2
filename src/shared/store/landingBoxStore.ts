@@ -1,12 +1,6 @@
 import { create } from 'zustand';
+import { LandingBoxData } from '../dto/EntityRepository';
 
-export interface LandingBoxData {
-  id: number;
-  originUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  description: string;
-}
 interface LandingBoxState {
   landingBox: LandingBoxData | null;
   setLandingBox: (value: LandingBoxData) => void;

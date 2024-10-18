@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useGlobalErrStore } from '../store/errorStore';
 import { ErrorCode } from '../api/errorCode';
-import { useAuth } from './useAuth';
-import { AlertPosition, AlertType, useStandardAlertStore } from '../store/portal/alertStore';
+import { useAuth } from './useApi/useAuth';
+import { useStandardAlertStore } from '../store/portal/alertStore';
+import { AlertPosition, AlertType } from '../enum/EnumRepository';
 
 export const useGlobalError = () => {
   const { managedErr, clearErr } = useGlobalErrStore();
@@ -42,6 +43,30 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleNFR = async () => {
+    console.log("handleNFR: There is no data like that!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "No Data Like that.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
+  const handleNAU = async () => {
+    console.log("handleNAU: Wrong Password!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Authentication failed.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
   const handleGlobalErr = async () => {
     if (managedErr === null) {
       return;
@@ -53,6 +78,12 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.ATX:
         await handleATX();
+        break;
+      case ErrorCode.NFR:
+        await handleNFR();
+        break;
+      case ErrorCode.NAU:
+        await handleNAU();
         break;
       case ErrorCode.WEF:
       default:

@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { WorkListResponse, getWorkList, updateWork, createWork, WorkResponse, DeleteResponse, deleteWork } from '../api/workListApi';
-import { CreateWorkReq, DeleteWorkReq, useWorkListStore } from '../store/WorkListStore';
-import { UpdateWorkReq, WorkData } from '../store/WorkListStore';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../store/WorkViewStore';
-import { convertStringToErrorCode } from '../api/errorCode';
-import { useGlobalErrStore } from '../store/errorStore';
+import { getWorkList, updateWork, createWork, deleteWork } from '../../api/workListApi';
+import { useWorkListStore } from '../../store/WorkListStore';
+import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { WorkData } from '../../dto/EntityRepository';
+import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../../dto/ReqDtoRepository';
+import { DeleteResponse, WorkListResponse, WorkResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseWorkListResult {
@@ -90,7 +92,6 @@ export const useWorkList = (): UseWorkListResult => {
 
   return {
     isLoading,
-    // error: errCode,
     workList,
     getWorkList: getWorkHandler,
     updateWork: updateWorkHandler,

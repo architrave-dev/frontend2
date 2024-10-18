@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import ProjectElement from '../../component/projectElement/ProjectElement';
-import { useProjectElement } from '../../shared/hooks/useProjectElement';
+import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
 import { useParams } from 'react-router-dom';
-import { CreateProjectElementReq, ProjectElementType, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import { UpdateProjectElementListReq } from '../../shared/api/projectElementApi';
-import { useProjectDetail } from '../../shared/hooks/useProjectDetail';
+import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
-import { DividerType } from '../../shared/Divider';
 import Space from '../../shared/Space';
-import { TextBoxAlignment, WorkAlignment } from '../../shared/component/SelectBox';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
+import Loading from '../../shared/component/Loading';
 
 
 const ProjectElementList: React.FC = () => {
@@ -57,12 +57,12 @@ const ProjectElementList: React.FC = () => {
           prodYear: new Date().getFullYear().toString()
         } : null,
       workAlignment: elementType === ProjectElementType.WORK ? WorkAlignment.CENTER : null,
+      workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
       createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
         content: "This is New TextBox"
       } : null,
       textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextBoxAlignment.CENTER : null,
-      dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null,
-      peOrder: (createdProjectElements.length + projectElementList.length).toString(),
+      dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
     };
 
     setCreatedProjectElements([...createdProjectElements, newElement]);
@@ -73,6 +73,7 @@ const ProjectElementList: React.FC = () => {
 
     const updatedData: UpdateProjectElementListReq = {
       projectId: project.id,
+      peIndexList: [],
       createProjectElements: createdProjectElements,
       updatedProjectElements: updatedProjectElements,
       removedProjectElements: removedProjectElements
@@ -94,6 +95,9 @@ const ProjectElementList: React.FC = () => {
     );
   }
 
+  // 로딩 상태를 처리합니다.
+  if (isLoading) return <Loading />;
+
   return (
     <ProjectElementListComp>
       {isEditMode && isChanged() &&
@@ -110,6 +114,7 @@ const ProjectElementList: React.FC = () => {
           projectElementType={each.projectElementType}
           work={each.work}
           workAlignment={each.workAlignment}
+          workDisplaySize={each.workDisplaySize}
           textBox={each.textBox}
           textBoxAlignment={each.textBoxAlignment}
           dividerType={each.dividerType}
@@ -125,6 +130,7 @@ const ProjectElementList: React.FC = () => {
               projectElementType={each.projectElementType}
               work={each.createWorkReq}
               workAlignment={each.workAlignment}
+              workDisplaySize={each.workDisplaySize}
               textBox={each.createTextBoxReq}
               textBoxAlignment={each.textBoxAlignment}
               dividerType={each.dividerType}

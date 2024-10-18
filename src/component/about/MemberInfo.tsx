@@ -2,17 +2,18 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAui } from '../../shared/hooks/useAui';
-import { useMemberInfo } from '../../shared/hooks/useMemberInfo';
-import { MemberInfoData, useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
+import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
+import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import { TextBoxAlignment } from '../../shared/component/SelectBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaBilboard } from '../../shared/component/headless/textarea/TextAreaBody';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import defaultImg from '../../asset/project/default_1.png';
 import Loading from '../../shared/component/Loading';
+import { MemberInfoData } from '../../shared/dto/EntityRepository';
+import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
 
 
 const MemberInfo: React.FC = () => {

@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { CareerListResponse, UpdatedCareerListReq, getCareerList, updateCareerList } from '../api/careerApi';
-import { CareerData, useCareerListStore, useCareerListStoreForUpdate } from '../store/careerStore';
-import { useGlobalErrStore } from '../store/errorStore';
-import { convertStringToErrorCode } from '../api/errorCode';
+import { getCareerList, updateCareerList } from '../../api/careerApi';
+import { useCareerListStore, useCareerListStoreForUpdate } from '../../store/careerStore';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
+import { CareerData } from '../../dto/EntityRepository';
+import { UpdatedCareerListReq } from '../../dto/ReqDtoRepository';
+import { CareerListResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseCareerResult {

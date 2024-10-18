@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { LandingBoxData, useLandingBoxStore } from '../store/landingBoxStore';
-import { LandingBoxResponse, getLandingBox, updateLandingBox } from '../api/landingBoxApi';
-import { useGlobalErrStore } from '../store/errorStore';
-import { convertStringToErrorCode } from '../api/errorCode';
+import { useLandingBoxStore } from '../../store/landingBoxStore';
+import { getLandingBox, updateLandingBox } from '../../api/landingBoxApi';
+import { useGlobalErrStore } from '../../store/errorStore';
+import { convertStringToErrorCode } from '../../api/errorCode';
+import { LandingBoxData } from '../../dto/EntityRepository';
+import { LandingBoxResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseLandingBoxResult {

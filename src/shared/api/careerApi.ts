@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { CareerData, CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../store/careerStore';
-import { ErrorResponse } from './workListApi';
+import { CareerListResponse, ErrorResponse } from '../dto/ResDtoRepository';
+import { UpdatedCareerListReq } from '../dto/ReqDtoRepository';
 
 const config = getConfig();
 
@@ -12,17 +12,6 @@ const careerApi = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-export interface UpdatedCareerListReq {
-  createCareerReqList?: CreateCareerReq[];
-  updateCareerReqList?: UpdateCareerReq[];
-  removeCareerReqList?: RemoveCareerReq[];
-}
-
-export interface CareerListResponse {
-  data: CareerData[];
-}
-
 
 export const getCareerList = async (aui: string): Promise<CareerListResponse> => {
   try {

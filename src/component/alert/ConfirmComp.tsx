@@ -43,8 +43,9 @@ const Title = styled.h2`
   color: ${({ theme }) => theme.colors.color_Gray_02};
   ${({ theme }) => theme.typography.Body_01_1};
 `;
-const Content = styled.h2`
+const Content = styled.div`
   margin-bottom: 44px;
+  white-space: pre-line;
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 

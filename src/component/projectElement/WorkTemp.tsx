@@ -1,21 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CreateProjectElementReq, CreateWorkReq, SizeData, convertSizeToString, convertStringToSize, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import defaultImg from '../../asset/project/default_1.png';
-import { WorkAlignment } from '../../shared/component/SelectBox';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
+import defaultImg from '../../asset/project/default_1.png';
+import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
+import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
+import SelectBox from '../../shared/component/SelectBox';
 
 export interface WorkProps {
   tempId: string;
   alignment: WorkAlignment | null;
+  displaySize: WorkDisplaySize | null;
   data: CreateWorkReq;
 }
 
-const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, data: initialData }) => {
+const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, displaySize: initialDisplaySize, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
 
   const handleChange = (field: keyof CreateWorkReq, value: string | SizeData) => {
@@ -26,13 +30,36 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
   }
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    handleChange('thumbnailUrl', thumbnailUrl);
-    handleChange('originUrl', originUrl);
+    const updatedCreatedProjectElements = createdProjectElements.map((each) =>
+      each.tempId === tempId ? {
+        ...each,
+        createWorkReq: {
+          ...each.createWorkReq,
+          thumbnailUrl,
+          originUrl,
+        } as CreateWorkReq
+      } : each);
+    setCreatedProjectElements(updatedCreatedProjectElements);
   }
+
+  const handleSizeChange = (value: WorkDisplaySize) => {
+    const updatedProjectElementList = createdProjectElements.map(each =>
+      each.tempId === tempId ? { ...each, workDisplaySize: value } : each
+    );
+    setCreatedProjectElements(updatedProjectElementList);
+  };
   return (
     <WorkWrapper>
+      <SelectBox
+        value={initialDisplaySize || WorkDisplaySize.BIG}
+        selectType={SelectType.WORK_SIZE}
+        handleChange={handleSizeChange} />
       <ImgWrapper>
-        <WorkImage src={initialData.originUrl === '' ? defaultImg : initialData.originUrl} alt={initialData.title} />
+        <WorkImage
+          src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
+          alt={initialData.title}
+          $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
+        />
         <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
       </ImgWrapper>
       <TitleInfoWrpper>
@@ -75,6 +102,7 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
 };
 
 const WorkWrapper = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -85,9 +113,19 @@ const ImgWrapper = styled.div`
   position: relative;
 `
 
-const WorkImage = styled.img`
+const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
   max-width: 100%;
-  max-height: 90vh;
+  max-height: ${({ $displaySize }) => {
+    switch ($displaySize) {
+      case WorkDisplaySize.SMALL:
+        return '20vh';
+      case WorkDisplaySize.REGULAR:
+        return '50vh';
+      case WorkDisplaySize.BIG:
+      default:
+        return '90vh';
+    }
+  }};
   margin-bottom: 16px;
   object-fit: contain;
 `;

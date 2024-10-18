@@ -1,12 +1,7 @@
 import { create } from 'zustand';
+import { ProjectSimpleData } from '../dto/EntityRepository';
 
-export interface ProjectSimpleData {
-  id: string;
-  title: string;
-  description: string;
-  originUrl: string;
-  thumbnailUrl: string;
-}
+
 
 interface ProjectListState {
   projects: ProjectSimpleData[];

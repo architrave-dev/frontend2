@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
-import { useWorkList } from '../../shared/hooks/useWorkList';
+import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import WorkInfo from './WorkInfo';
 import ColumnInfo from './ColumnInfo';
-import { SortOrder } from '../../shared/component/SelectBox';
 import SortStation, { sortWorkList } from './SortStation';
-import { WorkData } from '../../shared/store/WorkListStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import Loading from '../../shared/component/Loading';
+import { SortOrder } from '../../shared/enum/EnumRepository';
+import { WorkData } from '../../shared/dto/EntityRepository';
 
 const WorkList: React.FC = () => {
   const { isLoading, workList, getWorkList } = useWorkList();
