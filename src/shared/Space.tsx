@@ -21,6 +21,8 @@ const SpaceComp = styled.div<{ $align?: string, $height?: string }>`
   display: flex;
   justify-content: ${({ $align }) => $align !== undefined ? $align : 'center'};
   align-items: center;
+
+  padding: 20px 0px;
 `
 
 export default Space;

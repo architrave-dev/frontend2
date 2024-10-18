@@ -4,7 +4,6 @@ import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
-import defaultImg from '../../asset/project/default_1.png';
 import { WorkData, convertSizeToString } from '../../shared/dto/EntityRepository';
 
 interface WorkInfoProps {
@@ -37,17 +36,15 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
   return (
     <WorkInfoComp onClick={handleClick}>
       <ContentWrapper $isActive={isActive}>
-        <ThumbnailBlock>
-          <WorkImage src={data.thumbnailUrl === '' ? defaultImg : data.thumbnailUrl} alt={data.title} />
-        </ThumbnailBlock>
         <TitleBlock>{data.title}</TitleBlock>
         <SizeBlock>{convertSizeToString(data.size)}</SizeBlock>
         <MaterialBlock>{data.material}</MaterialBlock>
         <ProdYearBlock>{data.prodYear}</ProdYearBlock>
         <DescriptionBlock>{data.description}</DescriptionBlock>
         <PriceBlock>-</PriceBlock>
+        <SpaceBlock />
       </ContentWrapper>
-      {isActive && <ArrowBlock>{"--------------------------------------------------->"}</ArrowBlock>}
+      {isActive && <ArrowBlock>{"--------------------->"}</ArrowBlock>}
     </WorkInfoComp>
   )
 }
@@ -60,7 +57,6 @@ const WorkInfoComp = styled.article`
   display: flex;
   cursor: pointer;
   
-  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
@@ -68,6 +64,7 @@ const WorkInfoComp = styled.article`
 const ContentWrapper = styled.div<{ $isActive: boolean }>`
   display: flex;
   width: 100%;
+  height: 40px;
   opacity: ${props => props.$isActive ? 0.5 : 1};
 `;
 
@@ -87,78 +84,81 @@ const ArrowBlock = styled.div`
   overflow: hidden;
   pointer-events: none;
 `
-const WorkImage = styled.img`
-  max-width: 100%;
-  max-height: 60px;
-  object-fit: contain;
-`;
-
-const ThumbnailBlock = styled.div`
-  width: 160px;
-  height: 80px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background-color: #ffedbf;
-  `
 
 const TitleBlock = styled.div`
-  width: 200px;
+  flex: 3.5;
 
   display: flex;
   align-items: center;
 
-  background-color: #ffcd74;
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffcd74;
 `
 
 const SizeBlock = styled.div`
-  width: 120px;
+  flex: 1.5;
 
   display: flex;
+  justify-content: center;
   align-items: center;
 
-  background-color: #ffedbf;
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffedbf;
 `
 
 const MaterialBlock = styled.div`
-  width: 100px;
+  flex: 2;
 
   display: flex;
+  justify-content: center;
   align-items: center;
 
-  background-color: #ffcd74;
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffcd74;
 `
 
 const ProdYearBlock = styled.div`
-  width: 50px;
+  flex: 0.5;
 
   display: flex;
+  justify-content: center;
   align-items: center;
 
-  background-color: #ffedbf;
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffedbf;
 `
 
 const DescriptionBlock = styled.div`
-  width: 200px;
+  flex: 2;
 
   display: flex;
+  justify-content: center;
   align-items: center;
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background-color: #ffcd74;
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffcd74;
 `
 const PriceBlock = styled.div`
-  width: 80px;
+  flex: 1.2;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffedbf;
+`
+const SpaceBlock = styled.div`
+  flex: 0.5;
+  
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background-color: #ffedbf;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_White};
 `
 
 export default WorkInfo;

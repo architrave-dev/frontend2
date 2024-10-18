@@ -4,21 +4,22 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import defaultImg from '../../asset/project/default_1.png';
-import MemberInfoEach from '../about/MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import Divider from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkDelete } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, DividerType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, DividerType, WorkAlignment } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
-import { CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
+import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
+import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
-  const { updateWork, createWork, deleteWork } = useWorkList();
+  const { updateWork, deleteWork } = useWorkList();
   const { activeWork, setActiveWork, clearActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
@@ -56,24 +57,6 @@ const WorkViewer: React.FC = () => {
     }
   };
 
-  const handleCreateWork = async () => {
-    const newWork: CreateWorkReq = {
-      originUrl: process.env.REACT_APP_DEFAULT_IMG || '',
-      thumbnailUrl: process.env.REACT_APP_DEFAULT_IMG || '',
-      title: "New Work",
-      description: "This is New Work",
-      size: {
-        width: "000",
-        height: "000"
-      },
-      material: "material",
-      prodYear: new Date().getFullYear().toString()
-    }
-    try {
-      await createWork(aui, newWork);
-    } catch (err) { };
-  };
-
   const handleDelete = async () => {
     const callback = async () => {
       try {
@@ -102,17 +85,57 @@ const WorkViewer: React.FC = () => {
 
   return (
     <WorkViewComp>
+      {isEditMode ?
+        <WorkInfoContainer>
+          <HeadlessInput
+            value={updatedActiveWork.title}
+            handleChange={(e) => handleChange("title", e.target.value)}
+            placeholder="Title"
+            StyledInput={InputWorkTitle}
+          />
+          <WorkInfo>
+            <HeadlessInput
+              value={updatedActiveWork.material}
+              placeholder={"Material"}
+              handleChange={(e) => handleChange("material", e.target.value)}
+              StyledInput={InputWork}
+            />
+            <HeadlessInput
+              value={convertSizeToString(updatedActiveWork.size)}
+              placeholder={"Size"}
+              handleChange={(e) => handleChange("size", e.target.value)}
+              StyledInput={InputWork}
+            />
+            <HeadlessInput
+              value={updatedActiveWork.prodYear}
+              placeholder={"Year"}
+              handleChange={(e) => handleChange("prodYear", e.target.value)}
+              StyledInput={InputWork}
+            />
+            <HeadlessTextArea
+              alignment={WorkAlignment.LEFT}
+              content={updatedActiveWork.description}
+              placeholder={"Description"}
+              handleChange={(e) => handleChange("description", e.target.value)}
+              StyledTextArea={TextAreaWork}
+            />
+          </WorkInfo>
+        </WorkInfoContainer> :
+        <WorkInfoContainer>
+          <Title>{updatedActiveWork.title}</Title>
+          <WorkInfo>
+            <Info>{updatedActiveWork.prodYear}</Info>
+            <Info>{updatedActiveWork.material}</Info>
+            <Info>{convertSizeToString(updatedActiveWork.size)}</Info>
+          </WorkInfo>
+          <Description>{updatedActiveWork.description}</Description>
+          <Info> - </Info>
+        </WorkInfoContainer>
+      }
       <ImgWrapper>
         <WorkImage src={updatedActiveWork.originUrl === '' ? defaultImg : updatedActiveWork.originUrl} alt={updatedActiveWork.title} />
         <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
       </ImgWrapper>
-      <Divider dividerType={DividerType.PLAIN} />
-      <MemberInfoEach name={"Title"} value={updatedActiveWork.title} handleChange={(e) => handleChange('title', e.target.value)} />
-      <MemberInfoEach name={"Size"} value={convertSizeToString(updatedActiveWork.size)} handleChange={(e) => handleChange('size', e.target.value)} />
-      <MemberInfoEach name={"Material"} value={updatedActiveWork.material} handleChange={(e) => handleChange('material', e.target.value)} />
-      <MemberInfoEach name={"Year"} value={updatedActiveWork.prodYear} handleChange={(e) => handleChange('prodYear', e.target.value)} />
-      <MemberInfoEach name={"Description"} value={updatedActiveWork.description} handleChange={(e) => handleChange('prodYear', e.target.value)} />
-
       {isEditMode &&
         <BtnContainer>
           {/* <HeadlessBtn
@@ -120,11 +143,6 @@ const WorkViewer: React.FC = () => {
           handleClick={handleDelete}
           StyledBtn={BtnCreate}
         /> */}
-          <HeadlessBtn
-            value={"Create"}
-            handleClick={handleCreateWork}
-            StyledBtn={BtnWorkDelete}
-          />
           <HeadlessBtn
             value={"Confirm"}
             handleClick={handleConfirm}
@@ -142,26 +160,70 @@ const WorkViewer: React.FC = () => {
 }
 
 const WorkViewComp = styled.section`
+  position: relative;
   width: 35vw;
   height: 100%;
+
   display: flex;
   flex-direction: column;
-  padding: 40px 6vw;
 
-  padding-top: 100px;
-  background-color: #eae7dc;
+  overflow-y: scroll; /* 넘칠 경우 스크롤 생성 */
+
+  // background-color: #eae7dc;
 `;
+
+
+
+const WorkInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px 0px;
+`
+
+const Title = styled.h2`
+  width: 100%;
+  height:28px;
+
+  display: flex;
+  align-items: center;
+
+  
+  margin-bottom: 3px;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_02_2};
+`;
+
+const WorkInfo = styled.div`
+  display: flex;
+  gap: 10px;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+`;
+
+const Info = styled.div`
+  height: 18px;
+  padding-right:4px;
+  text-align: center;
+  ${({ theme }) => theme.typography.Body_04};
+`;
+
+const Description = styled.div`
+  padding: 8px 0px;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  margin-bottom: 1px;
+  ${({ theme }) => theme.typography.Body_03_2};
+`
+
 
 const ImgWrapper = styled.div`
   position: relative;
-  height: 60vh;
+  height: fit-content;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 16px;
-  background-color: #ffedbf;
+  // background-color: #ffedbf;
 `
 
 const WorkImage = styled.img`
@@ -175,18 +237,11 @@ const WorkImage = styled.img`
 `;
 
 const BtnContainer = styled.div`
+  position: absolute;
+  width: 100%;
+
+  bottom: 0px;
   display: flex;
   justify-content: space-between;
-
-  margin-top: 30px;
 `
-
-const Description = styled.div`
-  padding: 8px 0px;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  text-align: left;
-  margin-bottom: 1px;
-  ${({ theme }) => theme.typography.Body_03_2};
-`;
-
 export default WorkViewer;
