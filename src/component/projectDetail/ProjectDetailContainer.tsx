@@ -11,9 +11,12 @@ import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfo
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
-import { DividerType } from '../../shared/enum/EnumRepository';
+import { DividerType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
 import { ProjectData } from '../../shared/dto/EntityRepository';
+import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
+import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
+import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -24,6 +27,7 @@ const ProjectDetailContainer: React.FC = () => {
   const [backgroundImageUrl, setBackgroundImageUrl] = useState("");
   const [thumbnailImageUrl, setThumbnailImageUrl] = useState("");
 
+  const { updatedProject, setUpdatedProject } = useProjectStoreForUpdate();
   const { createInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
 
   useEffect(() => {
@@ -58,7 +62,6 @@ const ProjectDetailContainer: React.FC = () => {
     }
   };
 
-  // const isChanged = (initialData: ProjectData, currentData: UpdateProjectReq): boolean => {
   const isChanged = (initialData: ProjectData): boolean => {
     const currentData = {
       id: initialData.id,
@@ -73,6 +76,7 @@ const ProjectDetailContainer: React.FC = () => {
     return (
       initialData.originUrl !== currentData.originUrl ||
       initialData.title !== currentData.title ||
+      initialData.description !== currentData.description ||
       (currentData.createdProjectInfoList?.length ?? 0) > 0 ||
       (currentData.updatedProjectInfoList?.length ?? 0) > 0 ||
       (currentData.removedProjectInfoList?.length ?? 0) > 0
@@ -99,6 +103,23 @@ const ProjectDetailContainer: React.FC = () => {
       <ProjectDetailWrapper>
         <ProjectTitle title={title} setTitle={setTitle} />
         <Divider dividerType={DividerType.PLAIN} />
+        {isEditMode ?
+          <HeadlessTextArea
+            alignment={TextBoxAlignment.LEFT}
+            content={description}
+            placeholder={"project description"}
+            handleChange={(e) => setDescription(e.target.value)}
+            StyledTextArea={TextAreaTextBox}
+          />
+          :
+          <Description $textBoxAlignment={TextBoxAlignment.LEFT}>
+            {description.split('\n').map((line, index) => (
+              <React.Fragment key={index}>
+                {line}<br />
+              </React.Fragment>
+            ))}
+          </Description>
+        }
         <ProjectInfoList />
       </ProjectDetailWrapper>
     </ProjectDetailContainerComp>
@@ -111,5 +132,14 @@ const ProjectDetailContainerComp = styled.section`
 const ProjectDetailWrapper = styled.article`
   padding: calc(8vh) calc(10vw);
 `;
+
+const Description = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
+  padding: 8px 0px;
+  margin-bottom: 50px;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
+  ${({ theme }) => theme.typography.Body_02_2};
+`;
+
 
 export default ProjectDetailContainer;
