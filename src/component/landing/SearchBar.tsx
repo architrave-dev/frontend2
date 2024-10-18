@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useMember } from '../shared/hooks/useApi/useMember';
+import { useMember } from '../../shared/hooks/useApi/useMember';
 import { useNavigate } from 'react-router-dom';
-import HeadlessInput from '../shared/component/headless/input/HeadlessInput';
-import { InputBox } from '../shared/component/headless/input/InputBody';
+import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
+import { InputBox } from '../../shared/component/headless/input/InputBody';
 
 
 const SearchBar: React.FC = () => {
@@ -49,6 +49,7 @@ const SearchWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 30px;
 `;
 
 const InputWrapper = styled.div`

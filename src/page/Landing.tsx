@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import SearchBar from '../component/SearchBar';
-import LandingLogo from '../component/LandingLogo';
+import SearchBar from '../component/landing/SearchBar';
+import Welcome from '../component/landing/Welcome';
 
 const Landing: React.FC = () => {
   return (
     <LandingContainer>
-      <LandingLogo />
+      <Welcome />
       <SearchBar />
     </LandingContainer>
   );

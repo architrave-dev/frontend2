@@ -8,15 +8,16 @@ import User from './UserComp';
 const Gnb: React.FC = () => {
   const location = useLocation();
 
-  if (location.pathname === '/') {
-    return null;
-  }
-
   return (
     <GnbSection>
       <Logo />
-      <Navigation />
-      <User />
+      {location.pathname === '/' ?
+        <></> :
+        <>
+          <Navigation />
+          <User />
+        </>
+      }
     </GnbSection>
   );
 }
