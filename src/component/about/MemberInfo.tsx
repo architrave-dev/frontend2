@@ -7,13 +7,14 @@ import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore'
 import MemberInfoEach from './MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
-import { TextAreaBilboard } from '../../shared/component/headless/textarea/TextAreaBody';
+import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import defaultImg from '../../asset/project/default_1.png';
 import Loading from '../../shared/component/Loading';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
 import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import MemberTitle from './MemberTitle';
 
 
 const MemberInfo: React.FC = () => {
@@ -43,8 +44,11 @@ const MemberInfo: React.FC = () => {
     setUpdateMemberInfoDto({ ...updateMemberInfoDto, [field]: value });
   }
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    handleChange('thumbnailUrl', thumbnailUrl);
-    handleChange('originUrl', originUrl);
+    setUpdateMemberInfoDto({
+      ...updateMemberInfoDto,
+      originUrl,
+      thumbnailUrl,
+    });
   }
 
   const isChanged = (initialData: MemberInfoData, currentData: MemberInfoData): boolean => {
@@ -62,6 +66,7 @@ const MemberInfo: React.FC = () => {
   const handleConfirm = async () => {
     if (!memberInfo) return;
     if (!updateMemberInfoDto) return;
+
     try {
       await updateMemberInfo(aui, updateMemberInfoDto);
     } catch (err) {
@@ -80,31 +85,37 @@ const MemberInfo: React.FC = () => {
           <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
         </Profile>
         <InfoContainer>
-          <MemberInfoEach name={"Name"} value={updateMemberInfoDto.name} handleChange={(e) => handleChange('name', e.target.value)} />
+          <MemberTitle
+            name={"Name"}
+            value={updateMemberInfoDto.name}
+            handleChange={(e) => handleChange('name', e.target.value)}
+          />
           <MemberInfoEach name={"Year"} value={updateMemberInfoDto.year} handleChange={(e) => handleChange('year', e.target.value)} />
           <MemberInfoEach name={"Country"} value={updateMemberInfoDto.country} handleChange={(e) => handleChange('country', e.target.value)} />
           <MemberInfoEach name={"Email"} value={updateMemberInfoDto.email} handleChange={(e) => handleChange('email', e.target.value)} />
           <MemberInfoEach name={"Contact"} value={updateMemberInfoDto.contact} handleChange={(e) => handleChange('contact', e.target.value)} />
         </InfoContainer>
       </ProfileAndInfo>
-      {isEditMode ? (
-        <HeadlessTextArea
-          alignment={TextBoxAlignment.CENTER}
-          content={updateMemberInfoDto.description}
-          placeholder="Enter description"
-          handleChange={(e) => handleChange('description', e.target.value)}
-          StyledTextArea={TextAreaBilboard}
-        />
-      ) : (
-        <Description>
-          {updateMemberInfoDto.description.split('\n').map((line, index) => (
-            <React.Fragment key={index}>
-              {line}
-              <br />
-            </React.Fragment>
-          ))}
-        </Description>
-      )}
+      <DescriptionWrapper>
+        {isEditMode ? (
+          <HeadlessTextArea
+            alignment={TextBoxAlignment.LEFT}
+            content={updateMemberInfoDto.description}
+            placeholder="Enter description"
+            handleChange={(e) => handleChange('description', e.target.value)}
+            StyledTextArea={TextAreaMemberInfo}
+          />
+        ) : (
+          <Description>
+            {updateMemberInfoDto.description.split('\n').map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
+          </Description>
+        )}
+      </DescriptionWrapper>
       {isEditMode && isChanged(memberInfo, updateMemberInfoDto) &&
         <HeadlessBtn
           value={"Confirm"}
@@ -122,9 +133,8 @@ const MemberInfoComp = styled.section`
   height: fit-content;
   display: flex;
   flex-direction: column;
-  padding:20px 6vw;
 
-  margin-top: 100px;
+  margin-top: 60px;
 `;
 const ProfileAndInfo = styled.div`
   width: 100%;
@@ -133,19 +143,19 @@ const ProfileAndInfo = styled.div`
   display: flex;
   margin-bottom: 30px;
 
-  background-color: #ffcd74;
+  // background-color: #ffcd74;
 `;
 
 const Profile = styled.div<{ $backgroundimage: string }>`
-  height: 30vh; 
-  width: calc(30vh * (3 / 4));
+  height: 28vh; 
+  width: calc(28vh * (3 / 4));
 
   background-image: url(${props => props.$backgroundimage});
   background-size: cover;
   background-position: center;
   position: relative;
 
-  margin-right: 20px;
+  margin-right: 30px;
 `;
 
 const InfoContainer = styled.div`
@@ -154,15 +164,19 @@ const InfoContainer = styled.div`
   flex-direction: column;
   justify-content: flex-end;
 
-  background-color: #ffedbf;
+  gap: 5px;
+  // background-color: #ffedbf;
 `;
 
+const DescriptionWrapper = styled.div`
+  width: 65%;
+`;
 const Description = styled.div`
   padding: 8px 0px;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
   text-align: left;
-  margin-bottom: 1px;
-  ${({ theme }) => theme.typography.Body_03_2};
+  margin-bottom: 4px;
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 

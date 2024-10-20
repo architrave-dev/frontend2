@@ -4,7 +4,6 @@ import WorkList from '../component/work/WorkList';
 import { useInitPage } from '../shared/hooks/useInitPage';
 import SortStation from '../component/work/SortStation';
 import ColumnInfo from '../component/work/ColumnInfo';
-import { useWorkListStore } from '../shared/store/WorkListStore';
 
 const Works: React.FC = () => {
   useInitPage();

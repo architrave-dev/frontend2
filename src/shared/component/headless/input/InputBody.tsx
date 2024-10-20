@@ -120,6 +120,28 @@ export const WorkViewerInfo = styled.input`
   ${({ theme }) => theme.typography.Body_04};
 `;
 
+export const MemberTitleInput = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: fit-content;
+
+  padding: 4px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.H_02};
+`;
+
+export const MemberInfoInput = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: fit-content;
+
+  padding: 5px 0px 4px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_02_1};
+`;
+
 // const commonInputStyles = css`
 //   padding: 0px 8px;
 //   background: transparent;

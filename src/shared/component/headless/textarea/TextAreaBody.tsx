@@ -45,6 +45,13 @@ export const TextAreaWorkViewer = styled.textarea<{ $alignment: Alignment }>`
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 
+export const TextAreaMemberInfo = styled.textarea<{ $alignment: Alignment }>`
+  ${commonTextAreaStyles}
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  text-align: ${({ $alignment }) => getAlignment($alignment)};
+  ${({ theme }) => theme.typography.Body_02_2};
+`;
+
 export const getAlignment = (alignment: Alignment): string => {
   switch (alignment) {
     case TextBoxAlignment.LEFT:
