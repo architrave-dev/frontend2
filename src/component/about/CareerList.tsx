@@ -6,8 +6,9 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import Loading from '../../shared/component/Loading';
-import { CareerType } from '../../shared/enum/EnumRepository';
+import { CareerType, DividerType } from '../../shared/enum/EnumRepository';
 import { CreateCareerReq, UpdatedCareerListReq } from '../../shared/dto/ReqDtoRepository';
+import Divider from '../../shared/Divider';
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -80,6 +81,7 @@ const CareerList: React.FC = () => {
       return (
         <Section key={section.type}>
           <CareerTitle>{section.title}</CareerTitle>
+          <Divider dividerType={DividerType.PLAIN} bottom={'20px'} />
           {filteredCareers.map((each) => (
             <CareerInfo
               key={each.id}
@@ -109,15 +111,17 @@ const CareerListComp = styled.section`
   height: fit-content;
   display: flex;
   flex-direction: column;
-  padding: 40px 6vw;
+  padding: 40px 0px;
 `;
 
 const Section = styled.div`
+  width: 60%;
   margin-bottom: 2rem;
 `;
 
-const CareerTitle = styled.h2`
-
+const CareerTitle = styled.h3`
+  margin-bottom: 20px;
+  ${({ theme }) => theme.typography.H_02};
 `;
 
 export default CareerList;

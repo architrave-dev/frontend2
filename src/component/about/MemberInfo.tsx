@@ -169,13 +169,13 @@ const InfoContainer = styled.div`
 `;
 
 const DescriptionWrapper = styled.div`
-  width: 65%;
+  width: 60%;
 `;
 const Description = styled.div`
   padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   text-align: left;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
   ${({ theme }) => theme.typography.Body_02_2};
 `;
 

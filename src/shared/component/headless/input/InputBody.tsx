@@ -138,6 +138,17 @@ export const MemberInfoInput = styled.input`
 
   padding: 5px 0px 4px 0px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_02_1};
+`;
+
+export const MemberInfoValue = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: fit-content;
+
+  padding: 5px 0px 4px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_02_1};
 `;
