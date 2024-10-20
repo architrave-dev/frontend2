@@ -7,20 +7,20 @@ import defaultImg from '../../asset/project/default_1.png';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
-import { BtnWorkDelete } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, DividerType, WorkAlignment } from '../../shared/enum/EnumRepository';
+import { BtnWorkDelete, BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
+import { AlertPosition, AlertType, WorkAlignment } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
-import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
-import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
+import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
+import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
   const { updateWork, deleteWork } = useWorkList();
-  const { activeWork, setActiveWork, clearActiveWork } = useWorkViewStore();
+  const { activeWork, clearActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
 
@@ -91,45 +91,52 @@ const WorkViewer: React.FC = () => {
             value={updatedActiveWork.title}
             handleChange={(e) => handleChange("title", e.target.value)}
             placeholder="Title"
-            StyledInput={InputWorkTitle}
+            StyledInput={WorkViewerTitle}
           />
           <WorkInfo>
+            <HeadlessInput
+              value={updatedActiveWork.prodYear}
+              placeholder={"Year"}
+              handleChange={(e) => handleChange("prodYear", e.target.value)}
+              StyledInput={WorkViewerInfo}
+            />
             <HeadlessInput
               value={updatedActiveWork.material}
               placeholder={"Material"}
               handleChange={(e) => handleChange("material", e.target.value)}
-              StyledInput={InputWork}
+              StyledInput={WorkViewerInfo}
             />
             <HeadlessInput
               value={convertSizeToString(updatedActiveWork.size)}
               placeholder={"Size"}
               handleChange={(e) => handleChange("size", e.target.value)}
-              StyledInput={InputWork}
-            />
-            <HeadlessInput
-              value={updatedActiveWork.prodYear}
-              placeholder={"Year"}
-              handleChange={(e) => handleChange("prodYear", e.target.value)}
-              StyledInput={InputWork}
-            />
-            <HeadlessTextArea
-              alignment={WorkAlignment.LEFT}
-              content={updatedActiveWork.description}
-              placeholder={"Description"}
-              handleChange={(e) => handleChange("description", e.target.value)}
-              StyledTextArea={TextAreaWork}
+              StyledInput={WorkViewerInfo}
             />
           </WorkInfo>
+          <HeadlessTextArea
+            alignment={WorkAlignment.LEFT}
+            content={updatedActiveWork.description}
+            placeholder={"Description"}
+            handleChange={(e) => handleChange("description", e.target.value)}
+            StyledTextArea={TextAreaWorkViewer}
+          />
         </WorkInfoContainer> :
         <WorkInfoContainer>
           <Title>{updatedActiveWork.title}</Title>
           <WorkInfo>
             <Info>{updatedActiveWork.prodYear}</Info>
+            <DividerSmall>|</DividerSmall>
             <Info>{updatedActiveWork.material}</Info>
+            <DividerSmall>|</DividerSmall>
             <Info>{convertSizeToString(updatedActiveWork.size)}</Info>
           </WorkInfo>
-          <Description>{updatedActiveWork.description}</Description>
-          <Info> - </Info>
+          <Description>
+            {updatedActiveWork.description.split('\n').map((line, index) => (
+              <React.Fragment key={index}>
+                {line}<br />
+              </React.Fragment>
+            ))}
+          </Description>
         </WorkInfoContainer>
       }
       <ImgWrapper>
@@ -138,20 +145,15 @@ const WorkViewer: React.FC = () => {
       </ImgWrapper>
       {isEditMode &&
         <BtnContainer>
-          {/* <HeadlessBtn
-          value={"Full"}
-          handleClick={handleDelete}
-          StyledBtn={BtnCreate}
-        /> */}
           <HeadlessBtn
             value={"Confirm"}
             handleClick={handleConfirm}
-            StyledBtn={BtnWorkDelete}
+            StyledBtn={BtnWorkViewer}
           />
           <HeadlessBtn
             value={"Delete"}
             handleClick={handleDelete}
-            StyledBtn={BtnWorkDelete}
+            StyledBtn={BtnWorkViewer}
           />
         </BtnContainer>
       }
@@ -168,6 +170,9 @@ const WorkViewComp = styled.section`
   flex-direction: column;
 
   overflow-y: scroll; /* 넘칠 경우 스크롤 생성 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   // background-color: #eae7dc;
 `;
@@ -178,7 +183,8 @@ const WorkInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 20px 0px;
+  padding-top: 10px;
+  padding-bottom: 16px;
 `
 
 const Title = styled.h2`
@@ -187,8 +193,8 @@ const Title = styled.h2`
 
   display: flex;
   align-items: center;
-
   
+  padding-bottom: 1px;
   margin-bottom: 3px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_02_2};
@@ -203,14 +209,21 @@ const WorkInfo = styled.div`
 const Info = styled.div`
   height: 18px;
   padding-right:4px;
+  margin-bottom: 1px;
   text-align: center;
   ${({ theme }) => theme.typography.Body_04};
 `;
 
+const DividerSmall = styled.span`
+  height: 18px;
+  padding-right:4px;
+  color: ${({ theme }) => theme.colors.color_Gray_05};
+  ${({ theme }) => theme.typography.Body_04};
+`;
+
 const Description = styled.div`
-  padding: 8px 0px;
+  padding: 6px 0 9px 0;
   color: ${({ theme }) => theme.colors.color_Gray_04};
-  margin-bottom: 1px;
   ${({ theme }) => theme.typography.Body_03_2};
 `
 

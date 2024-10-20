@@ -96,3 +96,37 @@ export const InputWorkName = styled.input`
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
+
+export const WorkViewerTitle = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height:28px;
+
+  padding: 0px;
+  margin-bottom: 2px;
+
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_03};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_02_2};
+`;
+
+export const WorkViewerInfo = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: 18px;
+
+  padding: 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_04};
+`;
+
+// const commonInputStyles = css`
+//   padding: 0px 8px;
+//   background: transparent;
+//   border: none;
+//   outline: none;
+//   color: ${({ theme }) => theme.colors.color_Gray_04};
+//   &:focus {
+//     outline: none;
+//   }
+// `;

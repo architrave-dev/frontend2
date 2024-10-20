@@ -44,7 +44,7 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
         <PriceBlock>-</PriceBlock>
         <SpaceBlock />
       </ContentWrapper>
-      {isActive && <ArrowBlock>{"--------------------->"}</ArrowBlock>}
+      {isActive && <ArrowBlock>{"----->"}</ArrowBlock>}
     </WorkInfoComp>
   )
 }
@@ -71,7 +71,7 @@ const ContentWrapper = styled.div<{ $isActive: boolean }>`
 const ArrowBlock = styled.div`
   position: absolute;
   top: 0;
-  right: 0;
+  right: 1vw;
   
   width: 100%;
   height: 100%;

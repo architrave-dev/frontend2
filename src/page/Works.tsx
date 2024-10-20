@@ -4,16 +4,15 @@ import WorkList from '../component/work/WorkList';
 import { useInitPage } from '../shared/hooks/useInitPage';
 import SortStation from '../component/work/SortStation';
 import ColumnInfo from '../component/work/ColumnInfo';
-import { SortOrder } from '../shared/enum/EnumRepository';
+import { useWorkListStore } from '../shared/store/WorkListStore';
 
 const Works: React.FC = () => {
   useInitPage();
 
-  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.TITLE_ASC);
 
   return (
     <WorkContainer>
-      <SortStation setSortOrder={setSortOrder} />
+      <SortStation />
       <ColumnInfo />
       <WorkListContainer>
         <WorkList />

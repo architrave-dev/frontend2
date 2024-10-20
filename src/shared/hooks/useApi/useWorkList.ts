@@ -7,6 +7,7 @@ import { useGlobalErrStore } from '../../store/errorStore';
 import { WorkData } from '../../dto/EntityRepository';
 import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../../dto/ReqDtoRepository';
 import { DeleteResponse, WorkListResponse, WorkResponse } from '../../dto/ResDtoRepository';
+import { SortOrder } from '../../enum/EnumRepository';
 
 
 interface UseWorkListResult {
