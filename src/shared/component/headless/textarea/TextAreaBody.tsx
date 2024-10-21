@@ -15,7 +15,7 @@ const commonTextAreaStyles = css`
     outline: none;
   }
 `;
-export const TextAreaBilboard = styled.textarea<{ $alignment: Alignment }>`
+export const TextAreaBillboard = styled.textarea<{ $alignment: Alignment }>`
   ${commonTextAreaStyles}
   width: 60%;
   min-height: 7vh;

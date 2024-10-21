@@ -48,7 +48,7 @@ export const InputWorkTitle = styled.input`
   text-align: center;
   ${({ theme }) => theme.typography.Body_02_2};
 `;
-export const InputBilboard = styled.input`
+export const InputBillboard = styled.input`
   ${commonInputStyles}
   width: 70%;
   color: ${({ theme }) => theme.colors.color_Gray_01};

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { CountryType } from '../enum/EnumRepository';
 import { MemberInfoData } from '../dto/EntityRepository';
 
 

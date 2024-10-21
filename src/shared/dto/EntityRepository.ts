@@ -16,7 +16,7 @@ export interface UserDataWithRefreshToken extends UserData {
   refreshToken: string;
 }
 
-export interface LandingBoxData {
+export interface BillboardData {
   id: number;
   originUrl: string;
   thumbnailUrl: string;

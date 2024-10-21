@@ -1,12 +1,12 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { ErrorResponse, LandingBoxResponse } from '../dto/ResDtoRepository';
-import { LandingBoxData } from '../dto/EntityRepository';
+import { ErrorResponse, BillboardResponse } from '../dto/ResDtoRepository';
+import { BillboardData } from '../dto/EntityRepository';
 
 
 const config = getConfig();
 
-const langingBoxApi = axios.create({
+const billboardApi = axios.create({
   // baseURL: API_BASE_URL,
   baseURL: config.apiBaseUrl,
   headers: {
@@ -15,22 +15,22 @@ const langingBoxApi = axios.create({
 });
 
 
-export const getLandingBox = async (aui: string): Promise<LandingBoxResponse> => {
+export const getBillboard = async (aui: string): Promise<BillboardResponse> => {
   try {
-    const response = await langingBoxApi.get<LandingBoxResponse>(`/api/v1/landing-box?aui=${aui}`);
+    const response = await billboardApi.get<BillboardResponse>(`/api/v1/billboard?aui=${aui}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
   }
 };
 
-export const updateLandingBox = async (aui: string, data: LandingBoxData): Promise<LandingBoxResponse> => {
+export const updateBillboard = async (aui: string, data: BillboardData): Promise<BillboardResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await langingBoxApi.put<LandingBoxResponse>(`/api/v1/landing-box?aui=${aui}`, data, {
+    const response = await billboardApi.put<BillboardResponse>(`/api/v1/billboard?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -49,4 +49,4 @@ const handleApiError = (error: unknown): Error => {
   return new Error('An unexpected error occurred');
 };
 
-export default langingBoxApi;
+export default billboardApi;
