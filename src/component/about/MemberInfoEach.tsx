@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import { InputWorkName, MemberInfoInput } from '../../shared/component/headless/input/InputBody';
+import { MemberInfoValue } from '../../shared/component/headless/input/InputBody';
 
 
 
@@ -25,7 +25,7 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
           value={value.toString()}
           placeholder={"Enter value"}
           handleChange={handleChange}
-          StyledInput={MemberInfoInput}
+          StyledInput={MemberInfoValue}
         /> :
         <ValueSection>{value}</ValueSection>
       }

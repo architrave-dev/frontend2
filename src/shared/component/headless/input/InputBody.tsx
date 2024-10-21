@@ -149,17 +149,6 @@ export const MemberInfoValue = styled.input`
 
   padding: 5px 0px 4px 0px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-  color: ${({ theme }) => theme.colors.color_Gray_03};
+  color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_02_1};
 `;
-
-// const commonInputStyles = css`
-//   padding: 0px 8px;
-//   background: transparent;
-//   border: none;
-//   outline: none;
-//   color: ${({ theme }) => theme.colors.color_Gray_04};
-//   &:focus {
-//     outline: none;
-//   }
-// `;

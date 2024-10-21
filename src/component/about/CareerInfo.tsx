@@ -87,7 +87,7 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
                 StyledInput={MemberInfoInput}
               />
             </InputWrapper>
-            <YearDivider> - </YearDivider>
+            {/* <YearDivider> - </YearDivider>
             <InputWrapper>
               <HeadlessInput
                 value={initialYearTo.toString()}
@@ -95,7 +95,7 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
                 handleChange={(e) => handleChange("yearTo", e.target.value)}
                 StyledInput={MemberInfoInput}
               />
-            </InputWrapper>
+            </InputWrapper> */}
           </YearSection>
           <HeadlessInput
             value={initialContent}
@@ -113,8 +113,12 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
         <>
           <YearSection>
             <Year>{initialYearFrom}</Year>
-            <YearDivider> - </YearDivider>
-            <Year>{initialYearTo}</Year>
+            {/* {initialYearTo &&
+              <>
+                <YearDivider> - </YearDivider>
+                <Year>{initialYearTo}</Year>
+              </>
+            } */}
           </YearSection>
           <Content>{initialContent}</Content>
         </>
@@ -134,7 +138,8 @@ const YearSection = styled.div`
   display: flex;
 
   
-  width: 13vw;
+  // width: 13vw;  //날짜가 2개일 경우
+  width: 4vw;  //날짜가 1개일 경우
   color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_02_2};
 `;
@@ -145,12 +150,14 @@ padding: 5px 0px;
 `;
 
 const Year = styled.div`
-width: 40%;
+  // width: 40%;  //날짜가 2개일 경우
+  width: 100%;  //날짜가 1개일 경우
   padding: 5px 0px;
 `;
 
 const InputWrapper = styled.div`
-width: 40%;
+// width: 40%;   //날짜가 2개일 경우
+width: 100%;   //날짜가 2개일 경우
 `;
 
 

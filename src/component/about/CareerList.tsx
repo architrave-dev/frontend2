@@ -33,7 +33,7 @@ const CareerList: React.FC = () => {
 
   const handleCreateElement = (careerType: CareerType) => {
     const newElement: CreateCareerReq = {
-      tempId: Math.floor(Math.random() * 100) + "",
+      tempId: Math.floor(Math.random() * 1000) + "",
       careerType,
       yearFrom: 2024,
       yearTo: 2024,
