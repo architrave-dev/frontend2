@@ -134,6 +134,7 @@ export interface UpdateProjectElementListReq {
 
 //-------------- Career
 export interface CreateCareerReq {
+  tempId: string;
   careerType: CareerType
   yearFrom: number;
   yearTo: number;

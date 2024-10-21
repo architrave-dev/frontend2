@@ -9,6 +9,10 @@ import Loading from '../../shared/component/Loading';
 import { CareerType, DividerType } from '../../shared/enum/EnumRepository';
 import { CreateCareerReq, UpdatedCareerListReq } from '../../shared/dto/ReqDtoRepository';
 import Divider from '../../shared/Divider';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import Space from '../../shared/Space';
+import CareerInfoTemp from './CareerInfoTemp';
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -29,10 +33,11 @@ const CareerList: React.FC = () => {
 
   const handleCreateElement = (careerType: CareerType) => {
     const newElement: CreateCareerReq = {
+      tempId: Math.floor(Math.random() * 100) + "",
       careerType,
       yearFrom: 2024,
       yearTo: 2024,
-      content: "Hello"
+      content: ""
     };
 
     setCreatedCareers([...createdCareers, newElement]);
@@ -75,6 +80,7 @@ const CareerList: React.FC = () => {
 
     return careerSections.map((section) => {
       const filteredCareers = careerList.filter((each) => each.careerType === section.type);
+      const filteredCreatedCareers = createdCareers.filter((each) => each.careerType === section.type);
 
       if (filteredCareers.length === 0) return null;
 
@@ -82,6 +88,15 @@ const CareerList: React.FC = () => {
         <Section key={section.type}>
           <CareerTitle>{section.title}</CareerTitle>
           <Divider dividerType={DividerType.PLAIN} bottom={'20px'} />
+          {filteredCreatedCareers.map((each) => (
+            <CareerInfoTemp
+              key={each.tempId}
+              tempId={each.tempId}
+              initialContent={each.content}
+              initialYearFrom={each.yearFrom}
+              initialYearTo={each.yearTo}
+            />
+          ))}
           {filteredCareers.map((each) => (
             <CareerInfo
               key={each.id}
@@ -102,6 +117,34 @@ const CareerList: React.FC = () => {
   return (
     <CareerListComp>
       {renderCareerSections()}
+      {isEditMode &&
+        <Space $align={"center"} $height={"calc(6vw)"}>
+          <CreateButtonGroup>
+            <HeadlessBtn
+              value={"Education"}
+              handleClick={() => handleCreateElement(CareerType.EDU)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Exhibition Solo"}
+              handleClick={() => handleCreateElement(CareerType.S_EXH)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Exhibition Group"}
+              handleClick={() => handleCreateElement(CareerType.G_EXH)}
+              StyledBtn={BtnCreate}
+            />
+          </CreateButtonGroup>
+        </Space>
+      }
+      {isEditMode && isChanged() &&
+        <HeadlessBtn
+          value={"Confirm"}
+          handleClick={handleConfirm}
+          StyledBtn={BtnConfirm}
+        />
+      }
     </CareerListComp>
   );
 }
@@ -115,6 +158,7 @@ const CareerListComp = styled.section`
 `;
 
 const Section = styled.div`
+  position: relative;
   width: 60%;
   margin-bottom: 2rem;
 `;
@@ -122,6 +166,12 @@ const Section = styled.div`
 const CareerTitle = styled.h3`
   margin-bottom: 20px;
   ${({ theme }) => theme.typography.H_02};
+`;
+
+const CreateButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 `;
 
 export default CareerList;

@@ -84,7 +84,6 @@ const ProjectElementList: React.FC = () => {
     } finally {
       setEditMode(false);
     }
-
   }
 
   const isChanged = (): boolean => {

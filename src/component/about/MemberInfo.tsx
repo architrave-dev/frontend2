@@ -164,7 +164,7 @@ const InfoContainer = styled.div`
   flex-direction: column;
   justify-content: flex-end;
 
-  gap: 5px;
+  gap: 4px;
   // background-color: #ffedbf;
 `;
 
