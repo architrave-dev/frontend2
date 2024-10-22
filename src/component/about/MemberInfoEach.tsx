@@ -17,17 +17,18 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
 }) => {
 
   const { isEditMode } = useEditMode();
+
   return (
     <Info>
       <NameSection>{name}</NameSection>
       {isEditMode ?
         <HeadlessInput
-          value={value.toString()}
+          value={value ? value : ''}
           placeholder={"Enter value"}
           handleChange={handleChange}
           StyledInput={MemberInfoValue}
         /> :
-        <ValueSection>{value}</ValueSection>
+        <ValueSection>{value ? value : "Fill this feild"}</ValueSection>
       }
     </Info>
   );

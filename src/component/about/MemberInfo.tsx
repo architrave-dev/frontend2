@@ -6,15 +6,13 @@ import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
 import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
-import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import defaultImg from '../../asset/project/default_1.png';
 import Loading from '../../shared/component/Loading';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
-import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
 import MemberTitle from './MemberTitle';
+import MoleculeDescription from '../../shared/molecule/MoleculeDescription';
 
 
 const MemberInfo: React.FC = () => {
@@ -51,15 +49,15 @@ const MemberInfo: React.FC = () => {
     });
   }
 
-  const isChanged = (initialData: MemberInfoData, currentData: MemberInfoData): boolean => {
+  const isChanged = (): boolean => {
     return (
-      initialData.originUrl !== currentData.originUrl ||
-      initialData.name !== currentData.name ||
-      initialData.year !== currentData.year ||
-      initialData.country !== currentData.country ||
-      initialData.email !== currentData.email ||
-      initialData.contact !== currentData.contact ||
-      initialData.description !== currentData.description
+      memberInfo.originUrl !== updateMemberInfoDto.originUrl ||
+      memberInfo.name !== updateMemberInfoDto.name ||
+      memberInfo.year !== updateMemberInfoDto.year ||
+      memberInfo.country !== updateMemberInfoDto.country ||
+      memberInfo.email !== updateMemberInfoDto.email ||
+      memberInfo.contact !== updateMemberInfoDto.contact ||
+      memberInfo.description !== updateMemberInfoDto.description
     );
   };
 
@@ -86,7 +84,6 @@ const MemberInfo: React.FC = () => {
         </Profile>
         <InfoContainer>
           <MemberTitle
-            name={"Name"}
             value={updateMemberInfoDto.name}
             handleChange={(e) => handleChange('name', e.target.value)}
           />
@@ -97,26 +94,12 @@ const MemberInfo: React.FC = () => {
         </InfoContainer>
       </ProfileAndInfo>
       <DescriptionWrapper>
-        {isEditMode ? (
-          <HeadlessTextArea
-            alignment={TextBoxAlignment.LEFT}
-            content={updateMemberInfoDto.description}
-            placeholder="Enter description"
-            handleChange={(e) => handleChange('description', e.target.value)}
-            StyledTextArea={TextAreaMemberInfo}
-          />
-        ) : (
-          <Description>
-            {updateMemberInfoDto.description.split('\n').map((line, index) => (
-              <React.Fragment key={index}>
-                {line}
-                <br />
-              </React.Fragment>
-            ))}
-          </Description>
-        )}
+        <MoleculeDescription
+          value={updateMemberInfoDto.description}
+          handleChange={(e) => handleChange('description', e.target.value)}
+        />
       </DescriptionWrapper>
-      {isEditMode && isChanged(memberInfo, updateMemberInfoDto) &&
+      {isEditMode && isChanged() &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
@@ -171,14 +154,6 @@ const InfoContainer = styled.div`
 const DescriptionWrapper = styled.div`
   width: 60%;
 `;
-const Description = styled.div`
-  padding: 8px 0px;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  text-align: left;
-  margin-bottom: 5px;
-  ${({ theme }) => theme.typography.Body_02_2};
-`;
-
 
 
 export default MemberInfo;

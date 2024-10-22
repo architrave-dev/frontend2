@@ -4,7 +4,7 @@ type StyledInputComponent = React.ComponentType<React.InputHTMLAttributes<HTMLIn
 
 interface HeadlessInputProps {
   type?: string;
-  value: string;
+  value: string | number;
   placeholder: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleKeyBoard?: (e: React.KeyboardEvent<HTMLInputElement>) => void;

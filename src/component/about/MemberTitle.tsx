@@ -7,13 +7,12 @@ import { MemberTitleInput } from '../../shared/component/headless/input/InputBod
 
 
 export interface MemberTitleProps {
-  name: string;
   value: string | number;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const MemberTitle: React.FC<MemberTitleProps> = ({
-  name, value, handleChange
+  value, handleChange
 }) => {
 
   const { isEditMode } = useEditMode();
@@ -21,12 +20,12 @@ const MemberTitle: React.FC<MemberTitleProps> = ({
     <Info>
       {isEditMode ?
         <HeadlessInput
-          value={value.toString()}
+          value={value}
           placeholder={"Enter value"}
           handleChange={handleChange}
           StyledInput={MemberTitleInput}
         /> :
-        <ValueSection>{value}</ValueSection>
+        <ValueSection>{value ? value : "Name"}</ValueSection>
       }
     </Info>
   );
