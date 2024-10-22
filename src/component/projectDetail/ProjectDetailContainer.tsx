@@ -13,73 +13,63 @@ import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
 import { DividerType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
-import { ProjectData } from '../../shared/dto/EntityRepository';
+import { IndexData, ProjectData } from '../../shared/dto/EntityRepository';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
-  const { aui } = useAui();
   const { isLoading, project, updateProject } = useProjectDetail();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [backgroundImageUrl, setBackgroundImageUrl] = useState("");
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState("");
+  const { updatedProjectDto, setUpdatedProjectDto } = useProjectStoreForUpdate();
+  const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
 
-  const { updatedProject, setUpdatedProject } = useProjectStoreForUpdate();
-  const { createInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
+  const { aui } = useAui();
 
-  useEffect(() => {
-    if (project) {
-      setTitle(project.title);
-      setDescription(project.description);
-      setBackgroundImageUrl(project.originUrl);
-      setThumbnailImageUrl(project.thumbnailUrl);
-    }
-  }, [project]);
 
+  if (!project || !updatedProjectDto) {
+    return null;
+  }
+  const convertToPiIndexList = (): IndexData[] => {
+    return [];
+  }
   const handleConfirm = async () => {
     if (!project) return;
+    if (!updatedProjectDto) return;
 
-    const updatedData: UpdateProjectReq = {
-      id: project.id,
-      originUrl: backgroundImageUrl,
-      thumbnailUrl: thumbnailImageUrl,
-      title: title,
-      description: description,
-      piIndexList: [],  //이걸 어쩌나...
-      createdProjectInfoList: createInfoList,
-      updatedProjectInfoList: updateInfoList,
-      removedProjectInfoList: removeInfoList,
-    };
-
+    const newUpdateProjectReq: UpdateProjectReq = {
+      ...updatedProjectDto,
+      piIndexList: convertToPiIndexList(),
+      createdProjectInfoList: createPiList,
+      updatedProjectInfoList: updatePiList,
+      removedProjectInfoList: removePiList
+    }
     try {
-      await updateProject(aui, updatedData);
+      await updateProject(aui, newUpdateProjectReq);
     } catch (err) {
     } finally {
       setEditMode(false);
     }
   };
 
-  const isChanged = (initialData: ProjectData): boolean => {
-    const currentData = {
-      id: initialData.id,
-      originUrl: backgroundImageUrl,
-      thumbnailUrl: thumbnailImageUrl,
-      title: title,
-      description: description,
-      createdProjectInfoList: createInfoList,
-      updatedProjectInfoList: updateInfoList,
-      removedProjectInfoList: removeInfoList
-    };
+  const handleChange = (field: keyof ProjectData, value: string) => {
+    setUpdatedProjectDto({ ...updatedProjectDto, [field]: value });
+  }
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    setUpdatedProjectDto({
+      ...updatedProjectDto,
+      originUrl,
+      thumbnailUrl
+    });
+  }
+  const isChanged = (): boolean => {
     return (
-      initialData.originUrl !== currentData.originUrl ||
-      initialData.title !== currentData.title ||
-      initialData.description !== currentData.description ||
-      (currentData.createdProjectInfoList?.length ?? 0) > 0 ||
-      (currentData.updatedProjectInfoList?.length ?? 0) > 0 ||
-      (currentData.removedProjectInfoList?.length ?? 0) > 0
+      project.originUrl !== updatedProjectDto.originUrl ||
+      project.title !== updatedProjectDto.title ||
+      project.description !== updatedProjectDto.description ||
+      (createPiList.length ?? 0) > 0 ||
+      (updatePiList.length ?? 0) > 0 ||
+      (removePiList.length ?? 0) > 0
     );
   };
 
@@ -88,32 +78,28 @@ const ProjectDetailContainer: React.FC = () => {
 
   return (
     <ProjectDetailContainerComp>
-      {isEditMode && project && isChanged(project) &&
+      {isEditMode && project && isChanged() &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
           StyledBtn={BtnConfirm}
         />
       }
-      <RepresentImg
-        backgroundImg={backgroundImageUrl}
-        setBackgroundImg={setBackgroundImageUrl}
-        setThumbnailImg={setThumbnailImageUrl}
-      />
+      <RepresentImg backgroundImg={updatedProjectDto.originUrl} />
       <ProjectDetailWrapper>
-        <ProjectTitle title={title} setTitle={setTitle} />
+        <ProjectTitle title={updatedProjectDto.title} handleChange={(e) => handleChange('title', e.target.value)} />
         <Divider dividerType={DividerType.PLAIN} />
         {isEditMode ?
           <HeadlessTextArea
             alignment={TextBoxAlignment.LEFT}
-            content={description}
+            content={updatedProjectDto.description}
             placeholder={"project description"}
-            handleChange={(e) => setDescription(e.target.value)}
+            handleChange={(e) => handleChange('description', e.target.value)}
             StyledTextArea={TextAreaTextBox}
           />
           :
           <Description $textBoxAlignment={TextBoxAlignment.LEFT}>
-            {description.split('\n').map((line, index) => (
+            {updatedProjectDto.description.split('\n').map((line, index) => (
               <React.Fragment key={index}>
                 {line}<br />
               </React.Fragment>

@@ -13,11 +13,11 @@ export const useProjectStore = create<ProjectState>((set) => ({
 }));
 
 interface ProjectStateForUpdate {
-  updatedProject: ProjectData | null;
-  setUpdatedProject: (updatedProject: ProjectData) => void;
+  updatedProjectDto: ProjectData | null;
+  setUpdatedProjectDto: (updatedProjectDto: ProjectData) => void;
 }
 
 export const useProjectStoreForUpdate = create<ProjectStateForUpdate>((set) => ({
-  updatedProject: null,
-  setUpdatedProject: (updatedProject) => set({ updatedProject }),
+  updatedProjectDto: null,
+  setUpdatedProjectDto: (updatedProjectDto) => set({ updatedProjectDto }),
 }));

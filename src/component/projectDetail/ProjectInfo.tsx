@@ -21,20 +21,20 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   initialCustomValue }) => {
   const { isEditMode } = useEditMode();
   const { projectInfoList, setProjectInfoList } = useProjectInfoListStore();
-  const { updateInfoList, setUpdateInfoList, removeInfoList, setRemoveInfoList } = useProjectInfoListStoreForUpdate();
+  const { updatePiList, setUpdatePiList, removePiList, setRemovePiList } = useProjectInfoListStoreForUpdate();
 
 
   const handleChange = (field: keyof UpdatedProjectInfoReq, value: string) => {
 
-    const targetElement = updateInfoList.find(info => info.id === projectInfoId);
+    const targetElement = updatePiList.find(info => info.id === projectInfoId);
     if (targetElement) {
-      //updateInfoList에 있다면
-      const updatedProjectInfoList = updateInfoList.map(each =>
+      //updatePiList에 있다면
+      const updatedProjectInfoList = updatePiList.map(each =>
         each.id === projectInfoId ? { ...each, [field]: value } : each
       )
-      setUpdateInfoList(updatedProjectInfoList);
+      setUpdatePiList(updatedProjectInfoList);
     } else {
-      //updateInfoList에 없다면
+      //updatePiList에 없다면
       const target = projectInfoList.find(info => info.id === projectInfoId);
       if (!target) return;
 
@@ -42,7 +42,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
         ...target,
         [field]: value
       };
-      setUpdateInfoList([...updateInfoList, newUpdatedProjectInfoReq]);
+      setUpdatePiList([...updatePiList, newUpdatedProjectInfoReq]);
     }
     const updatedProjectInfoList: ProjectInfoData[] = projectInfoList.map(each =>
       each.id === projectInfoId ? { ...each, [field]: value } : each
@@ -53,19 +53,19 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
 
   const handleDelete = () => {
     //이미 update 된 애들일 수도 있어.
-    //projectInfoList, updateInfoList에서 찾아서 없애고, 
+    //projectInfoList, updatePiList에서 찾아서 없애고, 
     //removeInfoList에 추가하기.
-    const targetElement = updateInfoList.find(each => each.id === projectInfoId);
+    const targetElement = updatePiList.find(each => each.id === projectInfoId);
     if (targetElement) {
-      const updatedInfoList = updateInfoList.filter((each) => each.id !== projectInfoId)
-      setUpdateInfoList(updatedInfoList);
+      const updatedInfoList = updatePiList.filter((each) => each.id !== projectInfoId)
+      setUpdatePiList(updatedInfoList);
     }
 
     const updatedProjectInfoList = projectInfoList.filter((each) => each.id !== projectInfoId)
     setProjectInfoList(updatedProjectInfoList);
 
     const newRemoveInfo: RemoveProjectInfoReq = { id: projectInfoId };
-    setRemoveInfoList([...removeInfoList, newRemoveInfo]);
+    setRemovePiList([...removePiList, newRemoveInfo]);
   }
 
   return (

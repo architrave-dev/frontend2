@@ -64,10 +64,10 @@ export interface CreateProjectReq {
 
 export interface UpdateProjectReq {
   id: string;
-  originUrl?: string;
-  thumbnailUrl?: string;
   title?: string;
   description?: string;
+  originUrl?: string;
+  thumbnailUrl?: string;
   piIndexList: IndexData[];
   createdProjectInfoList?: CreateProjectInfoReq[];
   updatedProjectInfoList?: UpdatedProjectInfoReq[];

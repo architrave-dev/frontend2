@@ -6,15 +6,12 @@ import { InputTitle } from '../../shared/component/headless/input/InputBody';
 
 interface ProjectTitleProps {
   title: string;
-  setTitle: (value: string) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ProjectTitle: React.FC<ProjectTitleProps> = ({ title, setTitle }) => {
+const ProjectTitle: React.FC<ProjectTitleProps> = ({ title, handleChange }) => {
   const { isEditMode } = useEditMode();
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
 
   return (
     <>
@@ -22,7 +19,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({ title, setTitle }) => {
         <HeadlessInput
           type={'text'}
           value={title ? title : ''}
-          handleChange={handleTitleChange}
+          handleChange={handleChange}
           placeholder={"Enter title"}
           StyledInput={InputTitle}
         />

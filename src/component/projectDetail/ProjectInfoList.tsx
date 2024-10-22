@@ -12,7 +12,7 @@ import { CreateProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
 const ProjectInfoList: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { projectInfoList } = useProjectInfoListStore();
-  const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
+  const { createPiList, setCreatePiList } = useProjectInfoListStoreForUpdate();
 
   const handleCreateInfo = () => {
     const newInfo: CreateProjectInfoReq = {
@@ -20,7 +20,7 @@ const ProjectInfoList: React.FC = () => {
       customName: '',
       customValue: ''
     };
-    setCreateInfoList([...createInfoList, newInfo]);
+    setCreatePiList([...createPiList, newInfo]);
   };
 
 
@@ -36,7 +36,7 @@ const ProjectInfoList: React.FC = () => {
       )}
       {isEditMode &&
         <>
-          {createInfoList.map((each) => (
+          {createPiList.map((each) => (
             <ProjectInfoTemp
               key={each.tempId}
               tempId={each.tempId}

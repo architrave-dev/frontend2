@@ -2,27 +2,32 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
+import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
 
 interface RepresentImgProps {
   backgroundImg: string;
-  setBackgroundImg: (value: string) => void;
-  setThumbnailImg: (value: string) => void;
 }
 
 const RepresentImg: React.FC<RepresentImgProps> = ({
-  backgroundImg, setBackgroundImg, setThumbnailImg
+  backgroundImg
 }) => {
   const { isEditMode } = useEditMode();
+  const { updatedProjectDto, setUpdatedProjectDto } = useProjectStoreForUpdate();
+
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    setBackgroundImg(originUrl);
-    setThumbnailImg(thumbnailUrl);
+    if (!updatedProjectDto) return;
+    setUpdatedProjectDto({
+      ...updatedProjectDto,
+      originUrl,
+      thumbnailUrl
+    });
   }
 
   return (
     <RepresentImgContainer $backgroundImg={backgroundImg}>
       {isEditMode && (
-        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
+        <ReplaceImageButton setImageUrl={setOriginThumbnailUrl} />
       )}
     </RepresentImgContainer>
   );
