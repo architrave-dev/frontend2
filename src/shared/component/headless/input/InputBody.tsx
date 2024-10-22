@@ -79,6 +79,7 @@ export const InputBox = styled.input`
   background-color: ${({ theme }) => theme.colors.color_Gray_06};
   ${({ theme }) => theme.typography.Body_02_2};
 `;
+
 export const InputAuth = styled.input`
   ${commonInputBoxStyles}
   width: 100%;

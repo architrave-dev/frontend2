@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import ProjectTitle from '../../component/projectDetail/ProjectTitle';
 import Divider from '../../shared/Divider';

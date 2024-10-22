@@ -76,3 +76,13 @@ export const BtnWorkViewer = styled.button`
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
+
+export const BtnCancel = styled.button`
+  ${commonBtnStyles}
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  border-radius: 1px;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Alpha_02};
+  }
+`;
