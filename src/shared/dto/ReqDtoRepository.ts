@@ -137,7 +137,6 @@ export interface CreateCareerReq {
   tempId: string;
   careerType: CareerType
   yearFrom: number;
-  yearTo: number;
   content: string;
 }
 

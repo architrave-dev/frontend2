@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import CareerInfo from './CareerInfo';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
-import Loading from '../../shared/component/Loading';
-import { CareerType, DividerType } from '../../shared/enum/EnumRepository';
+import { CareerType } from '../../shared/enum/EnumRepository';
 import { CreateCareerReq, UpdatedCareerListReq } from '../../shared/dto/ReqDtoRepository';
-import Divider from '../../shared/Divider';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import Loading from '../../shared/component/Loading';
 import Space from '../../shared/Space';
-import CareerInfoTemp from './CareerInfoTemp';
+import CareerSection from './CareerSection';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -32,20 +30,19 @@ const CareerList: React.FC = () => {
   }, [aui]);
 
   const handleCreateElement = (careerType: CareerType) => {
+    console.log("handleCreateElement", careerType)
     const newElement: CreateCareerReq = {
       tempId: Math.floor(Math.random() * 1000) + "",
       careerType,
-      yearFrom: 2024,
-      yearTo: 2024,
+      yearFrom: new Date().getFullYear(),
       content: ""
     };
+    console.log("newElement", newElement)
 
     setCreatedCareers([...createdCareers, newElement]);
   };
 
   const handleConfirm = async () => {
-    if (!careerList) return;
-
     const updatedData: UpdatedCareerListReq = {
       createCareerReqList: createdCareers,
       updateCareerReqList: updatedCareers,
@@ -75,48 +72,14 @@ const CareerList: React.FC = () => {
     { type: CareerType.EDU, title: 'Education' },
   ];
 
-  const renderCareerSections = () => {
-    if (!careerList) return null;
-
-    return careerSections.map((section) => {
-      const filteredCareers = careerList.filter((each) => each.careerType === section.type);
-      const filteredCreatedCareers = createdCareers.filter((each) => each.careerType === section.type);
-
-      if (filteredCareers.length === 0) return null;
-
-      return (
-        <Section key={section.type}>
-          <CareerTitle>{section.title}</CareerTitle>
-          <Divider dividerType={DividerType.PLAIN} bottom={'20px'} />
-          {filteredCreatedCareers.map((each) => (
-            <CareerInfoTemp
-              key={each.tempId}
-              tempId={each.tempId}
-              initialContent={each.content}
-              initialYearFrom={each.yearFrom}
-              initialYearTo={each.yearTo}
-            />
-          ))}
-          {filteredCareers.map((each) => (
-            <CareerInfo
-              key={each.id}
-              careerId={each.id}
-              initialContent={each.content}
-              initialYearFrom={each.yearFrom}
-              initialYearTo={each.yearTo}
-            />
-          ))}
-        </Section>
-      );
-    });
-  };
-
   // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
+  if (isLoading || !careerList) return <Loading />;
 
   return (
     <CareerListComp>
-      {renderCareerSections()}
+      {careerSections.map((section) => (
+        <CareerSection key={section.title} type={section.type} title={section.title} />
+      ))}
       {isEditMode &&
         <Space $align={"center"} $height={"calc(6vw)"}>
           <CreateButtonGroup>
@@ -155,17 +118,6 @@ const CareerListComp = styled.section`
   display: flex;
   flex-direction: column;
   padding: 40px 0px;
-`;
-
-const Section = styled.div`
-  position: relative;
-  width: 60%;
-  margin-bottom: 2rem;
-`;
-
-const CareerTitle = styled.h3`
-  margin-bottom: 20px;
-  ${({ theme }) => theme.typography.H_02};
 `;
 
 const CreateButtonGroup = styled.div`

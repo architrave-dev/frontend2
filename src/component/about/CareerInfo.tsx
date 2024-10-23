@@ -13,21 +13,19 @@ interface CareerInfoProps {
   careerId: string;
   initialContent: string;
   initialYearFrom: number;
-  initialYearTo: number;
 }
 
 const CareerInfo: React.FC<CareerInfoProps> = ({
   careerId,
   initialContent,
-  initialYearFrom,
-  initialYearTo
+  initialYearFrom
   // onSave 
 }) => {
   const { isEditMode } = useEditMode();
   const { careers, setCareers } = useCareerListStore();
   const { updatedCareers, setUpdatedCareers, removedCareers, setRemovedCareers } = useCareerListStoreForUpdate();
 
-  const handleChange = (field: keyof UpdateCareerReq, value: string) => {
+  const handleChange = (field: keyof UpdateCareerReq, value: string | number) => {
     const targetCareer = updatedCareers.find((c) => c.careerId === careerId);
     if (targetCareer) {
       //updatedCareers에 있다면
@@ -81,21 +79,12 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
           <YearSection>
             <InputWrapper>
               <HeadlessInput
-                value={initialYearFrom.toString()}
+                value={initialYearFrom}
                 placeholder={"Enter YearFrom"}
                 handleChange={(e) => handleChange("yearFrom", e.target.value)}
                 StyledInput={MemberInfoInput}
               />
             </InputWrapper>
-            {/* <YearDivider> - </YearDivider>
-            <InputWrapper>
-              <HeadlessInput
-                value={initialYearTo.toString()}
-                placeholder={"Enter YearTo"}
-                handleChange={(e) => handleChange("yearTo", e.target.value)}
-                StyledInput={MemberInfoInput}
-              />
-            </InputWrapper> */}
           </YearSection>
           <HeadlessInput
             value={initialContent}
@@ -113,12 +102,6 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
         <>
           <YearSection>
             <Year>{initialYearFrom}</Year>
-            {/* {initialYearTo &&
-              <>
-                <YearDivider> - </YearDivider>
-                <Year>{initialYearTo}</Year>
-              </>
-            } */}
           </YearSection>
           <Content>{initialContent}</Content>
         </>
@@ -127,42 +110,32 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
   );
 };
 
-const CareerInfoComp = styled.div`
+export const CareerInfoComp = styled.div`
   display: flex;
   height: 32px;
   gap: 20px;
   margin-bottom: 8px;
 `;
 
-const YearSection = styled.div`
+export const YearSection = styled.div`
   display: flex;
 
-  
-  // width: 13vw;  //날짜가 2개일 경우
   width: 4vw;  //날짜가 1개일 경우
   color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_02_2};
 `;
 
-const YearDivider = styled.div`
-width: 20%;
-padding: 5px 0px;
-`;
 
-const Year = styled.div`
-  // width: 40%;  //날짜가 2개일 경우
-  width: 100%;  //날짜가 1개일 경우
+export const Year = styled.div`
+  width: 100%;
   padding: 5px 0px;
 `;
 
-const InputWrapper = styled.div`
-// width: 40%;   //날짜가 2개일 경우
-width: 100%;   //날짜가 2개일 경우
+export const InputWrapper = styled.div`
+  width: 100%;
 `;
 
-
-
-const Content = styled.div`
+export const Content = styled.div`
   width: 100%;
   padding: 5px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
