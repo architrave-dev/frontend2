@@ -6,7 +6,8 @@ import { CreateCareerReq } from '../../shared/dto/ReqDtoRepository';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
-import { CareerInfoComp, Content, InputWrapper, Year, YearSection } from './CareerInfo';
+import { CareerInfoComp, Content, Year, YearSection } from './CareerInfo';
+import MoleculeValue from './molecules/MoleculeValue';
 
 interface CareerInfoProps {
   tempId: string;
@@ -22,12 +23,6 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
   const { isEditMode } = useEditMode();
   const { createdCareers, setCreatedCareers } = useCareerListStoreForUpdate();
 
-  const handleChange = (field: keyof CreateCareerReq, value: string | number) => {
-    const newCreatedCareers: CreateCareerReq[] = createdCareers.map(each =>
-      each.tempId === tempId ? { ...each, [field]: value } : each
-    )
-    setCreatedCareers(newCreatedCareers);
-  }
   const handleDelete = () => {
     const filteredList = createdCareers.filter((each) => each.tempId !== tempId);
     setCreatedCareers(filteredList);
@@ -35,38 +30,29 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
 
   return (
     <CareerInfoComp>
-      {isEditMode ? (
-        <>
-          <YearSection>
-            <InputWrapper>
-              <HeadlessInput
-                value={initialYearFrom}
-                placeholder={"Enter YearFrom"}
-                handleChange={(e) => handleChange("yearFrom", e.target.value)}
-                StyledInput={MemberInfoInput}
-              />
-            </InputWrapper>
-          </YearSection>
-          <HeadlessInput
-            value={initialContent}
-            placeholder={"Enter value"}
-            handleChange={(e) => handleChange("content", e.target.value)}
-            StyledInput={MemberInfoValue}
-          />
-          <HeadlessBtn
-            value={"Delete"}
-            handleClick={handleDelete}
-            StyledBtn={BtnDelete}
-          />
-        </>
-      ) : (
-        <>
-          <YearSection>
-            <Year>{initialYearFrom}</Year>
-          </YearSection>
-          <Content>{initialContent}</Content>
-        </>
-      )}
+      <YearSection>
+        <MoleculeValue
+          tempId={tempId}
+          value={initialYearFrom}
+          targetField={"yearFrom"}
+          inputStyle={MemberInfoValue}
+          StyledDiv={Year}
+        />
+      </YearSection>
+      <MoleculeValue
+        tempId={tempId}
+        value={initialContent}
+        targetField={"content"}
+        inputStyle={MemberInfoValue}
+        StyledDiv={Content}
+      />
+      {isEditMode &&
+        <HeadlessBtn
+          value={"Delete"}
+          handleClick={handleDelete}
+          StyledBtn={BtnDelete}
+        />
+      }
     </CareerInfoComp>
   );
 };

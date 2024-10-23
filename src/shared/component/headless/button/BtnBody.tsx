@@ -5,7 +5,6 @@ const commonBtnStyles = css`
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s;
-  cursor: pointer;
 `;
 
 export const BtnCreate = styled.button`

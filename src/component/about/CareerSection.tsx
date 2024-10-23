@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import { CareerType, DividerType } from '../../shared/enum/EnumRepository';
 import Divider from '../../shared/Divider';
-import CareerInfoTempList from './CareerInfoTempList';
-import CareerInfoList from './CareerInfoList';
+import CareerInfo from './CareerInfo';
+import CareerInfoTemp from './CareerInfoTemp';
 
 interface CareerSectionProps {
   title: string;
@@ -18,7 +18,6 @@ const CareerSection: React.FC<CareerSectionProps> = ({ title, type }) => {
 
   const filteredCareers = careerList.filter((each) => each.careerType === type);
   const filteredCreatedCareers = createdCareers.filter((each) => each.careerType === type);
-  // useEffect(() => {},[careerList])
 
   if (filteredCareers.length + filteredCreatedCareers.length <= 0) {
     return null;
@@ -28,12 +27,22 @@ const CareerSection: React.FC<CareerSectionProps> = ({ title, type }) => {
     <Section>
       <CareerTitle>{title}</CareerTitle>
       <Divider dividerType={DividerType.PLAIN} bottom={'20px'} />
-      <CareerInfoList
-        careerList={filteredCareers}
-      />
-      <CareerInfoTempList
-        createdlist={filteredCreatedCareers}
-      />
+      {filteredCareers.map((each) => (
+        <CareerInfo
+          key={each.id}
+          careerId={each.id}
+          initialContent={each.content}
+          initialYearFrom={each.yearFrom}
+        />
+      ))}
+      {filteredCreatedCareers.map((each) => (
+        <CareerInfoTemp
+          key={each.tempId}
+          tempId={each.tempId}
+          initialContent={each.content}
+          initialYearFrom={each.yearFrom}
+        />
+      ))}
     </Section>
 
   );

@@ -143,7 +143,6 @@ export interface CreateCareerReq {
 export interface UpdateCareerReq {
   careerId: string;
   yearFrom: number;
-  yearTo: number;
   content: string;
 }
 
