@@ -10,7 +10,7 @@ const ColumnInfo: React.FC<ColumnInfoProps> = () => {
     <ColumnInfoComp>
       <InfoContainer>
         <TitleBlock>Title</TitleBlock>
-        <SizeBlock>Size</SizeBlock>
+        <SizeBlock>Size(cm)</SizeBlock>
         <MaterialBlock>Material</MaterialBlock>
         <ProdYearBlock>Year</ProdYearBlock>
         <DescriptionBlock>Description</DescriptionBlock>

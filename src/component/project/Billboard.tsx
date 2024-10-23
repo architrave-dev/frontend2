@@ -142,7 +142,7 @@ max-width: 70vw;
 min-height: 7vh;
 margin-bottom: 20px;
 padding: 0.5rem;
-${({ theme }) => theme.typography.Body_01};
+${({ theme }) => theme.typography.Body_01_1};
 `;
 
 

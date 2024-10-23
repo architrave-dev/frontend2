@@ -95,6 +95,7 @@ const ProjectSimpleInfo = styled.div`
   align-items: flex-start;
   padding: 20px 20px 20px 6vw;
 `;
+
 const ProjectSimpleTitle = styled.h2`
   margin-bottom: 10px;
   text-align: end;
@@ -103,7 +104,7 @@ const ProjectSimpleTitle = styled.h2`
 
 const ProjectSimpleDescription = styled.div`
   text-align: end;
-  ${({ theme }) => theme.typography.Body_01};
+  ${({ theme }) => theme.typography.Body_01_2};
 `;
 
 const ProjectRepresent = styled.div<{ $backgroundimage: string }>`

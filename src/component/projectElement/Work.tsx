@@ -158,10 +158,12 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
     <WorkWrapper>
       {isEditMode ? (
         <>
-          <SelectBox
-            value={initialDisplaySize || WorkDisplaySize.BIG}
-            selectType={SelectType.WORK_SIZE}
-            handleChange={handleSizeChange} />
+          <SelectBoxContainer>
+            <SelectBox
+              value={initialDisplaySize || WorkDisplaySize.BIG}
+              selectType={SelectType.WORK_SIZE}
+              handleChange={handleSizeChange} />
+          </SelectBoxContainer>
           <ImgWrapper>
             <WorkImage
               src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
@@ -244,6 +246,14 @@ const WorkWrapper = styled.div`
   align-items: center;
   // background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
+
+const SelectBoxContainer = styled.div`
+  position: absolute;
+  top: -30px;
+  width: 100%;
+  display: flex;
+  gap: 20px;
+`
 const ImgWrapper = styled.div`
   position: relative;
 `
