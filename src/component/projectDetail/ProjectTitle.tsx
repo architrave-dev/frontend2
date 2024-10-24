@@ -31,8 +31,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({ title, handleChange }) => {
 }
 
 const TitleDisplay = styled.h1`
-  padding: 5px;
-  margin-bottom: calc(2vh);
+  padding: 5px 0px;
   ${({ theme }) => theme.typography.H_015};
 `;
 

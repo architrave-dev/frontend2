@@ -12,7 +12,10 @@ import defaultImg from '../../asset/project/default_1.png';
 import Loading from '../../shared/component/Loading';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
 import MemberTitle from './MemberTitle';
-import MoleculeDescription from '../../shared/molecule/MoleculeDescription';
+import MoleculeDescription from '../../shared/component/molecule/MoleculeDescription';
+import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
+import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
+import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 
 
 const MemberInfo: React.FC = () => {
@@ -79,9 +82,11 @@ const MemberInfo: React.FC = () => {
   return (
     <MemberInfoComp>
       <ProfileAndInfo>
-        <Profile $backgroundimage={updateMemberInfoDto.originUrl === '' ? defaultImg : updateMemberInfoDto.originUrl} >
-          <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
-        </Profile>
+        <MoleculeImgDivContainer
+          backgroundImg={updateMemberInfoDto.originUrl}
+          handleChange={setOriginThumbnailUrl}
+          StyledImgDivContainer={Profile}
+        />
         <InfoContainer>
           <MemberTitle
             value={updateMemberInfoDto.name}
@@ -97,6 +102,8 @@ const MemberInfo: React.FC = () => {
         <MoleculeDescription
           value={updateMemberInfoDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
+          textareaStyle={TextAreaMemberInfo}
+          StyleDescription={Description}
         />
       </DescriptionWrapper>
       {isEditMode && isChanged() &&
@@ -129,11 +136,11 @@ const ProfileAndInfo = styled.div`
   // background-color: #ffcd74;
 `;
 
-const Profile = styled.div<{ $backgroundimage: string }>`
+const Profile = styled.div<StyledImgDivContainerProps>`
   height: 28vh; 
   width: calc(28vh * (3 / 4));
 
-  background-image: url(${props => props.$backgroundimage});
+  background-image: url(${props => props.$backgroundImg});
   background-size: cover;
   background-position: center;
   position: relative;
@@ -153,6 +160,13 @@ const InfoContainer = styled.div`
 
 const DescriptionWrapper = styled.div`
   width: 60%;
+`;
+const Description = styled.div`
+  padding: 8px 0px;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  text-align: left;
+  margin-bottom: 5px;
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 

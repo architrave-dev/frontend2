@@ -13,9 +13,9 @@ import Loading from '../../shared/component/Loading';
 import { DividerType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
 import { IndexData, ProjectData } from '../../shared/dto/EntityRepository';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
+import MoleculeDescription from '../../shared/component/molecule/MoleculeDescription';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 
@@ -35,9 +35,6 @@ const ProjectDetailContainer: React.FC = () => {
     return [];
   }
   const handleConfirm = async () => {
-    if (!project) return;
-    if (!updatedProjectDto) return;
-
     const newUpdateProjectReq: UpdateProjectReq = {
       ...updatedProjectDto,
       piIndexList: convertToPiIndexList(),
@@ -80,7 +77,7 @@ const ProjectDetailContainer: React.FC = () => {
 
   return (
     <ProjectDetailContainerComp>
-      {isEditMode && project && isChanged() &&
+      {isEditMode && isChanged() &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
@@ -95,23 +92,13 @@ const ProjectDetailContainer: React.FC = () => {
       <ProjectDetailWrapper>
         <ProjectTitle title={updatedProjectDto.title} handleChange={(e) => handleChange('title', e.target.value)} />
         <Divider dividerType={DividerType.PLAIN} />
-        {isEditMode ?
-          <HeadlessTextArea
-            alignment={TextBoxAlignment.LEFT}
-            content={updatedProjectDto.description}
-            placeholder={"project description"}
-            handleChange={(e) => handleChange('description', e.target.value)}
-            StyledTextArea={TextAreaTextBox}
-          />
-          :
-          <Description $textBoxAlignment={TextBoxAlignment.LEFT}>
-            {updatedProjectDto.description.split('\n').map((line, index) => (
-              <React.Fragment key={index}>
-                {line}<br />
-              </React.Fragment>
-            ))}
-          </Description>
-        }
+        <MoleculeDescription
+          value={updatedProjectDto.description}
+          handleChange={(e) => handleChange('description', e.target.value)}
+          alignment={TextBoxAlignment.LEFT}
+          textareaStyle={TextAreaTextBox}
+          StyleDescription={Description}
+        />
         <ProjectInfoList />
       </ProjectDetailWrapper>
     </ProjectDetailContainerComp>
@@ -121,6 +108,15 @@ const ProjectDetailContainer: React.FC = () => {
 const ProjectDetailContainerComp = styled.section`
   position: relative;
 `;
+
+const RepresentImgContainer = styled.div<StyledImgDivContainerProps>`
+  position: relative;
+  background-image: url(${props => props.$backgroundImg});
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+`;
+
 const ProjectDetailWrapper = styled.article`
   padding: calc(8vh) calc(10vw);
 `;

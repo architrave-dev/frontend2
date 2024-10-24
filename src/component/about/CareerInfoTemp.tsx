@@ -1,8 +1,6 @@
 import React from 'react';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import { MemberInfoInput, MemberInfoValue } from '../../shared/component/headless/input/InputBody';
-import { CreateCareerReq } from '../../shared/dto/ReqDtoRepository';
+import { MemberInfoValue } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';

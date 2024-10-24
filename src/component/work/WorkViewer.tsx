@@ -139,6 +139,7 @@ const WorkViewer: React.FC = () => {
           </Description>
         </WorkInfoContainer>
       }
+
       <ImgWrapper>
         <WorkImage src={updatedActiveWork.originUrl === '' ? defaultImg : updatedActiveWork.originUrl} alt={updatedActiveWork.title} />
         <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
@@ -235,8 +236,6 @@ const ImgWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  // background-color: #ffedbf;
 `
 
 const WorkImage = styled.img`

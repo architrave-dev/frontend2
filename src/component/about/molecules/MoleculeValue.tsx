@@ -4,9 +4,8 @@ import HeadlessInput from '../../../shared/component/headless/input/HeadlessInpu
 import { CreateCareerReq, UpdateCareerReq } from '../../../shared/dto/ReqDtoRepository';
 import { useCareerListStore, useCareerListStoreForUpdate } from '../../../shared/store/careerStore';
 import { CareerData } from '../../../shared/dto/EntityRepository';
+import { StyledDivComponent, StyledInputComponent } from '../../../shared/dto/StyleCompRepository';
 
-type StyledInputComponent = React.ComponentType<React.InputHTMLAttributes<HTMLInputElement>>;
-type StyledDivComponent = React.ComponentType<React.HTMLAttributes<HTMLDivElement>>;
 
 interface MoleculeValueProps {
   careerId?: string;

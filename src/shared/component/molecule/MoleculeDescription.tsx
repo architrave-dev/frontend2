@@ -1,21 +1,23 @@
 import React from 'react';
-import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
-import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
-import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
-
+import { useEditMode } from '../../hooks/useEditMode';
+import HeadlessTextArea, { StyledTextAreaComponent } from '../headless/textarea/HeadlessTextArea';
+import { TextBoxAlignment } from '../../enum/EnumRepository';
+import { StyledDivComponent } from '../../dto/StyleCompRepository';
 
 interface MoleculeDescriptionProps {
   value: string;
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   alignment?: TextBoxAlignment;
+  textareaStyle: StyledTextAreaComponent;
+  StyleDescription: StyledDivComponent;
 }
 
 const MoleculeDescription: React.FC<MoleculeDescriptionProps> = ({
   value,
   handleChange,
-  alignment
+  alignment,
+  textareaStyle,
+  StyleDescription
 }) => {
   const { isEditMode } = useEditMode();
 
@@ -27,31 +29,21 @@ const MoleculeDescription: React.FC<MoleculeDescriptionProps> = ({
           content={value}
           placeholder="Enter description"
           handleChange={handleChange}
-          StyledTextArea={TextAreaMemberInfo}
+          StyledTextArea={textareaStyle}
         />
       ) : (
-        <Description>
+        <StyleDescription>
           {value.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}
               <br />
             </React.Fragment>
           ))}
-        </Description>
+        </StyleDescription>
       )}
     </>
   );
 };
-
-
-const Description = styled.div`
-  padding: 8px 0px;
-  color: ${({ theme }) => theme.colors.color_Gray_03};
-  text-align: left;
-  margin-bottom: 5px;
-  ${({ theme }) => theme.typography.Body_02_2};
-`;
-
 
 
 export default MoleculeDescription;

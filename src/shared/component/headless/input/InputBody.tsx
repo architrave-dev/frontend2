@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const commonInputStyles = css`
-  padding: 0px 8px;
+  padding: 4px 0px;
   background: transparent;
   border: none;
   outline: none;

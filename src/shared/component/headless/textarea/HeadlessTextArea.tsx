@@ -5,7 +5,7 @@ type StyledTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   $alignment: Alignment;
 };
 
-type StyledTextAreaComponent = React.ForwardRefExoticComponent<
+export type StyledTextAreaComponent = React.ForwardRefExoticComponent<
   StyledTextAreaProps & React.RefAttributes<HTMLTextAreaElement>
 >;
 

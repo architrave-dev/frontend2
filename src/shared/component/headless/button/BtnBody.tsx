@@ -53,6 +53,7 @@ export const BtnConfirm = styled.button`
     }
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
+  z-index:2; 
 `;
 
 export const BtnWorkDelete = styled.button`

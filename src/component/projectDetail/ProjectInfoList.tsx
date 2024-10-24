@@ -60,6 +60,7 @@ const ProjectInfoList: React.FC = () => {
 }
 
 const ProjectInfoListComp = styled.article`
+  position: relative;
 `;
 
 export default ProjectInfoList;
