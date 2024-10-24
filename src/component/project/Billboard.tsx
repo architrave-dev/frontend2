@@ -3,10 +3,7 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useBillboard } from '../../shared/hooks/useApi/useBillboard';
 import { useAui } from '../../shared/hooks/useAui';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaBillboard } from '../../shared/component/headless/textarea/TextAreaBody';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputBillboard } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
@@ -16,6 +13,8 @@ import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
 import { useBillboardStoreForUpdate } from '../../shared/store/billboardStore';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
+import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 
 const Billboard: React.FC = () => {
@@ -52,13 +51,13 @@ const Billboard: React.FC = () => {
     });
   }
 
-  const isChanged = (initialData: BillboardData, currentData: BillboardData): boolean => {
+  const isChanged = (): boolean => {
     return (
-      initialData.title !== currentData.title ||
-      initialData.description !== currentData.description ||
-      initialData.originUrl !== currentData.originUrl ||
-      initialData.thumbnailUrl !== currentData.thumbnailUrl ||
-      initialData.isVisible !== currentData.isVisible
+      billboard.title !== updateBillboardDto.title ||
+      billboard.description !== updateBillboardDto.description ||
+      billboard.originUrl !== updateBillboardDto.originUrl ||
+      billboard.thumbnailUrl !== updateBillboardDto.thumbnailUrl ||
+      billboard.isVisible !== updateBillboardDto.isVisible
     );
   };
 
@@ -84,37 +83,26 @@ const Billboard: React.FC = () => {
       handleChange={setOriginThumbnailUrl}
       StyledImgDivContainer={Container}
     >
-      {isEditMode ? (
-        <>
-          <ReplaceImageButton setImageUrl={setOriginThumbnailUrl} />
-          <HeadlessInput
-            type={'text'}
-            value={updateBillboardDto.title}
-            handleChange={(e) => handleChange('title', e.target.value)}
-            placeholder={"Enter title"}
-            StyledInput={InputBillboard}
-          />
-          <HeadlessTextArea
-            alignment={TextBoxAlignment.LEFT}
-            content={updateBillboardDto.description}
-            placeholder={"Enter description"}
-            handleChange={(e) => handleChange('description', e.target.value)}
-            StyledTextArea={TextAreaBillboard}
-          />
-          {isChanged(billboard, updateBillboardDto) &&
-            <HeadlessBtn
-              value={"Confirm"}
-              handleClick={handleConfirm}
-              StyledBtn={BtnConfirm}
-            />
-          }
-        </>
-      ) : (
-        <>
-          <Title>{updateBillboardDto.title}</Title>
-          <Description>{updateBillboardDto.description}</Description>
-        </>
-      )}
+      <MoleculeInputDiv
+        value={updateBillboardDto.title}
+        handleChange={(e) => handleChange('title', e.target.value)}
+        inputStyle={InputBillboard}
+        StyledDiv={Title}
+      />
+      <MoleculeTextareaDescription
+        value={updateBillboardDto.description}
+        handleChange={(e) => handleChange('description', e.target.value)}
+        alignment={TextBoxAlignment.LEFT}
+        textareaStyle={TextAreaBillboard}
+        StyleDescription={Description}
+      />
+      {isEditMode && isChanged() &&
+        <HeadlessBtn
+          value={"Confirm"}
+          handleClick={handleConfirm}
+          StyledBtn={BtnConfirm}
+        />
+      }
     </MoleculeImgDivContainer>
   );
 };

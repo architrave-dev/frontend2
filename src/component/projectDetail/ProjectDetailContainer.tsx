@@ -15,9 +15,9 @@ import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
 import { IndexData, ProjectData } from '../../shared/dto/EntityRepository';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
-import MoleculeDescription from '../../shared/component/molecule/MoleculeDescription';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
+import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -92,7 +92,7 @@ const ProjectDetailContainer: React.FC = () => {
       <ProjectDetailWrapper>
         <ProjectTitle title={updatedProjectDto.title} handleChange={(e) => handleChange('title', e.target.value)} />
         <Divider dividerType={DividerType.PLAIN} />
-        <MoleculeDescription
+        <MoleculeTextareaDescription
           value={updatedProjectDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
           alignment={TextBoxAlignment.LEFT}

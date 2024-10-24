@@ -5,17 +5,15 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
 import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import defaultImg from '../../asset/project/default_1.png';
 import Loading from '../../shared/component/Loading';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
 import MemberTitle from './MemberTitle';
-import MoleculeDescription from '../../shared/component/molecule/MoleculeDescription';
 import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
+import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 
 
 const MemberInfo: React.FC = () => {
@@ -99,7 +97,7 @@ const MemberInfo: React.FC = () => {
         </InfoContainer>
       </ProfileAndInfo>
       <DescriptionWrapper>
-        <MoleculeDescription
+        <MoleculeTextareaDescription
           value={updateMemberInfoDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
           textareaStyle={TextAreaMemberInfo}

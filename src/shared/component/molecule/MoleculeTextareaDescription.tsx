@@ -4,7 +4,7 @@ import HeadlessTextArea, { StyledTextAreaComponent } from '../headless/textarea/
 import { TextBoxAlignment } from '../../enum/EnumRepository';
 import { StyledDivComponent } from '../../dto/StyleCompRepository';
 
-interface MoleculeDescriptionProps {
+interface MoleculeTextareaDescriptionProps {
   value: string;
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   alignment?: TextBoxAlignment;
@@ -12,7 +12,7 @@ interface MoleculeDescriptionProps {
   StyleDescription: StyledDivComponent;
 }
 
-const MoleculeDescription: React.FC<MoleculeDescriptionProps> = ({
+const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = ({
   value,
   handleChange,
   alignment,
@@ -46,4 +46,4 @@ const MoleculeDescription: React.FC<MoleculeDescriptionProps> = ({
 };
 
 
-export default MoleculeDescription;
+export default MoleculeTextareaDescription;

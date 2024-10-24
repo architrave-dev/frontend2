@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
 import { ProjectInfoData } from '../../shared/dto/EntityRepository';
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 interface ProjectInfoProps {
   projectInfoId: string;
@@ -70,32 +70,24 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
 
   return (
     <ProjectInfoItem $isEditMode={isEditMode}>
-      {isEditMode ? (
-        <>
-          <HeadlessInput
-            value={initialCustomName}
-            placeholder={"Enter info"}
-            handleChange={(e) => handleChange("customName", e.target.value)}
-            StyledInput={InputName}
-          />
-          <HeadlessInput
-            value={initialCustomValue}
-            placeholder={"Enter value"}
-            handleChange={(e) => handleChange("customValue", e.target.value)}
-            StyledInput={InputValue}
-          />
-          <HeadlessBtn
-            value={"Delete"}
-            handleClick={handleDelete}
-            StyledBtn={BtnDelete}
-          />
-        </>
-      ) : (
-        <>
-          <NameSection>{initialCustomName}</NameSection>
-          <ValueSection>{initialCustomValue}</ValueSection>
-        </>
-      )}
+      <MoleculeInputDiv
+        value={initialCustomName}
+        handleChange={(e) => handleChange("customName", e.target.value)}
+        inputStyle={InputName}
+        StyledDiv={NameSection}
+      />
+      <MoleculeInputDiv
+        value={initialCustomValue}
+        handleChange={(e) => handleChange("customValue", e.target.value)}
+        inputStyle={InputValue}
+        StyledDiv={ValueSection}
+      />
+      {isEditMode &&
+        <HeadlessBtn
+          value={"Delete"}
+          handleClick={handleDelete}
+          StyledBtn={BtnDelete}
+        />}
     </ProjectInfoItem>
   );
 }

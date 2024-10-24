@@ -7,14 +7,14 @@ import defaultImg from '../../asset/project/default_1.png';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
-import { BtnWorkDelete, BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, WorkAlignment } from '../../shared/enum/EnumRepository';
+import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
+import { AlertPosition, AlertType, TextBoxAlignment, WorkAlignment } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
+import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -85,61 +85,43 @@ const WorkViewer: React.FC = () => {
 
   return (
     <WorkViewComp>
-      {isEditMode ?
-        <WorkInfoContainer>
-          <HeadlessInput
-            value={updatedActiveWork.title}
-            handleChange={(e) => handleChange("title", e.target.value)}
-            placeholder="Title"
-            StyledInput={WorkViewerTitle}
+      <WorkInfoContainer>
+        <MoleculeInputDiv
+          value={updatedActiveWork.title}
+          handleChange={(e) => handleChange("title", e.target.value)}
+          inputStyle={WorkViewerTitle}
+          StyledDiv={Title}
+        />
+        <WorkInfo>
+          <MoleculeInputDiv
+            value={updatedActiveWork.prodYear}
+            handleChange={(e) => handleChange("prodYear", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
           />
-          <WorkInfo>
-            <HeadlessInput
-              value={updatedActiveWork.prodYear}
-              placeholder={"Year"}
-              handleChange={(e) => handleChange("prodYear", e.target.value)}
-              StyledInput={WorkViewerInfo}
-            />
-            <HeadlessInput
-              value={updatedActiveWork.material}
-              placeholder={"Material"}
-              handleChange={(e) => handleChange("material", e.target.value)}
-              StyledInput={WorkViewerInfo}
-            />
-            <HeadlessInput
-              value={convertSizeToString(updatedActiveWork.size)}
-              placeholder={"Size"}
-              handleChange={(e) => handleChange("size", e.target.value)}
-              StyledInput={WorkViewerInfo}
-            />
-          </WorkInfo>
-          <HeadlessTextArea
-            alignment={WorkAlignment.LEFT}
-            content={updatedActiveWork.description}
-            placeholder={"Description"}
-            handleChange={(e) => handleChange("description", e.target.value)}
-            StyledTextArea={TextAreaWorkViewer}
+          <DividerSmall>|</DividerSmall>
+          <MoleculeInputDiv
+            value={updatedActiveWork.material}
+            handleChange={(e) => handleChange("material", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
           />
-        </WorkInfoContainer> :
-        <WorkInfoContainer>
-          <Title>{updatedActiveWork.title}</Title>
-          <WorkInfo>
-            <Info>{updatedActiveWork.prodYear}</Info>
-            <DividerSmall>|</DividerSmall>
-            <Info>{updatedActiveWork.material}</Info>
-            <DividerSmall>|</DividerSmall>
-            <Info>{convertSizeToString(updatedActiveWork.size)}</Info>
-          </WorkInfo>
-          <Description>
-            {updatedActiveWork.description.split('\n').map((line, index) => (
-              <React.Fragment key={index}>
-                {line}<br />
-              </React.Fragment>
-            ))}
-          </Description>
-        </WorkInfoContainer>
-      }
-
+          <DividerSmall>|</DividerSmall>
+          <MoleculeInputDiv
+            value={convertSizeToString(updatedActiveWork.size)}
+            handleChange={(e) => handleChange("size", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
+          />
+        </WorkInfo>
+        <MoleculeTextareaDescription
+          value={updatedActiveWork.description}
+          handleChange={(e) => handleChange("description", e.target.value)}
+          alignment={TextBoxAlignment.LEFT}
+          textareaStyle={TextAreaWorkViewer}
+          StyleDescription={Description}
+        />
+      </WorkInfoContainer>
       <ImgWrapper>
         <WorkImage src={updatedActiveWork.originUrl === '' ? defaultImg : updatedActiveWork.originUrl} alt={updatedActiveWork.title} />
         <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />

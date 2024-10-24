@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { MemberTitleInput } from '../../shared/component/headless/input/InputBody';
-
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 
 export interface MemberTitleProps {
@@ -15,18 +13,14 @@ const MemberTitle: React.FC<MemberTitleProps> = ({
   value, handleChange
 }) => {
 
-  const { isEditMode } = useEditMode();
   return (
     <Info>
-      {isEditMode ?
-        <HeadlessInput
-          value={value}
-          placeholder={"Enter value"}
-          handleChange={handleChange}
-          StyledInput={MemberTitleInput}
-        /> :
-        <ValueSection>{value ? value : "Name"}</ValueSection>
-      }
+      <MoleculeInputDiv
+        value={value}
+        handleChange={handleChange}
+        inputStyle={MemberTitleInput}
+        StyledDiv={ValueSection}
+      />
     </Info>
   );
 };

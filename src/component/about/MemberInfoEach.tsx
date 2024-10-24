@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { MemberInfoValue } from '../../shared/component/headless/input/InputBody';
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 
 
@@ -16,20 +15,15 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
   name, value, handleChange
 }) => {
 
-  const { isEditMode } = useEditMode();
-
   return (
     <Info>
       <NameSection>{name}</NameSection>
-      {isEditMode ?
-        <HeadlessInput
-          value={value ? value : ''}
-          placeholder={"Enter value"}
-          handleChange={handleChange}
-          StyledInput={MemberInfoValue}
-        /> :
-        <ValueSection>{value ? value : "Fill this feild"}</ValueSection>
-      }
+      <MoleculeInputDiv
+        value={value}
+        handleChange={handleChange}
+        inputStyle={MemberInfoValue}
+        StyledDiv={ValueSection}
+      />
     </Info>
   );
 };
