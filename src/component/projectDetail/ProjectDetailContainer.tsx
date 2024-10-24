@@ -6,7 +6,6 @@ import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useAui } from '../../shared/hooks/useAui';
-import RepresentImg from './RepresentImg';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
@@ -17,6 +16,8 @@ import { IndexData, ProjectData } from '../../shared/dto/EntityRepository';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
+import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
+import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -65,6 +66,7 @@ const ProjectDetailContainer: React.FC = () => {
   const isChanged = (): boolean => {
     return (
       project.originUrl !== updatedProjectDto.originUrl ||
+      project.thumbnailUrl !== updatedProjectDto.thumbnailUrl ||
       project.title !== updatedProjectDto.title ||
       project.description !== updatedProjectDto.description ||
       (createPiList.length ?? 0) > 0 ||
@@ -85,7 +87,11 @@ const ProjectDetailContainer: React.FC = () => {
           StyledBtn={BtnConfirm}
         />
       }
-      <RepresentImg backgroundImg={updatedProjectDto.originUrl} />
+      <MoleculeImgDivContainer
+        backgroundImg={updatedProjectDto.originUrl}
+        handleChange={setOriginThumbnailUrl}
+        StyledImgDivContainer={RepresentImgContainer}
+      />
       <ProjectDetailWrapper>
         <ProjectTitle title={updatedProjectDto.title} handleChange={(e) => handleChange('title', e.target.value)} />
         <Divider dividerType={DividerType.PLAIN} />

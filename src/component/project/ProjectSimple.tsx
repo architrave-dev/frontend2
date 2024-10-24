@@ -9,6 +9,8 @@ import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import Loading from '../../shared/component/Loading';
+import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
+import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 
 interface ProjectSimpleProps {
   projectId: string;
@@ -61,7 +63,11 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
         <ProjectSimpleTitle>{initialTitle}</ProjectSimpleTitle>
         <ProjectSimpleDescription>{initialDescription}</ProjectSimpleDescription>
       </ProjectSimpleInfo>
-      <ProjectRepresent $backgroundimage={initialImage} />
+      <MoleculeImgDivContainer
+        backgroundImg={initialImage}
+        handleChange={() => { }}
+        StyledImgDivContainer={ProjectRepresent}
+      />
       {isEditMode &&
         <HeadlessBtn
           value={"Delete"}
@@ -79,7 +85,7 @@ const ProjectSimpleComp = styled.div<{ $isEditMode: boolean }>`
   width: 100%;
   height: 56vh;
   display: flex;
-  align-items: center;
+  // align-items: center;
   justify-content: space-between; 
   margin-bottom: 20px;
   // background-color: #EECFBB; /*for dev*/
@@ -107,11 +113,11 @@ const ProjectSimpleDescription = styled.div`
   ${({ theme }) => theme.typography.Body_01_2};
 `;
 
-const ProjectRepresent = styled.div<{ $backgroundimage: string }>`
+const ProjectRepresent = styled.div<StyledImgDivContainerProps>`
   width: calc(62vw);
   height: 100%;
 
-  background-image: url(${props => props.$backgroundimage});
+  background-image: url(${props => props.$backgroundImg});
   background-size: cover;
   background-position: center;
   position: relative;

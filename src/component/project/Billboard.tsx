@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useBillboard } from '../../shared/hooks/useApi/useBillboard';
-import defaultImg from '../../asset/project/default_1.png';
 import { useAui } from '../../shared/hooks/useAui';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
@@ -15,6 +14,8 @@ import Loading from '../../shared/component/Loading';
 import { BillboardData } from '../../shared/dto/EntityRepository';
 import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
 import { useBillboardStoreForUpdate } from '../../shared/store/billboardStore';
+import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
+import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 
 
 const Billboard: React.FC = () => {
@@ -78,7 +79,11 @@ const Billboard: React.FC = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <Container $backgroundimage={updateBillboardDto.originUrl === '' ? defaultImg : updateBillboardDto.originUrl}>
+    <MoleculeImgDivContainer
+      backgroundImg={updateBillboardDto.originUrl}
+      handleChange={setOriginThumbnailUrl}
+      StyledImgDivContainer={Container}
+    >
       {isEditMode ? (
         <>
           <ReplaceImageButton setImageUrl={setOriginThumbnailUrl} />
@@ -110,14 +115,14 @@ const Billboard: React.FC = () => {
           <Description>{updateBillboardDto.description}</Description>
         </>
       )}
-    </Container>
+    </MoleculeImgDivContainer>
   );
 };
 
-const Container = styled.div<{ $backgroundimage: string | undefined }>`
+const Container = styled.div<StyledImgDivContainerProps>`
   position: relative;
 
-  background-image: url(${props => props.$backgroundimage});
+  background-image: url(${props => props.$backgroundImg});
   background-size: cover;
   background-position: center;
 
