@@ -16,7 +16,7 @@ export interface UserDataWithRefreshToken extends UserData {
   refreshToken: string;
 }
 
-export interface LandingBoxData {
+export interface BillboardData {
   id: number;
   originUrl: string;
   thumbnailUrl: string;
@@ -138,7 +138,6 @@ export interface CareerData {
   id: string;
   careerType: CareerType;
   yearFrom: number;
-  yearTo: number;
   content: string;
   index: number;
 }

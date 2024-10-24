@@ -18,19 +18,19 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
   initialCustomName,
   initialCustomValue
 }) => {
-  const { createInfoList, setCreateInfoList } = useProjectInfoListStoreForUpdate();
+  const { createPiList, setCreatePiList } = useProjectInfoListStoreForUpdate();
 
 
   const handleChange = (field: keyof CreateProjectInfoReq, value: string) => {
-    const newCreateInfoList: CreateProjectInfoReq[] = createInfoList.map(each =>
+    const newCreatePiList: CreateProjectInfoReq[] = createPiList.map(each =>
       each.tempId === tempId ? { ...each, [field]: value } : each
     )
-    setCreateInfoList(newCreateInfoList);
+    setCreatePiList(newCreatePiList);
   }
 
   const handleDelete = () => {
-    const filteredList = createInfoList.filter((each) => each.tempId !== tempId);
-    setCreateInfoList(filteredList);
+    const filteredList = createPiList.filter((each) => each.tempId !== tempId);
+    setCreatePiList(filteredList);
   };
 
   return (
@@ -57,9 +57,11 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 };
 
 const ProjectInfoItem = styled.div`
+  position: relative;
   display: flex;
   height: 40px;
-  gap: 20px;
+  gap: 40px;
+  margin-bottom: 10px;
 `;
 
 

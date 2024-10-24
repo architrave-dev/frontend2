@@ -24,6 +24,8 @@ const AboutContainer = styled.div`
   display: flex;
   flex-direction: column;
 
+  padding: calc(8vh) calc(6vw);
+
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;

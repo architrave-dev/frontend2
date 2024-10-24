@@ -5,6 +5,7 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, SelectType, SortOrder } from '../../shared/enum/EnumRepository';
 import { WorkData, getAreaFromSize } from '../../shared/dto/EntityRepository';
+import { useWorkListStore } from '../../shared/store/WorkListStore';
 
 
 const compareValues = <T extends keyof WorkData>(a: WorkData[T], b: WorkData[T]): number => {
@@ -37,15 +38,10 @@ export const sortWorkList = (workList: WorkData[], sortOrder: SortOrder): WorkDa
   });
 }
 
-interface SortStationProps {
-  setSortOrder: (value: SortOrder) => void;
-}
-
-const SortStation: React.FC<SortStationProps> = (
-  { setSortOrder }
-) => {
+const SortStation: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { setStandardAlert } = useStandardAlertStore();
+  const { setSortBy } = useWorkListStore();
 
   const handleOrderChange = (value: SortOrder) => {
     if (isEditMode) {
@@ -57,27 +53,31 @@ const SortStation: React.FC<SortStationProps> = (
       return;
     }
     console.log("We should order work list by ", value);
-    setSortOrder(value);
+    setSortBy(value);
   };
 
 
   return (
     <SortingStation>
-      <div>Sort by:
-        <SelectBox
-          value={SortOrder.TITLE_ASC}
-          selectType={SelectType.SORT_ORDER}
-          handleChange={handleOrderChange} />
-      </div>
+      <span>
+        Sort by:
+      </span>
+      <SelectBox
+        value={SortOrder.TITLE_ASC}
+        selectType={SelectType.SORT_ORDER}
+        handleChange={handleOrderChange} />
     </SortingStation>
   );
 }
 
 const SortingStation = styled.article`
   width: 100%;
-  height: 60px;
+  height: 40px;
 
   display: flex;
+  padding: 10px 0px;
+
+  gap: 10px;
 `;
 
 export default SortStation;

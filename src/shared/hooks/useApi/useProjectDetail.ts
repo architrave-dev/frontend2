@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useProjectStore } from '../../store/projectStore';
+import { useProjectStore, useProjectStoreForUpdate } from '../../store/projectStore';
 import { getProjectDetail, updateProject } from '../../api/projectApi';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../store/projectInfoListStore';
 import { useGlobalErrStore } from '../../store/errorStore';
@@ -20,6 +20,7 @@ export const useProjectDetail = (): UseProjectResult => {
   const [isLoading, setIsLoading] = useState(false);
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { project, setProject } = useProjectStore();
+  const { setUpdatedProjectDto } = useProjectStoreForUpdate();
   const { setProjectInfoList } = useProjectInfoListStore()
   const { clearAll } = useProjectInfoListStoreForUpdate()
 
@@ -27,6 +28,7 @@ export const useProjectDetail = (): UseProjectResult => {
   const handleProjectSuccess = (response: ProjectResponse) => {
     const projectData = response.data;
     setProject(projectData);
+    setUpdatedProjectDto(projectData);
     setProjectInfoList(projectData.projectInfoList);
     clearAll();
   };

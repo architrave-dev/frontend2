@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import LandingBox from '../component/project/LandingBox';
+import Bilboard from '../component/project/Billboard';
 import ProjectList from '../component/project/ProjectList';
 import { useInitPage } from '../shared/hooks/useInitPage';
 
@@ -10,7 +10,7 @@ const Projects: React.FC = () => {
 
   return (
     <ProjectsPage>
-      <LandingBox />
+      <Bilboard />
       <ProjectList />
     </ProjectsPage>
   );

@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import CareerInfo from './CareerInfo';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
-import Loading from '../../shared/component/Loading';
 import { CareerType } from '../../shared/enum/EnumRepository';
 import { CreateCareerReq, UpdatedCareerListReq } from '../../shared/dto/ReqDtoRepository';
+import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import Loading from '../../shared/component/Loading';
+import Space from '../../shared/Space';
+import CareerSection from './CareerSection';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 const CareerList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -27,19 +30,19 @@ const CareerList: React.FC = () => {
   }, [aui]);
 
   const handleCreateElement = (careerType: CareerType) => {
+    console.log("handleCreateElement", careerType)
     const newElement: CreateCareerReq = {
+      tempId: Math.floor(Math.random() * 1000) + "",
       careerType,
-      yearFrom: 2024,
-      yearTo: 2024,
-      content: "Hello"
+      yearFrom: new Date().getFullYear(),
+      content: ""
     };
+    console.log("newElement", newElement)
 
     setCreatedCareers([...createdCareers, newElement]);
   };
 
   const handleConfirm = async () => {
-    if (!careerList) return;
-
     const updatedData: UpdatedCareerListReq = {
       createCareerReqList: createdCareers,
       updateCareerReqList: updatedCareers,
@@ -69,37 +72,42 @@ const CareerList: React.FC = () => {
     { type: CareerType.EDU, title: 'Education' },
   ];
 
-  const renderCareerSections = () => {
-    if (!careerList) return null;
-
-    return careerSections.map((section) => {
-      const filteredCareers = careerList.filter((each) => each.careerType === section.type);
-
-      if (filteredCareers.length === 0) return null;
-
-      return (
-        <Section key={section.type}>
-          <CareerTitle>{section.title}</CareerTitle>
-          {filteredCareers.map((each) => (
-            <CareerInfo
-              key={each.id}
-              careerId={each.id}
-              initialContent={each.content}
-              initialYearFrom={each.yearFrom}
-              initialYearTo={each.yearTo}
-            />
-          ))}
-        </Section>
-      );
-    });
-  };
-
   // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
+  if (isLoading || !careerList) return <Loading />;
 
   return (
     <CareerListComp>
-      {renderCareerSections()}
+      {careerSections.map((section) => (
+        <CareerSection key={section.title} type={section.type} title={section.title} />
+      ))}
+      {isEditMode &&
+        <Space $align={"center"} $height={"calc(6vw)"}>
+          <CreateButtonGroup>
+            <HeadlessBtn
+              value={"Education"}
+              handleClick={() => handleCreateElement(CareerType.EDU)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Exhibition Solo"}
+              handleClick={() => handleCreateElement(CareerType.S_EXH)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Exhibition Group"}
+              handleClick={() => handleCreateElement(CareerType.G_EXH)}
+              StyledBtn={BtnCreate}
+            />
+          </CreateButtonGroup>
+        </Space>
+      }
+      {isEditMode && isChanged() &&
+        <HeadlessBtn
+          value={"Confirm"}
+          handleClick={handleConfirm}
+          StyledBtn={BtnConfirm}
+        />
+      }
     </CareerListComp>
   );
 }
@@ -109,15 +117,13 @@ const CareerListComp = styled.section`
   height: fit-content;
   display: flex;
   flex-direction: column;
-  padding: 40px 6vw;
+  padding: 40px 0px;
 `;
 
-const Section = styled.div`
-  margin-bottom: 2rem;
-`;
-
-const CareerTitle = styled.h2`
-
+const CreateButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 `;
 
 export default CareerList;

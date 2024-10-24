@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import { InputWorkName } from '../../shared/component/headless/input/InputBody';
+import { MemberInfoValue } from '../../shared/component/headless/input/InputBody';
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 
 
@@ -16,19 +15,15 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
   name, value, handleChange
 }) => {
 
-  const { isEditMode } = useEditMode();
   return (
     <Info>
-      <NameSection>{name}:</NameSection>
-      {isEditMode ?
-        <HeadlessInput
-          value={value.toString()}
-          placeholder={"Enter value"}
-          handleChange={handleChange}
-          StyledInput={InputWorkName}
-        /> :
-        <ValueSection>{value}</ValueSection>
-      }
+      <NameSection>{name}</NameSection>
+      <MoleculeInputDiv
+        value={value}
+        handleChange={handleChange}
+        inputStyle={MemberInfoValue}
+        StyledDiv={ValueSection}
+      />
     </Info>
   );
 };
@@ -41,16 +36,14 @@ const NameSection = styled.div`
   width: 120px;
   padding: 5px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  ${({ theme }) => theme.typography.Body_03_2};
-
-  background-color: #ff7251;
+  ${({ theme }) => theme.typography.Body_02_2};
 `;
 
 const ValueSection = styled.div`
   width: 100%;
-  padding: 5px;
+  padding: 5px 0;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  ${({ theme }) => theme.typography.Body_03_1};
+  ${({ theme }) => theme.typography.Body_02_1};
 `;
 
 

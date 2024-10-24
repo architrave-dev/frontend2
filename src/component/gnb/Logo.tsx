@@ -18,7 +18,6 @@ const StyledLink = styled(Link)`
 const LogoComp = styled.article`
   display: flex;
   align-items: center;
-  margin: 0 20px 0 20px;
 `;
 
 const LogoImg = styled.img`

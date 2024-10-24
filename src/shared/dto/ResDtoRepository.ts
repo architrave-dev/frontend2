@@ -1,4 +1,4 @@
-import { CareerData, LandingBoxData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData } from './EntityRepository';
+import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData } from './EntityRepository';
 
 
 export interface AuthResponse {
@@ -7,8 +7,8 @@ export interface AuthResponse {
 }
 
 //-------------- LandingBox
-export interface LandingBoxResponse {
-  data: LandingBoxData;
+export interface BillboardResponse {
+  data: BillboardData;
 }
 
 export interface WorkListResponse {

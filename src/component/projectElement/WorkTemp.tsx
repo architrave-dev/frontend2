@@ -11,6 +11,7 @@ import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/En
 import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
+import { ImgWrapper, SelectBoxContainer, TitleInfoWrpper, WorkImage, WorkInfo, WorkWrapper } from './Work';
 
 export interface WorkProps {
   tempId: string;
@@ -50,10 +51,12 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
   };
   return (
     <WorkWrapper>
-      <SelectBox
-        value={initialDisplaySize || WorkDisplaySize.BIG}
-        selectType={SelectType.WORK_SIZE}
-        handleChange={handleSizeChange} />
+      <SelectBoxContainer>
+        <SelectBox
+          value={initialDisplaySize || WorkDisplaySize.BIG}
+          selectType={SelectType.WORK_SIZE}
+          handleChange={handleSizeChange} />
+      </SelectBoxContainer>
       <ImgWrapper>
         <WorkImage
           src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
@@ -100,47 +103,5 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
     </WorkWrapper>
   );
 };
-
-const WorkWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  // background-color: ${({ theme }) => theme.colors.color_Gray_06};
-`;
-const ImgWrapper = styled.div`
-  position: relative;
-`
-
-const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
-  max-width: 100%;
-  max-height: ${({ $displaySize }) => {
-    switch ($displaySize) {
-      case WorkDisplaySize.SMALL:
-        return '20vh';
-      case WorkDisplaySize.REGULAR:
-        return '50vh';
-      case WorkDisplaySize.BIG:
-      default:
-        return '90vh';
-    }
-  }};
-  margin-bottom: 16px;
-  object-fit: contain;
-`;
-
-const TitleInfoWrpper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-
-const WorkInfo = styled.div`
-  display: flex;
-  gap: 4px;
-`;
-
 
 export default WorkTemp;

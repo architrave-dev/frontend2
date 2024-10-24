@@ -1,85 +1,75 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import ProjectTitle from '../../component/projectDetail/ProjectTitle';
 import Divider from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useAui } from '../../shared/hooks/useAui';
-import RepresentImg from './RepresentImg';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
 import { DividerType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
-import { ProjectData } from '../../shared/dto/EntityRepository';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
+import { IndexData, ProjectData } from '../../shared/dto/EntityRepository';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
+import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
+import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
+import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
+import { InputTitle } from '../../shared/component/headless/input/InputBody';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
-  const { aui } = useAui();
   const { isLoading, project, updateProject } = useProjectDetail();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [backgroundImageUrl, setBackgroundImageUrl] = useState("");
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState("");
+  const { updatedProjectDto, setUpdatedProjectDto } = useProjectStoreForUpdate();
+  const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
 
-  const { updatedProject, setUpdatedProject } = useProjectStoreForUpdate();
-  const { createInfoList, updateInfoList, removeInfoList } = useProjectInfoListStoreForUpdate();
+  const { aui } = useAui();
 
-  useEffect(() => {
-    if (project) {
-      setTitle(project.title);
-      setDescription(project.description);
-      setBackgroundImageUrl(project.originUrl);
-      setThumbnailImageUrl(project.thumbnailUrl);
-    }
-  }, [project]);
 
+  if (!project || !updatedProjectDto) {
+    return null;
+  }
+  const convertToPiIndexList = (): IndexData[] => {
+    return [];
+  }
   const handleConfirm = async () => {
-    if (!project) return;
-
-    const updatedData: UpdateProjectReq = {
-      id: project.id,
-      originUrl: backgroundImageUrl,
-      thumbnailUrl: thumbnailImageUrl,
-      title: title,
-      description: description,
-      piIndexList: [],  //이걸 어쩌나...
-      createdProjectInfoList: createInfoList,
-      updatedProjectInfoList: updateInfoList,
-      removedProjectInfoList: removeInfoList,
-    };
-
+    const newUpdateProjectReq: UpdateProjectReq = {
+      ...updatedProjectDto,
+      piIndexList: convertToPiIndexList(),
+      createdProjectInfoList: createPiList,
+      updatedProjectInfoList: updatePiList,
+      removedProjectInfoList: removePiList
+    }
     try {
-      await updateProject(aui, updatedData);
+      await updateProject(aui, newUpdateProjectReq);
     } catch (err) {
     } finally {
       setEditMode(false);
     }
   };
 
-  const isChanged = (initialData: ProjectData): boolean => {
-    const currentData = {
-      id: initialData.id,
-      originUrl: backgroundImageUrl,
-      thumbnailUrl: thumbnailImageUrl,
-      title: title,
-      description: description,
-      createdProjectInfoList: createInfoList,
-      updatedProjectInfoList: updateInfoList,
-      removedProjectInfoList: removeInfoList
-    };
+  const handleChange = (field: keyof ProjectData, value: string) => {
+    setUpdatedProjectDto({ ...updatedProjectDto, [field]: value });
+  }
+  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+    setUpdatedProjectDto({
+      ...updatedProjectDto,
+      originUrl,
+      thumbnailUrl
+    });
+  }
+  const isChanged = (): boolean => {
     return (
-      initialData.originUrl !== currentData.originUrl ||
-      initialData.title !== currentData.title ||
-      initialData.description !== currentData.description ||
-      (currentData.createdProjectInfoList?.length ?? 0) > 0 ||
-      (currentData.updatedProjectInfoList?.length ?? 0) > 0 ||
-      (currentData.removedProjectInfoList?.length ?? 0) > 0
+      project.originUrl !== updatedProjectDto.originUrl ||
+      project.thumbnailUrl !== updatedProjectDto.thumbnailUrl ||
+      project.title !== updatedProjectDto.title ||
+      project.description !== updatedProjectDto.description ||
+      (createPiList.length ?? 0) > 0 ||
+      (updatePiList.length ?? 0) > 0 ||
+      (removePiList.length ?? 0) > 0
     );
   };
 
@@ -88,38 +78,33 @@ const ProjectDetailContainer: React.FC = () => {
 
   return (
     <ProjectDetailContainerComp>
-      {isEditMode && project && isChanged(project) &&
+      {isEditMode && isChanged() &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
           StyledBtn={BtnConfirm}
         />
       }
-      <RepresentImg
-        backgroundImg={backgroundImageUrl}
-        setBackgroundImg={setBackgroundImageUrl}
-        setThumbnailImg={setThumbnailImageUrl}
+      <MoleculeImgDivContainer
+        backgroundImg={updatedProjectDto.originUrl}
+        handleChange={setOriginThumbnailUrl}
+        StyledImgDivContainer={RepresentImgContainer}
       />
       <ProjectDetailWrapper>
-        <ProjectTitle title={title} setTitle={setTitle} />
+        <MoleculeInputDiv
+          value={updatedProjectDto.title}
+          handleChange={(e) => handleChange('title', e.target.value)}
+          inputStyle={InputTitle}
+          StyledDiv={Title}
+        />
         <Divider dividerType={DividerType.PLAIN} />
-        {isEditMode ?
-          <HeadlessTextArea
-            alignment={TextBoxAlignment.LEFT}
-            content={description}
-            placeholder={"project description"}
-            handleChange={(e) => setDescription(e.target.value)}
-            StyledTextArea={TextAreaTextBox}
-          />
-          :
-          <Description $textBoxAlignment={TextBoxAlignment.LEFT}>
-            {description.split('\n').map((line, index) => (
-              <React.Fragment key={index}>
-                {line}<br />
-              </React.Fragment>
-            ))}
-          </Description>
-        }
+        <MoleculeTextareaDescription
+          value={updatedProjectDto.description}
+          handleChange={(e) => handleChange('description', e.target.value)}
+          alignment={TextBoxAlignment.LEFT}
+          textareaStyle={TextAreaTextBox}
+          StyledDescription={Description}
+        />
         <ProjectInfoList />
       </ProjectDetailWrapper>
     </ProjectDetailContainerComp>
@@ -129,16 +114,31 @@ const ProjectDetailContainer: React.FC = () => {
 const ProjectDetailContainerComp = styled.section`
   position: relative;
 `;
+
+const Title = styled.div`
+  padding: 4px 0px;
+  margin-bottom: 1px;
+  ${({ theme }) => theme.typography.H_015};
+`;
+
+const RepresentImgContainer = styled.div<StyledImgDivContainerProps>`
+  position: relative;
+  background-image: url(${props => props.$backgroundImg});
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+`;
+
 const ProjectDetailWrapper = styled.article`
-  padding: calc(8vh) calc(10vw);
+  padding: calc(8vh) calc(10vw) calc(4vh) calc(10vw);
 `;
 
 const Description = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
-  padding: 8px 0px;
-  margin-bottom: 50px;
+  padding: 9px 0px;
+  margin-bottom: 3px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
-  ${({ theme }) => theme.typography.Body_02_2};
+  text-align: ${({ $textBoxAlignment = TextBoxAlignment.LEFT }) => getAlignment($textBoxAlignment)};
+  ${({ theme }) => theme.typography.Body_02_1};
 `;
 
 

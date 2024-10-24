@@ -1,17 +1,11 @@
 import { create } from 'zustand';
 import { UserData } from '../dto/EntityRepository';
 
-
-interface AuthState {
+interface AuthStore {
   user: UserData | null;
-}
-
-interface AuthActions {
   setUser: (user: UserData | null) => void;
   clearAuth: () => void;
 }
-
-type AuthStore = AuthState & AuthActions;
 
 export const useAuthStore = create<AuthStore>()((set) => ({
   user: null,
@@ -19,15 +13,11 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   clearAuth: () => set({ user: null }),
 }));
 
-interface EditModeState {
+//----- editMode -----
+interface EditModeStore {
   isEditMode: boolean;
-}
-
-interface EditModeActions {
   setIsEditMode: (value: boolean) => void;
 }
-
-type EditModeStore = EditModeState & EditModeActions;
 
 export const useEditModeStore = create<EditModeStore>((set) => ({
   isEditMode: false,

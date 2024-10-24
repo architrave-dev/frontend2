@@ -64,10 +64,10 @@ export interface CreateProjectReq {
 
 export interface UpdateProjectReq {
   id: string;
-  originUrl?: string;
-  thumbnailUrl?: string;
   title?: string;
   description?: string;
+  originUrl?: string;
+  thumbnailUrl?: string;
   piIndexList: IndexData[];
   createdProjectInfoList?: CreateProjectInfoReq[];
   updatedProjectInfoList?: UpdatedProjectInfoReq[];
@@ -134,16 +134,15 @@ export interface UpdateProjectElementListReq {
 
 //-------------- Career
 export interface CreateCareerReq {
+  tempId: string;
   careerType: CareerType
   yearFrom: number;
-  yearTo: number;
   content: string;
 }
 
 export interface UpdateCareerReq {
   careerId: string;
   yearFrom: number;
-  yearTo: number;
   content: string;
 }
 

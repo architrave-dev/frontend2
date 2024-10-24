@@ -98,10 +98,12 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
     <TextBoxWrapper>
       {isEditMode ? (
         <>
-          <SelectBox
-            value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
-            selectType={SelectType.TEXTBOX_ALIGNMENT}
-            handleChange={handleAlignmentChange} />
+          <SelectBoxContainer>
+            <SelectBox
+              value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
+              selectType={SelectType.TEXTBOX_ALIGNMENT}
+              handleChange={handleAlignmentChange} />
+          </SelectBoxContainer>
           <HeadlessTextArea
             alignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}
             content={initialData.content}
@@ -124,15 +126,23 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
 }
 
 export const TextBoxWrapper = styled.div`
-      position: relative;
-      min-height: 80px;
-      `;
+  position: relative;
+  min-height: 80px;
+`;
+
+export const SelectBoxContainer = styled.div`
+  position: absolute;
+  top: -30px;
+  width: 100%;
+  display: flex;
+  gap: 20px;
+`
 
 const TextBoxContent = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
-      padding: 8px 0px;
-      color: ${({ theme }) => theme.colors.color_Gray_03};
-      text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
-      ${({ theme }) => theme.typography.Body_02_2};
-      `;
+  padding: 8px 0px;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
+  ${({ theme }) => theme.typography.Body_02_2};
+`;
 
 export default TextBox;

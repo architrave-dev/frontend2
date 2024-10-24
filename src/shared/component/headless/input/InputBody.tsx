@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const commonInputStyles = css`
-  padding: 0px 8px;
+  padding: 4px 0px;
   background: transparent;
   border: none;
   outline: none;
@@ -13,20 +13,21 @@ const commonInputStyles = css`
 
 export const InputName = styled.input`
   ${commonInputStyles}
-  width: 18vw;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
-  ${({ theme }) => theme.typography.Body_03_2};
-`;
-export const InputNameNew = styled.input`
-  ${commonInputStyles}
-  width: 18vw;
+  width: 14vw;
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 export const InputValue = styled.input`
   ${commonInputStyles}
   width: 50vw;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
+  ${({ theme }) => theme.typography.Body_03_2};
+`;
+
+export const InputNameNew = styled.input`
+  ${commonInputStyles}
+  width: 14vw;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 export const InputValueNew = styled.input`
@@ -48,11 +49,12 @@ export const InputWorkTitle = styled.input`
   text-align: center;
   ${({ theme }) => theme.typography.Body_02_2};
 `;
-export const InputBilboard = styled.input`
+export const InputBillboard = styled.input`
   ${commonInputStyles}
   width: 70%;
-  color: ${({ theme }) => theme.colors.color_Gray_01};
+  margin-bottom: 20px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_White};
+  color: ${({ theme }) => theme.colors.color_Gray_01};
   ${({ theme }) => theme.typography.H_01};
 `;
 export const InputTitle = styled.input`
@@ -79,6 +81,7 @@ export const InputBox = styled.input`
   background-color: ${({ theme }) => theme.colors.color_Gray_06};
   ${({ theme }) => theme.typography.Body_02_2};
 `;
+
 export const InputAuth = styled.input`
   ${commonInputBoxStyles}
   width: 100%;
@@ -95,4 +98,60 @@ export const InputWorkName = styled.input`
   border: none;
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
   ${({ theme }) => theme.typography.Body_03_2};
+`;
+
+export const WorkViewerTitle = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height:28px;
+
+  padding: 0px;
+  margin-bottom: 2px;
+
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_03};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_02_2};
+`;
+
+export const WorkViewerInfo = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: 18px;
+
+  padding: 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_04};
+`;
+
+export const MemberTitleInput = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: fit-content;
+
+  padding: 4px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.H_02};
+`;
+
+export const MemberInfoInput = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: fit-content;
+
+  padding: 5px 0px 4px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_02_2};
+`;
+
+export const MemberInfoValue = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: fit-content;
+
+  padding: 5px 0px 4px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_02_1};
 `;

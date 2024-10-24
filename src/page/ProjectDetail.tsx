@@ -16,9 +16,11 @@ const ProjectDetail: React.FC = () => {
 
   useEffect(() => {
     const getProjectWithApi = async () => {
-      if (aui && projectTitle) {
+      if (!(aui && projectTitle)) return;
+      try {
+        console.log("getting ProjectDetail...")
         await getProject(aui, projectTitle);
-      }
+      } catch (error) { }
     }
     getProjectWithApi();
   }, [aui, projectTitle]);

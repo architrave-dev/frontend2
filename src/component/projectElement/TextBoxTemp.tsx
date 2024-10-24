@@ -1,7 +1,7 @@
 import React from 'react';
 import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import SelectBox from '../../shared/component/SelectBox';
-import { TextBoxWrapper } from './TextBox';
+import { SelectBoxContainer, TextBoxWrapper } from './TextBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
 import { SelectType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
@@ -33,10 +33,12 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
 
   return (
     <TextBoxWrapper>
-      <SelectBox
-        value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
-        selectType={SelectType.TEXTBOX_ALIGNMENT}
-        handleChange={handleAlignmentChange} />
+      <SelectBoxContainer>
+        <SelectBox
+          value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
+          selectType={SelectType.TEXTBOX_ALIGNMENT}
+          handleChange={handleAlignmentChange} />
+      </SelectBoxContainer>
       <HeadlessTextArea
         alignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}
         content={initialData.content}

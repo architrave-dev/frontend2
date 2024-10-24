@@ -5,7 +5,6 @@ const commonBtnStyles = css`
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s;
-  cursor: pointer;
 `;
 
 export const BtnCreate = styled.button`
@@ -54,6 +53,7 @@ export const BtnConfirm = styled.button`
     }
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
+  z-index:2; 
 `;
 
 export const BtnWorkDelete = styled.button`
@@ -64,4 +64,25 @@ export const BtnWorkDelete = styled.button`
   }
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
+`;
+
+export const BtnWorkViewer = styled.button`
+  ${commonBtnStyles}
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  background-color: ${({ theme }) => theme.colors.color_White};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  }
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_03_2};
+`;
+
+export const BtnCancel = styled.button`
+  ${commonBtnStyles}
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  border-radius: 1px;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Alpha_02};
+  }
 `;
