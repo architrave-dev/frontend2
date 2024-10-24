@@ -238,7 +238,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
   );
 };
 
-const WorkWrapper = styled.div`
+export const WorkWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
@@ -247,25 +247,25 @@ const WorkWrapper = styled.div`
   // background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 
-const SelectBoxContainer = styled.div`
+export const SelectBoxContainer = styled.div`
   position: absolute;
   top: -30px;
   width: 100%;
   display: flex;
   gap: 20px;
 `
-const ImgWrapper = styled.div`
+export const ImgWrapper = styled.div`
   position: relative;
 `
 
-const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
+export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
   max-width: 100%;
   max-height: ${({ $displaySize }) => {
     switch ($displaySize) {
       case WorkDisplaySize.SMALL:
-        return '20vh';
+        return '35vh';
       case WorkDisplaySize.REGULAR:
-        return '50vh';
+        return '55vh';
       case WorkDisplaySize.BIG:
       default:
         return '90vh';
@@ -275,13 +275,13 @@ const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
   object-fit: contain;
 `;
 
-const TitleInfoWrpper = styled.div`
+export const TitleInfoWrpper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `
-const WorkInfo = styled.div`
+export const WorkInfo = styled.div`
   display: flex;
   gap: 4px;
 `;
