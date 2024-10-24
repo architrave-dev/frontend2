@@ -17,11 +17,13 @@ const commonTextAreaStyles = css`
 `;
 export const TextAreaBillboard = styled.textarea<{ $alignment: Alignment }>`
   ${commonTextAreaStyles}
-  width: 60%;
-  min-height: 7vh;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_White};
   text-align: ${({ $alignment }) => getAlignment($alignment)};
-  ${({ theme }) => theme.typography.Body_01};
+  width: 60%;
+  min-height: 10vh;
+  margin-bottom: 20px;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_White};
+  color: ${({ theme }) => theme.colors.color_Gray_01};
+  ${({ theme }) => theme.typography.Body_01_1};
 `;
 
 export const TextAreaWork = styled.textarea<{ $alignment: Alignment }>`
@@ -33,6 +35,14 @@ export const TextAreaWork = styled.textarea<{ $alignment: Alignment }>`
 
 export const TextAreaTextBox = styled.textarea<{ $alignment: Alignment }>`
   ${commonTextAreaStyles}
+
+  width: 100%;
+  padding: 8px 0px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+
+
   color: ${({ theme }) => theme.colors.color_Gray_03};
   text-align: ${({ $alignment }) => getAlignment($alignment)};
   ${({ theme }) => theme.typography.Body_02_1};

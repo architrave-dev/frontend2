@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import ProjectTitle from '../../component/projectDetail/ProjectTitle';
 import Divider from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useEditMode } from '../../shared/hooks/useEditMode';
@@ -18,6 +17,8 @@ import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
+import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
+import { InputTitle } from '../../shared/component/headless/input/InputBody';
 
 const ProjectDetailContainer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
@@ -90,14 +91,19 @@ const ProjectDetailContainer: React.FC = () => {
         StyledImgDivContainer={RepresentImgContainer}
       />
       <ProjectDetailWrapper>
-        <ProjectTitle title={updatedProjectDto.title} handleChange={(e) => handleChange('title', e.target.value)} />
+        <MoleculeInputDiv
+          value={updatedProjectDto.title}
+          handleChange={(e) => handleChange('title', e.target.value)}
+          inputStyle={InputTitle}
+          StyledDiv={Title}
+        />
         <Divider dividerType={DividerType.PLAIN} />
         <MoleculeTextareaDescription
           value={updatedProjectDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
           alignment={TextBoxAlignment.LEFT}
           textareaStyle={TextAreaTextBox}
-          StyleDescription={Description}
+          StyledDescription={Description}
         />
         <ProjectInfoList />
       </ProjectDetailWrapper>
@@ -109,6 +115,12 @@ const ProjectDetailContainerComp = styled.section`
   position: relative;
 `;
 
+const Title = styled.div`
+  padding: 4px 0px;
+  margin-bottom: 1px;
+  ${({ theme }) => theme.typography.H_015};
+`;
+
 const RepresentImgContainer = styled.div<StyledImgDivContainerProps>`
   position: relative;
   background-image: url(${props => props.$backgroundImg});
@@ -118,15 +130,15 @@ const RepresentImgContainer = styled.div<StyledImgDivContainerProps>`
 `;
 
 const ProjectDetailWrapper = styled.article`
-  padding: calc(8vh) calc(10vw);
+  padding: calc(8vh) calc(10vw) calc(4vh) calc(10vw);
 `;
 
 const Description = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
-  padding: 8px 0px;
-  margin-bottom: 50px;
+  padding: 9px 0px;
+  margin-bottom: 3px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};
-  ${({ theme }) => theme.typography.Body_02_2};
+  text-align: ${({ $textBoxAlignment = TextBoxAlignment.LEFT }) => getAlignment($textBoxAlignment)};
+  ${({ theme }) => theme.typography.Body_02_1};
 `;
 
 

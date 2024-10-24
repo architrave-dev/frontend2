@@ -93,22 +93,27 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
 }
 
 const ProjectInfoItem = styled.div<{ $isEditMode: boolean }>`
+  position: relative;
   display: flex;
   height: 40px;
-  gap: 20px;
-  margin-bottom: ${({ $isEditMode }) => $isEditMode ? '8px' : '10px'};
+  gap: 40px;
+  margin-bottom: ${({ $isEditMode }) => $isEditMode ? '10px' : '10px'};
 `;
 
 const NameSection = styled.div`
-  width: 18vw;
-  padding: 5px;
+  width: 14vw;
+  display: flex;
+  align-items: center;
+  padding: 5px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 const ValueSection = styled.div`
-  width: 60vw;
-  padding: 5px;
+  width: 50vw;
+  display: flex;
+  align-items: center;
+  padding: 5px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_1};
 `;

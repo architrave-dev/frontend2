@@ -9,7 +9,7 @@ interface MoleculeTextareaDescriptionProps {
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   alignment?: TextBoxAlignment;
   textareaStyle: StyledTextAreaComponent;
-  StyleDescription: StyledDivComponent;
+  StyledDescription: StyledDivComponent;
 }
 
 const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = ({
@@ -17,7 +17,7 @@ const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = 
   handleChange,
   alignment,
   textareaStyle,
-  StyleDescription
+  StyledDescription
 }) => {
   const { isEditMode } = useEditMode();
 
@@ -32,14 +32,14 @@ const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = 
           StyledTextArea={textareaStyle}
         />
       ) : (
-        <StyleDescription>
+        <StyledDescription>
           {value.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}
               <br />
             </React.Fragment>
           ))}
-        </StyleDescription>
+        </StyledDescription>
       )}
     </>
   );

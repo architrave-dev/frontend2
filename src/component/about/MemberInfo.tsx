@@ -101,7 +101,7 @@ const MemberInfo: React.FC = () => {
           value={updateMemberInfoDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
           textareaStyle={TextAreaMemberInfo}
-          StyleDescription={Description}
+          StyledDescription={Description}
         />
       </DescriptionWrapper>
       {isEditMode && isChanged() &&

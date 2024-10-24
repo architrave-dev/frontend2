@@ -57,9 +57,11 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
 };
 
 const ProjectInfoItem = styled.div`
+  position: relative;
   display: flex;
   height: 40px;
-  gap: 20px;
+  gap: 40px;
+  margin-bottom: 10px;
 `;
 
 

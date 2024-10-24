@@ -94,7 +94,7 @@ const Billboard: React.FC = () => {
         handleChange={(e) => handleChange('description', e.target.value)}
         alignment={TextBoxAlignment.LEFT}
         textareaStyle={TextAreaBillboard}
-        StyleDescription={Description}
+        StyledDescription={Description}
       />
       {isEditMode && isChanged() &&
         <HeadlessBtn
@@ -123,18 +123,18 @@ const Container = styled.div<StyledImgDivContainerProps>`
   padding: 40px 6vw;
 `;
 
-const Title = styled.h1`
-max-width: 60vw;
-padding: 0.5rem;
-margin-bottom: 20px;
-${({ theme }) => theme.typography.H_01};
+const Title = styled.div`
+  width: 70%;
+  padding: 6px 0px;
+  margin-bottom: 20px;
+  ${({ theme }) => theme.typography.H_01};
 `;
 
-const Description = styled.p`
-max-width: 70vw;
-min-height: 7vh;
+const Description = styled.div`
+width: 60%;;
+min-height: 10vh;
+padding: 8px 0px;
 margin-bottom: 20px;
-padding: 0.5rem;
 ${({ theme }) => theme.typography.Body_01_1};
 `;
 

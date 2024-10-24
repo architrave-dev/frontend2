@@ -119,7 +119,7 @@ const WorkViewer: React.FC = () => {
           handleChange={(e) => handleChange("description", e.target.value)}
           alignment={TextBoxAlignment.LEFT}
           textareaStyle={TextAreaWorkViewer}
-          StyleDescription={Description}
+          StyledDescription={Description}
         />
       </WorkInfoContainer>
       <ImgWrapper>

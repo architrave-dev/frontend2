@@ -13,20 +13,21 @@ const commonInputStyles = css`
 
 export const InputName = styled.input`
   ${commonInputStyles}
-  width: 18vw;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
-  ${({ theme }) => theme.typography.Body_03_2};
-`;
-export const InputNameNew = styled.input`
-  ${commonInputStyles}
-  width: 18vw;
+  width: 14vw;
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 export const InputValue = styled.input`
   ${commonInputStyles}
   width: 50vw;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_06};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
+  ${({ theme }) => theme.typography.Body_03_2};
+`;
+
+export const InputNameNew = styled.input`
+  ${commonInputStyles}
+  width: 14vw;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 export const InputValueNew = styled.input`
@@ -51,8 +52,9 @@ export const InputWorkTitle = styled.input`
 export const InputBillboard = styled.input`
   ${commonInputStyles}
   width: 70%;
-  color: ${({ theme }) => theme.colors.color_Gray_01};
+  margin-bottom: 20px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.color_White};
+  color: ${({ theme }) => theme.colors.color_Gray_01};
   ${({ theme }) => theme.typography.H_01};
 `;
 export const InputTitle = styled.input`
