@@ -46,8 +46,21 @@ export async function uploadToS3(file: File, bucketName: string, aui: string): P
     await s3Client.send(new PutObjectCommand(originParams));
     await s3Client.send(new PutObjectCommand(thumbnailParams));
 
-    const originUrl = `https://${bucketName}.s3.amazonaws.com/${originalFileKey}`;
-    const thumbnailUrl = `https://${bucketName}.s3.amazonaws.com/${thumbnailFileKey}`;
+
+    const cloudfrontDomain = process.env.REACT_APP_CLOUDFRONT_URL!
+    // console.log("cloudfrontDomain: " + cloudfrontDomain);
+
+    // MVP-1에서 사용
+    // S3의 Image url에 직접적으로 접근하는 방법
+    // const originUrl = `https://${bucketName}.s3.amazonaws.com/${originalFileKey}`;
+    // const thumbnailUrl = `https://${bucketName}.s3.amazonaws.com/${thumbnailFileKey}`;
+
+    // MVP-2에서 사용
+    // cloudfront를 통해 Image url에서 접근하는 방법.
+    // S3의 모든 퍼블릭 접근이 제한되었기에, 해당 방법을 사용한다. 
+    const originUrl = `https://${cloudfrontDomain}/${originalFileKey}`;
+    const thumbnailUrl = `https://${cloudfrontDomain}/${thumbnailFileKey}`;
+
 
     return { originUrl, thumbnailUrl };
   } catch (error) {
