@@ -56,8 +56,8 @@ const WorkList: React.FC = () => {
 
   const handleCreateWork = async () => {
     const newWork: CreateWorkReq = {
-      originUrl: process.env.REACT_APP_DEFAULT_IMG || '',
-      thumbnailUrl: process.env.REACT_APP_DEFAULT_IMG || '',
+      originUrl: '',
+      thumbnailUrl: '',
       title: "New Work",
       description: "This is New Work",
       size: {
