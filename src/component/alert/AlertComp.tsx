@@ -61,7 +61,9 @@ const Button = styled.button`
 const AlertContent = styled.div`
   position: fixed;
   top: calc(10vh);
-  left: 45vw;
+   /* 화면 가운데 정렬 */
+  left: 50%;
+  transform: translateX(-50%);
   min-width: 500px;
   min-height: 50px;
   width: fit-content;
