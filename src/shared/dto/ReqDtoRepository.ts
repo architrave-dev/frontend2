@@ -53,6 +53,19 @@ export interface UpdateTextBoxReq {
   content: string;
 }
 
+//-------------- Document
+export interface CreateDocumentReq {
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
+export interface UpdateDocumentReq {
+  id: string;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
 
 //-------------- Project
 export interface CreateProjectReq {
@@ -107,6 +120,8 @@ export interface CreateProjectElementReq {
   workDisplaySize: WorkDisplaySize | null;
   createTextBoxReq: CreateTextBoxReq | null,
   textBoxAlignment: TextBoxAlignment | null;
+  createDocumentReq: CreateDocumentReq | null;
+  documentAlignment: WorkAlignment | null;
   dividerType: DividerType | null;
 }
 
@@ -117,6 +132,8 @@ export interface UpdateProjectElementReq {
   workDisplaySize?: WorkDisplaySize | null;
   updateTextBoxReq?: UpdateTextBoxReq | null,
   textBoxAlignment?: TextBoxAlignment | null;
+  updateDocumentReq: UpdateDocumentReq | null;
+  documentAlignment: WorkAlignment | null;
   dividerType?: DividerType | null;
 }
 

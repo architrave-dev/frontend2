@@ -17,6 +17,8 @@ export enum AlertPosition {
 
 export enum ProjectElementType {
   WORK = 'WORK',
+  DETAIL = 'DETAIL',
+  DOC = 'DOC',
   TEXTBOX = 'TEXTBOX',
   DIVIDER = 'DIVIDER',
 }

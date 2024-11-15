@@ -62,6 +62,12 @@ const ProjectElementList: React.FC = () => {
         content: "This is New TextBox"
       } : null,
       textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextBoxAlignment.CENTER : null,
+      createDocumentReq: elementType === ProjectElementType.DOC ? {
+        originUrl: '',
+        thumbnailUrl: '',
+        description: "New Doc",
+      } : null,
+      documentAlignment: elementType === ProjectElementType.WORK ? WorkAlignment.CENTER : null,
       dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
     };
 
@@ -140,6 +146,16 @@ const ProjectElementList: React.FC = () => {
               <HeadlessBtn
                 value={"Work"}
                 handleClick={() => handleCreateElement(ProjectElementType.WORK)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Detail"}
+                handleClick={() => handleCreateElement(ProjectElementType.DETAIL)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Doc"}
+                handleClick={() => handleCreateElement(ProjectElementType.DOC)}
                 StyledBtn={BtnCreate}
               />
               <HeadlessBtn

@@ -56,6 +56,8 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         workDisplaySize: target.workDisplaySize,
         updateTextBoxReq: null,
         textBoxAlignment: null,
+        updateDocumentReq: null,
+        documentAlignment: null,
         dividerType: null
       }
       //projectElementList에서 id로 찾고
@@ -107,6 +109,8 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         workDisplaySize: target.workDisplaySize,
         updateTextBoxReq: null,
         textBoxAlignment: null,
+        updateDocumentReq: null,
+        documentAlignment: null,
         dividerType: null
       }
       //projectElementList에서 id로 찾고
@@ -144,6 +148,8 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         workDisplaySize: value,
         updateTextBoxReq: null,
         textBoxAlignment: null,
+        updateDocumentReq: null,
+        documentAlignment: null,
         dividerType: null
       }
       setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
