@@ -10,20 +10,20 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 
 const ProjectDetail: React.FC = () => {
   useInitPage();
-  const { projectTitle } = useParams<{ projectTitle: string }>();
+  const { projectId } = useParams<{ projectId: string }>();
   const { aui } = useAui();
   const { isLoading, getProject } = useProjectDetail();
 
   useEffect(() => {
     const getProjectWithApi = async () => {
-      if (!(aui && projectTitle)) return;
+      if (!(aui && projectId)) return;
       try {
         console.log("getting ProjectDetail...")
-        await getProject(aui, projectTitle);
+        await getProject(aui, projectId);
       } catch (error) { }
     }
     getProjectWithApi();
-  }, [aui, projectTitle]);
+  }, [aui, projectId]);
 
   return (
     <ProjectDetailPage>

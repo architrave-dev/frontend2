@@ -13,9 +13,9 @@ const projectElementApi = axios.create({
   },
 });
 
-export const getProjectElementList = async (aui: string, projectTitle: string): Promise<ProjectElementListResponse> => {
+export const getProjectElementList = async (aui: string, projectId: string): Promise<ProjectElementListResponse> => {
   try {
-    const response = await projectElementApi.get<ProjectElementListResponse>(`/api/v1/project-element?aui=${aui}&projectTitle=${projectTitle}`);
+    const response = await projectElementApi.get<ProjectElementListResponse>(`/api/v1/project-element?aui=${aui}&projectId=${projectId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);

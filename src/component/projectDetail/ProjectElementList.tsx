@@ -17,7 +17,7 @@ import Loading from '../../shared/component/Loading';
 
 
 const ProjectElementList: React.FC = () => {
-  const { AUI, projectTitle } = useParams<{ AUI: string, projectTitle: string }>();
+  const { AUI, projectId } = useParams<{ AUI: string, projectId: string }>();
   const { isEditMode, setEditMode } = useEditMode();
   const { project } = useProjectDetail();
   const { isLoading, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
@@ -26,14 +26,14 @@ const ProjectElementList: React.FC = () => {
 
   useEffect(() => {
     const getProjectElementListWithApi = async () => {
-      if (aui && projectTitle) {
+      if (aui && projectId) {
         try {
-          await getProjectElementList(aui, projectTitle);
+          await getProjectElementList(aui, projectId);
         } catch (error) { }
       }
     }
     getProjectElementListWithApi();
-  }, [aui, projectTitle]);
+  }, [aui, projectId]);
 
   const handleCreateElement = (elementType: ProjectElementType) => {
     if (!project) {

@@ -35,7 +35,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
 
   const moveToProjectDetail = () => {
     if (isEditMode) return;
-    navigate(`/${aui}/projects/${initialTitle}`);
+    navigate(`/${aui}/projects/${projectId}`);
   }
 
   const handleDelete = async () => {

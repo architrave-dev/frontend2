@@ -11,7 +11,7 @@ import { ProjectElementListResponse } from '../../dto/ResDtoRepository';
 interface UseProjectElementResult {
   isLoading: boolean;
   projectElementList: ProjectElementData[];
-  getProjectElementList: (aui: string, title: string) => Promise<void>;
+  getProjectElementList: (aui: string, projectId: string) => Promise<void>;
   updateProjectElementList: (aui: string, data: UpdateProjectElementListReq) => Promise<void>;
 }
 
@@ -33,7 +33,7 @@ export const useProjectElement = (): UseProjectElementResult => {
   const handleProjectElementRequest = async (
     aui: string,
     action: 'get' | 'update',
-    title: string | null,
+    projectId: string | null,
     data?: UpdateProjectElementListReq
   ) => {
     setIsLoading(true);
@@ -42,8 +42,8 @@ export const useProjectElement = (): UseProjectElementResult => {
       if (data) {
         const response = await updateProjectElementList(aui, data);
         handleProjectElementSuccess(response);
-      } else if (title) {
-        const response = await getProjectElementList(aui, title);
+      } else if (projectId) {
+        const response = await getProjectElementList(aui, projectId);
         handleProjectElementSuccess(response);
       }
     } catch (err) {
@@ -51,7 +51,7 @@ export const useProjectElement = (): UseProjectElementResult => {
       const convertedErrCode = convertStringToErrorCode(errCode);
       setManagedErr({
         errCode: convertedErrCode,
-        retryFunction: () => handleProjectElementRequest(aui, action, title, data)
+        retryFunction: () => handleProjectElementRequest(aui, action, projectId, data)
       });
       throw err;
     } finally {
@@ -59,7 +59,7 @@ export const useProjectElement = (): UseProjectElementResult => {
     }
   };
 
-  const getProjectElementHandler = (aui: string, projectTitle: string) => handleProjectElementRequest(aui, 'get', projectTitle);
+  const getProjectElementHandler = (aui: string, projectId: string) => handleProjectElementRequest(aui, 'get', projectId);
   const updateProjectDetailHandler = (aui: string, data: UpdateProjectElementListReq) => handleProjectElementRequest(aui, 'update', null, data);
 
 
