@@ -11,6 +11,7 @@ import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoR
 import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
 import { ImgWrapper, SelectBoxContainer, TitleInfoWrpper, WorkImage, WorkInfo, WorkWrapper } from './Work';
+import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 export interface WorkProps {
   tempId: string;
@@ -57,12 +58,13 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
           handleChange={handleSizeChange} />
       </SelectBoxContainer>
       <ImgWrapper>
-        <WorkImage
-          src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
+        <MoleculeImg
+          srcUrl={initialData.originUrl}
           alt={initialData.title}
-          $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
+          displaySize={initialDisplaySize}
+          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          StyledImg={WorkImage}
         />
-        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
       </ImgWrapper>
       <TitleInfoWrpper>
         <HeadlessInput

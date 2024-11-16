@@ -12,6 +12,7 @@ import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/En
 import { ProjectElementData, SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { UpdateProjectElementReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import SelectBox from '../../shared/component/SelectBox';
+import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 export interface WorkProps {
   alignment: WorkAlignment | null;
@@ -164,22 +165,23 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
 
   return (
     <WorkWrapper>
+      <SelectBoxContainer>
+        <SelectBox
+          value={initialDisplaySize || WorkDisplaySize.BIG}
+          selectType={SelectType.WORK_SIZE}
+          handleChange={handleSizeChange} />
+      </SelectBoxContainer>
+      <ImgWrapper>
+        <MoleculeImg
+          srcUrl={initialData.originUrl}
+          alt={initialData.title}
+          displaySize={initialDisplaySize}
+          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          StyledImg={WorkImage}
+        />
+      </ImgWrapper>
       {isEditMode ? (
         <>
-          <SelectBoxContainer>
-            <SelectBox
-              value={initialDisplaySize || WorkDisplaySize.BIG}
-              selectType={SelectType.WORK_SIZE}
-              handleChange={handleSizeChange} />
-          </SelectBoxContainer>
-          <ImgWrapper>
-            <WorkImage
-              src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
-              alt={initialData.title}
-              $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
-            />
-            <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
-          </ImgWrapper>
           <TitleInfoWrpper>
             <HeadlessInput
               value={initialData.title}
@@ -218,13 +220,6 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         </>
       ) : (
         <>
-          <ImgWrapper>
-            <WorkImage
-              src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
-              alt={initialData.title}
-              $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
-            />
-          </ImgWrapper>
           <TitleInfoWrpper>
             <Title>[ {initialData.title} ]</Title>
             <Description>
