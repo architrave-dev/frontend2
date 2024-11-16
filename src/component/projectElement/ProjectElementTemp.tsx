@@ -30,7 +30,7 @@ const ProjectElementTemp: React.FC<CreateProjectElementReq> = ({
         return work && <WorkTemp tempId={tempId} alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBoxTemp tempId={tempId} alignment={textBoxAlignment} data={textBox} />;
-      case ProjectElementType.DOC:
+      case ProjectElementType.DOCUMENT:
         return document && <DocumentTemp tempId={tempId} alignment={documentAlignment} data={document} />;
       case ProjectElementType.DIVIDER:
         return dividerType && <DividerTemp tempId={tempId} dividerType={dividerType} />;
@@ -72,7 +72,7 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
     switch ($elementType) {
       case ProjectElementType.WORK:
         return 'calc(16vh)';
-      case ProjectElementType.DOC:
+      case ProjectElementType.DOCUMENT:
         return 'calc(16vh)';
       case ProjectElementType.TEXTBOX:
         return 'calc(10vh)';
