@@ -80,6 +80,13 @@ export interface WorkData {
   //Price: 
 }
 
+export interface DocumentData {
+  id: string;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
 export interface TextBoxData {
   id: string;
   content: string;
@@ -118,6 +125,8 @@ export interface ProjectElementData {
   workDisplaySize: WorkDisplaySize | null;
   textBox: TextBoxData | null;
   textBoxAlignment: TextBoxAlignment | null;
+  document: DocumentData | null;
+  documentAlignment: WorkAlignment | null;
   dividerType: DividerType | null;
 }
 

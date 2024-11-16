@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';

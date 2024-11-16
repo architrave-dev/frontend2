@@ -43,6 +43,7 @@ const ProjectElementList: React.FC = () => {
       tempId: Math.floor(Math.random() * 100) + "",
       projectId: project.id,
       projectElementType: elementType,
+      // Work
       createWorkReq: elementType === ProjectElementType.WORK ?
         {
           originUrl: '',
@@ -58,16 +59,22 @@ const ProjectElementList: React.FC = () => {
         } : null,
       workAlignment: elementType === ProjectElementType.WORK ? WorkAlignment.CENTER : null,
       workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
+
+      // TextBox
       createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
-        content: "This is New TextBox"
+        content: "New TextBox"
       } : null,
       textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextBoxAlignment.CENTER : null,
+
+      // DOC
       createDocumentReq: elementType === ProjectElementType.DOC ? {
         originUrl: '',
         thumbnailUrl: '',
         description: "New Doc",
       } : null,
-      documentAlignment: elementType === ProjectElementType.WORK ? WorkAlignment.CENTER : null,
+      documentAlignment: elementType === ProjectElementType.DOC ? WorkAlignment.CENTER : null,
+
+      // Divider
       dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
     };
 
@@ -133,11 +140,13 @@ const ProjectElementList: React.FC = () => {
               tempId={each.tempId}
               projectId={each.projectId}
               projectElementType={each.projectElementType}
-              work={each.createWorkReq}
+              createWorkReq={each.createWorkReq}
               workAlignment={each.workAlignment}
               workDisplaySize={each.workDisplaySize}
-              textBox={each.createTextBoxReq}
+              createTextBoxReq={each.createTextBoxReq}
               textBoxAlignment={each.textBoxAlignment}
+              createDocumentReq={each.createDocumentReq}
+              documentAlignment={each.documentAlignment}
               dividerType={each.dividerType}
             />
           ))}
