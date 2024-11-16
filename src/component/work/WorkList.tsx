@@ -14,6 +14,7 @@ import { CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkListStore } from '../../shared/store/WorkListStore';
 import Space from '../../shared/Space';
+import { WorkType } from '../../shared/enum/EnumRepository';
 
 const WorkList: React.FC = () => {
   const { isEditMode } = useEditMode();
@@ -26,6 +27,7 @@ const WorkList: React.FC = () => {
   const setDefaultWorkView = () => {
     const defaultWork: WorkData = {
       id: '',
+      workType: WorkType.NONE,
       originUrl: '',
       thumbnailUrl: '',
       title: 'Select Work',
@@ -56,6 +58,7 @@ const WorkList: React.FC = () => {
 
   const handleCreateWork = async () => {
     const newWork: CreateWorkReq = {
+      workType: WorkType.NONE,
       originUrl: '',
       thumbnailUrl: '',
       title: "New Work",

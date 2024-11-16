@@ -1,4 +1,4 @@
-import { CareerType, DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../enum/EnumRepository';
+import { CareerType, DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
 import { IndexData, SizeData } from './EntityRepository';
 
 //-------------- Auth
@@ -19,6 +19,7 @@ export interface RefreshReq {
 
 //-------------- Work
 export interface CreateWorkReq {
+  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   title: string;
@@ -30,6 +31,7 @@ export interface CreateWorkReq {
 
 export interface UpdateWorkReq {
   id: string;
+  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   title: string;

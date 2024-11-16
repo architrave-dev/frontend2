@@ -11,7 +11,7 @@ import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import Space from '../../shared/Space';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
 import Loading from '../../shared/component/Loading';
 
@@ -46,6 +46,7 @@ const ProjectElementList: React.FC = () => {
       // Work
       createWorkReq: elementType === ProjectElementType.WORK ?
         {
+          workType: WorkType.NONE,
           originUrl: '',
           thumbnailUrl: '',
           title: "New Work",

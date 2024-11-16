@@ -1,4 +1,4 @@
-import { CareerType, CountryType, DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../enum/EnumRepository';
+import { CareerType, CountryType, DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
 
 /**
  * 전부 ~Data로 통일
@@ -68,6 +68,7 @@ export const convertStringToSize = (value: string): SizeData => {
 
 export interface WorkData {
   id: string;
+  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   title: string;
@@ -75,8 +76,6 @@ export interface WorkData {
   size: SizeData;
   material: string,
   prodYear: string,
-  //genre : drawing, painting, Sculpture, Installation, Video, Photo, 
-  //Sketch or Research
   //Price: 
 }
 

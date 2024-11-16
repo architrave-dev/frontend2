@@ -44,6 +44,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         projectElementId: target.id,
         updateWorkReq: {
           id: targetWork.id,
+          workType: targetWork.workType,
           originUrl: targetWork.originUrl,
           thumbnailUrl: targetWork.thumbnailUrl,
           title: targetWork.title,
@@ -97,6 +98,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         projectElementId: target.id,
         updateWorkReq: {
           id: targetWork.id,
+          workType: targetWork.workType,
           originUrl: targetWork.originUrl,
           thumbnailUrl: targetWork.thumbnailUrl,
           title: targetWork.title,

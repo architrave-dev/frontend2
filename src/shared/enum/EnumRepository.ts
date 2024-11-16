@@ -73,6 +73,21 @@ export enum TextBoxAlignment {
   RIGHT = 'RIGHT',
 }
 
+export enum WorkType {
+  PAINTING_WATER = 'PAINTING_WATER',
+  PAINTING_OIL = 'PAINTING_OIL',
+  PAINTING_DRY = 'PAINTING_DRY',
+  PRINTS = 'PRINTS',
+  PHOTO = 'PHOTO',
+  STUDY = 'STUDY',
+  DIGITAL = 'DIGITAL',
+  INSTALLATION = 'INSTALLATION',
+  SCULPTURE = 'SCULPTURE',
+  CONCEPTUAL_OBJECT = 'CONCEPTUAL_OBJECT',
+  DETAILS = 'DETAILS',
+  NONE = 'NONE'
+}
+
 export enum WorkAlignment {
   LEFT = 'LEFT',
   CENTER = 'CENTER',
