@@ -38,8 +38,8 @@ const ProjectList: React.FC = () => {
       description: 'This is a new project.'
     };
     try {
-      await createProject(aui, newDummyProject);
-      navigate(`/${aui}/projects/` + newTitle);
+      const { data: { id: projectId } } = await createProject(aui, newDummyProject);
+      navigate(`/${aui}/projects/` + projectId);
     } catch (error) { }
   };
 
