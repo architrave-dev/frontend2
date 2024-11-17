@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEditMode } from '../../hooks/useEditMode';
-import HeadlessTextArea, { Alignment } from '../headless/textarea/HeadlessTextArea';
+import HeadlessTextArea from '../headless/textarea/HeadlessTextArea';
 import { TextAlignment } from '../../enum/EnumRepository';
 import { StyledDivComponent, StyledTextAreaComponent } from '../../dto/StyleCompRepository';
 

@@ -34,7 +34,9 @@ const WorkList: React.FC = () => {
       description: 'Description section',
       size: { width: '000', height: '000' },
       material: 'material',
-      prodYear: '0000'
+      prodYear: '0000',
+      price: '',
+      collection: ''
     };
     setActiveWork(defaultWork);
     setUpdatedActiveWork(defaultWork);
@@ -68,7 +70,9 @@ const WorkList: React.FC = () => {
         height: "000"
       },
       material: "material",
-      prodYear: new Date().getFullYear().toString()
+      prodYear: new Date().getFullYear().toString(),
+      price: "",
+      collection: ""
     }
     try {
       await createWork(aui, newWork);

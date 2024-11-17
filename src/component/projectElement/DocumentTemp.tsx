@@ -4,7 +4,7 @@ import SelectBox from '../../shared/component/SelectBox';
 import { SelectBoxContainer } from './TextBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
+import { SelectType, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateDocumentReq, CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { DocumentWrapper } from './Document';
 import { ImgWrapper, WorkImage } from './Work';

@@ -76,7 +76,8 @@ export interface WorkData {
   size: SizeData;
   material: string,
   prodYear: string,
-  //Price: 
+  price: string,
+  collection: string
 }
 
 export interface DocumentData {

@@ -69,11 +69,6 @@ const SubmitButton = styled.button`
   /* Add your styles here */
 `;
 
-const ErrorMessage = styled.p`
-  color: ${({ theme }) => theme.colors.color_alert_red};
-  margin-bottom: 10px;
-`;
-
 const ToggleText = styled.p`
   /* Add your styles here */
 `;

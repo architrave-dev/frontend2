@@ -56,7 +56,9 @@ const ProjectElementList: React.FC = () => {
             height: "000"
           },
           material: "material",
-          prodYear: new Date().getFullYear().toString()
+          prodYear: new Date().getFullYear().toString(),
+          price: '',
+          collection: ''
         } : null,
       workAlignment: elementType === ProjectElementType.WORK ? DisplayAlignment.CENTER : null,
       workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,

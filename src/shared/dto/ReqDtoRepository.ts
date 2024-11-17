@@ -26,7 +26,9 @@ export interface CreateWorkReq {
   description: string;
   size: SizeData;
   material: string,
-  prodYear: string
+  prodYear: string,
+  price: string,
+  collection: string
 }
 
 export interface UpdateWorkReq {
@@ -39,6 +41,8 @@ export interface UpdateWorkReq {
   size: SizeData;
   material: string,
   prodYear: string
+  price: string,
+  collection: string
 }
 
 export interface DeleteWorkReq {

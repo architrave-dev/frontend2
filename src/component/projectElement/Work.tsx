@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import defaultImg from '../../asset/project/default_1.png';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
@@ -52,7 +50,9 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
           description: targetWork.description,
           size: targetWork.size,
           material: targetWork.material,
-          prodYear: targetWork.prodYear
+          prodYear: targetWork.prodYear,
+          price: targetWork.price,
+          collection: targetWork.collection
         },
         workAlignment: target.workAlignment,
         workDisplaySize: target.workDisplaySize,
@@ -106,7 +106,9 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
           description: targetWork.description,
           size: targetWork.size,
           material: targetWork.material,
-          prodYear: targetWork.prodYear
+          prodYear: targetWork.prodYear,
+          price: targetWork.price,
+          collection: targetWork.collection
         },
         workAlignment: target.workAlignment,
         workDisplaySize: target.workDisplaySize,
