@@ -125,7 +125,7 @@ export interface ProjectElementData {
   textBox: TextBoxData | null;
   textBoxAlignment: TextAlignment | null;
   document: DocumentData | null;
-  documentAlignment: DisplayAlignment | null;
+  documentAlignment: TextAlignment | null;
   dividerType: DividerType | null;
 }
 

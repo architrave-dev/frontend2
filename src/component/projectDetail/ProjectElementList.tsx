@@ -73,7 +73,7 @@ const ProjectElementList: React.FC = () => {
         thumbnailUrl: '',
         description: "New Doc",
       } : null,
-      documentAlignment: elementType === ProjectElementType.DOCUMENT ? DisplayAlignment.CENTER : null,
+      documentAlignment: elementType === ProjectElementType.DOCUMENT ? TextAlignment.CENTER : null,
 
       // Divider
       dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null

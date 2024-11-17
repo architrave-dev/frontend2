@@ -4,8 +4,8 @@ import { SelectType, SortOrder, TextAlignment, DisplayAlignment, WorkDisplaySize
 
 
 const selectOptions = {
-  [SelectType.TEXTBOX_ALIGNMENT]: Object.values(TextAlignment),
-  [SelectType.WORK_ALIGNMENT]: Object.values(DisplayAlignment),
+  [SelectType.TEXT_ALIGNMENT]: Object.values(TextAlignment),
+  [SelectType.DISPLAY_ALIGNMENT]: Object.values(DisplayAlignment),
   [SelectType.WORK_SIZE]: Object.values(WorkDisplaySize),
   [SelectType.SORT_ORDER]: Object.values(SortOrder),
 };

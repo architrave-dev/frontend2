@@ -123,7 +123,7 @@ export interface CreateProjectElementReq {
   createTextBoxReq: CreateTextBoxReq | null,
   textBoxAlignment: TextAlignment | null;
   createDocumentReq: CreateDocumentReq | null;
-  documentAlignment: DisplayAlignment | null;
+  documentAlignment: TextAlignment | null;
   dividerType: DividerType | null;
 }
 
@@ -135,7 +135,7 @@ export interface UpdateProjectElementReq {
   updateTextBoxReq?: UpdateTextBoxReq | null,
   textBoxAlignment?: TextAlignment | null;
   updateDocumentReq: UpdateDocumentReq | null;
-  documentAlignment: DisplayAlignment | null;
+  documentAlignment: TextAlignment | null;
   dividerType?: DividerType | null;
 }
 
