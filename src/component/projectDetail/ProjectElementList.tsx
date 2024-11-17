@@ -130,6 +130,8 @@ const ProjectElementList: React.FC = () => {
           workDisplaySize={each.workDisplaySize}
           textBox={each.textBox}
           textBoxAlignment={each.textBoxAlignment}
+          document={each.document}
+          documentAlignment={each.documentAlignment}
           dividerType={each.dividerType}
         />
       ))}
