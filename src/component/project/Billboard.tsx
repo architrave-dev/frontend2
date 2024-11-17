@@ -9,7 +9,7 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
 import { BillboardData } from '../../shared/dto/EntityRepository';
-import { TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import { TextAlignment } from '../../shared/enum/EnumRepository';
 import { useBillboardStoreForUpdate } from '../../shared/store/billboardStore';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
@@ -92,7 +92,7 @@ const Billboard: React.FC = () => {
       <MoleculeTextareaDescription
         value={updateBillboardDto.description}
         handleChange={(e) => handleChange('description', e.target.value)}
-        alignment={TextBoxAlignment.LEFT}
+        alignment={TextAlignment.LEFT}
         StyledTextarea={TextAreaBillboard}
         StyledDescription={Description}
       />

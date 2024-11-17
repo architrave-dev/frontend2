@@ -9,7 +9,7 @@ import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfo
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
-import { DividerType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import { DividerType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
 import { IndexData, ProjectData } from '../../shared/dto/EntityRepository';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
@@ -101,7 +101,7 @@ const ProjectDetailContainer: React.FC = () => {
         <MoleculeTextareaDescription
           value={updatedProjectDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
-          alignment={TextBoxAlignment.LEFT}
+          alignment={TextAlignment.LEFT}
           StyledTextarea={TextAreaTextBox}
           StyledDescription={Description}
         />
@@ -133,11 +133,11 @@ const ProjectDetailWrapper = styled.article`
   padding: calc(8vh) calc(10vw) calc(4vh) calc(10vw);
 `;
 
-const Description = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
+const Description = styled.div<{ $textAlignment: TextAlignment }>`
   padding: 9px 0px;
   margin-bottom: 3px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  text-align: ${({ $textBoxAlignment = TextBoxAlignment.LEFT }) => getAlignment($textBoxAlignment)};
+  text-align: ${({ $textAlignment = TextAlignment.LEFT }) => getAlignment($textAlignment)};
   ${({ theme }) => theme.typography.Body_02_1};
 `;
 

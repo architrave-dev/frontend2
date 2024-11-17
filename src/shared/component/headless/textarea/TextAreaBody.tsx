@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { Alignment } from './HeadlessTextArea';
-import { TextBoxAlignment, WorkAlignment } from '../../../enum/EnumRepository';
+import { TextAlignment, WorkAlignment } from '../../../enum/EnumRepository';
 
 
 const commonTextAreaStyles = css`
@@ -64,13 +64,13 @@ export const TextAreaMemberInfo = styled.textarea<{ $alignment: Alignment }>`
 
 export const getAlignment = (alignment: Alignment): string => {
   switch (alignment) {
-    case TextBoxAlignment.LEFT:
+    case TextAlignment.LEFT:
     case WorkAlignment.LEFT:
       return 'left';
-    case TextBoxAlignment.CENTER:
+    case TextAlignment.CENTER:
     case WorkAlignment.CENTER:
       return 'center';
-    case TextBoxAlignment.RIGHT:
+    case TextAlignment.RIGHT:
     case WorkAlignment.RIGHT:
       return 'right';
     default:

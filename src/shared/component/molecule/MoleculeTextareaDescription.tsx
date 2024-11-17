@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEditMode } from '../../hooks/useEditMode';
 import HeadlessTextArea, { Alignment } from '../headless/textarea/HeadlessTextArea';
-import { TextBoxAlignment } from '../../enum/EnumRepository';
+import { TextAlignment } from '../../enum/EnumRepository';
 import { StyledDivComponent, StyledTextAreaComponent } from '../../dto/StyleCompRepository';
 
 interface MoleculeTextareaDescriptionProps {
@@ -25,14 +25,14 @@ const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = 
     <>
       {isEditMode ? (
         <HeadlessTextArea
-          alignment={alignment ? alignment : TextBoxAlignment.LEFT}
+          alignment={alignment ? alignment : TextAlignment.LEFT}
           content={value}
           placeholder="Enter description"
           handleChange={handleChange}
           StyledTextArea={StyledTextarea}
         />
       ) : (
-        <StyledDescription $alignment={alignment ? alignment : TextBoxAlignment.LEFT} >
+        <StyledDescription $alignment={alignment ? alignment : TextAlignment.LEFT} >
           {value.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}

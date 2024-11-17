@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { TextBoxAlignment, WorkAlignment } from '../../../enum/EnumRepository';
+import { TextAlignment, WorkAlignment } from '../../../enum/EnumRepository';
 import { StyledTextAreaComponent } from '../../../dto/StyleCompRepository';
 
 
@@ -11,7 +11,7 @@ export interface HeadlessTextAreaProps {
   StyledTextArea: StyledTextAreaComponent
 }
 
-export type Alignment = TextBoxAlignment | WorkAlignment;
+export type Alignment = TextAlignment | WorkAlignment;
 
 
 const HeadlessTextArea: React.FC<HeadlessTextAreaProps> = ({

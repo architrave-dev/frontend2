@@ -67,7 +67,7 @@ export enum SelectType {
   SORT_ORDER = 'SORT_ORDER'
 }
 
-export enum TextBoxAlignment {
+export enum TextAlignment {
   LEFT = 'LEFT',
   CENTER = 'CENTER',
   RIGHT = 'RIGHT',

@@ -8,7 +8,7 @@ import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, TextBoxAlignment, WorkAlignment } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, TextAlignment, WorkAlignment } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
@@ -117,7 +117,7 @@ const WorkViewer: React.FC = () => {
         <MoleculeTextareaDescription
           value={updatedActiveWork.description}
           handleChange={(e) => handleChange("description", e.target.value)}
-          alignment={TextBoxAlignment.LEFT}
+          alignment={TextAlignment.LEFT}
           StyledTextarea={TextAreaWorkViewer}
           StyledDescription={Description}
         />

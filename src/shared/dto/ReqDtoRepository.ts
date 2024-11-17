@@ -1,4 +1,4 @@
-import { CareerType, DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
+import { CareerType, DividerType, ProjectElementType, TextAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
 import { IndexData, SizeData } from './EntityRepository';
 
 //-------------- Auth
@@ -121,7 +121,7 @@ export interface CreateProjectElementReq {
   workAlignment: WorkAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
   createTextBoxReq: CreateTextBoxReq | null,
-  textBoxAlignment: TextBoxAlignment | null;
+  textBoxAlignment: TextAlignment | null;
   createDocumentReq: CreateDocumentReq | null;
   documentAlignment: WorkAlignment | null;
   dividerType: DividerType | null;
@@ -133,7 +133,7 @@ export interface UpdateProjectElementReq {
   workAlignment?: WorkAlignment | null;
   workDisplaySize?: WorkDisplaySize | null;
   updateTextBoxReq?: UpdateTextBoxReq | null,
-  textBoxAlignment?: TextBoxAlignment | null;
+  textBoxAlignment?: TextAlignment | null;
   updateDocumentReq: UpdateDocumentReq | null;
   documentAlignment: WorkAlignment | null;
   dividerType?: DividerType | null;

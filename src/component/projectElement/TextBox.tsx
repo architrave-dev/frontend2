@@ -6,12 +6,12 @@ import SelectBox from '../../shared/component/SelectBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { TextBoxData } from '../../shared/dto/EntityRepository';
-import { SelectType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import { SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectElementReq, UpdateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export interface TextBoxProps {
-  alignment: TextBoxAlignment | null;
+  alignment: TextAlignment | null;
   data: TextBoxData;
 }
 
@@ -20,7 +20,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
 
-  const handleAlignmentChange = (value: TextBoxAlignment) => {
+  const handleAlignmentChange = (value: TextAlignment) => {
     const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
     if (targetElement) {
       const updatedProjectElementList = updatedProjectElements.map(each =>
@@ -104,12 +104,12 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
         <>
           <SelectBoxContainer>
             <SelectBox
-              value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
+              value={initialTexBoxAlignment || TextAlignment.CENTER}
               selectType={SelectType.TEXTBOX_ALIGNMENT}
               handleChange={handleAlignmentChange} />
           </SelectBoxContainer>
           <HeadlessTextArea
-            alignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}
+            alignment={initialTexBoxAlignment || TextAlignment.CENTER}
             content={initialData.content}
             placeholder={"text"}
             handleChange={(e) => handlechange("content", e.target.value)}
@@ -117,7 +117,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
           />
         </>
       ) : (
-        <TextBoxContent $textBoxAlignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}>
+        <TextBoxContent $textBoxAlignment={initialTexBoxAlignment || TextAlignment.CENTER}>
           {initialData.content.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}<br />
@@ -142,7 +142,7 @@ export const SelectBoxContainer = styled.div`
   gap: 20px;
 `
 
-const TextBoxContent = styled.div<{ $textBoxAlignment: TextBoxAlignment }>`
+const TextBoxContent = styled.div<{ $textBoxAlignment: TextAlignment }>`
   padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   text-align: ${({ $textBoxAlignment }) => getAlignment($textBoxAlignment)};

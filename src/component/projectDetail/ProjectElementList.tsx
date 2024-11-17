@@ -11,7 +11,7 @@ import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import Space from '../../shared/Space';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
 import Loading from '../../shared/component/Loading';
 
@@ -65,7 +65,7 @@ const ProjectElementList: React.FC = () => {
       createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
         content: "New TextBox"
       } : null,
-      textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextBoxAlignment.CENTER : null,
+      textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextAlignment.CENTER : null,
 
       // DOC
       createDocumentReq: elementType === ProjectElementType.DOCUMENT ? {
