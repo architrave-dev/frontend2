@@ -102,7 +102,7 @@ const ProjectDetailContainer: React.FC = () => {
           value={updatedProjectDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
           alignment={TextBoxAlignment.LEFT}
-          textareaStyle={TextAreaTextBox}
+          StyledTextarea={TextAreaTextBox}
           StyledDescription={Description}
         />
         <ProjectInfoList />

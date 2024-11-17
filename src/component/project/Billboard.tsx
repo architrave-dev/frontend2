@@ -93,7 +93,7 @@ const Billboard: React.FC = () => {
         value={updateBillboardDto.description}
         handleChange={(e) => handleChange('description', e.target.value)}
         alignment={TextBoxAlignment.LEFT}
-        textareaStyle={TextAreaBillboard}
+        StyledTextarea={TextAreaBillboard}
         StyledDescription={Description}
       />
       {isEditMode && isChanged() &&

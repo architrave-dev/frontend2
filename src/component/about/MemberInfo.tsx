@@ -100,7 +100,7 @@ const MemberInfo: React.FC = () => {
         <MoleculeTextareaDescription
           value={updateMemberInfoDto.description}
           handleChange={(e) => handleChange('description', e.target.value)}
-          textareaStyle={TextAreaMemberInfo}
+          StyledTextarea={TextAreaMemberInfo}
           StyledDescription={Description}
         />
       </DescriptionWrapper>

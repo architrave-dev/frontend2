@@ -1,13 +1,6 @@
 import React, { useRef } from 'react';
 import { TextBoxAlignment, WorkAlignment } from '../../../enum/EnumRepository';
-
-type StyledTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  $alignment: Alignment;
-};
-
-export type StyledTextAreaComponent = React.ForwardRefExoticComponent<
-  StyledTextAreaProps & React.RefAttributes<HTMLTextAreaElement>
->;
+import { StyledTextAreaComponent } from '../../../dto/StyleCompRepository';
 
 
 export interface HeadlessTextAreaProps {
