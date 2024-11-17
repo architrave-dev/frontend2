@@ -1,27 +1,26 @@
 import React from 'react';
 import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import SelectBox from '../../shared/component/SelectBox';
-import { SelectBoxContainer, TextBoxWrapper } from './TextBox';
+import { SelectBoxContainer } from './TextBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateDocumentReq, CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { DocumentWrapper } from './Document';
 import { ImgWrapper, WorkImage } from './Work';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import defaultImg from '../../asset/project/default_1.png';
+import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 
 export interface DocumentProps {
   tempId: string;
-  alignment: WorkAlignment | null;
+  alignment: TextAlignment;
   data: CreateDocumentReq;
 }
 
 const DocumentTemp: React.FC<DocumentProps> = ({ tempId, alignment: initialAlignment, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
 
-  const handleAlignmentChange = (value: WorkAlignment) => {
+  const handleAlignmentChange = (value: TextAlignment) => {
     const updatedProjectElementList = createdProjectElements.map(each =>
       each.tempId === tempId ? { ...each, documentAlignment: value } : each
     );
@@ -40,9 +39,9 @@ const DocumentTemp: React.FC<DocumentProps> = ({ tempId, alignment: initialAlign
       each.tempId === tempId ? {
         ...each,
         createDocumentReq: {
-          ...each.createWorkReq,
-          thumbnailUrl,
+          ...each.createDocumentReq,
           originUrl,
+          thumbnailUrl,
         } as CreateDocumentReq
       } : each);
     setCreatedProjectElements(updatedCreatedProjectElements);
@@ -51,23 +50,23 @@ const DocumentTemp: React.FC<DocumentProps> = ({ tempId, alignment: initialAlign
 
   return (
     <DocumentWrapper>
-      <ImgWrapper>
-        <WorkImage
-          src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
-          alt={initialData.description}
-          $displaySize={WorkDisplaySize.REGULAR}
-        />
-        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
-      </ImgWrapper>
-
       <SelectBoxContainer>
         <SelectBox
-          value={initialAlignment || WorkAlignment.CENTER}
-          selectType={SelectType.WORK_ALIGNMENT}
+          value={initialAlignment}
+          selectType={SelectType.TEXT_ALIGNMENT}
           handleChange={handleAlignmentChange} />
       </SelectBoxContainer>
+      <ImgWrapper>
+        <MoleculeImg
+          srcUrl={initialData.originUrl}
+          alt={initialData.description}
+          displaySize={WorkDisplaySize.REGULAR}
+          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          StyledImg={WorkImage}
+        />
+      </ImgWrapper>
       <HeadlessTextArea
-        alignment={initialAlignment || WorkAlignment.CENTER}
+        alignment={initialAlignment}
         content={initialData.description}
         placeholder={"text"}
         handleChange={(e) => handlechange("description", e.target.value)}

@@ -31,7 +31,7 @@ const ProjectElementTemp: React.FC<CreateProjectElementReq> = ({
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBoxTemp tempId={tempId} alignment={textBoxAlignment} data={textBox} />;
       case ProjectElementType.DOCUMENT:
-        return document && <DocumentTemp tempId={tempId} alignment={documentAlignment} data={document} />;
+        return document && documentAlignment && <DocumentTemp tempId={tempId} alignment={documentAlignment} data={document} />;
       case ProjectElementType.DIVIDER:
         return dividerType && <DividerTemp tempId={tempId} dividerType={dividerType} />;
       default:

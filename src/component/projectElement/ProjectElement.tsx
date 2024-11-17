@@ -37,7 +37,7 @@ const ProjectElement: React.FC<ProjectElementData> = ({
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBox alignment={textBoxAlignment} data={textBox} />;
       case ProjectElementType.DOCUMENT:
-        return document && <Document alignment={documentAlignment} data={document} />;
+        return document && documentAlignment && <Document alignment={documentAlignment} data={document} />;
       case ProjectElementType.DIVIDER:
         return dividerType && <Divider dividerType={dividerType} />;
       default:

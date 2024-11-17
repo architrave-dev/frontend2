@@ -9,7 +9,7 @@ interface MoleculeTextareaDescriptionProps {
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   StyledTextarea: StyledTextAreaComponent;
   StyledDescription: StyledDivComponent;
-  alignment?: Alignment;
+  alignment?: TextAlignment;
 }
 
 const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = ({

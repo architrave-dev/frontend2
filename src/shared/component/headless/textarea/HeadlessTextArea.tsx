@@ -4,7 +4,7 @@ import { StyledTextAreaComponent } from '../../../dto/StyleCompRepository';
 
 
 export interface HeadlessTextAreaProps {
-  alignment: Alignment;
+  alignment: TextAlignment;
   content: string;
   placeholder?: string;
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;

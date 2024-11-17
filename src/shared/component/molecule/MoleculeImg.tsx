@@ -5,7 +5,7 @@ import { StyledImgProps } from '../../dto/StyleCompRepository';
 import defaultImg from '../../../asset/project/default_1.png'
 import { WorkDisplaySize } from '../../enum/EnumRepository';
 
-interface MoleculeImgDivContainerProps {
+interface MoleculeImgProps {
   srcUrl: string;
   alt: string;
   displaySize: WorkDisplaySize | null;
@@ -13,7 +13,7 @@ interface MoleculeImgDivContainerProps {
   StyledImg: React.ComponentType<StyledImgProps>;
 }
 
-const MoleculeImg: React.FC<MoleculeImgDivContainerProps> = ({
+const MoleculeImg: React.FC<MoleculeImgProps> = ({
   srcUrl,
   alt,
   displaySize,
@@ -21,8 +21,6 @@ const MoleculeImg: React.FC<MoleculeImgDivContainerProps> = ({
   StyledImg,
 }) => {
   const { isEditMode } = useEditMode();
-
-
   return (
     <>
       <StyledImg

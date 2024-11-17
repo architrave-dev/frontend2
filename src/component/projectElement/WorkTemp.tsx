@@ -4,7 +4,7 @@ import { InputWork, InputWorkTitle } from '../../shared/component/headless/input
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
@@ -72,7 +72,7 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
           StyledInput={InputWorkTitle}
         />
         <HeadlessTextArea
-          alignment={initialWorkAlignment || DisplayAlignment.CENTER}
+          alignment={TextAlignment.CENTER}
           content={initialData.description}
           placeholder={"Description"}
           handleChange={(e) => handleChange("description", e.target.value)}
