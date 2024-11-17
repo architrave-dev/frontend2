@@ -88,7 +88,7 @@ export enum WorkType {
   NONE = 'NONE'
 }
 
-export enum WorkAlignment {
+export enum DisplayAlignment {
   LEFT = 'LEFT',
   CENTER = 'CENTER',
   RIGHT = 'RIGHT',

@@ -8,14 +8,14 @@ import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { SelectType, DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { ProjectElementData, SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { UpdateProjectElementReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import SelectBox from '../../shared/component/SelectBox';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 export interface WorkProps {
-  alignment: WorkAlignment | null;
+  alignment: DisplayAlignment | null;
   displaySize: WorkDisplaySize | null;
   data: WorkData;
 }
@@ -190,7 +190,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
               StyledInput={InputWorkTitle}
             />
             <HeadlessTextArea
-              alignment={initialWorkAlignment || WorkAlignment.CENTER}
+              alignment={initialWorkAlignment || DisplayAlignment.CENTER}
               content={initialData.description}
               placeholder={"Description"}
               handleChange={(e) => handleChange("description", e.target.value)}

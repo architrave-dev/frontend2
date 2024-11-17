@@ -11,7 +11,7 @@ import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import Space from '../../shared/Space';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { DividerType, ProjectElementType, TextAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
 import Loading from '../../shared/component/Loading';
 
@@ -58,7 +58,7 @@ const ProjectElementList: React.FC = () => {
           material: "material",
           prodYear: new Date().getFullYear().toString()
         } : null,
-      workAlignment: elementType === ProjectElementType.WORK ? WorkAlignment.CENTER : null,
+      workAlignment: elementType === ProjectElementType.WORK ? DisplayAlignment.CENTER : null,
       workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
 
       // TextBox
@@ -73,7 +73,7 @@ const ProjectElementList: React.FC = () => {
         thumbnailUrl: '',
         description: "New Doc",
       } : null,
-      documentAlignment: elementType === ProjectElementType.DOCUMENT ? WorkAlignment.CENTER : null,
+      documentAlignment: elementType === ProjectElementType.DOCUMENT ? DisplayAlignment.CENTER : null,
 
       // Divider
       dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null

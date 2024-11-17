@@ -1,4 +1,4 @@
-import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment, WorkAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
+import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
 
 /**
  * 전부 ~Data로 통일
@@ -120,12 +120,12 @@ export interface ProjectElementData {
   id: string;
   projectElementType: ProjectElementType;
   work: WorkData | null;
-  workAlignment: WorkAlignment | null;
+  workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
   textBox: TextBoxData | null;
   textBoxAlignment: TextAlignment | null;
   document: DocumentData | null;
-  documentAlignment: WorkAlignment | null;
+  documentAlignment: DisplayAlignment | null;
   dividerType: DividerType | null;
 }
 
