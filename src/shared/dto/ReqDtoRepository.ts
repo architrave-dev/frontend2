@@ -49,6 +49,28 @@ export interface DeleteWorkReq {
   workId: string;
 }
 
+//-------------- WorkDetail
+export interface CreateWorkDetailReq {
+  workId: string;
+  workType: WorkType;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
+export interface UpdateWorkDetailReq {
+  workDetailId: string;
+  workType: WorkType;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
+export interface DeleteWorkDetailReq {
+  workDetailId: string;
+}
+
+
 //-------------- TextBox
 export interface CreateTextBoxReq {
   content: string;

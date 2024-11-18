@@ -80,6 +80,14 @@ export interface WorkData {
   collection: string
 }
 
+export interface WorkDetailData {
+  id: string;
+  workType: WorkType;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
 export interface DocumentData {
   id: string;
   originUrl: string;
