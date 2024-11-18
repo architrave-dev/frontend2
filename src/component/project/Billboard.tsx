@@ -85,6 +85,7 @@ const Billboard: React.FC = () => {
     >
       <MoleculeInputDiv
         value={updateBillboardDto.title}
+        placeholder={"title"}
         handleChange={(e) => handleChange('title', e.target.value)}
         inputStyle={InputBillboard}
         StyledDiv={Title}

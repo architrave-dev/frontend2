@@ -12,6 +12,7 @@ import { DeleteResponse, WorkListResponse, WorkResponse } from '../../dto/ResDto
 interface UseWorkListResult {
   isLoading: boolean;
   workList: WorkData[];
+  getWork: (aui: string) => Promise<void>;
   getWorkList: (aui: string) => Promise<void>;
   updateWork: (aui: string, data: UpdateWorkReq) => Promise<void>;
   createWork: (aui: string, data: CreateWorkReq) => Promise<void>;
@@ -26,6 +27,11 @@ export const useWorkList = (): UseWorkListResult => {
   const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
 
   const handleGetWorkSuccess = (response: WorkListResponse) => {
+    const data = response.data;
+    // setWorkList(data);
+  };
+
+  const handleGetWorkListSuccess = (response: WorkListResponse) => {
     const data = response.data;
     setWorkList(data);
   };
@@ -49,7 +55,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   const handleWorkRequest = async (
     aui: string,
-    action: 'get' | 'update' | 'create' | 'delete',
+    action: 'get' | 'get list' | 'update' | 'create' | 'delete',
     data?: UpdateWorkReq | CreateWorkReq | DeleteWorkReq
   ) => {
     setIsLoading(true);
@@ -65,6 +71,9 @@ export const useWorkList = (): UseWorkListResult => {
           break;
         case 'create':
           handleCreatWorkSuccess(await createWork(aui, data as CreateWorkReq));
+          break;
+        case 'get list':
+          handleGetWorkListSuccess(await getWorkList(aui));
           break;
         case 'get':
         default:
@@ -85,6 +94,7 @@ export const useWorkList = (): UseWorkListResult => {
   };
 
   const getWorkHandler = (aui: string) => handleWorkRequest(aui, 'get');
+  const getWorkListHandler = (aui: string) => handleWorkRequest(aui, 'get list');
   const updateWorkHandler = (aui: string, data: UpdateWorkReq) => handleWorkRequest(aui, 'update', data);
   const createWorkHandler = (aui: string, data: CreateWorkReq) => handleWorkRequest(aui, 'create', data);
   const deleteWorkHandler = (aui: string, data: DeleteWorkReq) => handleWorkRequest(aui, 'delete', data);
@@ -93,7 +103,8 @@ export const useWorkList = (): UseWorkListResult => {
   return {
     isLoading,
     workList,
-    getWorkList: getWorkHandler,
+    getWork: getWorkHandler,
+    getWorkList: getWorkListHandler,
     updateWork: updateWorkHandler,
     createWork: createWorkHandler,
     deleteWork: deleteWorkHandler,

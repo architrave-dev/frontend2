@@ -17,6 +17,7 @@ const MemberTitle: React.FC<MemberTitleProps> = ({
     <Info>
       <MoleculeInputDiv
         value={value}
+        placeholder={"title"}
         handleChange={handleChange}
         inputStyle={MemberTitleInput}
         StyledDiv={ValueSection}

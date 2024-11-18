@@ -93,6 +93,7 @@ const ProjectDetailContainer: React.FC = () => {
       <ProjectDetailWrapper>
         <MoleculeInputDiv
           value={updatedProjectDto.title}
+          placeholder={"title"}
           handleChange={(e) => handleChange('title', e.target.value)}
           inputStyle={InputTitle}
           StyledDiv={Title}

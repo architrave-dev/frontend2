@@ -55,7 +55,7 @@ const ProjectElementList: React.FC = () => {
             width: "000",
             height: "000"
           },
-          material: "material",
+          material: "",
           prodYear: new Date().getFullYear().toString(),
           price: '',
           collection: ''

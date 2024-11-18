@@ -38,10 +38,11 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
       <ContentWrapper $isActive={isActive}>
         <TitleBlock>{data.title}</TitleBlock>
         <SizeBlock>{convertSizeToString(data.size)}</SizeBlock>
-        <MaterialBlock>{data.material}</MaterialBlock>
+        <MaterialBlock>{data.material === '' ? '-' : data.material}</MaterialBlock>
         <ProdYearBlock>{data.prodYear}</ProdYearBlock>
-        <DescriptionBlock>{data.description}</DescriptionBlock>
-        <PriceBlock>-</PriceBlock>
+        <DescriptionBlock>{data.description === '' ? '-' : data.description}</DescriptionBlock>
+        <PriceBlock>{data.price === "" ? "-" : data.price}</PriceBlock>
+        <CollectionBlock>{data.collection === "" ? "-" : data.collection}</CollectionBlock>
         <SpaceBlock />
       </ContentWrapper>
       {isActive && <ArrowBlock>{"----->"}</ArrowBlock>}
@@ -150,6 +151,16 @@ const PriceBlock = styled.div`
 
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
   // background-color: #ffedbf;
+`
+const CollectionBlock = styled.div`
+  flex: 1.2;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffcd74;
 `
 const SpaceBlock = styled.div`
   flex: 0.5;

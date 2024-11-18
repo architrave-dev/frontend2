@@ -41,7 +41,9 @@ const WorkViewer: React.FC = () => {
       initialData.size !== currentData.size ||
       initialData.material !== currentData.material ||
       initialData.prodYear !== currentData.prodYear ||
-      initialData.description !== currentData.description
+      initialData.description !== currentData.description ||
+      initialData.price !== currentData.price ||
+      initialData.collection !== currentData.collection
     );
   };
 
@@ -88,6 +90,7 @@ const WorkViewer: React.FC = () => {
       <WorkInfoContainer>
         <MoleculeInputDiv
           value={updatedActiveWork.title}
+          placeholder={"Title"}
           handleChange={(e) => handleChange("title", e.target.value)}
           inputStyle={WorkViewerTitle}
           StyledDiv={Title}
@@ -95,6 +98,7 @@ const WorkViewer: React.FC = () => {
         <WorkInfo>
           <MoleculeInputDiv
             value={updatedActiveWork.prodYear}
+            placeholder={"ProdYear"}
             handleChange={(e) => handleChange("prodYear", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
@@ -102,6 +106,7 @@ const WorkViewer: React.FC = () => {
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
             value={updatedActiveWork.material}
+            placeholder={"Material"}
             handleChange={(e) => handleChange("material", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
@@ -109,7 +114,25 @@ const WorkViewer: React.FC = () => {
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
             value={convertSizeToString(updatedActiveWork.size)}
+            placeholder={"Size"}
             handleChange={(e) => handleChange("size", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
+          />
+        </WorkInfo>
+        <WorkInfo>
+          <MoleculeInputDiv
+            value={updatedActiveWork.price}
+            placeholder={"Price ($)"}
+            handleChange={(e) => handleChange("price", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
+          />
+          <DividerSmall>|</DividerSmall>
+          <MoleculeInputDiv
+            value={updatedActiveWork.collection}
+            placeholder={"Collection"}
+            handleChange={(e) => handleChange("collection", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />

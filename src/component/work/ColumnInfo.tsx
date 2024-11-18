@@ -15,6 +15,7 @@ const ColumnInfo: React.FC<ColumnInfoProps> = () => {
         <ProdYearBlock>Year</ProdYearBlock>
         <DescriptionBlock>Description</DescriptionBlock>
         <PriceBlock>Price($)</PriceBlock>
+        <CollectionBlock>Collection</CollectionBlock>
         <SpaceBlock />
       </InfoContainer>
       <OverviewBlock>Overview</OverviewBlock>
@@ -87,6 +88,15 @@ const DescriptionBlock = styled.div`
 `
 
 const PriceBlock = styled.div`
+  flex: 1.2;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // background-color: #ffcd74;
+`
+const CollectionBlock = styled.div`
   flex: 1.2;
   
   display: flex;
