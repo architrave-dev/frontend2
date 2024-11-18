@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
-import defaultImg from '../../asset/project/default_1.png';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
@@ -15,13 +13,15 @@ import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
+import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
+import WorkDetail from './WorkDetail';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
   const { updateWork, deleteWork } = useWorkList();
-  const { activeWork, clearActiveWork } = useWorkViewStore();
-  const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { activeWork, activeWorkDetailList, clearActiveWork } = useWorkViewStore();
+  const { updatedActiveWork, setUpdatedActiveWork, updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
 
   if (!activeWork || !updatedActiveWork) return null;
@@ -47,6 +47,9 @@ const WorkViewer: React.FC = () => {
     );
   };
 
+  const handleAddWorkDetail = async () => {
+    console.log("add Work Detail")
+  }
   const handleConfirm = async () => {
     if (!isChanged(activeWork, updatedActiveWork)) {
       return;
@@ -146,11 +149,24 @@ const WorkViewer: React.FC = () => {
         />
       </WorkInfoContainer>
       <ImgWrapper>
-        <WorkImage src={updatedActiveWork.originUrl === '' ? defaultImg : updatedActiveWork.originUrl} alt={updatedActiveWork.title} />
-        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
+        <MoleculeImg
+          srcUrl={updatedActiveWork.originUrl}
+          alt={updatedActiveWork.title}
+          displaySize={null}
+          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          StyledImg={WorkImage}
+        />
       </ImgWrapper>
+      {updateActiveWorkDetailList.map((wd) => (
+        <WorkDetail data={wd} />
+      ))}
       {isEditMode &&
         <BtnContainer>
+          <HeadlessBtn
+            value={"Add Detail"}
+            handleClick={handleAddWorkDetail}
+            StyledBtn={BtnWorkViewer}
+          />
           <HeadlessBtn
             value={"Confirm"}
             handleClick={handleConfirm}
