@@ -87,6 +87,9 @@ export interface WorkDetailData {
   thumbnailUrl: string;
   description: string;
 }
+export interface WorkWithDetailData extends WorkData {
+  workDetailList: WorkDetailData[]; // 추가된 필드
+}
 
 export interface DocumentData {
   id: string;

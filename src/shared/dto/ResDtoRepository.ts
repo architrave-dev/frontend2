@@ -1,4 +1,4 @@
-import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData } from './EntityRepository';
+import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData } from './EntityRepository';
 
 
 export interface AuthResponse {
@@ -11,6 +11,7 @@ export interface BillboardResponse {
   data: BillboardData;
 }
 
+//-------------- Work
 export interface WorkListResponse {
   data: WorkData[];
 }
@@ -18,6 +19,19 @@ export interface WorkResponse {
   data: WorkData;
 }
 
+//-------------- WorkDetail
+export interface WorkDetailResponse {
+  data: WorkDetailData;
+}
+
+export interface WorkDetailListResponse {
+  data: WorkDetailData[];
+}
+
+//-------------- Work & Detail
+export interface WorkWithDetailResponse {
+  data: WorkWithDetailData;
+}
 
 export interface ProjectElementListResponse {
   data: {

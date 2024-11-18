@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { getWorkList, updateWork, createWork, deleteWork } from '../../api/workListApi';
+import { getWorkList, updateWork, createWork, deleteWork, getWork } from '../../api/workListApi';
 import { useWorkListStore } from '../../store/WorkListStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { WorkData } from '../../dto/EntityRepository';
 import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../../dto/ReqDtoRepository';
-import { DeleteResponse, WorkListResponse, WorkResponse } from '../../dto/ResDtoRepository';
+import { DeleteResponse, WorkListResponse, WorkResponse, WorkWithDetailResponse } from '../../dto/ResDtoRepository';
 
 
 interface UseWorkListResult {
@@ -26,8 +26,9 @@ export const useWorkList = (): UseWorkListResult => {
   const { setActiveWork } = useWorkViewStore();
   const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
 
-  const handleGetWorkSuccess = (response: WorkListResponse) => {
+  const handleGetWorkSuccess = (response: WorkWithDetailResponse) => {
     const data = response.data;
+    // data.workDetailList
     // setWorkList(data);
   };
 
@@ -77,7 +78,7 @@ export const useWorkList = (): UseWorkListResult => {
           break;
         case 'get':
         default:
-          handleGetWorkSuccess(await getWorkList(aui));
+          handleGetWorkSuccess(await getWork(aui));
           break;
       }
     } catch (err) {
