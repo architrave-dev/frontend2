@@ -12,7 +12,7 @@ import { DeleteResponse, WorkListResponse, WorkResponse, WorkWithDetailResponse 
 interface UseWorkListResult {
   isLoading: boolean;
   workList: WorkData[];
-  getWork: (aui: string) => Promise<void>;
+  getWork: (workId: string) => Promise<void>;
   getWorkList: (aui: string) => Promise<void>;
   updateWork: (aui: string, data: UpdateWorkReq) => Promise<void>;
   createWork: (aui: string, data: CreateWorkReq) => Promise<void>;
@@ -23,13 +23,16 @@ export const useWorkList = (): UseWorkListResult => {
   const [isLoading, setIsLoading] = useState(false);
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
-  const { setActiveWork } = useWorkViewStore();
-  const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { setActiveWork, setActiveWorkDetailList } = useWorkViewStore();
+  const { setUpdatedActiveWork, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
 
   const handleGetWorkSuccess = (response: WorkWithDetailResponse) => {
     const data = response.data;
-    // data.workDetailList
-    // setWorkList(data);
+    setActiveWork(data);
+    setUpdatedActiveWork(data);
+    setActiveWorkDetailList(data.workDetailList);
+    setUpdateActiveWorkDetailList(data.workDetailList);
+
   };
 
   const handleGetWorkListSuccess = (response: WorkListResponse) => {
@@ -94,7 +97,7 @@ export const useWorkList = (): UseWorkListResult => {
     }
   };
 
-  const getWorkHandler = (aui: string) => handleWorkRequest(aui, 'get');
+  const getWorkHandler = (workId: string) => handleWorkRequest(workId, 'get');
   const getWorkListHandler = (aui: string) => handleWorkRequest(aui, 'get list');
   const updateWorkHandler = (aui: string, data: UpdateWorkReq) => handleWorkRequest(aui, 'update', data);
   const createWorkHandler = (aui: string, data: CreateWorkReq) => handleWorkRequest(aui, 'create', data);

@@ -14,13 +14,13 @@ import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/Tex
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
-import WorkDetail from './WorkDetail';
+import WorkDetailList from './WorkDetailList';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
   const { updateWork, deleteWork } = useWorkList();
-  const { activeWork, activeWorkDetailList, clearActiveWork } = useWorkViewStore();
+  const { activeWork, clearActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork, updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
 
@@ -157,9 +157,7 @@ const WorkViewer: React.FC = () => {
           StyledImg={WorkImage}
         />
       </ImgWrapper>
-      {updateActiveWorkDetailList.map((wd) => (
-        <WorkDetail data={wd} />
-      ))}
+      <WorkDetailList />
       {isEditMode &&
         <BtnContainer>
           <HeadlessBtn
@@ -257,6 +255,8 @@ const ImgWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-bottom: 50px;
 `
 
 const WorkImage = styled.img`

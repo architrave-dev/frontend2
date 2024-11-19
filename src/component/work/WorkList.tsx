@@ -80,7 +80,7 @@ const WorkList: React.FC = () => {
   };
 
   return (
-    <>
+    <WorkListContainer>
       <WorkListComp>
         {sortedWorkList.map((each: WorkData) =>
           <WorkInfo key={each.id} data={each} />
@@ -97,9 +97,15 @@ const WorkList: React.FC = () => {
 
       </WorkListComp>
       <WorkViewer />
-    </>
+    </WorkListContainer>
   );
 }
+const WorkListContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding-bottom: calc(8vh);
+`;
 
 const WorkListComp = styled.section`
   width: 100%;

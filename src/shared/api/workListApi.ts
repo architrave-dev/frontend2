@@ -13,9 +13,9 @@ const workListApi = axios.create({
   },
 });
 
-export const getWork = async (aui: string): Promise<WorkWithDetailResponse> => {
+export const getWork = async (workId: string): Promise<WorkWithDetailResponse> => {
   try {
-    const response = await workListApi.get<WorkWithDetailResponse>(`/api/v1/work?aui=${aui}`);
+    const response = await workListApi.get<WorkWithDetailResponse>(`/api/v1/work?workId=${workId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
