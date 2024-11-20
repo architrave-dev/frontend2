@@ -5,6 +5,7 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString } from '../../shared/dto/EntityRepository';
+import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 
 interface WorkInfoProps {
   data: WorkData;
@@ -12,9 +13,10 @@ interface WorkInfoProps {
 
 const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
   const { isEditMode } = useEditMode();
-  const { activeWork, setActiveWork } = useWorkViewStore();
-  const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { activeWork } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();
+  const { getWork } = useWorkList();
+
 
   const handleClick = () => {
     if (isEditMode) {
@@ -25,9 +27,16 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
       })
       return;
     }
-    setActiveWork(data);
-    setUpdatedActiveWork(data);
+    const getWorkWithDetailWithApi = async () => {
+      try {
+        console.log("getting work Detail List...")
+        await getWork(data.id);
+      } catch (error) { }
+    }
+
+    getWorkWithDetailWithApi();
   }
+
 
   if (!data) return null;
 

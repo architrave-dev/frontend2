@@ -67,6 +67,7 @@ export interface UpdateWorkDetailReq {
 }
 
 export interface DeleteWorkDetailReq {
+  workId: string;
   workDetailId: string;
 }
 

@@ -67,7 +67,7 @@ export const deleteWorkDetail = async (aui: string, data: DeleteWorkDetailReq): 
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workDetailApi.delete<DeleteResponse>(`/api/v1/work-detail?aui=${aui}&workId=${data.workDetailId}`, {
+    const response = await workDetailApi.delete<DeleteResponse>(`/api/v1/work-detail?aui=${aui}&workDetailId=${data.workDetailId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

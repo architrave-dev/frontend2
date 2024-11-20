@@ -73,7 +73,7 @@ const WorkViewer: React.FC = () => {
       }
     }
     setStandardAlert({
-      type: AlertType.ALERT,
+      type: AlertType.CONFIRM,
       position: AlertPosition.TOP,
       content: "Are you sure you want to delete this work?",
       callBack: callback
@@ -160,11 +160,6 @@ const WorkViewer: React.FC = () => {
       <WorkDetailList />
       {isEditMode &&
         <BtnContainer>
-          <HeadlessBtn
-            value={"Add Detail"}
-            handleClick={handleAddWorkDetail}
-            StyledBtn={BtnWorkViewer}
-          />
           <HeadlessBtn
             value={"Confirm"}
             handleClick={handleConfirm}

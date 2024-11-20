@@ -4,10 +4,12 @@ import { useGlobalErrStore } from '../../store/errorStore';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../../dto/ReqDtoRepository';
 import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse } from '../../dto/ResDtoRepository';
 import { createWorkDetail, deleteWorkDetail, getWorkDetail, getWorkDetailList, updateWorkDetail } from '../../api/workDetailApi';
+import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
 
 
 interface UseWorkListResult {
   isLoading: boolean;
+  // workDetailList: WorkDetailData[];
   getWorkDetail: (aui: string, workDetailId: string) => Promise<void>;
   getWorkDetailList: (aui: string, workId: string) => Promise<void>;
   updateWorkDetail: (aui: string, data: UpdateWorkDetailReq) => Promise<void>;
@@ -15,35 +17,37 @@ interface UseWorkListResult {
   deleteWorkDetail: (aui: string, data: DeleteWorkDetailReq) => Promise<void>;
 }
 
-export const useWorkList = (): UseWorkListResult => {
+export const useWorkDetail = (): UseWorkListResult => {
   const [isLoading, setIsLoading] = useState(false);
   const { setManagedErr, clearErr } = useGlobalErrStore();
+  const { activeWorkDetailList, setActiveWorkDetailList } = useWorkViewStore();
+  const { updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
 
   const handleGetWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
-    // setWorkList(data);
   };
 
   const handleGetWorkDetailListSuccess = (response: WorkDetailListResponse) => {
     const data = response.data;
-    // setWorkList(data);
+    setUpdateActiveWorkDetailList(data);
   };
 
   const handleUpdateWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
-    // const newWorkList = workList.map((each) => each.id === data.id ? data : each);
-    // setWorkList(newWorkList);
+    const newUpdateWorkDetailList = updateActiveWorkDetailList.map((wd) => wd.id === data.id ? data : wd);
+    const newWorkDetailList = activeWorkDetailList.map((wd) => wd.id === data.id ? data : wd);
+    setUpdateActiveWorkDetailList(newUpdateWorkDetailList);
+    setActiveWorkDetailList(newWorkDetailList);
   };
 
   const handleDeleteWorkDetailSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
   };
 
-  const handleCreatWorkDetailSuccess = (response: WorkDetailResponse) => {
+  const handleCreateWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
-    // setWorkList([...workList, data]);
-    // setActiveWork(data);
-    // setUpdatedActiveWork(data);
+    setUpdateActiveWorkDetailList([...updateActiveWorkDetailList, data]);
+    setActiveWorkDetailList([...activeWorkDetailList, data]);
   };
 
   const handleWorkDetailRequest = async (
@@ -57,13 +61,12 @@ export const useWorkList = (): UseWorkListResult => {
       switch (action) {
         case 'delete':
           handleDeleteWorkDetailSuccess(await deleteWorkDetail(aui, data as DeleteWorkDetailReq));
-          // getWorkDetailHandler(aui);
           break;
         case 'update':
           handleUpdateWorkDetailSuccess(await updateWorkDetail(aui, data as UpdateWorkDetailReq));
           break;
         case 'create':
-          handleCreatWorkDetailSuccess(await createWorkDetail(aui, data as CreateWorkDetailReq));
+          handleCreateWorkDetailSuccess(await createWorkDetail(aui, data as CreateWorkDetailReq));
           break;
         case 'get list':
           handleGetWorkDetailListSuccess(await getWorkDetailList(aui, data as string));

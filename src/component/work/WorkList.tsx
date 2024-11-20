@@ -104,7 +104,7 @@ const WorkListContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  padding-bottom: calc(8vh);
+  padding-bottom: calc(9vh);
 `;
 
 const WorkListComp = styled.section`
