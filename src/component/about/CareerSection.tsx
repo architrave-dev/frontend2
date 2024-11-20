@@ -56,7 +56,7 @@ const Section = styled.div`
 
 const CareerTitle = styled.h3`
   margin-bottom: 20px;
-  ${({ theme }) => theme.typography.H_02};
+  ${({ theme }) => theme.typography.Body_01_1};
 `;
 
 export default CareerSection;

@@ -30,14 +30,12 @@ const CareerList: React.FC = () => {
   }, [aui]);
 
   const handleCreateElement = (careerType: CareerType) => {
-    console.log("handleCreateElement", careerType)
     const newElement: CreateCareerReq = {
       tempId: Math.floor(Math.random() * 1000) + "",
       careerType,
       yearFrom: new Date().getFullYear(),
       content: ""
     };
-    console.log("newElement", newElement)
 
     setCreatedCareers([...createdCareers, newElement]);
   };
@@ -65,11 +63,16 @@ const CareerList: React.FC = () => {
   }
 
   const careerSections = [
+    { type: CareerType.EDU, title: 'Education' },
     { type: CareerType.S_EXH, title: 'Solo Exhibition' },
     { type: CareerType.G_EXH, title: 'Group Exhibition' },
-    { type: CareerType.RPS, title: 'Representation' },
+    { type: CareerType.PRZ, title: 'Prize' },
     { type: CareerType.PRS, title: 'Press' },
-    { type: CareerType.EDU, title: 'Education' },
+    { type: CareerType.RSD, title: 'Residency' },
+    { type: CareerType.RPS, title: 'Representation' },
+    { type: CareerType.TCH, title: 'Teach' },
+    { type: CareerType.PBL, title: 'Publication' },
+    { type: CareerType.COL, title: 'Collections' },
   ];
 
   // 로딩 상태를 처리합니다.
@@ -96,6 +99,41 @@ const CareerList: React.FC = () => {
             <HeadlessBtn
               value={"Exhibition Group"}
               handleClick={() => handleCreateElement(CareerType.G_EXH)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Prize"}
+              handleClick={() => handleCreateElement(CareerType.PRZ)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Press"}
+              handleClick={() => handleCreateElement(CareerType.PRS)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Residency"}
+              handleClick={() => handleCreateElement(CareerType.RSD)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Representation"}
+              handleClick={() => handleCreateElement(CareerType.RPS)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Teach"}
+              handleClick={() => handleCreateElement(CareerType.TCH)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Publication"}
+              handleClick={() => handleCreateElement(CareerType.PBL)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Collections"}
+              handleClick={() => handleCreateElement(CareerType.COL)}
               StyledBtn={BtnCreate}
             />
           </CreateButtonGroup>

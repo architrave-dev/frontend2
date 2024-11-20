@@ -32,12 +32,15 @@ export enum CountryType {
 
 export enum CareerType {
   EDU = 'EDU',      //Education
+  S_EXH = 'S_EXH',  //Solo Exhibition
+  G_EXH = 'G_EXH',  //Group Exhibition
   PRZ = 'PRZ',      //Prize
   PRS = 'PRS',      //Press
   RSD = 'RSD',      //Residency
-  S_EXH = 'S_EXH',  //Solo Exhibition
-  G_EXH = 'G_EXH',  //Group Exhibition
-  RPS = 'RPS'       //Representation
+  RPS = 'RPS',      //Representation
+  TCH = 'TCH',      //Teach
+  PBL = 'PBL',      //Publication
+  COL = 'COL'       //Collections
 }
 
 export enum TextArea {
