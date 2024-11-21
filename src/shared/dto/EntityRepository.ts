@@ -91,6 +91,15 @@ export interface WorkWithDetailData extends WorkData {
   workDetailList: WorkDetailData[]; // 추가된 필드
 }
 
+export interface WorkPropertyVisibleData {
+  workPropertyVisibleId: string;
+  workType: boolean;
+  imageUrl: boolean;
+  description: boolean;
+  price: boolean,
+  collection: boolean
+}
+
 export interface DocumentData {
   id: string;
   originUrl: string;

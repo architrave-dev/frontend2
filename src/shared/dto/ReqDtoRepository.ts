@@ -39,14 +39,24 @@ export interface UpdateWorkReq {
   title: string;
   description: string;
   size: SizeData;
-  material: string,
-  prodYear: string
-  price: string,
+  material: string;
+  prodYear: string;
+  price: string;
   collection: string
 }
 
 export interface DeleteWorkReq {
   workId: string;
+}
+
+//-------------- WorkPropertyVisible
+export interface UpdateWorkPropertyVisibleReq {
+  workPropertyVisibleId: string;
+  workType: boolean;
+  imageUrl: boolean;
+  description: boolean;
+  price: boolean;
+  collection: boolean;
 }
 
 //-------------- WorkDetail
