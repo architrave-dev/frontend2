@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
-import { WorkData, convertSizeToString } from '../../shared/dto/EntityRepository';
+import { AlertPosition, AlertType, WorkType } from '../../shared/enum/EnumRepository';
+import { WorkData, WorkPropertyVisibleData, convertSizeToString } from '../../shared/dto/EntityRepository';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
+import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
 
 interface WorkInfoProps {
   data: WorkData;
@@ -16,6 +17,7 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
   const { activeWork } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { getWork } = useWorkList();
+  const { workPropertyVisible } = useWorkPropertyVisible();
 
 
   const handleClick = () => {
@@ -38,7 +40,14 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
   }
 
 
-  if (!data) return null;
+  if (!data || !workPropertyVisible) return null;
+
+  const renderCondition = (field: keyof WorkPropertyVisibleData) => {
+    if (!isEditMode && !workPropertyVisible[field]) // edit 모드가 아닌데 visible이 false면 안보여야해
+      return false;
+    else
+      return true;
+  }
 
   const isActive: boolean = !!activeWork && activeWork.id === data.id;
 
@@ -46,12 +55,21 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
     <WorkInfoComp onClick={handleClick}>
       <ContentWrapper $isActive={isActive}>
         <TitleBlock>{data.title}</TitleBlock>
+        {renderCondition('workType') &&
+          <WorkTypeBlock>{data.workType === WorkType.NONE ? '-' : data.workType}</WorkTypeBlock>
+        }
         <SizeBlock>{convertSizeToString(data.size)}</SizeBlock>
         <MaterialBlock>{data.material === '' ? '-' : data.material}</MaterialBlock>
         <ProdYearBlock>{data.prodYear}</ProdYearBlock>
-        <DescriptionBlock>{data.description === '' ? '-' : data.description}</DescriptionBlock>
-        <PriceBlock>{data.price === "" ? "-" : data.price}</PriceBlock>
-        <CollectionBlock>{data.collection === "" ? "-" : data.collection}</CollectionBlock>
+        {renderCondition('description') &&
+          <DescriptionBlock>{data.description === '' ? '-' : data.description}</DescriptionBlock>
+        }
+        {renderCondition('price') &&
+          <PriceBlock>{data.price === "" ? "-" : data.price}</PriceBlock>
+        }
+        {renderCondition('collection') &&
+          <CollectionBlock>{data.collection === "" ? "-" : data.collection}</CollectionBlock>
+        }
         <SpaceBlock />
       </ContentWrapper>
       {isActive && <ArrowBlock>{"----->"}</ArrowBlock>}
@@ -96,7 +114,7 @@ const ArrowBlock = styled.div`
 `
 
 const TitleBlock = styled.div`
-  flex: 3.5;
+  flex: 2.5;
 
   display: flex;
   align-items: center;
@@ -104,6 +122,17 @@ const TitleBlock = styled.div`
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
   // background-color: #ffcd74;
 `
+
+const WorkTypeBlock = styled.div`
+  flex: 1.5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
+  // background-color: #ffedbf;
+  `
 
 const SizeBlock = styled.div`
   flex: 1.5;
