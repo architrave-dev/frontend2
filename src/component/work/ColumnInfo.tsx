@@ -4,6 +4,8 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
 import { WorkPropertyVisibleData } from '../../shared/dto/EntityRepository';
+import BlockWithVisible from './BlockWithVisible';
+
 
 interface ColumnInfoProps {
 }
@@ -38,40 +40,53 @@ const ColumnInfo: React.FC<ColumnInfoProps> = () => {
     }
   };
 
-  const renderCondition = (field: keyof WorkPropertyVisibleData) => {
-    if (!isEditMode && !workPropertyVisible[field]) // edit 모드가 아닌데 visible이 false면 안보여야해
-      return false;
-    else
-      return true;
-  }
-
   return (
     <ColumnInfoComp>
       <InfoContainer>
         <TitleBlock>Title</TitleBlock>
-        {renderCondition('workType') &&
-          <WorkTypeBlock
-            $isVisible={workPropertyVisible.workType}
-            onDoubleClick={() => handleDoubleClick('workType')}>Type</WorkTypeBlock>
-        }
-        <SizeBlock>Size(cm)</SizeBlock>
-        <MaterialBlock>Material</MaterialBlock>
-        <ProdYearBlock>Year</ProdYearBlock>
-        {renderCondition('description') &&
-          <DescriptionBlock
-            $isVisible={workPropertyVisible.description}
-            onDoubleClick={() => handleDoubleClick('description')}>Description</DescriptionBlock>
-        }
-        {renderCondition('price') &&
-          <PriceBlock
-            $isVisible={workPropertyVisible.price}
-            onDoubleClick={() => handleDoubleClick('price')}>Price($)</PriceBlock>
-        }
-        {renderCondition('collection') &&
-          <CollectionBlock
-            $isVisible={workPropertyVisible.collection}
-            onDoubleClick={() => handleDoubleClick('collection')} >Collection</CollectionBlock>
-        }
+        <BlockWithVisible
+          width={"1.5"}
+          isColumn={true}
+          field={'workType'}
+          value={"Type"}
+          doubleClickHandler={() => handleDoubleClick('workType')}
+        />
+        <BlockWithVisible
+          width={"1.5"}
+          isColumn={true}
+          value={"Size(cm)"}
+        />
+        <BlockWithVisible
+          width={"2"}
+          isColumn={true}
+          value={"Material"}
+        />
+        <BlockWithVisible
+          width={"0.5"}
+          isColumn={true}
+          value={"Year"}
+        />
+        <BlockWithVisible
+          width={"2"}
+          isColumn={true}
+          field={'description'}
+          value={"Description"}
+          doubleClickHandler={() => handleDoubleClick('description')}
+        />
+        <BlockWithVisible
+          width={"1.2"}
+          isColumn={true}
+          field={'price'}
+          value={"Price($)"}
+          doubleClickHandler={() => handleDoubleClick('price')}
+        />
+        <BlockWithVisible
+          width={"1.2"}
+          isColumn={true}
+          field={'collection'}
+          value={"Collection"}
+          doubleClickHandler={() => handleDoubleClick('collection')}
+        />
         <SpaceBlock />
       </InfoContainer>
       <OverviewBlock>Overview</OverviewBlock>
@@ -99,79 +114,6 @@ const TitleBlock = styled.div`
 
   display: flex;
   align-items: center;
-
-  // background-color: #ffedbf;
-  `
-
-const WorkTypeBlock = styled.div<{ $isVisible: boolean }>`
-  flex: 1.5;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0.5)};
-  `
-
-const SizeBlock = styled.div`
-  flex: 1.5;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  // background-color: #ffcd74;
-`
-
-const MaterialBlock = styled.div`
-  flex: 2;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // background-color: #ffedbf;
-  `
-
-const ProdYearBlock = styled.div`
-  flex: 0.5;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // background-color: #ffcd74;
-`
-
-const DescriptionBlock = styled.div<{ $isVisible: boolean }>`
-  flex: 2;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0.5)};
-
-`
-
-const PriceBlock = styled.div<{ $isVisible: boolean }>`
-  flex: 1.2;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0.5)};
-
-`
-const CollectionBlock = styled.div<{ $isVisible: boolean }>`
-  flex: 1.2;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0.5)};
 `
 
 const SpaceBlock = styled.div`
@@ -187,8 +129,6 @@ const OverviewBlock = styled.div`
   // flex-grow: 10;
   display: flex;
   align-items: center;
-
-  // background-color: #ffedbf;
 `
 
 

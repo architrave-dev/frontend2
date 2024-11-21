@@ -4,9 +4,11 @@ import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, WorkType } from '../../shared/enum/EnumRepository';
-import { WorkData, WorkPropertyVisibleData, convertSizeToString } from '../../shared/dto/EntityRepository';
+import { WorkData, convertSizeToString } from '../../shared/dto/EntityRepository';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
+import BlockWithVisible from './BlockWithVisible';
+
 
 interface WorkInfoProps {
   data: WorkData;
@@ -42,34 +44,37 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
 
   if (!data || !workPropertyVisible) return null;
 
-  const renderCondition = (field: keyof WorkPropertyVisibleData) => {
-    if (!isEditMode && !workPropertyVisible[field]) // edit 모드가 아닌데 visible이 false면 안보여야해
-      return false;
-    else
-      return true;
-  }
-
   const isActive: boolean = !!activeWork && activeWork.id === data.id;
 
   return (
     <WorkInfoComp onClick={handleClick}>
       <ContentWrapper $isActive={isActive}>
         <TitleBlock>{data.title}</TitleBlock>
-        {renderCondition('workType') &&
-          <WorkTypeBlock>{data.workType === WorkType.NONE ? '-' : data.workType}</WorkTypeBlock>
-        }
-        <SizeBlock>{convertSizeToString(data.size)}</SizeBlock>
-        <MaterialBlock>{data.material === '' ? '-' : data.material}</MaterialBlock>
-        <ProdYearBlock>{data.prodYear}</ProdYearBlock>
-        {renderCondition('description') &&
-          <DescriptionBlock>{data.description === '' ? '-' : data.description}</DescriptionBlock>
-        }
-        {renderCondition('price') &&
-          <PriceBlock>{data.price === "" ? "-" : data.price}</PriceBlock>
-        }
-        {renderCondition('collection') &&
-          <CollectionBlock>{data.collection === "" ? "-" : data.collection}</CollectionBlock>
-        }
+        <BlockWithVisible
+          width={"1.5"}
+          field={"workType"}
+          value={data.workType === WorkType.NONE ? '-' : data.workType} />
+        <BlockWithVisible
+          width={"1.5"}
+          value={convertSizeToString(data.size)} />
+        <BlockWithVisible
+          width={"2"}
+          value={data.material === '' ? '-' : data.material} />
+        <BlockWithVisible
+          width={"0.5"}
+          value={data.prodYear} />
+        <BlockWithVisible
+          width={"2"}
+          field={"description"}
+          value={data.description === '' ? '-' : data.description} />
+        <BlockWithVisible
+          width={"1.2"}
+          field={"price"}
+          value={data.price === "" ? "-" : data.price} />
+        <BlockWithVisible
+          width={"1.2"}
+          field={"collection"}
+          value={data.collection === "" ? "-" : data.collection} />
         <SpaceBlock />
       </ContentWrapper>
       {isActive && <ArrowBlock>{"----->"}</ArrowBlock>}
@@ -120,86 +125,8 @@ const TitleBlock = styled.div`
   align-items: center;
 
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffcd74;
 `
 
-const WorkTypeBlock = styled.div`
-  flex: 1.5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffedbf;
-  `
-
-const SizeBlock = styled.div`
-  flex: 1.5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffedbf;
-`
-
-const MaterialBlock = styled.div`
-  flex: 2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffcd74;
-`
-
-const ProdYearBlock = styled.div`
-  flex: 0.5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffedbf;
-`
-
-const DescriptionBlock = styled.div`
-  flex: 2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffcd74;
-`
-const PriceBlock = styled.div`
-  flex: 1.2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffedbf;
-`
-const CollectionBlock = styled.div`
-  flex: 1.2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffcd74;
-`
 const SpaceBlock = styled.div`
   flex: 0.5;
   
