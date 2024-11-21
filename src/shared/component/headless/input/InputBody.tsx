@@ -131,7 +131,7 @@ export const MemberTitleInput = styled.input`
   padding: 4px 0px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  ${({ theme }) => theme.typography.H_02};
+  ${({ theme }) => theme.typography.H_03};
 `;
 
 export const MemberInfoInput = styled.input`

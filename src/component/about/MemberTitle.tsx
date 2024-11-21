@@ -17,7 +17,7 @@ const MemberTitle: React.FC<MemberTitleProps> = ({
     <Info>
       <MoleculeInputDiv
         value={value}
-        placeholder={"title"}
+        placeholder={"Name"}
         handleChange={handleChange}
         inputStyle={MemberTitleInput}
         StyledDiv={ValueSection}
@@ -28,14 +28,14 @@ const MemberTitle: React.FC<MemberTitleProps> = ({
 
 const Info = styled.div`
   display: flex;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 `;
 
 const ValueSection = styled.div`
   width: 100%;
   padding: 5px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_02};
-  ${({ theme }) => theme.typography.H_02};
+  ${({ theme }) => theme.typography.H_03};
 `;
 
 

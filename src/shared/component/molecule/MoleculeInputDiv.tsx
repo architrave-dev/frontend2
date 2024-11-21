@@ -31,7 +31,7 @@ const MoleculeInputDiv: React.FC<MoleculeInputDivProps> = ({
           StyledInput={inputStyle}
         />
       ) : (
-        <StyledDiv>{value == '' ? placeholder : value}</StyledDiv>
+        <StyledDiv>{value}</StyledDiv>
       )}
     </>
   );

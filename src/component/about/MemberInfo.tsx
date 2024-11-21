@@ -17,11 +17,11 @@ import MoleculeTextareaDescription from '../../shared/component/molecule/Molecul
 
 
 const MemberInfo: React.FC = () => {
+  const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { isLoading, memberInfo, getMemberInfo, updateMemberInfo } = useMemberInfo();
   const { updateMemberInfoDto, setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
 
-  const { aui } = useAui();
 
   useEffect(() => {
     const getMemberInfoWithApi = async () => {
@@ -90,7 +90,7 @@ const MemberInfo: React.FC = () => {
             value={updateMemberInfoDto.name}
             handleChange={(e) => handleChange('name', e.target.value)}
           />
-          <MemberInfoEach name={"Year"} value={updateMemberInfoDto.year} handleChange={(e) => handleChange('year', e.target.value)} />
+          <MemberInfoEach name={"Born"} value={updateMemberInfoDto.year} handleChange={(e) => handleChange('year', e.target.value)} />
           <MemberInfoEach name={"Country"} value={updateMemberInfoDto.country} handleChange={(e) => handleChange('country', e.target.value)} />
           <MemberInfoEach name={"Email"} value={updateMemberInfoDto.email} handleChange={(e) => handleChange('email', e.target.value)} />
           <MemberInfoEach name={"Contact"} value={updateMemberInfoDto.contact} handleChange={(e) => handleChange('contact', e.target.value)} />
