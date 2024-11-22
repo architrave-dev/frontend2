@@ -43,6 +43,7 @@ const BlockWithVisible: React.FC<BlockWithVisibleProps> = ({ width, isColumn, fi
           $isColumn={isColumn}
           onDoubleClick={doubleClickHandler}>
           <Value
+            $isColumn={isColumn}
             $isVisible={opacityCondition()}
           >
             {value}
@@ -61,11 +62,23 @@ const Block = styled.div<{ $width: string; $isColumn: boolean | undefined }>`
   justify-content: center;
   align-items: center;
 
+  min-width: 0;
+
   border-bottom: ${({ $isColumn, theme }) =>
     $isColumn ? 'none' : `0.5px solid ${theme.colors.color_Gray_04}`};
 `
 
-const Value = styled.span<{ $isVisible: boolean }>`
+const Value = styled.span<{ $isVisible: boolean; $isColumn: boolean | undefined }>`
+  width: 80%;
+
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+
+  padding-left: ${({ $isColumn }) => $isColumn ? `0px` : '3px'};
+
+  text-align: center;
+
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0.5)};
 `
 

@@ -61,10 +61,10 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
           width={"2"}
           value={data.material === '' ? '-' : data.material} />
         <BlockWithVisible
-          width={"0.5"}
+          width={"0.8"}
           value={data.prodYear} />
         <BlockWithVisible
-          width={"2"}
+          width={"1.5"}
           field={"description"}
           value={data.description === '' ? '-' : data.description} />
         <BlockWithVisible

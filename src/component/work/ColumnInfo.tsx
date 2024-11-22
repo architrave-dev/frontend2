@@ -62,12 +62,12 @@ const ColumnInfo: React.FC<ColumnInfoProps> = () => {
           value={"Material"}
         />
         <BlockWithVisible
-          width={"0.5"}
+          width={"0.8"}
           isColumn={true}
           value={"Year"}
         />
         <BlockWithVisible
-          width={"2"}
+          width={"1.5"}
           isColumn={true}
           field={'description'}
           value={"Description"}
