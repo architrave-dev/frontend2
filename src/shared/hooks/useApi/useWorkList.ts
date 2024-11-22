@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { getWorkList, updateWork, createWork, deleteWork, getWork } from '../../api/workListApi';
+import { getWorkList, updateWork, createWork, deleteWork, getWork, getSimpleWorkList } from '../../api/workListApi';
 import { useWorkListStore } from '../../store/WorkListStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { WorkData } from '../../dto/EntityRepository';
 import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../../dto/ReqDtoRepository';
-import { DeleteResponse, WorkListResponse, WorkResponse, WorkWithDetailResponse } from '../../dto/ResDtoRepository';
+import { DeleteResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../../dto/ResDtoRepository';
+import { useWorkStationStore } from '../../store/workStationStore';
 
 
 interface UseWorkListResult {
@@ -14,6 +15,7 @@ interface UseWorkListResult {
   workList: WorkData[];
   getWork: (workId: string) => Promise<void>;
   getWorkList: (aui: string) => Promise<void>;
+  getSimpleWorkList: (aui: string) => Promise<void>;
   updateWork: (aui: string, data: UpdateWorkReq) => Promise<void>;
   createWork: (aui: string, data: CreateWorkReq) => Promise<void>;
   deleteWork: (aui: string, data: DeleteWorkReq) => Promise<void>;
@@ -23,6 +25,7 @@ export const useWorkList = (): UseWorkListResult => {
   const [isLoading, setIsLoading] = useState(false);
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
+  const { setSimpleWorkList } = useWorkStationStore();
   const { setActiveWork, setActiveWorkDetailList } = useWorkViewStore();
   const { setUpdatedActiveWork, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
 
@@ -32,7 +35,11 @@ export const useWorkList = (): UseWorkListResult => {
     setUpdatedActiveWork(data);
     setActiveWorkDetailList(data.workDetailList);
     setUpdateActiveWorkDetailList(data.workDetailList);
+  };
 
+  const handleGetSimpleWorkListSuccess = (response: WorkSimpleListResponse) => {
+    const data = response.data;
+    setSimpleWorkList(data);
   };
 
   const handleGetWorkListSuccess = (response: WorkListResponse) => {
@@ -59,7 +66,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   const handleWorkRequest = async (
     aui: string,
-    action: 'get' | 'get list' | 'update' | 'create' | 'delete',
+    action: 'get' | 'get list' | 'get simple list' | 'update' | 'create' | 'delete',
     data?: UpdateWorkReq | CreateWorkReq | DeleteWorkReq
   ) => {
     setIsLoading(true);
@@ -75,6 +82,9 @@ export const useWorkList = (): UseWorkListResult => {
           break;
         case 'create':
           handleCreatWorkSuccess(await createWork(aui, data as CreateWorkReq));
+          break;
+        case 'get simple list':
+          handleGetSimpleWorkListSuccess(await getSimpleWorkList(aui));
           break;
         case 'get list':
           handleGetWorkListSuccess(await getWorkList(aui));
@@ -99,6 +109,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   const getWorkHandler = (workId: string) => handleWorkRequest(workId, 'get');
   const getWorkListHandler = (aui: string) => handleWorkRequest(aui, 'get list');
+  const getSimpleWorkListHandler = (aui: string) => handleWorkRequest(aui, 'get simple list');
   const updateWorkHandler = (aui: string, data: UpdateWorkReq) => handleWorkRequest(aui, 'update', data);
   const createWorkHandler = (aui: string, data: CreateWorkReq) => handleWorkRequest(aui, 'create', data);
   const deleteWorkHandler = (aui: string, data: DeleteWorkReq) => handleWorkRequest(aui, 'delete', data);
@@ -109,6 +120,7 @@ export const useWorkList = (): UseWorkListResult => {
     workList,
     getWork: getWorkHandler,
     getWorkList: getWorkListHandler,
+    getSimpleWorkList: getSimpleWorkListHandler,
     updateWork: updateWorkHandler,
     createWork: createWorkHandler,
     deleteWork: deleteWorkHandler,
