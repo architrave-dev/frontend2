@@ -2,6 +2,7 @@ export enum ModalType {
   NONE = 'NONE',
   SIGNIN = 'SIGNIN',
   LOGIN = 'LOGIN',
+  WORK_STATION = 'WORK_STATION',
   ALERT = 'ALERT',
 }
 

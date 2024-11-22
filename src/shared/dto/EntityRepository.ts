@@ -80,6 +80,12 @@ export interface WorkData {
   collection: string
 }
 
+export interface WorkSimpleData {
+  id: string;
+  thumbnailUrl: string;
+  title: string;
+}
+
 export interface WorkDetailData {
   id: string;
   workType: WorkType;
