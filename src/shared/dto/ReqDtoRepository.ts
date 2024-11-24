@@ -150,6 +150,22 @@ export interface RemoveProjectInfoReq {
 
 
 //-------------- ProjectElement
+export interface ImportProjectElementReq {
+  tempId: string;
+  projectId: string;
+  projectElementType: ProjectElementType;
+
+  importWorkReq: UpdateWorkReq | null;
+  workAlignment: DisplayAlignment | null;
+  workDisplaySize: WorkDisplaySize | null;
+
+  importTextBoxReq: null,
+  textBoxAlignment: null;
+  importDocumentReq: null;
+  documentAlignment: null;
+  dividerType: null;
+}
+
 export interface CreateProjectElementReq {
   tempId: string;
   projectId: string;
@@ -166,14 +182,14 @@ export interface CreateProjectElementReq {
 
 export interface UpdateProjectElementReq {
   projectElementId: string;
-  updateWorkReq?: UpdateWorkReq | null;
-  workAlignment?: DisplayAlignment | null;
-  workDisplaySize?: WorkDisplaySize | null;
-  updateTextBoxReq?: UpdateTextBoxReq | null,
-  textBoxAlignment?: TextAlignment | null;
+  updateWorkReq: UpdateWorkReq | null;
+  workAlignment: DisplayAlignment | null;
+  workDisplaySize: WorkDisplaySize | null;
+  updateTextBoxReq: UpdateTextBoxReq | null,
+  textBoxAlignment: TextAlignment | null;
   updateDocumentReq: UpdateDocumentReq | null;
   documentAlignment: TextAlignment | null;
-  dividerType?: DividerType | null;
+  dividerType: DividerType | null;
 }
 
 export interface RemoveProjectElementReq {
@@ -183,9 +199,10 @@ export interface RemoveProjectElementReq {
 export interface UpdateProjectElementListReq {
   projectId: string;
   peIndexList: IndexData[];
-  createProjectElements?: CreateProjectElementReq[];
-  updatedProjectElements?: UpdateProjectElementReq[];
-  removedProjectElements?: RemoveProjectElementReq[];
+  importProjectElements: ImportProjectElementReq[];
+  createProjectElements: CreateProjectElementReq[];
+  updatedProjectElements: UpdateProjectElementReq[];
+  removedProjectElements: RemoveProjectElementReq[];
 }
 
 //-------------- Career

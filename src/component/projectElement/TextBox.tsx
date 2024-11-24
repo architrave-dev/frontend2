@@ -71,6 +71,7 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
         projectElementId: target.id,
         updateWorkReq: null,
         workAlignment: null,
+        workDisplaySize: null,
         updateTextBoxReq: {
           id: targetTextBox.id,
           content: targetTextBox.content

@@ -73,6 +73,7 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         projectElementId: target.id,
         updateWorkReq: null,
         workAlignment: null,
+        workDisplaySize: null,
         updateTextBoxReq: null,
         textBoxAlignment: null,
         updateDocumentReq: {

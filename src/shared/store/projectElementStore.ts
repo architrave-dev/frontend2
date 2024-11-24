@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { ProjectElementData } from '../dto/EntityRepository';
-import { CreateProjectElementReq, RemoveProjectElementReq, UpdateProjectElementReq } from '../dto/ReqDtoRepository';
+import { CreateProjectElementReq, ImportProjectElementReq, RemoveProjectElementReq, UpdateProjectElementReq } from '../dto/ReqDtoRepository';
 interface ProjectElementListState {
   projectElementList: ProjectElementData[];
   setProjectElementList: (projectElementList: ProjectElementData[]) => void;
@@ -13,6 +13,8 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
 }));
 
 interface ProjectElementListStateForUpdate {
+  importedProjectElements: ImportProjectElementReq[];
+  setImportedProjectElements: (importedProjectElements: ImportProjectElementReq[]) => void;
   createdProjectElements: CreateProjectElementReq[];
   setCreatedProjectElements: (createProjectElements: CreateProjectElementReq[]) => void;
   updatedProjectElements: UpdateProjectElementReq[];
@@ -23,6 +25,8 @@ interface ProjectElementListStateForUpdate {
 }
 
 export const useProjectElementListStoreForUpdate = create<ProjectElementListStateForUpdate>((set) => ({
+  importedProjectElements: [],
+  setImportedProjectElements: (importedProjectElements) => set({ importedProjectElements }),
   createdProjectElements: [],
   setCreatedProjectElements: (createdProjectElements) => set({ createdProjectElements }),
   updatedProjectElements: [],
