@@ -41,6 +41,10 @@ export interface WorkWithDetailResponse {
   data: WorkWithDetailData;
 }
 
+export interface ProjectElementResponse {
+  data: ProjectElementData;
+}
+
 export interface ProjectElementListResponse {
   data: {
     peIndex: string;

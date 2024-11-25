@@ -150,20 +150,11 @@ export interface RemoveProjectInfoReq {
 
 
 //-------------- ProjectElement
-export interface ImportProjectElementReq {
-  tempId: string;
+export interface CreateProjectElementWithWorkReq {
   projectId: string;
-  projectElementType: ProjectElementType;
-
-  importWorkReq: UpdateWorkReq | null;
-  workAlignment: DisplayAlignment | null;
-  workDisplaySize: WorkDisplaySize | null;
-
-  importTextBoxReq: null,
-  textBoxAlignment: null;
-  importDocumentReq: null;
-  documentAlignment: null;
-  dividerType: null;
+  workId: string;
+  workAlignment: DisplayAlignment;
+  workDisplaySize: WorkDisplaySize;
 }
 
 export interface CreateProjectElementReq {
@@ -199,7 +190,6 @@ export interface RemoveProjectElementReq {
 export interface UpdateProjectElementListReq {
   projectId: string;
   peIndexList: IndexData[];
-  importProjectElements: ImportProjectElementReq[];
   createProjectElements: CreateProjectElementReq[];
   updatedProjectElements: UpdateProjectElementReq[];
   removedProjectElements: RemoveProjectElementReq[];
