@@ -4,20 +4,20 @@ import SelectBox from '../../shared/component/SelectBox';
 import { SelectBoxContainer, TextBoxWrapper } from './TextBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, TextBoxAlignment } from '../../shared/enum/EnumRepository';
+import { SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, CreateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
 
 
 export interface TextBoxProps {
   tempId: string;
-  alignment: TextBoxAlignment | null;
+  alignment: TextAlignment | null;
   data: CreateTextBoxReq;
 }
 
 const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxAlignment, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
 
-  const handleAlignmentChange = (value: TextBoxAlignment) => {
+  const handleAlignmentChange = (value: TextAlignment) => {
     const updatedProjectElementList = createdProjectElements.map(each =>
       each.tempId === tempId ? { ...each, textBoxAlignment: value } : each
     );
@@ -35,12 +35,12 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
     <TextBoxWrapper>
       <SelectBoxContainer>
         <SelectBox
-          value={initialTexBoxAlignment || TextBoxAlignment.CENTER}
-          selectType={SelectType.TEXTBOX_ALIGNMENT}
+          value={initialTexBoxAlignment || TextAlignment.CENTER}
+          selectType={SelectType.TEXT_ALIGNMENT}
           handleChange={handleAlignmentChange} />
       </SelectBoxContainer>
       <HeadlessTextArea
-        alignment={initialTexBoxAlignment || TextBoxAlignment.CENTER}
+        alignment={initialTexBoxAlignment || TextAlignment.CENTER}
         content={initialData.content}
         placeholder={"text"}
         handleChange={(e) => handlechange("content", e.target.value)}

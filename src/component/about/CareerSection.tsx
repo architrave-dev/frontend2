@@ -26,7 +26,7 @@ const CareerSection: React.FC<CareerSectionProps> = ({ title, type }) => {
   return (
     <Section>
       <CareerTitle>{title}</CareerTitle>
-      <Divider dividerType={DividerType.PLAIN} bottom={'20px'} />
+      <Divider dividerType={DividerType.PLAIN} bottom={'16px'} />
       {filteredCareers.map((each) => (
         <CareerInfo
           key={each.id}
@@ -55,8 +55,8 @@ const Section = styled.div`
 `;
 
 const CareerTitle = styled.h3`
-  margin-bottom: 20px;
-  ${({ theme }) => theme.typography.H_02};
+  margin-bottom: 12px;
+  ${({ theme }) => theme.typography.Body_01_1};
 `;
 
 export default CareerSection;

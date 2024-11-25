@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, WorkType } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString } from '../../shared/dto/EntityRepository';
+import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
+import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
+import BlockWithVisible from './BlockWithVisible';
+
 
 interface WorkInfoProps {
   data: WorkData;
@@ -12,9 +16,11 @@ interface WorkInfoProps {
 
 const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
   const { isEditMode } = useEditMode();
-  const { activeWork, setActiveWork } = useWorkViewStore();
-  const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { activeWork } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();
+  const { getWork } = useWorkList();
+  const { workPropertyVisible } = useWorkPropertyVisible();
+
 
   const handleClick = () => {
     if (isEditMode) {
@@ -25,11 +31,18 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
       })
       return;
     }
-    setActiveWork(data);
-    setUpdatedActiveWork(data);
+    const getWorkWithDetailWithApi = async () => {
+      try {
+        console.log("getting work Detail List...")
+        await getWork(data.id);
+      } catch (error) { }
+    }
+
+    getWorkWithDetailWithApi();
   }
 
-  if (!data) return null;
+
+  if (!data || !workPropertyVisible) return null;
 
   const isActive: boolean = !!activeWork && activeWork.id === data.id;
 
@@ -37,11 +50,31 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
     <WorkInfoComp onClick={handleClick}>
       <ContentWrapper $isActive={isActive}>
         <TitleBlock>{data.title}</TitleBlock>
-        <SizeBlock>{convertSizeToString(data.size)}</SizeBlock>
-        <MaterialBlock>{data.material}</MaterialBlock>
-        <ProdYearBlock>{data.prodYear}</ProdYearBlock>
-        <DescriptionBlock>{data.description}</DescriptionBlock>
-        <PriceBlock>-</PriceBlock>
+        <BlockWithVisible
+          width={"1.5"}
+          field={"workType"}
+          value={data.workType === WorkType.NONE ? '-' : data.workType} />
+        <BlockWithVisible
+          width={"1.5"}
+          value={convertSizeToString(data.size)} />
+        <BlockWithVisible
+          width={"2"}
+          value={data.material === '' ? '-' : data.material} />
+        <BlockWithVisible
+          width={"0.8"}
+          value={data.prodYear} />
+        <BlockWithVisible
+          width={"1.5"}
+          field={"description"}
+          value={data.description === '' ? '-' : data.description} />
+        <BlockWithVisible
+          width={"1.2"}
+          field={"price"}
+          value={data.price === "" ? "-" : data.price} />
+        <BlockWithVisible
+          width={"1.2"}
+          field={"collection"}
+          value={data.collection === "" ? "-" : data.collection} />
         <SpaceBlock />
       </ContentWrapper>
       {isActive && <ArrowBlock>{"----->"}</ArrowBlock>}
@@ -86,71 +119,14 @@ const ArrowBlock = styled.div`
 `
 
 const TitleBlock = styled.div`
-  flex: 3.5;
+  flex: 2.5;
 
   display: flex;
   align-items: center;
 
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffcd74;
 `
 
-const SizeBlock = styled.div`
-  flex: 1.5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffedbf;
-`
-
-const MaterialBlock = styled.div`
-  flex: 2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffcd74;
-`
-
-const ProdYearBlock = styled.div`
-  flex: 0.5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffedbf;
-`
-
-const DescriptionBlock = styled.div`
-  flex: 2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffcd74;
-`
-const PriceBlock = styled.div`
-  flex: 1.2;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-bottom: 0.5px solid ${({ theme }) => theme.colors.color_Gray_04};
-  // background-color: #ffedbf;
-`
 const SpaceBlock = styled.div`
   flex: 0.5;
   

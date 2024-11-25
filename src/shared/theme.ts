@@ -21,6 +21,7 @@ const theme: DefaultTheme = {
     font_H01: '68px',
     font_H015: '50px',
     font_H02: '36px',
+    font_H03: '28px',
     font_B01: '20px',
     font_B02: '16px',
     font_B03: '14px',
@@ -45,6 +46,10 @@ const theme: DefaultTheme = {
     H_02: css`
       font-size: ${props => props.theme.fontSize.font_H02};
       font-weight: ${props => props.theme.fontWeight.bold};
+    `,
+    H_03: css`
+      font-size: ${props => props.theme.fontSize.font_H03};
+      font-weight: ${props => props.theme.fontWeight.semi_bold};
     `,
     Body_01_1: css`
       font-size: ${props => props.theme.fontSize.font_B01};

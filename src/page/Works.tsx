@@ -13,9 +13,7 @@ const Works: React.FC = () => {
     <WorkContainer>
       <SortStation />
       <ColumnInfo />
-      <WorkListContainer>
-        <WorkList />
-      </WorkListContainer>
+      <WorkList />
     </WorkContainer>
   );
 }
@@ -33,11 +31,4 @@ const WorkContainer = styled.div`
   margin: calc(8vh) 0;
 
   overflow: hidden;
-`;
-
-const WorkListContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-
 `;

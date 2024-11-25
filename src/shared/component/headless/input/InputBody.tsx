@@ -131,7 +131,7 @@ export const MemberTitleInput = styled.input`
   padding: 4px 0px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  ${({ theme }) => theme.typography.H_02};
+  ${({ theme }) => theme.typography.H_03};
 `;
 
 export const MemberInfoInput = styled.input`
@@ -154,4 +154,16 @@ export const MemberInfoValue = styled.input`
   border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_02_1};
+`;
+
+export const WorkDetailInputDescription = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: 18px;
+
+  padding: 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+
+  text-align: right;
+  ${({ theme }) => theme.typography.Body_03_2};
 `;

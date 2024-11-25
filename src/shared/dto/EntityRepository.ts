@@ -1,4 +1,4 @@
-import { CareerType, CountryType, DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../enum/EnumRepository';
+import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
 
 /**
  * 전부 ~Data로 통일
@@ -68,6 +68,7 @@ export const convertStringToSize = (value: string): SizeData => {
 
 export interface WorkData {
   id: string;
+  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   title: string;
@@ -75,9 +76,41 @@ export interface WorkData {
   size: SizeData;
   material: string,
   prodYear: string,
-  //genre : drawing, painting, Sculpture, Installation, Video, Photo, 
-  //Sketch or Research
-  //Price: 
+  price: string,
+  collection: string
+}
+
+export interface WorkSimpleData {
+  id: string;
+  thumbnailUrl: string;
+  title: string;
+}
+
+export interface WorkDetailData {
+  id: string;
+  workType: WorkType;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+export interface WorkWithDetailData extends WorkData {
+  workDetailList: WorkDetailData[]; // 추가된 필드
+}
+
+export interface WorkPropertyVisibleData {
+  workPropertyVisibleId: string;
+  workType: boolean;
+  imageUrl: boolean;
+  description: boolean;
+  price: boolean,
+  collection: boolean
+}
+
+export interface DocumentData {
+  id: string;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
 }
 
 export interface TextBoxData {
@@ -114,10 +147,12 @@ export interface ProjectElementData {
   id: string;
   projectElementType: ProjectElementType;
   work: WorkData | null;
-  workAlignment: WorkAlignment | null;
+  workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
   textBox: TextBoxData | null;
-  textBoxAlignment: TextBoxAlignment | null;
+  textBoxAlignment: TextAlignment | null;
+  document: DocumentData | null;
+  documentAlignment: TextAlignment | null;
   dividerType: DividerType | null;
 }
 

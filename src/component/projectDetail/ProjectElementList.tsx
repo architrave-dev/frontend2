@@ -1,39 +1,49 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import ProjectElement from '../../component/projectElement/ProjectElement';
-import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
+import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useParams } from 'react-router-dom';
+import { useModal } from '../../shared/hooks/useModal';
+import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import ProjectElementTemp from '../projectElement/ProjectElementTemp';
-import Space from '../../shared/Space';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, ModalType } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
+import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
+import ProjectElement from '../../component/projectElement/ProjectElement';
+import ProjectElementTemp from '../projectElement/ProjectElementTemp';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import Space from '../../shared/Space';
 import Loading from '../../shared/component/Loading';
 
 
 const ProjectElementList: React.FC = () => {
-  const { AUI, projectTitle } = useParams<{ AUI: string, projectTitle: string }>();
+  const { aui } = useAui();
+  const { AUI, projectId } = useParams<{ AUI: string, projectId: string }>();
   const { isEditMode, setEditMode } = useEditMode();
   const { project } = useProjectDetail();
+  const { getSimpleWorkList } = useWorkList();
   const { isLoading, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
-  const { createdProjectElements, setCreatedProjectElements, updatedProjectElements, removedProjectElements } = useProjectElementListStoreForUpdate();
-  const { aui } = useAui();
+  const {
+    createdProjectElements,
+    setCreatedProjectElements,
+    updatedProjectElements,
+    removedProjectElements
+  } = useProjectElementListStoreForUpdate();
+
+  const { openModal } = useModal();
 
   useEffect(() => {
     const getProjectElementListWithApi = async () => {
-      if (aui && projectTitle) {
+      if (aui && projectId) {
         try {
-          await getProjectElementList(aui, projectTitle);
+          await getProjectElementList(aui, projectId);
         } catch (error) { }
       }
     }
     getProjectElementListWithApi();
-  }, [aui, projectTitle]);
+  }, [aui, projectId]);
 
   const handleCreateElement = (elementType: ProjectElementType) => {
     if (!project) {
@@ -43,8 +53,10 @@ const ProjectElementList: React.FC = () => {
       tempId: Math.floor(Math.random() * 100) + "",
       projectId: project.id,
       projectElementType: elementType,
+      // Work
       createWorkReq: elementType === ProjectElementType.WORK ?
         {
+          workType: WorkType.NONE,
           originUrl: '',
           thumbnailUrl: '',
           title: "New Work",
@@ -53,15 +65,29 @@ const ProjectElementList: React.FC = () => {
             width: "000",
             height: "000"
           },
-          material: "material",
-          prodYear: new Date().getFullYear().toString()
+          material: "",
+          prodYear: new Date().getFullYear().toString(),
+          price: '',
+          collection: ''
         } : null,
-      workAlignment: elementType === ProjectElementType.WORK ? WorkAlignment.CENTER : null,
+      workAlignment: elementType === ProjectElementType.WORK ? DisplayAlignment.CENTER : null,
       workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
+
+      // TextBox
       createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
-        content: "This is New TextBox"
+        content: "New TextBox"
       } : null,
-      textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextBoxAlignment.CENTER : null,
+      textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextAlignment.CENTER : null,
+
+      // DOC
+      createDocumentReq: elementType === ProjectElementType.DOCUMENT ? {
+        originUrl: '',
+        thumbnailUrl: '',
+        description: "New Doc",
+      } : null,
+      documentAlignment: elementType === ProjectElementType.DOCUMENT ? TextAlignment.CENTER : null,
+
+      // Divider
       dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
     };
 
@@ -94,6 +120,15 @@ const ProjectElementList: React.FC = () => {
     );
   }
 
+  const handleImportElement = async (elementType: ProjectElementType) => {
+    try {
+      await getSimpleWorkList(aui);
+      openModal(ModalType.WORK_STATION);
+    } catch (err) {
+    } finally {
+    }
+  }
+
   // 로딩 상태를 처리합니다.
   if (isLoading) return <Loading />;
 
@@ -116,6 +151,8 @@ const ProjectElementList: React.FC = () => {
           workDisplaySize={each.workDisplaySize}
           textBox={each.textBox}
           textBoxAlignment={each.textBoxAlignment}
+          document={each.document}
+          documentAlignment={each.documentAlignment}
           dividerType={each.dividerType}
         />
       ))}
@@ -127,19 +164,36 @@ const ProjectElementList: React.FC = () => {
               tempId={each.tempId}
               projectId={each.projectId}
               projectElementType={each.projectElementType}
-              work={each.createWorkReq}
+              createWorkReq={each.createWorkReq}
               workAlignment={each.workAlignment}
               workDisplaySize={each.workDisplaySize}
-              textBox={each.createTextBoxReq}
+              createTextBoxReq={each.createTextBoxReq}
               textBoxAlignment={each.textBoxAlignment}
+              createDocumentReq={each.createDocumentReq}
+              documentAlignment={each.documentAlignment}
               dividerType={each.dividerType}
             />
           ))}
           <Space $align={"center"} $height={"calc(6vw)"}>
             <CreateButtonGroup>
               <HeadlessBtn
+                value={"Import"}
+                handleClick={() => handleImportElement(ProjectElementType.WORK)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
                 value={"Work"}
                 handleClick={() => handleCreateElement(ProjectElementType.WORK)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Detail"}
+                handleClick={() => handleCreateElement(ProjectElementType.DETAIL)}
+                StyledBtn={BtnCreate}
+              />
+              <HeadlessBtn
+                value={"Doc"}
+                handleClick={() => handleCreateElement(ProjectElementType.DOCUMENT)}
                 StyledBtn={BtnCreate}
               />
               <HeadlessBtn

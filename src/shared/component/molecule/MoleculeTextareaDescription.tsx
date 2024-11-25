@@ -1,23 +1,23 @@
 import React from 'react';
 import { useEditMode } from '../../hooks/useEditMode';
-import HeadlessTextArea, { StyledTextAreaComponent } from '../headless/textarea/HeadlessTextArea';
-import { TextBoxAlignment } from '../../enum/EnumRepository';
-import { StyledDivComponent } from '../../dto/StyleCompRepository';
+import HeadlessTextArea from '../headless/textarea/HeadlessTextArea';
+import { TextAlignment } from '../../enum/EnumRepository';
+import { StyledDivComponent, StyledTextAreaComponent } from '../../dto/StyleCompRepository';
 
 interface MoleculeTextareaDescriptionProps {
   value: string;
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  alignment?: TextBoxAlignment;
-  textareaStyle: StyledTextAreaComponent;
+  StyledTextarea: StyledTextAreaComponent;
   StyledDescription: StyledDivComponent;
+  alignment?: TextAlignment;
 }
 
 const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = ({
   value,
   handleChange,
+  StyledTextarea,
+  StyledDescription,
   alignment,
-  textareaStyle,
-  StyledDescription
 }) => {
   const { isEditMode } = useEditMode();
 
@@ -25,14 +25,14 @@ const MoleculeTextareaDescription: React.FC<MoleculeTextareaDescriptionProps> = 
     <>
       {isEditMode ? (
         <HeadlessTextArea
-          alignment={alignment ? alignment : TextBoxAlignment.LEFT}
+          alignment={alignment ? alignment : TextAlignment.LEFT}
           content={value}
           placeholder="Enter description"
           handleChange={handleChange}
-          StyledTextArea={textareaStyle}
+          StyledTextArea={StyledTextarea}
         />
       ) : (
-        <StyledDescription>
+        <StyledDescription $alignment={alignment ? alignment : TextAlignment.LEFT} >
           {value.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}

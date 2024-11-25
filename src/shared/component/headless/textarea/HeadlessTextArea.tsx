@@ -1,24 +1,17 @@
 import React, { useRef } from 'react';
-import { TextBoxAlignment, WorkAlignment } from '../../../enum/EnumRepository';
-
-type StyledTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  $alignment: Alignment;
-};
-
-export type StyledTextAreaComponent = React.ForwardRefExoticComponent<
-  StyledTextAreaProps & React.RefAttributes<HTMLTextAreaElement>
->;
+import { TextAlignment, DisplayAlignment } from '../../../enum/EnumRepository';
+import { StyledTextAreaComponent } from '../../../dto/StyleCompRepository';
 
 
 export interface HeadlessTextAreaProps {
-  alignment: Alignment;
+  alignment: TextAlignment;
   content: string;
   placeholder?: string;
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   StyledTextArea: StyledTextAreaComponent
 }
 
-export type Alignment = TextBoxAlignment | WorkAlignment;
+export type Alignment = TextAlignment | DisplayAlignment;
 
 
 const HeadlessTextArea: React.FC<HeadlessTextAreaProps> = ({

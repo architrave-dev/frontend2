@@ -2,6 +2,7 @@ export enum ModalType {
   NONE = 'NONE',
   SIGNIN = 'SIGNIN',
   LOGIN = 'LOGIN',
+  WORK_STATION = 'WORK_STATION',
   ALERT = 'ALERT',
 }
 
@@ -16,7 +17,10 @@ export enum AlertPosition {
 }
 
 export enum ProjectElementType {
+  I_WORK = 'I_WORK',
   WORK = 'WORK',
+  DETAIL = 'DETAIL',
+  DOCUMENT = 'DOCUMENT',
   TEXTBOX = 'TEXTBOX',
   DIVIDER = 'DIVIDER',
 }
@@ -30,12 +34,15 @@ export enum CountryType {
 
 export enum CareerType {
   EDU = 'EDU',      //Education
+  S_EXH = 'S_EXH',  //Solo Exhibition
+  G_EXH = 'G_EXH',  //Group Exhibition
   PRZ = 'PRZ',      //Prize
   PRS = 'PRS',      //Press
   RSD = 'RSD',      //Residency
-  S_EXH = 'S_EXH',  //Solo Exhibition
-  G_EXH = 'G_EXH',  //Group Exhibition
-  RPS = 'RPS'       //Representation
+  RPS = 'RPS',      //Representation
+  TCH = 'TCH',      //Teach
+  PBL = 'PBL',      //Publication
+  COL = 'COL'       //Collections
 }
 
 export enum TextArea {
@@ -59,19 +66,34 @@ export enum DividerType {
 
 
 export enum SelectType {
-  TEXTBOX_ALIGNMENT = 'TEXTBOX_ALIGNMENT',
-  WORK_ALIGNMENT = 'WORK_ALIGNMENT',
+  TEXT_ALIGNMENT = 'TEXT_ALIGNMENT',
+  DISPLAY_ALIGNMENT = 'DISPLAY_ALIGNMENT',
   WORK_SIZE = 'WORK_SIZE',
-  SORT_ORDER = 'SORT_ORDER'
+  SORT_ORDER = 'SORT_ORDER',
 }
 
-export enum TextBoxAlignment {
+export enum TextAlignment {
   LEFT = 'LEFT',
   CENTER = 'CENTER',
   RIGHT = 'RIGHT',
 }
 
-export enum WorkAlignment {
+export enum WorkType {
+  PAINTING_WATER = 'PAINTING_WATER',
+  PAINTING_OIL = 'PAINTING_OIL',
+  PAINTING_DRY = 'PAINTING_DRY',
+  PRINTS = 'PRINTS',
+  PHOTO = 'PHOTO',
+  STUDY = 'STUDY',
+  DIGITAL = 'DIGITAL',
+  INSTALLATION = 'INSTALLATION',
+  SCULPTURE = 'SCULPTURE',
+  CONCEPTUAL_OBJECT = 'CONCEPTUAL_OBJECT',
+  DETAILS = 'DETAILS',
+  NONE = 'NONE'
+}
+
+export enum DisplayAlignment {
   LEFT = 'LEFT',
   CENTER = 'CENTER',
   RIGHT = 'RIGHT',

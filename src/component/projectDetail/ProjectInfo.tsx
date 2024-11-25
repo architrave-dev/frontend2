@@ -72,12 +72,14 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
     <ProjectInfoItem $isEditMode={isEditMode}>
       <MoleculeInputDiv
         value={initialCustomName}
+        placeholder={"name"}
         handleChange={(e) => handleChange("customName", e.target.value)}
         inputStyle={InputName}
         StyledDiv={NameSection}
       />
       <MoleculeInputDiv
         value={initialCustomValue}
+        placeholder={"value"}
         handleChange={(e) => handleChange("customValue", e.target.value)}
         inputStyle={InputValue}
         StyledDiv={ValueSection}

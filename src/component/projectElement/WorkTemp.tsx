@@ -1,21 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import defaultImg from '../../asset/project/default_1.png';
-import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
 import { ImgWrapper, SelectBoxContainer, TitleInfoWrpper, WorkImage, WorkInfo, WorkWrapper } from './Work';
+import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 export interface WorkProps {
   tempId: string;
-  alignment: WorkAlignment | null;
+  alignment: DisplayAlignment | null;
   displaySize: WorkDisplaySize | null;
   data: CreateWorkReq;
 }
@@ -58,12 +56,13 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
           handleChange={handleSizeChange} />
       </SelectBoxContainer>
       <ImgWrapper>
-        <WorkImage
-          src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
+        <MoleculeImg
+          srcUrl={initialData.originUrl}
           alt={initialData.title}
-          $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
+          displaySize={initialDisplaySize}
+          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          StyledImg={WorkImage}
         />
-        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
       </ImgWrapper>
       <TitleInfoWrpper>
         <HeadlessInput
@@ -73,7 +72,7 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
           StyledInput={InputWorkTitle}
         />
         <HeadlessTextArea
-          alignment={initialWorkAlignment || WorkAlignment.CENTER}
+          alignment={TextAlignment.CENTER}
           content={initialData.description}
           placeholder={"Description"}
           handleChange={(e) => handleChange("description", e.target.value)}

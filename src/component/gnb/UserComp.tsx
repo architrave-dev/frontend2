@@ -32,14 +32,18 @@ const UserComp: React.FC = () => {
       })
       return;
     }
+    //store에 user가 있을 경우
     if (user) {
       compareAuiLoggedInAui(user);
     } else {
+      //store에 user가 없을 경우
       openModal(ModalType.LOGIN);
     }
   };
 
   const compareAuiLoggedInAui = (user: UserData) => {
+    //현재 AUI와 store의 aui를 비교
+    // 같을 경우
     if (aui && aui === user.aui) {
       setStandardAlert({
         type: AlertType.CONFIRM,
@@ -48,6 +52,7 @@ const UserComp: React.FC = () => {
         callBack: logout
       })
     } else {
+      // 다를 경우
       navigate(`/${aui}`);
     }
   }

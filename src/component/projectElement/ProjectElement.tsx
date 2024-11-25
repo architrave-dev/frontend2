@@ -7,23 +7,14 @@ import { useProjectElementListStore, useProjectElementListStoreForUpdate } from 
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
-import { TextBoxData, WorkData } from '../../shared/dto/EntityRepository';
+import { ProjectElementType } from '../../shared/enum/EnumRepository';
+import { ProjectElementData } from '../../shared/dto/EntityRepository';
 import { RemoveProjectElementReq } from '../../shared/dto/ReqDtoRepository';
+import Document from './Document';
 
 
-export type ProjectElementProps = {
-  id: string;
-  projectElementType: ProjectElementType;
-  work: WorkData | null;
-  workAlignment: WorkAlignment | null;
-  workDisplaySize: WorkDisplaySize | null;
-  textBox: TextBoxData | null;
-  textBoxAlignment: TextBoxAlignment | null;
-  dividerType: DividerType | null;
-};
 
-const ProjectElement: React.FC<ProjectElementProps> = ({
+const ProjectElement: React.FC<ProjectElementData> = ({
   id, //projectElementId
   projectElementType,
   work,
@@ -31,6 +22,8 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
   workDisplaySize,
   textBox,
   textBoxAlignment,
+  document,
+  documentAlignment,
   dividerType
   // order,
 }) => {
@@ -43,6 +36,8 @@ const ProjectElement: React.FC<ProjectElementProps> = ({
         return work && <Work alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBox alignment={textBoxAlignment} data={textBox} />;
+      case ProjectElementType.DOCUMENT:
+        return document && documentAlignment && <Document alignment={documentAlignment} data={document} />;
       case ProjectElementType.DIVIDER:
         return dividerType && <Divider dividerType={dividerType} />;
       default:

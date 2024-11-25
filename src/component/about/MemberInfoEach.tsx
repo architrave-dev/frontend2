@@ -20,6 +20,7 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
       <NameSection>{name}</NameSection>
       <MoleculeInputDiv
         value={value}
+        placeholder={"value"}
         handleChange={handleChange}
         inputStyle={MemberInfoValue}
         StyledDiv={ValueSection}

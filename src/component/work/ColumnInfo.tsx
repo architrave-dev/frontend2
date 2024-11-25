@@ -1,20 +1,92 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useAui } from '../../shared/hooks/useAui';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
+import { WorkPropertyVisibleData } from '../../shared/dto/EntityRepository';
+import BlockWithVisible from './BlockWithVisible';
+
 
 interface ColumnInfoProps {
 }
 
 const ColumnInfo: React.FC<ColumnInfoProps> = () => {
+  const { aui } = useAui();
+  const { isEditMode } = useEditMode();
+  const { workPropertyVisible, getWorkPropertyVisible, updateWorkPropertyVisible } = useWorkPropertyVisible();
+
+  useEffect(() => {
+    const getWorkPropertyVisibleWithApi = async () => {
+      if (!aui) return;
+      try {
+        console.log("getting billboard...");
+        await getWorkPropertyVisible(aui);
+      } catch (error) { }
+    }
+    getWorkPropertyVisibleWithApi();
+  }, [aui]);
+
+  if (!workPropertyVisible) return null;
+
+  const handleDoubleClick = async (field: keyof WorkPropertyVisibleData) => {
+    if (!isEditMode) return null;
+    try {
+      await updateWorkPropertyVisible(aui, {
+        ...workPropertyVisible,
+        [field]: !workPropertyVisible[field]
+      });
+    } catch (err) {
+    } finally {
+    }
+  };
 
   return (
     <ColumnInfoComp>
       <InfoContainer>
         <TitleBlock>Title</TitleBlock>
-        <SizeBlock>Size(cm)</SizeBlock>
-        <MaterialBlock>Material</MaterialBlock>
-        <ProdYearBlock>Year</ProdYearBlock>
-        <DescriptionBlock>Description</DescriptionBlock>
-        <PriceBlock>Price($)</PriceBlock>
+        <BlockWithVisible
+          width={"1.5"}
+          isColumn={true}
+          field={'workType'}
+          value={"Type"}
+          doubleClickHandler={() => handleDoubleClick('workType')}
+        />
+        <BlockWithVisible
+          width={"1.5"}
+          isColumn={true}
+          value={"Size(cm)"}
+        />
+        <BlockWithVisible
+          width={"2"}
+          isColumn={true}
+          value={"Material"}
+        />
+        <BlockWithVisible
+          width={"0.8"}
+          isColumn={true}
+          value={"Year"}
+        />
+        <BlockWithVisible
+          width={"1.5"}
+          isColumn={true}
+          field={'description'}
+          value={"Description"}
+          doubleClickHandler={() => handleDoubleClick('description')}
+        />
+        <BlockWithVisible
+          width={"1.2"}
+          isColumn={true}
+          field={'price'}
+          value={"Price($)"}
+          doubleClickHandler={() => handleDoubleClick('price')}
+        />
+        <BlockWithVisible
+          width={"1.2"}
+          isColumn={true}
+          field={'collection'}
+          value={"Collection"}
+          doubleClickHandler={() => handleDoubleClick('collection')}
+        />
         <SpaceBlock />
       </InfoContainer>
       <OverviewBlock>Overview</OverviewBlock>
@@ -38,63 +110,12 @@ const InfoContainer = styled.article`
 `;
 
 const TitleBlock = styled.div`
-  flex: 3.5;
+  flex: 2.5;
 
   display: flex;
   align-items: center;
-
-  // background-color: #ffedbf;
-  `
-
-const SizeBlock = styled.div`
-  flex: 1.5;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  // background-color: #ffcd74;
 `
 
-const MaterialBlock = styled.div`
-  flex: 2;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // background-color: #ffedbf;
-  `
-
-const ProdYearBlock = styled.div`
-  flex: 0.5;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // background-color: #ffcd74;
-`
-
-const DescriptionBlock = styled.div`
-  flex: 2;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // background-color: #ffedbf;
-`
-
-const PriceBlock = styled.div`
-  flex: 1.2;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // background-color: #ffcd74;
-`
 const SpaceBlock = styled.div`
   flex: 0.5;
   
@@ -108,8 +129,6 @@ const OverviewBlock = styled.div`
   // flex-grow: 10;
   display: flex;
   align-items: center;
-
-  // background-color: #ffedbf;
 `
 
 

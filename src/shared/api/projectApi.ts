@@ -23,9 +23,9 @@ export const getProjectList = async (aui: string): Promise<ProjectListResponse> 
   }
 };
 
-export const getProjectDetail = async (aui: string, title: string): Promise<ProjectResponse> => {
+export const getProjectDetail = async (aui: string, projectId: string): Promise<ProjectResponse> => {
   try {
-    const response = await projectApi.get<ProjectResponse>(`/api/v1/project?aui=${aui}&title=${title}`);
+    const response = await projectApi.get<ProjectResponse>(`/api/v1/project?aui=${aui}&projectId=${projectId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);

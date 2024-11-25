@@ -12,7 +12,7 @@ import { ProjectResponse } from '../../dto/ResDtoRepository';
 interface UseProjectResult {
   isLoading: boolean;
   project: ProjectData | null;
-  getProject: (aui: string, title: string) => Promise<void>;
+  getProject: (aui: string, projectId: string) => Promise<void>;
   updateProject: (aui: string, data: UpdateProjectReq) => Promise<void>;
 }
 
@@ -36,7 +36,7 @@ export const useProjectDetail = (): UseProjectResult => {
   const handleProjectRequest = async (
     aui: string,
     action: 'get' | 'update',
-    title: string | null,
+    projectId: string | null,
     data?: UpdateProjectReq
   ) => {
     setIsLoading(true);
@@ -45,8 +45,8 @@ export const useProjectDetail = (): UseProjectResult => {
       if (data) {
         const response = await updateProject(aui, data);
         handleProjectSuccess(response);
-      } else if (title) {
-        const response = await getProjectDetail(aui, title);
+      } else if (projectId) {
+        const response = await getProjectDetail(aui, projectId);
         handleProjectSuccess(response);
       }
     } catch (err) {
@@ -54,7 +54,7 @@ export const useProjectDetail = (): UseProjectResult => {
       const convertedErrCode = convertStringToErrorCode(errCode);
       setManagedErr({
         errCode: convertedErrCode,
-        retryFunction: () => handleProjectRequest(aui, action, title, data)
+        retryFunction: () => handleProjectRequest(aui, action, projectId, data)
       });
       throw err;
     } finally {
@@ -62,7 +62,7 @@ export const useProjectDetail = (): UseProjectResult => {
     }
   };
 
-  const getProjectHandler = (aui: string, title: string) => handleProjectRequest(aui, 'get', title);
+  const getProjectHandler = (aui: string, projectId: string) => handleProjectRequest(aui, 'get', projectId);
   const updateProjectHandler = (aui: string, data: UpdateProjectReq) => handleProjectRequest(aui, 'update', null, data);
 
 

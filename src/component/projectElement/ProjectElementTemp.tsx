@@ -6,30 +6,21 @@ import { useProjectElementListStoreForUpdate } from '../../shared/store/projectE
 import DividerTemp from './DividerTemp';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
-import { CreateTextBoxReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
+import { ProjectElementType } from '../../shared/enum/EnumRepository';
+import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
+import DocumentTemp from './DocumentTemp';
 
 
-export type ProjectElementTempProps = {
-  tempId: string;
-  projectId: string;
-  projectElementType: ProjectElementType;
-  work: CreateWorkReq | null;
-  workAlignment: WorkAlignment | null;
-  workDisplaySize: WorkDisplaySize | null;
-  textBox: CreateTextBoxReq | null;
-  textBoxAlignment: TextBoxAlignment | null;
-  dividerType: DividerType | null;
-};
-
-const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
+const ProjectElementTemp: React.FC<CreateProjectElementReq> = ({
   tempId,
   projectElementType,
-  work,
+  createWorkReq: work,
   workAlignment,
   workDisplaySize,
-  textBox,
+  createTextBoxReq: textBox,
   textBoxAlignment,
+  createDocumentReq: document,
+  documentAlignment,
   dividerType
 }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
@@ -39,6 +30,8 @@ const ProjectElementTemp: React.FC<ProjectElementTempProps> = ({
         return work && <WorkTemp tempId={tempId} alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBoxTemp tempId={tempId} alignment={textBoxAlignment} data={textBox} />;
+      case ProjectElementType.DOCUMENT:
+        return document && documentAlignment && <DocumentTemp tempId={tempId} alignment={documentAlignment} data={document} />;
       case ProjectElementType.DIVIDER:
         return dividerType && <DividerTemp tempId={tempId} dividerType={dividerType} />;
       default:
@@ -78,6 +71,8 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
     /* 각 Element를 순수하게 남기기 위해 여기서 설정 */
     switch ($elementType) {
       case ProjectElementType.WORK:
+        return 'calc(16vh)';
+      case ProjectElementType.DOCUMENT:
         return 'calc(16vh)';
       case ProjectElementType.TEXTBOX:
         return 'calc(10vh)';

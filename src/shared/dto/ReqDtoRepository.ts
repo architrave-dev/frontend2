@@ -1,4 +1,4 @@
-import { CareerType, DividerType, ProjectElementType, TextBoxAlignment, WorkAlignment, WorkDisplaySize } from '../enum/EnumRepository';
+import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
 import { IndexData, SizeData } from './EntityRepository';
 
 //-------------- Auth
@@ -19,29 +19,68 @@ export interface RefreshReq {
 
 //-------------- Work
 export interface CreateWorkReq {
+  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   title: string;
   description: string;
   size: SizeData;
   material: string,
-  prodYear: string
+  prodYear: string,
+  price: string,
+  collection: string
 }
 
 export interface UpdateWorkReq {
   id: string;
+  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   title: string;
   description: string;
   size: SizeData;
-  material: string,
-  prodYear: string
+  material: string;
+  prodYear: string;
+  price: string;
+  collection: string
 }
 
 export interface DeleteWorkReq {
   workId: string;
 }
+
+//-------------- WorkPropertyVisible
+export interface UpdateWorkPropertyVisibleReq {
+  workPropertyVisibleId: string;
+  workType: boolean;
+  imageUrl: boolean;
+  description: boolean;
+  price: boolean;
+  collection: boolean;
+}
+
+//-------------- WorkDetail
+export interface CreateWorkDetailReq {
+  workId: string;
+  workType: WorkType;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
+export interface UpdateWorkDetailReq {
+  workDetailId: string;
+  workType: WorkType;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
+export interface DeleteWorkDetailReq {
+  workId: string;
+  workDetailId: string;
+}
+
 
 //-------------- TextBox
 export interface CreateTextBoxReq {
@@ -53,6 +92,19 @@ export interface UpdateTextBoxReq {
   content: string;
 }
 
+//-------------- Document
+export interface CreateDocumentReq {
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
+
+export interface UpdateDocumentReq {
+  id: string;
+  originUrl: string;
+  thumbnailUrl: string;
+  description: string;
+}
 
 //-------------- Project
 export interface CreateProjectReq {
@@ -98,26 +150,37 @@ export interface RemoveProjectInfoReq {
 
 
 //-------------- ProjectElement
+export interface CreateProjectElementWithWorkReq {
+  projectId: string;
+  workId: string;
+  workAlignment: DisplayAlignment;
+  workDisplaySize: WorkDisplaySize;
+}
+
 export interface CreateProjectElementReq {
   tempId: string;
   projectId: string;
   projectElementType: ProjectElementType;
   createWorkReq: CreateWorkReq | null;
-  workAlignment: WorkAlignment | null;
+  workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
   createTextBoxReq: CreateTextBoxReq | null,
-  textBoxAlignment: TextBoxAlignment | null;
+  textBoxAlignment: TextAlignment | null;
+  createDocumentReq: CreateDocumentReq | null;
+  documentAlignment: TextAlignment | null;
   dividerType: DividerType | null;
 }
 
 export interface UpdateProjectElementReq {
   projectElementId: string;
-  updateWorkReq?: UpdateWorkReq | null;
-  workAlignment?: WorkAlignment | null;
-  workDisplaySize?: WorkDisplaySize | null;
-  updateTextBoxReq?: UpdateTextBoxReq | null,
-  textBoxAlignment?: TextBoxAlignment | null;
-  dividerType?: DividerType | null;
+  updateWorkReq: UpdateWorkReq | null;
+  workAlignment: DisplayAlignment | null;
+  workDisplaySize: WorkDisplaySize | null;
+  updateTextBoxReq: UpdateTextBoxReq | null,
+  textBoxAlignment: TextAlignment | null;
+  updateDocumentReq: UpdateDocumentReq | null;
+  documentAlignment: TextAlignment | null;
+  dividerType: DividerType | null;
 }
 
 export interface RemoveProjectElementReq {
@@ -127,9 +190,9 @@ export interface RemoveProjectElementReq {
 export interface UpdateProjectElementListReq {
   projectId: string;
   peIndexList: IndexData[];
-  createProjectElements?: CreateProjectElementReq[];
-  updatedProjectElements?: UpdateProjectElementReq[];
-  removedProjectElements?: RemoveProjectElementReq[];
+  createProjectElements: CreateProjectElementReq[];
+  updatedProjectElements: UpdateProjectElementReq[];
+  removedProjectElements: RemoveProjectElementReq[];
 }
 
 //-------------- Career

@@ -2,19 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
-import defaultImg from '../../asset/project/default_1.png';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, WorkAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { ProjectElementData, SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { UpdateProjectElementReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import SelectBox from '../../shared/component/SelectBox';
+import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 export interface WorkProps {
-  alignment: WorkAlignment | null;
+  alignment: DisplayAlignment | null;
   displaySize: WorkDisplaySize | null;
   data: WorkData;
 }
@@ -44,18 +43,23 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         projectElementId: target.id,
         updateWorkReq: {
           id: targetWork.id,
+          workType: targetWork.workType,
           originUrl: targetWork.originUrl,
           thumbnailUrl: targetWork.thumbnailUrl,
           title: targetWork.title,
           description: targetWork.description,
           size: targetWork.size,
           material: targetWork.material,
-          prodYear: targetWork.prodYear
+          prodYear: targetWork.prodYear,
+          price: targetWork.price,
+          collection: targetWork.collection
         },
         workAlignment: target.workAlignment,
         workDisplaySize: target.workDisplaySize,
         updateTextBoxReq: null,
         textBoxAlignment: null,
+        updateDocumentReq: null,
+        documentAlignment: null,
         dividerType: null
       }
       //projectElementList에서 id로 찾고
@@ -95,18 +99,23 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         projectElementId: target.id,
         updateWorkReq: {
           id: targetWork.id,
+          workType: targetWork.workType,
           originUrl: targetWork.originUrl,
           thumbnailUrl: targetWork.thumbnailUrl,
           title: targetWork.title,
           description: targetWork.description,
           size: targetWork.size,
           material: targetWork.material,
-          prodYear: targetWork.prodYear
+          prodYear: targetWork.prodYear,
+          price: targetWork.price,
+          collection: targetWork.collection
         },
         workAlignment: target.workAlignment,
         workDisplaySize: target.workDisplaySize,
         updateTextBoxReq: null,
         textBoxAlignment: null,
+        updateDocumentReq: null,
+        documentAlignment: null,
         dividerType: null
       }
       //projectElementList에서 id로 찾고
@@ -144,6 +153,8 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         workDisplaySize: value,
         updateTextBoxReq: null,
         textBoxAlignment: null,
+        updateDocumentReq: null,
+        documentAlignment: null,
         dividerType: null
       }
       setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
@@ -156,22 +167,23 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
 
   return (
     <WorkWrapper>
+      <SelectBoxContainer>
+        <SelectBox
+          value={initialDisplaySize || WorkDisplaySize.BIG}
+          selectType={SelectType.WORK_SIZE}
+          handleChange={handleSizeChange} />
+      </SelectBoxContainer>
+      <ImgWrapper>
+        <MoleculeImg
+          srcUrl={initialData.originUrl}
+          alt={initialData.title}
+          displaySize={initialDisplaySize}
+          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          StyledImg={WorkImage}
+        />
+      </ImgWrapper>
       {isEditMode ? (
         <>
-          <SelectBoxContainer>
-            <SelectBox
-              value={initialDisplaySize || WorkDisplaySize.BIG}
-              selectType={SelectType.WORK_SIZE}
-              handleChange={handleSizeChange} />
-          </SelectBoxContainer>
-          <ImgWrapper>
-            <WorkImage
-              src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
-              alt={initialData.title}
-              $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
-            />
-            <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
-          </ImgWrapper>
           <TitleInfoWrpper>
             <HeadlessInput
               value={initialData.title}
@@ -180,7 +192,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
               StyledInput={InputWorkTitle}
             />
             <HeadlessTextArea
-              alignment={initialWorkAlignment || WorkAlignment.CENTER}
+              alignment={TextAlignment.CENTER}
               content={initialData.description}
               placeholder={"Description"}
               handleChange={(e) => handleChange("description", e.target.value)}
@@ -210,13 +222,6 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         </>
       ) : (
         <>
-          <ImgWrapper>
-            <WorkImage
-              src={initialData.originUrl === '' ? defaultImg : initialData.originUrl}
-              alt={initialData.title}
-              $displaySize={initialDisplaySize || WorkDisplaySize.BIG}
-            />
-          </ImgWrapper>
           <TitleInfoWrpper>
             <Title>[ {initialData.title} ]</Title>
             <Description>

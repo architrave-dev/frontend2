@@ -3,25 +3,25 @@ import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
-import defaultImg from '../../asset/project/default_1.png';
-import ReplaceImageButton from '../../shared/component/ReplaceImageButton';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, TextBoxAlignment, WorkAlignment } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
+import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
+import WorkDetailList from './WorkDetailList';
 
 const WorkViewer: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
   const { updateWork, deleteWork } = useWorkList();
   const { activeWork, clearActiveWork } = useWorkViewStore();
-  const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { updatedActiveWork, setUpdatedActiveWork, updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
 
   if (!activeWork || !updatedActiveWork) return null;
@@ -41,10 +41,15 @@ const WorkViewer: React.FC = () => {
       initialData.size !== currentData.size ||
       initialData.material !== currentData.material ||
       initialData.prodYear !== currentData.prodYear ||
-      initialData.description !== currentData.description
+      initialData.description !== currentData.description ||
+      initialData.price !== currentData.price ||
+      initialData.collection !== currentData.collection
     );
   };
 
+  const handleAddWorkDetail = async () => {
+    console.log("add Work Detail")
+  }
   const handleConfirm = async () => {
     if (!isChanged(activeWork, updatedActiveWork)) {
       return;
@@ -68,7 +73,7 @@ const WorkViewer: React.FC = () => {
       }
     }
     setStandardAlert({
-      type: AlertType.ALERT,
+      type: AlertType.CONFIRM,
       position: AlertPosition.TOP,
       content: "Are you sure you want to delete this work?",
       callBack: callback
@@ -88,6 +93,7 @@ const WorkViewer: React.FC = () => {
       <WorkInfoContainer>
         <MoleculeInputDiv
           value={updatedActiveWork.title}
+          placeholder={"Title"}
           handleChange={(e) => handleChange("title", e.target.value)}
           inputStyle={WorkViewerTitle}
           StyledDiv={Title}
@@ -95,6 +101,7 @@ const WorkViewer: React.FC = () => {
         <WorkInfo>
           <MoleculeInputDiv
             value={updatedActiveWork.prodYear}
+            placeholder={"ProdYear"}
             handleChange={(e) => handleChange("prodYear", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
@@ -102,6 +109,7 @@ const WorkViewer: React.FC = () => {
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
             value={updatedActiveWork.material}
+            placeholder={"Material"}
             handleChange={(e) => handleChange("material", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
@@ -109,7 +117,25 @@ const WorkViewer: React.FC = () => {
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
             value={convertSizeToString(updatedActiveWork.size)}
+            placeholder={"Size"}
             handleChange={(e) => handleChange("size", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
+          />
+        </WorkInfo>
+        <WorkInfo>
+          <MoleculeInputDiv
+            value={updatedActiveWork.price}
+            placeholder={"Price ($)"}
+            handleChange={(e) => handleChange("price", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
+          />
+          <DividerSmall>|</DividerSmall>
+          <MoleculeInputDiv
+            value={updatedActiveWork.collection}
+            placeholder={"Collection"}
+            handleChange={(e) => handleChange("collection", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
@@ -117,15 +143,21 @@ const WorkViewer: React.FC = () => {
         <MoleculeTextareaDescription
           value={updatedActiveWork.description}
           handleChange={(e) => handleChange("description", e.target.value)}
-          alignment={TextBoxAlignment.LEFT}
-          textareaStyle={TextAreaWorkViewer}
+          alignment={TextAlignment.LEFT}
+          StyledTextarea={TextAreaWorkViewer}
           StyledDescription={Description}
         />
       </WorkInfoContainer>
       <ImgWrapper>
-        <WorkImage src={updatedActiveWork.originUrl === '' ? defaultImg : updatedActiveWork.originUrl} alt={updatedActiveWork.title} />
-        <ReplaceImageButton setImageUrl={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)} />
+        <MoleculeImg
+          srcUrl={updatedActiveWork.originUrl}
+          alt={updatedActiveWork.title}
+          displaySize={null}
+          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          StyledImg={WorkImage}
+        />
       </ImgWrapper>
+      <WorkDetailList />
       {isEditMode &&
         <BtnContainer>
           <HeadlessBtn
@@ -218,6 +250,8 @@ const ImgWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-bottom: 50px;
 `
 
 const WorkImage = styled.img`
