@@ -5,6 +5,7 @@ import Login from '../component/auth/Login';
 import Signin from '../component/auth/SignIn';
 import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
+import WorkImport from '../component/projectDetail/WorkImport';
 
 
 const ModalTemplate: React.FC = () => {
@@ -12,10 +13,30 @@ const ModalTemplate: React.FC = () => {
 
   const renderModalContent = () => {
     switch (modalType) {
+      case ModalType.WORK_STATION:
+        return (
+          <WorkStationOverlay onClick={() => setModalType(ModalType.NONE)}>
+            <WorkStationContent onClick={(e) => e.stopPropagation()}>
+              <WorkImport />
+            </WorkStationContent>
+          </WorkStationOverlay>
+        )
       case ModalType.SIGNIN:
-        return <Signin />;
+        return (
+          <ModalOverlay onClick={() => setModalType(ModalType.NONE)}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <Signin />
+            </ModalContent>
+          </ModalOverlay>
+        )
       case ModalType.LOGIN:
-        return <Login />;
+        return (
+          <ModalOverlay onClick={() => setModalType(ModalType.NONE)}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <Login />
+            </ModalContent>
+          </ModalOverlay>
+        )
       default:
         return null;
     }
@@ -25,11 +46,7 @@ const ModalTemplate: React.FC = () => {
 
   return (
     <Portal>
-      <ModalOverlay onClick={() => setModalType(ModalType.NONE)}>
-        <ModalContent onClick={(e) => e.stopPropagation()}>
-          {renderModalContent()}
-        </ModalContent>
-      </ModalOverlay>
+      {renderModalContent()}
     </Portal>
   );
 };
@@ -52,6 +69,31 @@ const ModalContent = styled.div`
   padding: 20px;
   border-radius: 8px;
   width: 440px;
+  //height은 각자 정해
+`;
+
+const WorkStationOverlay = styled.div`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  
+  // background-color: ${({ theme }) => theme.colors.color_Alpha_02};
+`;
+
+const WorkStationContent = styled.div`
+  position: absolute;
+  left: 6vw;
+
+  background-color: ${({ theme }) => theme.colors.color_White};
+  padding: 20px;
+  border-radius: 2px;
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  width: 200px;
   //height은 각자 정해
 `;
 

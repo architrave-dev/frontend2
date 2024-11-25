@@ -1,28 +1,38 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import ProjectElement from '../../component/projectElement/ProjectElement';
-import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useAui } from '../../shared/hooks/useAui';
+import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useParams } from 'react-router-dom';
+import { useModal } from '../../shared/hooks/useModal';
+import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import ProjectElementTemp from '../projectElement/ProjectElementTemp';
-import Space from '../../shared/Space';
 import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../../shared/enum/EnumRepository';
+import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, ModalType } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
+import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
+import ProjectElement from '../../component/projectElement/ProjectElement';
+import ProjectElementTemp from '../projectElement/ProjectElementTemp';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import Space from '../../shared/Space';
 import Loading from '../../shared/component/Loading';
 
 
 const ProjectElementList: React.FC = () => {
+  const { aui } = useAui();
   const { AUI, projectId } = useParams<{ AUI: string, projectId: string }>();
   const { isEditMode, setEditMode } = useEditMode();
   const { project } = useProjectDetail();
+  const { getSimpleWorkList } = useWorkList();
   const { isLoading, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
-  const { createdProjectElements, setCreatedProjectElements, updatedProjectElements, removedProjectElements } = useProjectElementListStoreForUpdate();
-  const { aui } = useAui();
+  const {
+    createdProjectElements,
+    setCreatedProjectElements,
+    updatedProjectElements,
+    removedProjectElements
+  } = useProjectElementListStoreForUpdate();
+
+  const { openModal } = useModal();
 
   useEffect(() => {
     const getProjectElementListWithApi = async () => {
@@ -110,6 +120,15 @@ const ProjectElementList: React.FC = () => {
     );
   }
 
+  const handleImportElement = async (elementType: ProjectElementType) => {
+    try {
+      await getSimpleWorkList(aui);
+      openModal(ModalType.WORK_STATION);
+    } catch (err) {
+    } finally {
+    }
+  }
+
   // 로딩 상태를 처리합니다.
   if (isLoading) return <Loading />;
 
@@ -157,6 +176,11 @@ const ProjectElementList: React.FC = () => {
           ))}
           <Space $align={"center"} $height={"calc(6vw)"}>
             <CreateButtonGroup>
+              <HeadlessBtn
+                value={"Import"}
+                handleClick={() => handleImportElement(ProjectElementType.WORK)}
+                StyledBtn={BtnCreate}
+              />
               <HeadlessBtn
                 value={"Work"}
                 handleClick={() => handleCreateElement(ProjectElementType.WORK)}
