@@ -75,7 +75,7 @@ export const useWorkList = (): UseWorkListResult => {
       switch (action) {
         case 'delete':
           handleDeleteWorkSuccess(await deleteWork(aui, data as DeleteWorkReq));
-          getWorkHandler(aui);
+          getWorkListHandler(aui);
           break;
         case 'update':
           handleUpdateWorkSuccess(await updateWork(aui, data as UpdateWorkReq));
