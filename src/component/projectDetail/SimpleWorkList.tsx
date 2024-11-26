@@ -1,24 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
-import { useModalStore } from '../../shared/store/portal/modalStore';
-import { DisplayAlignment, ModalType, WorkDisplaySize } from '../../shared/enum/EnumRepository';
+import { DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
+import { useModal } from '../../shared/hooks/useModal';
 import defaultImg from '../../asset/project/default_1.png'
 
 
 const WorkImport: React.FC = () => {
   const { aui } = useAui();
-  const { setModalType } = useModalStore();
+  const { closeModal } = useModal();
   const { project } = useProjectDetail();
   const { simpleWorkList } = useWorkStationStore();
   const { createProjectElementWithWork } = useProjectElement();
 
   if (!project) return null;
   if (simpleWorkList.length === 0) return (
-    <NoWorkContainer onClick={() => setModalType(ModalType.NONE)}>
+    <NoWorkContainer onClick={closeModal}>
       Work does not exist.
     </NoWorkContainer>
   );
@@ -34,7 +34,7 @@ const WorkImport: React.FC = () => {
       });
     } catch (err) {
     }
-    setModalType(ModalType.NONE);
+    closeModal();
   };
 
   return (
