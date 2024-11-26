@@ -6,16 +6,27 @@ import Signin from '../component/auth/SignIn';
 import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
-
+import { useModal } from './hooks/useModal';
+import { useOriginImgStore } from './store/portal/originImgStore';
+import defaultImg from '../asset/project/default_1.png'
 
 const ModalTemplate: React.FC = () => {
-  const { modalType, setModalType } = useModalStore();
+  const { closeModal } = useModal();
+  const { modalType } = useModalStore();
+  const { originUrl } = useOriginImgStore();
+
 
   const renderModalContent = () => {
     switch (modalType) {
+      case ModalType.ORIGIN_IMG:
+        return (
+          <OriginImgContent onClick={closeModal}>
+            <FullOriginImg src={originUrl != null ? originUrl : defaultImg} />
+          </OriginImgContent>
+        )
       case ModalType.WORK_STATION:
         return (
-          <WorkStationOverlay onClick={() => setModalType(ModalType.NONE)}>
+          <WorkStationOverlay onClick={closeModal}>
             <WorkStationContent onClick={(e) => e.stopPropagation()}>
               <WorkImport />
             </WorkStationContent>
@@ -23,7 +34,7 @@ const ModalTemplate: React.FC = () => {
         )
       case ModalType.SIGNIN:
         return (
-          <ModalOverlay onClick={() => setModalType(ModalType.NONE)}>
+          <ModalOverlay onClick={closeModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Signin />
             </ModalContent>
@@ -31,7 +42,7 @@ const ModalTemplate: React.FC = () => {
         )
       case ModalType.LOGIN:
         return (
-          <ModalOverlay onClick={() => setModalType(ModalType.NONE)}>
+          <ModalOverlay onClick={closeModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Login />
             </ModalContent>
@@ -95,6 +106,33 @@ const WorkStationContent = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   width: 200px;
   //height은 각자 정해
+`;
+
+const OriginImgContent = styled.div`
+  position: fixed;
+  top: calc(2vh);
+   /* 화면 가운데 정렬 */
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 96vw;
+  height: 96vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  border-radius: 2px;
+  background-color: ${({ theme }) => theme.colors.color_Alpha_04};
+  backdrop-filter: blur(8px);
+  z-index: 3; 
+`;
+
+const FullOriginImg = styled.img`
+  width: 100%;
+  height: 100%; 
+  object-fit: contain;
 `;
 
 export default ModalTemplate;

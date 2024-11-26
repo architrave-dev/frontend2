@@ -3,6 +3,7 @@ export enum ModalType {
   SIGNIN = 'SIGNIN',
   LOGIN = 'LOGIN',
   WORK_STATION = 'WORK_STATION',
+  ORIGIN_IMG = 'ORIGIN_IMG',
   ALERT = 'ALERT',
 }
 
