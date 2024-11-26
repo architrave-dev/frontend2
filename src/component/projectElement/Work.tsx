@@ -11,6 +11,8 @@ import { ProjectElementData, SizeData, WorkData, convertSizeToString, convertStr
 import { UpdateProjectElementReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import SelectBox from '../../shared/component/SelectBox';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
+import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
+import { OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 
 export interface WorkProps {
   alignment: DisplayAlignment | null;
@@ -167,13 +169,16 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
 
   return (
     <WorkWrapper>
-      <SelectBoxContainer>
-        <SelectBox
-          value={initialDisplaySize || WorkDisplaySize.BIG}
-          selectType={SelectType.WORK_SIZE}
-          handleChange={handleSizeChange} />
-      </SelectBoxContainer>
+      {isEditMode &&
+        <SelectBoxContainer>
+          <SelectBox
+            value={initialDisplaySize || WorkDisplaySize.BIG}
+            selectType={SelectType.WORK_SIZE}
+            handleChange={handleSizeChange} />
+        </SelectBoxContainer>
+      }
       <ImgWrapper>
+        <MoleculeShowOriginBtn originUrl={initialData.originUrl} styledBtn={OriginBtnBottom} />
         <MoleculeImg
           srcUrl={initialData.originUrl}
           alt={initialData.title}
@@ -261,6 +266,8 @@ export const SelectBoxContainer = styled.div`
 `
 export const ImgWrapper = styled.div`
   position: relative;
+
+  margin-bottom: 16px;
 `
 
 export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
@@ -276,7 +283,6 @@ export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
         return '90vh';
     }
   }};
-  margin-bottom: 16px;
   object-fit: contain;
 `;
 

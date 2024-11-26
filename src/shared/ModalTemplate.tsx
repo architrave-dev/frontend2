@@ -110,13 +110,13 @@ const WorkStationContent = styled.div`
 
 const OriginImgContent = styled.div`
   position: fixed;
-  top: calc(2vh);
+  top: calc(1.4vh);
    /* 화면 가운데 정렬 */
   left: 50%;
   transform: translateX(-50%);
 
-  width: 96vw;
-  height: 96vh;
+  width: 100vw;
+  height: 97.2vh;
 
   display: flex;
   justify-content: center;

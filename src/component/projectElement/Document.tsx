@@ -10,6 +10,8 @@ import { UpdateDocumentReq, UpdateProjectElementReq } from '../../shared/dto/Req
 import { ImgWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
+import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
+import { OriginBtnRight } from '../../shared/component/headless/button/BtnBody';
 
 
 export interface DocumentProps {
@@ -165,6 +167,7 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         </SelectBoxContainer>
       }
       <ImgWrapper>
+        <MoleculeShowOriginBtn originUrl={initialData.originUrl} styledBtn={OriginBtnRight} />
         <MoleculeImg
           srcUrl={initialData.originUrl}
           alt={initialData.description}

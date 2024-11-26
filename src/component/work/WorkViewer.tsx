@@ -5,7 +5,7 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
-import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
+import { BtnWorkViewer, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
@@ -34,22 +34,22 @@ const WorkViewer: React.FC = () => {
       setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
   }
 
-  const isChanged = (initialData: WorkData, currentData: WorkData): boolean => {
+  const isChanged = (): boolean => {
     return (
-      initialData.originUrl !== currentData.originUrl ||
-      initialData.thumbnailUrl !== currentData.thumbnailUrl ||
-      initialData.title !== currentData.title ||
-      initialData.size !== currentData.size ||
-      initialData.material !== currentData.material ||
-      initialData.prodYear !== currentData.prodYear ||
-      initialData.description !== currentData.description ||
-      initialData.price !== currentData.price ||
-      initialData.collection !== currentData.collection
+      activeWork.originUrl !== updatedActiveWork.originUrl ||
+      activeWork.thumbnailUrl !== updatedActiveWork.thumbnailUrl ||
+      activeWork.title !== updatedActiveWork.title ||
+      activeWork.size !== updatedActiveWork.size ||
+      activeWork.material !== updatedActiveWork.material ||
+      activeWork.prodYear !== updatedActiveWork.prodYear ||
+      activeWork.description !== updatedActiveWork.description ||
+      activeWork.price !== updatedActiveWork.price ||
+      activeWork.collection !== updatedActiveWork.collection
     );
   };
 
   const handleConfirm = async () => {
-    if (!isChanged(activeWork, updatedActiveWork)) {
+    if (!isChanged()) {
       return;
     }
     try {
@@ -147,7 +147,7 @@ const WorkViewer: React.FC = () => {
         />
       </WorkInfoContainer>
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={updatedActiveWork.originUrl} />
+        <MoleculeShowOriginBtn originUrl={updatedActiveWork.originUrl} styledBtn={OriginBtnBottom} />
         <MoleculeImg
           srcUrl={updatedActiveWork.originUrl}
           alt={updatedActiveWork.title}
@@ -155,22 +155,24 @@ const WorkViewer: React.FC = () => {
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
           StyledImg={WorkImage}
         />
+        {isEditMode &&
+          <BtnContainer>
+            {isChanged() &&
+              <HeadlessBtn
+                value={"Confirm"}
+                handleClick={handleConfirm}
+                StyledBtn={BtnWorkViewer}
+              />
+            }
+            <HeadlessBtn
+              value={"Delete"}
+              handleClick={handleDelete}
+              StyledBtn={BtnWorkViewer}
+            />
+          </BtnContainer>
+        }
       </ImgWrapper>
       <WorkDetailList />
-      {isEditMode &&
-        <BtnContainer>
-          <HeadlessBtn
-            value={"Confirm"}
-            handleClick={handleConfirm}
-            StyledBtn={BtnWorkViewer}
-          />
-          <HeadlessBtn
-            value={"Delete"}
-            handleClick={handleDelete}
-            StyledBtn={BtnWorkViewer}
-          />
-        </BtnContainer>
-      }
     </WorkViewComp>
   );
 }
@@ -265,10 +267,13 @@ const WorkImage = styled.img`
 
 const BtnContainer = styled.div`
   position: absolute;
-  width: 100%;
+  bottom: 10px;
 
-  bottom: 0px;
+  width: 100%;
+  
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 1vw;
 `
+
 export default WorkViewer;

@@ -18,7 +18,7 @@ const WorkDetailList: React.FC = () => {
   const { activeWork } = useWorkViewStore();
   const { updateActiveWorkDetailList } = useWorkViewStoreForUpdate();
 
-  if (activeWork === null || updateActiveWorkDetailList.length == 0) {
+  if (activeWork === null) {
     return null;
   }
 
@@ -39,18 +39,21 @@ const WorkDetailList: React.FC = () => {
     createDetail();
   };
 
-
   return (
     <>
-      <WorkDetailTitle>Details</WorkDetailTitle>
-      <WorkDetailContainer>
-        {updateActiveWorkDetailList.map((wd, index) => (
-          <WorkDetail key={wd.id} index={index + 1} workId={activeWork.id} data={wd} />
-        ))}
-      </WorkDetailContainer>
+      {updateActiveWorkDetailList.length > 0 &&
+        <>
+          <WorkDetailTitle>Details</WorkDetailTitle>
+          <WorkDetailContainer>
+            {updateActiveWorkDetailList.map((wd, index) => (
+              <WorkDetail key={wd.id} index={index + 1} workId={activeWork.id} data={wd} />
+            ))}
+          </WorkDetailContainer>
+        </>
+      }
       {isEditMode &&
         <HeadlessBtn
-          value={"Add"}
+          value={"Add Detail"}
           handleClick={handleAddWorkDetail}
           StyledBtn={BtnWorkViewer}
         />
@@ -78,7 +81,7 @@ const WorkDetailContainer = styled.div`
 
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 20px;
 
   // background-color: #eae7dc;
