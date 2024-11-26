@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { useModalStore } from '../../shared/store/portal/modalStore';
 import { ModalType } from '../../shared/enum/EnumRepository';
 import { useModal } from '../../shared/hooks/useModal';
 

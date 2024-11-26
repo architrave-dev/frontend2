@@ -1,15 +1,16 @@
 import React from 'react';
 import { useModal } from '../../hooks/useModal';
 import { useOriginImgStore } from '../../store/portal/originImgStore';
-import { OriginBtn } from '../headless/button/BtnBody';
 import { ModalType } from '../../enum/EnumRepository';
 import HeadlessBtn from '../headless/button/HeadlessBtn';
+import { StyledBtnComponent } from '../../dto/StyleCompRepository';
 
 export interface MoleculeShowOriginBtnProps {
   originUrl: string;
+  styledBtn: StyledBtnComponent;
 }
 
-const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl }) => {
+const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl, styledBtn }) => {
   const { openModal } = useModal();
   const { setOriginUrl } = useOriginImgStore();
 
@@ -22,7 +23,7 @@ const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl
     <HeadlessBtn
       value={"Origin"}
       handleClick={showOriginImg}
-      StyledBtn={OriginBtn}
+      StyledBtn={styledBtn}
     />
   );
 }

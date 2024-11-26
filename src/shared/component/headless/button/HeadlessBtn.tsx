@@ -1,7 +1,5 @@
 import React from 'react';
-
-type StyledBtnComponent = React.ComponentType<React.ButtonHTMLAttributes<HTMLButtonElement>>;
-
+import { StyledBtnComponent } from '../../../dto/StyleCompRepository';
 
 interface HeadlessBtnProps {
   value: string;
