@@ -86,3 +86,20 @@ export const BtnCancel = styled.button`
     background-color: ${({ theme }) => theme.colors.color_Alpha_02};
   }
 `;
+
+export const OriginBtn = styled.button`
+  ${commonBtnStyles}
+  position: absolute;
+  bottom: -1.8rem;
+  right: 0px;
+  
+  padding: 0.2rem 0.5rem;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  }
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_04};
+`;

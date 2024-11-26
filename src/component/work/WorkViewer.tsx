@@ -15,13 +15,14 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
+import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 
 const WorkViewer: React.FC = () => {
-  const { isEditMode, setEditMode } = useEditMode();
   const { aui } = useAui();
+  const { isEditMode, setEditMode } = useEditMode();
   const { updateWork, deleteWork } = useWorkList();
   const { activeWork, clearActiveWork } = useWorkViewStore();
-  const { updatedActiveWork, setUpdatedActiveWork, updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+  const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
 
   if (!activeWork || !updatedActiveWork) return null;
@@ -47,9 +48,6 @@ const WorkViewer: React.FC = () => {
     );
   };
 
-  const handleAddWorkDetail = async () => {
-    console.log("add Work Detail")
-  }
   const handleConfirm = async () => {
     if (!isChanged(activeWork, updatedActiveWork)) {
       return;
@@ -149,6 +147,7 @@ const WorkViewer: React.FC = () => {
         />
       </WorkInfoContainer>
       <ImgWrapper>
+        <MoleculeShowOriginBtn originUrl={updatedActiveWork.originUrl} />
         <MoleculeImg
           srcUrl={updatedActiveWork.originUrl}
           alt={updatedActiveWork.title}
