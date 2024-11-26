@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { useModalStore } from '../../shared/store/portal/modalStore';
 import { ModalType } from '../../shared/enum/EnumRepository';
+import { useModal } from '../../shared/hooks/useModal';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const { isLoading, signUp } = useAuth();
-  const setModalType = useModalStore((state) => state.setModalType);
+  const { openModal } = useModal();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +46,7 @@ const SignIn: React.FC = () => {
           {isLoading ? '처리 중...' : '회원가입'}
         </SubmitButton>
       </form>
-      <ToggleText onClick={() => setModalType(ModalType.LOGIN)}>
+      <ToggleText onClick={() => openModal(ModalType.LOGIN)}>
         이미 계정이 있으신가요? 로그인
       </ToggleText>
     </SignUpComp>

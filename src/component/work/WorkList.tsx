@@ -22,7 +22,7 @@ const WorkList: React.FC = () => {
   const { sortBy } = useWorkListStore();
   const { aui } = useAui();
   const { setActiveWork } = useWorkViewStore();
-  const { setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { setUpdatedActiveWork, clearAll } = useWorkViewStoreForUpdate();
 
   const setDefaultWorkView = () => {
     const defaultWork: WorkData = {
@@ -45,6 +45,7 @@ const WorkList: React.FC = () => {
     const getWorkListWithApi = async () => {
       if (!aui) return;
       try {
+        clearAll();
         console.log("getting work List...")
         await getWorkList(aui);
         setDefaultWorkView();

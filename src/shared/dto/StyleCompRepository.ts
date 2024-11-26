@@ -21,3 +21,5 @@ export type StyledImgDivContainerProps = React.HTMLAttributes<HTMLDivElement> & 
 export type StyledImgProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   $displaySize?: WorkDisplaySize;
 };
+
+export type StyledBtnComponent = React.ComponentType<React.ButtonHTMLAttributes<HTMLButtonElement>>;

@@ -31,5 +31,5 @@ export const useWorkViewStoreForUpdate = create<WorkViewStateForUpdate>((set) =>
   setUpdatedActiveWork: (updatedActiveWork) => set({ updatedActiveWork }),
   updateActiveWorkDetailList: [],
   setUpdateActiveWorkDetailList: (updateActiveWorkDetailList) => set({ updateActiveWorkDetailList }),
-  clearAll: () => set({ updatedActiveWork: null })
+  clearAll: () => set({ updatedActiveWork: null, updateActiveWorkDetailList: [] })
 }));

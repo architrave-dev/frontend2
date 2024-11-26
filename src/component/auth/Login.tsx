@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import MoleculeInput from './molecules/MoleculeInput';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnCancel } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
+import { useModal } from '../../shared/hooks/useModal';
 
 
 const Login: React.FC = () => {
   const { isLoading, login } = useAuth();
-  const { setModalType } = useModalStore();
+  const { closeModal } = useModal();
   const { setStandardAlert } = useStandardAlertStore();
 
   const [email, setEmail] = useState('');
@@ -53,7 +53,7 @@ const Login: React.FC = () => {
     }
     try {
       await login({ email, password });
-      setModalType(ModalType.NONE);
+      closeModal();
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -84,7 +84,7 @@ const Login: React.FC = () => {
         </SubmitButton>
         <HeadlessBtn
           value={"Cancel"}
-          handleClick={() => setModalType(ModalType.NONE)}
+          handleClick={closeModal}
           StyledBtn={BtnCancel}
         />
       </ButtonContainer>

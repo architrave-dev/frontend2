@@ -36,7 +36,6 @@ const GnbSection = styled.section`
   padding: 0px 6vw;
 
   background-color: transparent;
-  // background-color: #F6B99D;  /*for dev*/
 `;
 
 export default Gnb;

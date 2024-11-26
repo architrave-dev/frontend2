@@ -6,12 +6,13 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { WorkDetailInputDescription } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
+import { BtnWorkViewer, OriginBtnRight } from '../../shared/component/headless/button/BtnBody';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useAui } from '../../shared/hooks/useAui';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 
 interface WorkDetailProps {
   index: number;
@@ -69,8 +70,8 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
       try {
         await deleteWorkDetail(aui, { workId, workDetailId: data.id });
         // handleUpdateWorkDetailSuccess에서 하고 싶다...
-        const newUpdateWorkDetailList = updateActiveWorkDetailList.filter((wd) => wd.id != data.id);
-        const newWorkDetailList = activeWorkDetailList.filter((wd) => wd.id != data.id);
+        const newUpdateWorkDetailList = updateActiveWorkDetailList.filter((wd) => wd.id !== data.id);
+        const newWorkDetailList = activeWorkDetailList.filter((wd) => wd.id !== data.id);
 
         setUpdateActiveWorkDetailList(newUpdateWorkDetailList);
         setActiveWorkDetailList(newWorkDetailList);
@@ -121,6 +122,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
         </>
       </>
       <ImgWrapper>
+        <MoleculeShowOriginBtn originUrl={data.originUrl} styledBtn={OriginBtnRight} />
         <MoleculeImg
           srcUrl={data.originUrl}
           alt={"Work Detail"}
@@ -142,7 +144,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
 
 const WorkDetailWrapper = styled.div`
   position: relative;
-  width: 80%;
+  width: 88%;
 
   display: flex;
   flex-direction: column;
@@ -180,11 +182,12 @@ const WorkImage = styled.img`
 `;
 
 const BtnContainer = styled.div`
+  position: absolute;
+  top: -14px;
   width: 100%;
-
-  bottom: 0px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 1vw;
 `
 
 
