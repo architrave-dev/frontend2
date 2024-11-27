@@ -40,7 +40,7 @@ Contact us for a test Artist ID
 |-------------------|------------------------------------------------------------------------------------|----------------------|
 | Auth              | Login                                                                              | -                    |
 | Billboard         | Announcement or Set the Mood                                                       | Read, Update         |
-| Project           | -                                                                                  | Create, Read, Update |
+| Project           | User's Project                                                                     | Create, Read, Update, Delete |
 | ProjectInfo       | Detailed project descriptions                                                      | Create, Read, Update |
 | ProjectElement    | Project main content includes Work, TextBox, and Divider                           | Create, Read, Update |
 | Works             | Main archieve about user's all works                                               | Create, Read, Update, Delete |
