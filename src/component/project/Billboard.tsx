@@ -15,6 +15,7 @@ import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImg
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
+import { isModified } from '../../shared/hooks/useIsModified';
 
 
 const Billboard: React.FC = () => {
@@ -51,17 +52,6 @@ const Billboard: React.FC = () => {
     });
   }
 
-  const isChanged = (): boolean => {
-    return (
-      billboard.title !== updateBillboardDto.title ||
-      billboard.description !== updateBillboardDto.description ||
-      billboard.originUrl !== updateBillboardDto.originUrl ||
-      billboard.thumbnailUrl !== updateBillboardDto.thumbnailUrl ||
-      billboard.isVisible !== updateBillboardDto.isVisible
-    );
-  };
-
-
   const handleConfirm = async () => {
     if (!billboard) return;
     if (!updateBillboardDto) return;
@@ -97,7 +87,7 @@ const Billboard: React.FC = () => {
         StyledTextarea={TextAreaBillboard}
         StyledDescription={Description}
       />
-      {isEditMode && isChanged() &&
+      {isEditMode && isModified(billboard, updateBillboardDto) &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
