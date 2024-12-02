@@ -17,6 +17,21 @@ export interface RefreshReq {
   refreshToken: string;
 }
 
+export interface UpdateUploadFileReq {
+  uploadFileId: number;
+  originUrl: string;
+  thumbnailUrl: string;
+}
+
+//-------------- Billboard
+export interface UpdateBillboardReq {
+  id: number;
+  updateUploadFileReq: UpdateUploadFileReq;
+  title: string;
+  description: string;
+  isVisible: boolean;
+}
+
 //-------------- Work
 export interface CreateWorkReq {
   workType: WorkType;

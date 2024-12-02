@@ -16,10 +16,15 @@ export interface UserDataWithRefreshToken extends UserData {
   refreshToken: string;
 }
 
-export interface BillboardData {
+export interface UploadFileData {
   id: number;
   originUrl: string;
   thumbnailUrl: string;
+}
+
+export interface BillboardData {
+  id: number;
+  uploadFile: UploadFileData;
   title: string;
   description: string;
   isVisible: boolean;
