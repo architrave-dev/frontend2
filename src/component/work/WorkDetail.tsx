@@ -13,6 +13,7 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
+import { isModified } from '../../shared/hooks/useIsModified';
 
 interface WorkDetailProps {
   index: number;
@@ -37,16 +38,8 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
   const paintOnlyChanged = () => {
     const target = activeWorkDetailList.find(wd => wd.id === data.id);
     if (!target) return null;
-    return isChanged(data, target);
+    return isModified(data, target);
   }
-
-  const isChanged = (initialData: WorkDetailData, currentData: WorkDetailData): boolean => {
-    return (
-      initialData.originUrl !== currentData.originUrl ||
-      initialData.thumbnailUrl !== currentData.thumbnailUrl ||
-      initialData.description !== currentData.description
-    );
-  };
 
   const handleUpdate = async () => {
     const updateDetail = async () => {
