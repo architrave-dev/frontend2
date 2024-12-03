@@ -28,7 +28,7 @@ const MoleculeImg: React.FC<MoleculeImgProps> = ({
         alt={alt}
         $displaySize={displaySize === null ? WorkDisplaySize.BIG : displaySize}
       />
-      {isEditMode && <ReplaceImageButton setImageUrl={handleChange} />}
+      {isEditMode && <ReplaceImageButton imgSrc={srcUrl} setImageUrl={handleChange} />}
     </>
   );
 }
