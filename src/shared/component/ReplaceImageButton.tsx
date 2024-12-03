@@ -1,32 +1,27 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { uploadToS3 } from '../aws/s3Upload';
 import { useEditMode } from '../hooks/useEditMode';
-import { useAui } from '../hooks/useAui';
 
 export interface ReplaceImageButtonProps {
+  imgSrc: string;
   setImageUrl: (thumbnailUrl: string, originUrl: string) => void;
 }
 
-const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ setImageUrl }) => {
+const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ imgSrc, setImageUrl }) => {
   const { isEditMode } = useEditMode();
-  const { aui } = useAui();
-  const [isUploading, setIsUploading] = useState(false);
+  const [isLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setIsUploading(true);
-      try {
-        const { originUrl, thumbnailUrl } = await uploadToS3(file, process.env.REACT_APP_S3_BUCKET_NAME!, aui);
-        setImageUrl(thumbnailUrl, originUrl);
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      } finally {
-        setIsUploading(false);
-      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const localImageUrl = reader.result as string; // FileReader의 결과는 string 타입
+        setImageUrl(localImageUrl, localImageUrl); // 로컬 URL을 thumbnailUrl, originUrl로 전달
+      };
+      reader.readAsDataURL(file); // 파일을 Data URL로 읽기
     }
   };
 
@@ -40,8 +35,8 @@ const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ setImageUrl }) 
 
   return (
     <>
-      <ReplaceImgBtn onClick={triggerFileInput} disabled={isUploading}>
-        {isUploading ? 'Uploading...' : 'Replace Image'}
+      <ReplaceImgBtn onClick={triggerFileInput} disabled={isLoading}>
+        {isLoading ? 'Uploading...' : 'Replace Image'}
       </ReplaceImgBtn>
       <HiddenFileInput
         type="file"

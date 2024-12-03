@@ -16,6 +16,7 @@ import MoleculeTextareaDescription from '../../shared/component/molecule/Molecul
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
+import { isModified } from '../../shared/hooks/useIsModified';
 
 const WorkViewer: React.FC = () => {
   const { aui } = useAui();
@@ -34,22 +35,8 @@ const WorkViewer: React.FC = () => {
       setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
   }
 
-  const isChanged = (): boolean => {
-    return (
-      activeWork.originUrl !== updatedActiveWork.originUrl ||
-      activeWork.thumbnailUrl !== updatedActiveWork.thumbnailUrl ||
-      activeWork.title !== updatedActiveWork.title ||
-      activeWork.size !== updatedActiveWork.size ||
-      activeWork.material !== updatedActiveWork.material ||
-      activeWork.prodYear !== updatedActiveWork.prodYear ||
-      activeWork.description !== updatedActiveWork.description ||
-      activeWork.price !== updatedActiveWork.price ||
-      activeWork.collection !== updatedActiveWork.collection
-    );
-  };
-
   const handleConfirm = async () => {
-    if (!isChanged()) {
+    if (!isModified(activeWork, updatedActiveWork)) {
       return;
     }
     try {
@@ -157,7 +144,7 @@ const WorkViewer: React.FC = () => {
         />
         {isEditMode &&
           <BtnContainer>
-            {isChanged() &&
+            {isModified(activeWork, updatedActiveWork) &&
               <HeadlessBtn
                 value={"Confirm"}
                 handleClick={handleConfirm}

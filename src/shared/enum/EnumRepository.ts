@@ -115,3 +115,12 @@ export enum SortOrder {
   YEAR_ASC = 'YEAR_ASC',
   YEAR_DESC = 'YEAR_DESC',
 }
+
+export enum ServiceType {
+  BILLBOARD = 'BILLBOARD',
+  WORK = 'WORK',
+  DETAIL = 'DETAIL',
+  DOCUMENT = 'DOCUMENT',
+  PROJECT = 'PROJECT',
+  MEMBER_INFO = 'MEMBER_INFO'
+}

@@ -66,6 +66,15 @@ export const useGlobalError = () => {
       }
     });
   }
+  const handleAWS = async () => {
+    console.log("handleAWS: Something wrong about AWS!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Something wrong about handling Image.",
+      callBack: clearErr
+    });
+  }
 
   const handleGlobalErr = async () => {
     if (managedErr === null) {
@@ -84,6 +93,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.NAU:
         await handleNAU();
+        break;
+      case ErrorCode.AWS:
+        await handleAWS();
         break;
       case ErrorCode.WEF:
       default:

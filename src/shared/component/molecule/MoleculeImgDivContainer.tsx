@@ -23,7 +23,7 @@ const MoleculeImgDivContainer: React.FC<MoleculeImgDivContainerProps> = ({
   return (
     <StyledImgDivContainer $backgroundImg={backgroundImg !== '' ? backgroundImg : defaultImg}>
       {isEditMode && (
-        <ReplaceImageButton setImageUrl={handleChange} />
+        <ReplaceImageButton imgSrc={backgroundImg} setImageUrl={handleChange} />
       )}
       {children}
     </StyledImgDivContainer>

@@ -9,6 +9,8 @@ export enum ErrorCode {
   RTX = 'RTX',  // Refresh Token Expired
   UME = 'UME',  // UnManaged Error
 
+  AWS = 'AWS',  // Error about AWS
+
   WEF = 'WEF',  // Wrong Error Format
 }
 

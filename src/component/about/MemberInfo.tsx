@@ -14,6 +14,7 @@ import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/Tex
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
+import { isModified } from '../../shared/hooks/useIsModified';
 
 
 const MemberInfo: React.FC = () => {
@@ -49,18 +50,6 @@ const MemberInfo: React.FC = () => {
       thumbnailUrl,
     });
   }
-
-  const isChanged = (): boolean => {
-    return (
-      memberInfo.originUrl !== updateMemberInfoDto.originUrl ||
-      memberInfo.name !== updateMemberInfoDto.name ||
-      memberInfo.year !== updateMemberInfoDto.year ||
-      memberInfo.country !== updateMemberInfoDto.country ||
-      memberInfo.email !== updateMemberInfoDto.email ||
-      memberInfo.contact !== updateMemberInfoDto.contact ||
-      memberInfo.description !== updateMemberInfoDto.description
-    );
-  };
 
   const handleConfirm = async () => {
     if (!memberInfo) return;
@@ -104,7 +93,7 @@ const MemberInfo: React.FC = () => {
           StyledDescription={Description}
         />
       </DescriptionWrapper>
-      {isEditMode && isChanged() &&
+      {isEditMode && isModified(memberInfo, updateMemberInfoDto) &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
