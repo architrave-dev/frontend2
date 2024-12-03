@@ -5,13 +5,14 @@ import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { BillboardData } from '../../dto/EntityRepository';
 import { BillboardResponse } from '../../dto/ResDtoRepository';
+import { UpdateBillboardReq } from '../../dto/ReqDtoRepository';
 
 
 interface UseBillboardResult {
   isLoading: boolean;
   billboard: BillboardData | null;
   getBillboard: (aui: string) => Promise<void>;
-  updateBillboard: (aui: string, data: BillboardData) => Promise<void>;
+  updateBillboard: (aui: string, data: UpdateBillboardReq) => Promise<void>;
 }
 
 export const useBillboard = (): UseBillboardResult => {
@@ -20,7 +21,13 @@ export const useBillboard = (): UseBillboardResult => {
   const { billboard, setBillboard } = useBillboardStore();
   const { setUpdateBillboardDto } = useBillboardStoreForUpdate();
 
-  const handleBillboardSuccess = (response: BillboardResponse) => {
+  const handleGetBillboardSuccess = (response: BillboardResponse) => {
+    const billboardData = response.data;
+    setBillboard(billboardData);
+    setUpdateBillboardDto(billboardData);
+  };
+
+  const handleUpdateBillboardSuccess = async (response: BillboardResponse, aui: string) => {
     const billboardData = response.data;
     setBillboard(billboardData);
     setUpdateBillboardDto(billboardData);
@@ -29,17 +36,20 @@ export const useBillboard = (): UseBillboardResult => {
   const handleBillboardRequest = async (
     aui: string,
     action: 'get' | 'update',
-    data?: BillboardData
+    data?: UpdateBillboardReq
   ) => {
     setIsLoading(true);
     clearErr();
     try {
-      if (!data) {
-        const response = await getBillboard(aui);
-        handleBillboardSuccess(response);
-      } else {
-        const response = await updateBillboard(aui, data);
-        handleBillboardSuccess(response);
+      switch (action) {
+        case 'update':
+          const response = await updateBillboard(aui, data as UpdateBillboardReq);
+          await handleUpdateBillboardSuccess(response, aui);
+          break;
+        case 'get':
+        default:
+          handleGetBillboardSuccess(await getBillboard(aui));
+          break;
       }
     } catch (err) {
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
@@ -55,7 +65,7 @@ export const useBillboard = (): UseBillboardResult => {
   };
 
   const getBillboardHandler = (aui: string) => handleBillboardRequest(aui, 'get');
-  const updateBillboardHandler = (aui: string, data: BillboardData) => handleBillboardRequest(aui, 'update', data);
+  const updateBillboardHandler = (aui: string, data: UpdateBillboardReq) => handleBillboardRequest(aui, 'update', data);
 
   return {
     isLoading,

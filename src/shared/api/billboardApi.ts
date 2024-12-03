@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { ErrorResponse, BillboardResponse } from '../dto/ResDtoRepository';
-import { BillboardData } from '../dto/EntityRepository';
+import { UpdateBillboardReq } from '../dto/ReqDtoRepository';
 
 
 const config = getConfig();
@@ -24,7 +24,7 @@ export const getBillboard = async (aui: string): Promise<BillboardResponse> => {
   }
 };
 
-export const updateBillboard = async (aui: string, data: BillboardData): Promise<BillboardResponse> => {
+export const updateBillboard = async (aui: string, data: UpdateBillboardReq): Promise<BillboardResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {

@@ -9,20 +9,22 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
 import { BillboardData } from '../../shared/dto/EntityRepository';
-import { TextAlignment } from '../../shared/enum/EnumRepository';
+import { ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { useBillboardStoreForUpdate } from '../../shared/store/billboardStore';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
+import { UpdateBillboardReq } from '../../shared/dto/ReqDtoRepository';
 import { isModified } from '../../shared/hooks/useIsModified';
+import { ErrorCode } from '../../shared/api/errorCode';
+import { base64ToFileWithMime, uploadToS3 } from '../../shared/aws/s3Upload';
 
 
 const Billboard: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { isLoading, billboard, getBillboard, updateBillboard } = useBillboard();
   const { updateBillboardDto, setUpdateBillboardDto } = useBillboardStoreForUpdate();
-
   const { aui } = useAui();
 
   useEffect(() => {
@@ -36,7 +38,6 @@ const Billboard: React.FC = () => {
     getBillboardWithApi();
   }, [aui]);
 
-
   if (!billboard || !updateBillboardDto) {
     return null;
   }
@@ -47,17 +48,44 @@ const Billboard: React.FC = () => {
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
     setUpdateBillboardDto({
       ...updateBillboardDto,
-      originUrl,
-      thumbnailUrl,
+      uploadFile: {
+        ...updateBillboardDto.uploadFile,
+        originUrl,
+        thumbnailUrl
+      },
     });
+  }
+
+
+  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateBillboardReq, aui: string): Promise<UpdateBillboardReq> => {
+    const localImageUrl = prevData.updateUploadFileReq.originUrl;
+    const file = base64ToFileWithMime(serviceType, '', localImageUrl);
+    try {
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui);
+      return {
+        ...prevData,
+        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
+      };
+    } catch (error) {
+      throw new Error(ErrorCode.AWS);
+    }
   }
 
   const handleConfirm = async () => {
     if (!billboard) return;
     if (!updateBillboardDto) return;
 
+    const updateBillboardReq: UpdateBillboardReq = {
+      ...updateBillboardDto,
+      updateUploadFileReq: {
+        ...updateBillboardDto.uploadFile,
+        uploadFileId: updateBillboardDto.uploadFile.id
+      }
+    }
     try {
-      await updateBillboard(aui, updateBillboardDto);
+      //여기서 img를 upload 해야해
+      const convertedData = await uploadFileWithLocalUrl(ServiceType.BILLBOARD, updateBillboardReq, aui);
+      await updateBillboard(aui, convertedData);
     } catch (err) {
     } finally {
       setEditMode(false);
@@ -69,7 +97,7 @@ const Billboard: React.FC = () => {
 
   return (
     <MoleculeImgDivContainer
-      backgroundImg={updateBillboardDto.originUrl}
+      backgroundImg={updateBillboardDto.uploadFile.originUrl}
       handleChange={setOriginThumbnailUrl}
       StyledImgDivContainer={Container}
     >
