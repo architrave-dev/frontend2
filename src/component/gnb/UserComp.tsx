@@ -1,20 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { extractUsernameFromAui, useAuth } from '../../shared/hooks/useApi/useAuth';
+import { useAuth } from '../../shared/hooks/useApi/useAuth';
 import { useModal } from '../../shared/hooks/useModal';
 import { useAui } from '../../shared/hooks/useAui';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
-import { UserData } from '../../shared/dto/EntityRepository';
+import { useMenu } from '../../shared/hooks/useMenu';
 
 const UserComp: React.FC = () => {
   const navigate = useNavigate();
   const { aui } = useAui();
-
   const { isEditMode, setEditMode } = useEditMode();
   const { user, logout } = useAuth();
+  const { isMenuOpen, closeMenu } = useMenu();
   const { openModal } = useModal();
   const { setStandardAlert } = useStandardAlertStore();
 
@@ -23,82 +23,72 @@ const UserComp: React.FC = () => {
     setEditMode(!isEditMode);
   };
 
-  const handleUserAction = () => {
-    if (isEditMode) {
-      setStandardAlert({
-        type: AlertType.ALERT,
-        position: AlertPosition.TOP,
-        content: "You are in edit mode."
-      })
-      return;
-    }
-    //store에 user가 있을 경우
-    if (user) {
-      compareAuiLoggedInAui(user);
-    } else {
-      //store에 user가 없을 경우
-      openModal(ModalType.LOGIN);
-    }
+  const loginHandler = () => {
+    openModal(ModalType.LOGIN);
   };
 
-  const compareAuiLoggedInAui = (user: UserData) => {
-    //현재 AUI와 store의 aui를 비교
-    // 같을 경우
-    if (aui && aui === user.aui) {
-      setStandardAlert({
-        type: AlertType.CONFIRM,
-        position: AlertPosition.TOP,
-        content: "Do you want to log out?",
-        callBack: logout
-      })
+  const logoutHandler = () => {
+    setStandardAlert({
+      type: AlertType.CONFIRM,
+      position: AlertPosition.TOP,
+      content: "Do you want to log out?",
+      callBack: logout
+    })
+    closeMenu();
+  };
+
+  const goHome = () => {
+    closeMenu();
+    navigate(`/`);
+  }
+
+  const renderGeneralBtn = () => {
+    //로그인 되어있으면
+    if (user && user.aui === aui) {
+      if (isMenuOpen) {
+        return (<WithMenuBtn $isMenuOpen={isMenuOpen} onClick={logoutHandler}>Logout</WithMenuBtn>);
+      } else {
+        return (<WithNoMenuBtn $isMenuOpen={isMenuOpen} onClick={toggleEditMode} > {isEditMode ? "Done" : "Edit"}</WithNoMenuBtn>);
+      }
     } else {
-      // 다를 경우
-      navigate(`/${aui}`);
+      if (isMenuOpen) {
+        return (<WithMenuBtn $isMenuOpen={isMenuOpen} onClick={goHome}>Home</WithMenuBtn>);
+      } else {
+        return (<WithNoMenuBtn $isMenuOpen={isMenuOpen} onClick={loginHandler}>Login</WithNoMenuBtn>);
+      }
     }
   }
 
   return (
-    <UserArticle>
-      <ArtistName onClick={handleUserAction}>
-        {extractUsernameFromAui(aui)}
-      </ArtistName>
-      {user && user.aui === aui && (
-        <EditToggle
-          onClick={toggleEditMode}>
-          {isEditMode ? 'Done' : 'Edit'}
-        </EditToggle>
-      )}
-    </UserArticle>
+    <Btn>
+      {renderGeneralBtn()}
+    </Btn>
   );
 }
 
-const UserArticle = styled.article`
-  width: calc(14vw);
-  max-width: 120px;
+const Btn = styled.article`
+  width: calc(8vw);
+  max-width: 80px;
 
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  justify-content: space-between; 
-  ${({ theme }) => theme.typography.Body_01_2};
-`;
+  justify-content: space-between;
 
-const ArtistName = styled.div`
-  text-decoration: none;
-  &:hover {
-    text-decoration: ${({ theme }) => theme.fontWeight.decoration};
-  }
-  cursor: pointer;
-`;
+  transition: all 0.2s ease;
 
-const EditToggle = styled.div`
-  width: 50px;
-  text-align: center;
-  text-decoration: none;
-  &:hover {
-    text-decoration: ${({ theme }) => theme.fontWeight.decoration};
-  }
-  cursor: pointer;
-`;
+  z-index: 3;
+  ${({ theme }) => theme.typography.Body_02_2};
+`
+
+const WithMenuBtn = styled.article<{ $isMenuOpen: boolean; }>`
+  opacity: ${({ $isMenuOpen }) => ($isMenuOpen ? 1 : 0)};
+  transition: opacity 0.2s ease;
+  `;
+
+const WithNoMenuBtn = styled.div<{ $isMenuOpen: boolean; }>`
+  opacity: ${({ $isMenuOpen }) => ($isMenuOpen ? 0 : 1)};
+  transition: opacity 0.2s ease;
+  `;
 
 export default UserComp;
