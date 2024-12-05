@@ -17,6 +17,8 @@ import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { isModified } from '../../shared/hooks/useIsModified';
+import { useValidation } from '../../shared/hooks/useValidation';
+
 
 const WorkViewer: React.FC = () => {
   const { aui } = useAui();
@@ -25,14 +27,20 @@ const WorkViewer: React.FC = () => {
   const { activeWork, clearActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
+  const { checkType } = useValidation();
 
   if (!activeWork || !updatedActiveWork) return null;
 
   const handleChange = (field: keyof WorkData, value: string) => {
-    if (field === 'size')
+    if (!checkType(field, value)) {
+      return;
+    };
+    if (field === 'size') {
       setUpdatedActiveWork({ ...updatedActiveWork, [field]: convertStringToSize(value) });
-    else
+    }
+    else {
       setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
+    }
   }
 
   const handleConfirm = async () => {
