@@ -55,7 +55,3 @@ export const useMember = (): UseMemberResult => {
     result
   };
 }
-
-export const extractUsernameFromAui = (aui: string): string => {
-  return aui.split("-")[0];
-}

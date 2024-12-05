@@ -2,19 +2,27 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
-
-
+import { useMenu } from '../../shared/hooks/useMenu';
 
 
 const Navigation: React.FC = () => {
   const { aui } = useAui();
   const location = useLocation();
+  const { isMenuOpen, closeMenu } = useMenu();
 
   const navItems = [
     { path: `/${aui}/projects`, label: 'Projects' },
     { path: `/${aui}/works`, label: 'Works' },
     { path: `/${aui}/about`, label: 'About' },
   ];
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isMenuOpen) {
+      e.preventDefault();
+    } else {
+      closeMenu();
+    }
+  };
 
   return (
     <NavigationComp>
@@ -24,6 +32,8 @@ const Navigation: React.FC = () => {
             <StyledLink
               to={item.path}
               $isActive={location.pathname === item.path}
+              $isMenuOpen={isMenuOpen}
+              onClick={(e) => handleLinkClick(e)}
             >{item.label}</StyledLink>
           </NavItem>
         ))}
@@ -51,12 +61,12 @@ const NavItem = styled.li`
   ${({ theme }) => theme.typography.Body_01_2};
 `;
 
-const StyledLink = styled(Link) <{ $isActive: boolean }>`
+const StyledLink = styled(Link) <{ $isActive: boolean; $isMenuOpen: boolean; }>`
   text-decoration: ${({ $isActive }) => $isActive ? 'underline' : 'none'};
-
   &:hover {
     text-decoration: ${({ theme }) => theme.fontWeight.decoration};
-  }
+    }
+  cursor: ${({ $isMenuOpen }) => $isMenuOpen ? 'pointer' : 'not-allowed'};
 `;
 
 export default Navigation;
