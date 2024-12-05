@@ -23,3 +23,14 @@ export const useEditModeStore = create<EditModeStore>((set) => ({
   isEditMode: false,
   setIsEditMode: (value) => set({ isEditMode: value }),
 }));
+
+//----- Menu -----
+interface MenuToggleState {
+  isMenuOpen: boolean;
+  setIsMenuOpen: (value: boolean) => void;
+}
+
+export const useMenuToggleStore = create<MenuToggleState>((set) => ({
+  isMenuOpen: false,
+  setIsMenuOpen: (value) => set({ isMenuOpen: value }),
+}));

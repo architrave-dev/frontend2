@@ -105,5 +105,5 @@ export const useAuth = (): UseAuthResult => {
 }
 
 export const extractUsernameFromAui = (aui: string): string => {
-  return aui.split("-")[0];
+  return aui.split("-")[0].toUpperCase();
 }
