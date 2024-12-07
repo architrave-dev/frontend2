@@ -6,7 +6,7 @@ import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, TextAlignment } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
@@ -18,6 +18,7 @@ import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { isModified } from '../../shared/hooks/useIsModified';
 import { useValidation } from '../../shared/hooks/useValidation';
+import SelectBox from '../../shared/component/SelectBox';
 
 
 const WorkViewer: React.FC = () => {
@@ -133,6 +134,18 @@ const WorkViewer: React.FC = () => {
             StyledDiv={Info}
           />
         </WorkInfo>
+        <WorkInfo>
+          {isEditMode ?
+            <SelectBoxWrapper>
+              <SelectBox
+                value={updatedActiveWork.workType}
+                selectType={SelectType.WORK_TYPE}
+                handleChange={(value) => handleChange("workType", value)}
+                direction={false} />
+            </SelectBoxWrapper>
+            : <Info>{updatedActiveWork.workType}</Info>
+          }
+        </WorkInfo>
         <MoleculeTextareaDescription
           value={updatedActiveWork.description}
           handleChange={(e) => handleChange("description", e.target.value)}
@@ -230,6 +243,10 @@ const DividerSmall = styled.span`
   padding-right:4px;
   color: ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_04};
+`;
+
+const SelectBoxWrapper = styled.article`
+  width: 50%;
 `;
 
 const Description = styled.div`
