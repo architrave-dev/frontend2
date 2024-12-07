@@ -163,7 +163,8 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
           <SelectBox
             value={initialAlignment}
             selectType={SelectType.TEXT_ALIGNMENT}
-            handleChange={handleAlignmentChange} />
+            handleChange={handleAlignmentChange}
+            direction={false} />
         </SelectBoxContainer>
       }
       <ImgWrapper>

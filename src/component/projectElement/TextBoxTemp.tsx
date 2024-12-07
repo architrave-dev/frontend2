@@ -37,7 +37,8 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
         <SelectBox
           value={initialTexBoxAlignment || TextAlignment.CENTER}
           selectType={SelectType.TEXT_ALIGNMENT}
-          handleChange={handleAlignmentChange} />
+          handleChange={handleAlignmentChange}
+          direction={false} />
       </SelectBoxContainer>
       <HeadlessTextArea
         alignment={initialTexBoxAlignment || TextAlignment.CENTER}

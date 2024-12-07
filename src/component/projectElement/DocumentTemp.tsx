@@ -54,7 +54,8 @@ const DocumentTemp: React.FC<DocumentProps> = ({ tempId, alignment: initialAlign
         <SelectBox
           value={initialAlignment}
           selectType={SelectType.TEXT_ALIGNMENT}
-          handleChange={handleAlignmentChange} />
+          handleChange={handleAlignmentChange}
+          direction={false} />
       </SelectBoxContainer>
       <ImgWrapper>
         <MoleculeImg

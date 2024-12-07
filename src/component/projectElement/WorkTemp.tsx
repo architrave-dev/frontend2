@@ -53,7 +53,8 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
         <SelectBox
           value={initialDisplaySize || WorkDisplaySize.BIG}
           selectType={SelectType.WORK_SIZE}
-          handleChange={handleSizeChange} />
+          handleChange={handleSizeChange}
+          direction={false} />
       </SelectBoxContainer>
       <ImgWrapper>
         <MoleculeImg

@@ -107,7 +107,8 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
             <SelectBox
               value={initialTexBoxAlignment || TextAlignment.CENTER}
               selectType={SelectType.TEXT_ALIGNMENT}
-              handleChange={handleAlignmentChange} />
+              handleChange={handleAlignmentChange}
+              direction={false} />
           </SelectBoxContainer>
           <HeadlessTextArea
             alignment={initialTexBoxAlignment || TextAlignment.CENTER}
