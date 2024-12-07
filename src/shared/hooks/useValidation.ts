@@ -1,5 +1,5 @@
-import { SizeData, WorkData } from '../dto/EntityRepository';
-import { AlertPosition, AlertType } from '../enum/EnumRepository';
+import { WorkData } from '../dto/EntityRepository';
+import { AlertPosition, AlertType, WorkType } from '../enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 
@@ -8,7 +8,7 @@ export const useValidation = () => {
   const { setStandardAlert } = useStandardAlertStore();
 
 
-  const isNumeric = (str: string) => {
+  const isNumeric = (str: string): boolean => {
     return /^\d+$/.test(str);
   }
 
@@ -32,13 +32,13 @@ export const useValidation = () => {
     return true;
   }
 
-  const isValidNumber = (value: string) => {
+  const isValidNumber = (value: string): boolean => {
     if (value === "") return true;
     const regex = /^[0-9]+(\.[0-9]?)?$/;
     return regex.test(value);
   }
 
-  const isValidSize = (value: string) => {
+  const isValidSize = (value: string): boolean => {
     if (!value.includes("x")) { return false; }
     const result = value.split("x").every(isValidNumber);
     if (!result) {
@@ -52,6 +52,33 @@ export const useValidation = () => {
     return result;
   };
 
+  const isValidWorkType = (value: string): boolean => {
+    const isValid = Object.values(WorkType).includes(value as WorkType);
+    if (!isValid) {
+      setStandardAlert({
+        type: AlertType.CONFIRM,
+        position: AlertPosition.TOP,
+        content: "Invalid work type.",
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const isValidPrice = (value: string): boolean => {
+    const regex = /^[0-9]+$/;
+    const isValid = regex.test(value);
+    if (!isValid) {
+      setStandardAlert({
+        type: AlertType.CONFIRM,
+        position: AlertPosition.TOP,
+        content: "Invalid price format. Only positive integers (without '+') are allowed.",
+      });
+    }
+
+    return isValid;
+  };
+
   const checkType = (field: keyof WorkData, value: string): boolean | void => {
     switch (field) {
       case 'prodYear':
@@ -61,6 +88,16 @@ export const useValidation = () => {
         break;
       case 'size':
         if (!isValidSize(value)) {
+          return;
+        }
+        break;
+      case 'workType':
+        if (!isValidWorkType(value)) {
+          return;
+        }
+        break;
+      case 'price':
+        if (!isValidPrice(value)) {
           return;
         }
         break;
