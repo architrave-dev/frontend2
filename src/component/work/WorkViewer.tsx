@@ -120,6 +120,7 @@ const WorkViewer: React.FC = () => {
         <WorkInfo>
           <MoleculeInputDiv
             value={updatedActiveWork.price}
+            defaultValue={"Not for Sale"}
             placeholder={"Price ($)"}
             handleChange={(e) => handleChange("price", e.target.value)}
             inputStyle={WorkViewerInfo}
@@ -128,6 +129,7 @@ const WorkViewer: React.FC = () => {
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
             value={updatedActiveWork.collection}
+            defaultValue={"Artist's Collection"}
             placeholder={"Collection"}
             handleChange={(e) => handleChange("collection", e.target.value)}
             inputStyle={WorkViewerInfo}
