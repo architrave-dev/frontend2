@@ -6,6 +6,7 @@ import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessT
 import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
 import { SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq, CreateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
+import { SelectBoxWrapper } from './Work';
 
 
 export interface TextBoxProps {
@@ -34,11 +35,13 @@ const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxA
   return (
     <TextBoxWrapper>
       <SelectBoxContainer>
-        <SelectBox
-          value={initialTexBoxAlignment || TextAlignment.CENTER}
-          selectType={SelectType.TEXT_ALIGNMENT}
-          handleChange={handleAlignmentChange}
-          direction={false} />
+        <SelectBoxWrapper>
+          <SelectBox
+            value={initialTexBoxAlignment || TextAlignment.CENTER}
+            selectType={SelectType.TEXT_ALIGNMENT}
+            handleChange={handleAlignmentChange}
+            direction={false} />
+        </SelectBoxWrapper>
       </SelectBoxContainer>
       <HeadlessTextArea
         alignment={initialTexBoxAlignment || TextAlignment.CENTER}
