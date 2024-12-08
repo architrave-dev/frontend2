@@ -10,6 +10,7 @@ import { SizeData, convertSizeToString, convertStringToSize } from '../../shared
 import SelectBox from '../../shared/component/SelectBox';
 import { ImgWrapper, SelectBoxContainer, TitleInfoWrpper, WorkImage, WorkInfo, WorkWrapper } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
+import { useValidation } from '../../shared/hooks/useValidation';
 
 export interface WorkProps {
   tempId: string;
@@ -20,8 +21,12 @@ export interface WorkProps {
 
 const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, displaySize: initialDisplaySize, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
+  const { checkType } = useValidation();
 
   const handleChange = (field: keyof CreateWorkReq, value: string | SizeData) => {
+    if (!checkType(field, value)) {
+      return;
+    };
     const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
       each.tempId === tempId ? { ...each, createWorkReq: { ...each.createWorkReq, [field]: value } as CreateWorkReq } : each
     )

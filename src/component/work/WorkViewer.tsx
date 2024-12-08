@@ -7,7 +7,7 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType, SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
+import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
@@ -32,16 +32,11 @@ const WorkViewer: React.FC = () => {
 
   if (!activeWork || !updatedActiveWork) return null;
 
-  const handleChange = (field: keyof WorkData, value: string) => {
+  const handleChange = (field: keyof WorkData, value: string | SizeData) => {
     if (!checkType(field, value)) {
       return;
     };
-    if (field === 'size') {
-      setUpdatedActiveWork({ ...updatedActiveWork, [field]: convertStringToSize(value) });
-    }
-    else {
-      setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
-    }
+    setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
   }
 
   const handleConfirm = async () => {
@@ -112,7 +107,7 @@ const WorkViewer: React.FC = () => {
           <MoleculeInputDiv
             value={convertSizeToString(updatedActiveWork.size)}
             placeholder={"Size"}
-            handleChange={(e) => handleChange("size", e.target.value)}
+            handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />

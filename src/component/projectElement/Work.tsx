@@ -13,6 +13,7 @@ import SelectBox from '../../shared/component/SelectBox';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
+import { useValidation } from '../../shared/hooks/useValidation';
 
 export interface WorkProps {
   alignment: DisplayAlignment | null;
@@ -24,8 +25,12 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
   const { isEditMode } = useEditMode();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
+  const { checkType } = useValidation();
 
   const handleChange = (field: keyof WorkData, value: string | SizeData) => {
+    if (!checkType(field, value)) {
+      return;
+    };
     const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
     if (targetElement) {
       //updatedProjectElements에 있다면

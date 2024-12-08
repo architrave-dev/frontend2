@@ -1,6 +1,7 @@
-import { WorkData } from '../dto/EntityRepository';
+import { SizeData, WorkData } from '../dto/EntityRepository';
 import { AlertPosition, AlertType, WorkType } from '../enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { CreateWorkReq } from '../dto/ReqDtoRepository';
 
 
 
@@ -38,18 +39,19 @@ export const useValidation = () => {
     return regex.test(value);
   }
 
-  const isValidSize = (value: string): boolean => {
-    if (!value.includes("x")) { return false; }
-    const result = value.split("x").every(isValidNumber);
-    if (!result) {
+  const isValidSize = (value: SizeData): boolean => {
+    const { width, height, depth } = value;
+
+    if (!isValidNumber(width) || !isValidNumber(height) || (depth && !isValidNumber(depth))) {
       setStandardAlert({
         type: AlertType.CONFIRM,
         position: AlertPosition.TOP,
         content: "Invalid Size format.\nOnly positive numbers, including 0, with up to one decimal place are allowed.",
         // content: "Invalid Size format.\nOnly positive numbers, including 0, with up to one decimal place are allowed.\n\nExamples of invalid: \n    9.99 => 2 decimals \n    9.999 => 3 decimals \n    -9 => negative numbers",
       });
+      return false;
     }
-    return result;
+    return true;
   };
 
   const isValidWorkType = (value: string): boolean => {
@@ -79,25 +81,25 @@ export const useValidation = () => {
     return isValid;
   };
 
-  const checkType = (field: keyof WorkData, value: string): boolean | void => {
+  const checkType = (field: keyof WorkData | CreateWorkReq, value: string | SizeData): boolean | void => {
     switch (field) {
       case 'prodYear':
-        if (!isValidYear(value)) {
+        if (!isValidYear(value as string)) {
           return;
         }
         break;
       case 'size':
-        if (!isValidSize(value)) {
+        if (!isValidSize(value as SizeData)) {
           return;
         }
         break;
       case 'workType':
-        if (!isValidWorkType(value)) {
+        if (!isValidWorkType(value as string)) {
           return;
         }
         break;
       case 'price':
-        if (!isValidPrice(value)) {
+        if (!isValidPrice(value as string)) {
           return;
         }
         break;
