@@ -73,7 +73,7 @@ const SelectBox = <T extends SelectValue>({
 const SelectContainer = styled.div`
   position: relative;
   width: 100%;
-  min-width: 110px;
+  min-width: 80px;
 `;
 
 const SelectButton = styled.div`
