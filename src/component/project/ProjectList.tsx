@@ -39,7 +39,7 @@ const ProjectList: React.FC = () => {
     };
     try {
       const { data: { id: projectId } } = await createProject(aui, newDummyProject);
-      navigate(`/${aui}/projects/` + projectId);
+      navigate(`/${aui}/projects/` + projectId + "?isEditMode=true");
     } catch (error) { }
   };
 
