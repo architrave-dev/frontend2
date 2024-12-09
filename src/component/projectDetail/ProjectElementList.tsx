@@ -7,9 +7,9 @@ import { useModal } from '../../shared/hooks/useModal';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, ModalType } from '../../shared/enum/EnumRepository';
-import { CreateProjectElementReq, UpdateProjectElementListReq } from '../../shared/dto/ReqDtoRepository';
+import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import ProjectElement from '../../component/projectElement/ProjectElement';
 import ProjectElementTemp from '../projectElement/ProjectElementTemp';
@@ -20,16 +20,14 @@ import Loading from '../../shared/component/Loading';
 
 const ProjectElementList: React.FC = () => {
   const { aui } = useAui();
-  const { AUI, projectId } = useParams<{ AUI: string, projectId: string }>();
-  const { isEditMode, setEditMode } = useEditMode();
+  const { projectId } = useParams<{ projectId: string }>();
+  const { isEditMode } = useEditMode();
   const { project } = useProjectDetail();
   const { getSimpleWorkList } = useWorkList();
-  const { isLoading, projectElementList, getProjectElementList, updateProjectElementList } = useProjectElement();
+  const { isLoading, projectElementList, getProjectElementList } = useProjectElement();
   const {
     createdProjectElements,
-    setCreatedProjectElements,
-    updatedProjectElements,
-    removedProjectElements
+    setCreatedProjectElements
   } = useProjectElementListStoreForUpdate();
 
   const { openModal } = useModal();
@@ -94,32 +92,6 @@ const ProjectElementList: React.FC = () => {
     setCreatedProjectElements([...createdProjectElements, newElement]);
   };
 
-  const handleConfirm = async () => {
-    if (!projectElementList || !project) return;
-
-    const updatedData: UpdateProjectElementListReq = {
-      projectId: project.id,
-      peIndexList: [],
-      createProjectElements: createdProjectElements,
-      updatedProjectElements: updatedProjectElements,
-      removedProjectElements: removedProjectElements
-    }
-    try {
-      await updateProjectElementList(aui, updatedData);
-    } catch (err) {
-    } finally {
-      setEditMode(false);
-    }
-  }
-
-  const isChanged = (): boolean => {
-    return (
-      createdProjectElements.length > 0 ||
-      updatedProjectElements.length > 0 ||
-      removedProjectElements.length > 0
-    );
-  }
-
   const handleImportElement = async (elementType: ProjectElementType) => {
     try {
       await getSimpleWorkList(aui);
@@ -134,13 +106,6 @@ const ProjectElementList: React.FC = () => {
 
   return (
     <ProjectElementListComp>
-      {isEditMode && isChanged() &&
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
-      }
       {projectElementList.map((each, index) => (
         <ProjectElement
           key={index}

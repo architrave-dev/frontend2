@@ -6,8 +6,6 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useAui } from '../../shared/hooks/useAui';
 import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
 import { DividerType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
@@ -21,11 +19,10 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { InputTitle } from '../../shared/component/headless/input/InputBody';
 
 const ProjectDetailContainer: React.FC = () => {
-  const { isEditMode, setEditMode } = useEditMode();
+  const { setEditMode } = useEditMode();
   const { isLoading, project, updateProject } = useProjectDetail();
   const { updatedProjectDto, setUpdatedProjectDto } = useProjectStoreForUpdate();
   const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
-
   const { aui } = useAui();
 
 
@@ -61,30 +58,12 @@ const ProjectDetailContainer: React.FC = () => {
       thumbnailUrl
     });
   }
-  const isChanged = (): boolean => {
-    return (
-      project.originUrl !== updatedProjectDto.originUrl ||
-      project.thumbnailUrl !== updatedProjectDto.thumbnailUrl ||
-      project.title !== updatedProjectDto.title ||
-      project.description !== updatedProjectDto.description ||
-      (createPiList.length ?? 0) > 0 ||
-      (updatePiList.length ?? 0) > 0 ||
-      (removePiList.length ?? 0) > 0
-    );
-  };
 
   // 로딩 상태를 처리합니다.
   if (isLoading) return <Loading />;
 
   return (
     <ProjectDetailContainerComp>
-      {isEditMode && isChanged() &&
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
-      }
       <MoleculeImgDivContainer
         backgroundImg={updatedProjectDto.originUrl}
         handleChange={setOriginThumbnailUrl}
