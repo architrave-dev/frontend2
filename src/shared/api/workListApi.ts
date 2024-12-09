@@ -33,7 +33,7 @@ export const getWorkList = async (aui: string): Promise<WorkListResponse> => {
 
 export const getSimpleWorkList = async (aui: string): Promise<WorkSimpleListResponse> => {
   try {
-    const response = await workListApi.get<WorkListResponse>(`/api/v1/work/list/simple?aui=${aui}`);
+    const response = await workListApi.get<WorkSimpleListResponse>(`/api/v1/work/list/simple?aui=${aui}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
