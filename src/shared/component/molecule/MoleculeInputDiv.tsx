@@ -5,6 +5,7 @@ import HeadlessInput from '../headless/input/HeadlessInput';
 
 interface MoleculeInputDivProps {
   value: string | number;
+  defaultValue?: string;
   placeholder: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputStyle: StyledInputComponent;
@@ -13,6 +14,7 @@ interface MoleculeInputDivProps {
 
 const MoleculeInputDiv: React.FC<MoleculeInputDivProps> = ({
   value,
+  defaultValue,
   placeholder,
   handleChange,
   inputStyle,
@@ -31,7 +33,7 @@ const MoleculeInputDiv: React.FC<MoleculeInputDivProps> = ({
           StyledInput={inputStyle}
         />
       ) : (
-        <StyledDiv>{value}</StyledDiv>
+        <StyledDiv>{value || defaultValue}</StyledDiv>
       )}
     </>
   );

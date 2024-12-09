@@ -8,9 +8,9 @@ import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
-import Loading from '../../shared/component/Loading';
-import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
+import defaultImg from '../../asset/project/default_1.png'
+
 
 interface ProjectSimpleProps {
   projectId: string;
@@ -18,7 +18,6 @@ interface ProjectSimpleProps {
   initialDescription: string;
   initialImage: string;
 }
-
 
 const ProjectSimple: React.FC<ProjectSimpleProps> = ({
   projectId,
@@ -29,7 +28,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
 }) => {
   const { aui } = useAui();
   const { isEditMode } = useEditMode();
-  const { isLoading, deleteProject } = useProjectList();
+  const { deleteProject } = useProjectList();
   const { setStandardAlert } = useStandardAlertStore();
   const navigate = useNavigate();
 
@@ -54,20 +53,13 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
     });
   }
 
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
-
   return (
     <ProjectSimpleComp $isEditMode={isEditMode} onClick={moveToProjectDetail}>
       <ProjectSimpleInfo>
         <ProjectSimpleTitle>{initialTitle}</ProjectSimpleTitle>
         <ProjectSimpleDescription>{initialDescription}</ProjectSimpleDescription>
       </ProjectSimpleInfo>
-      <MoleculeImgDivContainer
-        backgroundImg={initialImage}
-        handleChange={() => { }}
-        StyledImgDivContainer={ProjectRepresent}
-      />
+      <ProjectRepresent $backgroundImg={initialImage !== '' ? initialImage : defaultImg} />
       {isEditMode &&
         <HeadlessBtn
           value={"Delete"}

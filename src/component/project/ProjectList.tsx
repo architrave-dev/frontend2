@@ -4,8 +4,6 @@ import ProjectSimple from './ProjectSimple';
 import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { createProject } from '../../shared/api/projectApi';
-import { useNavigate } from 'react-router-dom';
 import Space from '../../shared/Space';
 import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
@@ -13,9 +11,8 @@ import Loading from '../../shared/component/Loading';
 import { CreateProjectReq } from '../../shared/dto/ReqDtoRepository';
 
 const ProjectList: React.FC = () => {
-  const navigate = useNavigate();
-  const { isEditMode } = useEditMode();
-  const { isLoading, projects, getProjectList } = useProjectList();
+  const { isEditMode, setEditMode } = useEditMode();
+  const { isLoading, projects, getProjectList, createProject } = useProjectList();
 
   const { aui } = useAui();
 
@@ -38,9 +35,13 @@ const ProjectList: React.FC = () => {
       description: 'This is a new project.'
     };
     try {
-      const { data: { id: projectId } } = await createProject(aui, newDummyProject);
-      navigate(`/${aui}/projects/` + projectId);
-    } catch (error) { }
+      await createProject(aui, newDummyProject);
+      // const { data: { id: projectId } } = await createProject(aui, newDummyProject);
+      // navigate(`/${aui}/projects/` + projectId + "isEditMode=true");
+    } catch (error) {
+    } finally {
+      setEditMode(false);
+    }
   };
 
   // 로딩 상태를 처리합니다.

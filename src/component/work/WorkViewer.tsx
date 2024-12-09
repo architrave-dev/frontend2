@@ -6,8 +6,8 @@ import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
+import { AlertPosition, AlertType, SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
+import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
@@ -17,6 +17,9 @@ import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { isModified } from '../../shared/hooks/useIsModified';
+import { useValidation } from '../../shared/hooks/useValidation';
+import SelectBox from '../../shared/component/SelectBox';
+
 
 const WorkViewer: React.FC = () => {
   const { aui } = useAui();
@@ -25,14 +28,15 @@ const WorkViewer: React.FC = () => {
   const { activeWork, clearActiveWork } = useWorkViewStore();
   const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
   const { setStandardAlert } = useStandardAlertStore();
+  const { checkType } = useValidation();
 
   if (!activeWork || !updatedActiveWork) return null;
 
-  const handleChange = (field: keyof WorkData, value: string) => {
-    if (field === 'size')
-      setUpdatedActiveWork({ ...updatedActiveWork, [field]: convertStringToSize(value) });
-    else
-      setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
+  const handleChange = (field: keyof WorkData, value: string | SizeData) => {
+    if (!checkType(field, value)) {
+      return;
+    };
+    setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
   }
 
   const handleConfirm = async () => {
@@ -103,7 +107,7 @@ const WorkViewer: React.FC = () => {
           <MoleculeInputDiv
             value={convertSizeToString(updatedActiveWork.size)}
             placeholder={"Size"}
-            handleChange={(e) => handleChange("size", e.target.value)}
+            handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
@@ -111,6 +115,7 @@ const WorkViewer: React.FC = () => {
         <WorkInfo>
           <MoleculeInputDiv
             value={updatedActiveWork.price}
+            defaultValue={"Not for Sale"}
             placeholder={"Price ($)"}
             handleChange={(e) => handleChange("price", e.target.value)}
             inputStyle={WorkViewerInfo}
@@ -119,11 +124,24 @@ const WorkViewer: React.FC = () => {
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
             value={updatedActiveWork.collection}
+            defaultValue={"Artist's Collection"}
             placeholder={"Collection"}
             handleChange={(e) => handleChange("collection", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
+        </WorkInfo>
+        <WorkInfo>
+          {isEditMode ?
+            <SelectBoxWrapper>
+              <SelectBox
+                value={updatedActiveWork.workType}
+                selectType={SelectType.WORK_TYPE}
+                handleChange={(value) => handleChange("workType", value)}
+                direction={false} />
+            </SelectBoxWrapper>
+            : <Info>{updatedActiveWork.workType}</Info>
+          }
         </WorkInfo>
         <MoleculeTextareaDescription
           value={updatedActiveWork.description}
@@ -221,6 +239,12 @@ const DividerSmall = styled.span`
   height: 18px;
   padding-right:4px;
   color: ${({ theme }) => theme.colors.color_Gray_05};
+  ${({ theme }) => theme.typography.Body_04};
+`;
+
+const SelectBoxWrapper = styled.article`
+  width: 50%;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_04};
 `;
 

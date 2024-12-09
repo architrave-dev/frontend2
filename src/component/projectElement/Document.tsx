@@ -7,7 +7,7 @@ import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/t
 import { DocumentData, ProjectElementData } from '../../shared/dto/EntityRepository';
 import { SelectType, TextAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { UpdateDocumentReq, UpdateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
-import { ImgWrapper, WorkImage } from './Work';
+import { ImgWrapper, SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
@@ -160,10 +160,13 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
     <DocumentWrapper>
       {isEditMode &&
         <SelectBoxContainer>
-          <SelectBox
-            value={initialAlignment}
-            selectType={SelectType.TEXT_ALIGNMENT}
-            handleChange={handleAlignmentChange} />
+          <SelectBoxWrapper>
+            <SelectBox
+              value={initialAlignment}
+              selectType={SelectType.TEXT_ALIGNMENT}
+              handleChange={handleAlignmentChange}
+              direction={false} />
+          </SelectBoxWrapper>
         </SelectBoxContainer>
       }
       <ImgWrapper>

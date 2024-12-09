@@ -46,6 +46,7 @@ const Title = styled.h2`
 const Content = styled.div`
   margin-bottom: 44px;
   white-space: pre-line;
+  line-height: 20px;
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 

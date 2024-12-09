@@ -62,10 +62,13 @@ const SortStation: React.FC = () => {
       <span>
         Sort by:
       </span>
-      <SelectBox
-        value={SortOrder.TITLE_ASC}
-        selectType={SelectType.SORT_ORDER}
-        handleChange={handleOrderChange} />
+      <SelectBoxWrapper>
+        <SelectBox
+          value={SortOrder.TITLE_ASC}
+          selectType={SelectType.SORT_ORDER}
+          handleChange={handleOrderChange}
+          direction={false} />
+      </SelectBoxWrapper>
     </SortingStation>
   );
 }
@@ -78,6 +81,12 @@ const SortingStation = styled.article`
   padding: 10px 0px;
 
   gap: 10px;
+`;
+
+const SelectBoxWrapper = styled.article`
+  width: 8vw;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 export default SortStation;

@@ -8,7 +8,6 @@ import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
 import { useModal } from './hooks/useModal';
 import { useOriginImgStore } from './store/portal/originImgStore';
-import defaultImg from '../asset/project/default_1.png'
 
 const ModalTemplate: React.FC = () => {
   const { closeModal } = useModal();
@@ -21,7 +20,7 @@ const ModalTemplate: React.FC = () => {
       case ModalType.ORIGIN_IMG:
         return (
           <OriginImgContent onClick={closeModal}>
-            <FullOriginImg src={originUrl != null ? originUrl : defaultImg} />
+            <FullOriginImg src={originUrl} alt={"full screen size origin Img"} />
           </OriginImgContent>
         )
       case ModalType.WORK_STATION:

@@ -7,7 +7,7 @@ import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAr
 import { SelectType, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateDocumentReq, CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { DocumentWrapper } from './Document';
-import { ImgWrapper, WorkImage } from './Work';
+import { ImgWrapper, SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 
@@ -51,10 +51,13 @@ const DocumentTemp: React.FC<DocumentProps> = ({ tempId, alignment: initialAlign
   return (
     <DocumentWrapper>
       <SelectBoxContainer>
-        <SelectBox
-          value={initialAlignment}
-          selectType={SelectType.TEXT_ALIGNMENT}
-          handleChange={handleAlignmentChange} />
+        <SelectBoxWrapper>
+          <SelectBox
+            value={initialAlignment}
+            selectType={SelectType.TEXT_ALIGNMENT}
+            handleChange={handleAlignmentChange}
+            direction={false} />
+        </SelectBoxWrapper>
       </SelectBoxContainer>
       <ImgWrapper>
         <MoleculeImg

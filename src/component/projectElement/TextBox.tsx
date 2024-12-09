@@ -8,6 +8,7 @@ import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/t
 import { TextBoxData } from '../../shared/dto/EntityRepository';
 import { SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { UpdateProjectElementReq, UpdateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
+import { SelectBoxWrapper } from './Work';
 
 
 export interface TextBoxProps {
@@ -104,10 +105,13 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
       {isEditMode ? (
         <>
           <SelectBoxContainer>
-            <SelectBox
-              value={initialTexBoxAlignment || TextAlignment.CENTER}
-              selectType={SelectType.TEXT_ALIGNMENT}
-              handleChange={handleAlignmentChange} />
+            <SelectBoxWrapper>
+              <SelectBox
+                value={initialTexBoxAlignment || TextAlignment.CENTER}
+                selectType={SelectType.TEXT_ALIGNMENT}
+                handleChange={handleAlignmentChange}
+                direction={false} />
+            </SelectBoxWrapper>
           </SelectBoxContainer>
           <HeadlessTextArea
             alignment={initialTexBoxAlignment || TextAlignment.CENTER}

@@ -13,6 +13,7 @@ import SelectBox from '../../shared/component/SelectBox';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
+import { useValidation } from '../../shared/hooks/useValidation';
 
 export interface WorkProps {
   alignment: DisplayAlignment | null;
@@ -24,8 +25,12 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
   const { isEditMode } = useEditMode();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
+  const { checkType } = useValidation();
 
   const handleChange = (field: keyof WorkData, value: string | SizeData) => {
+    if (!checkType(field, value)) {
+      return;
+    };
     const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
     if (targetElement) {
       //updatedProjectElements에 있다면
@@ -138,11 +143,14 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
     setProjectElementList(updatedProjectElementList);
   }
 
-  const handleSizeChange = (value: WorkDisplaySize) => {
+  const handleSubChange = (
+    key: 'workDisplaySize' | 'workAlignment',
+    value: WorkDisplaySize | DisplayAlignment
+  ) => {
     const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
     if (targetElement) {
       const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkReq?.id === initialData.id ? { ...each, workDisplaySize: value } : each
+        each.updateWorkReq?.id === initialData.id ? { ...each, [key]: value } : each
       )
       setUpdatedProjectElements(updatedProjectElementList);
     } else {
@@ -151,8 +159,8 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
       const newUpdateProjectElementReq: UpdateProjectElementReq = {
         projectElementId: target.id,
         updateWorkReq: initialData,
-        workAlignment: null,
-        workDisplaySize: value,
+        workDisplaySize: key === 'workDisplaySize' ? (value as WorkDisplaySize) : null,
+        workAlignment: key === 'workAlignment' ? (value as DisplayAlignment) : null,
         updateTextBoxReq: null,
         textBoxAlignment: null,
         updateDocumentReq: null,
@@ -162,7 +170,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
       setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
     }
     const updatedProjectElementList = projectElementList.map(each =>
-      each.work?.id === initialData.id ? { ...each, workDisplaySize: value } : each
+      each.work?.id === initialData.id ? { ...each, [key]: value } : each
     );
     setProjectElementList(updatedProjectElementList);
   };
@@ -171,10 +179,20 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
     <WorkWrapper>
       {isEditMode &&
         <SelectBoxContainer>
-          <SelectBox
-            value={initialDisplaySize || WorkDisplaySize.BIG}
-            selectType={SelectType.WORK_SIZE}
-            handleChange={handleSizeChange} />
+          <SelectBoxWrapper>
+            <SelectBox
+              value={initialDisplaySize || WorkDisplaySize.BIG}
+              selectType={SelectType.WORK_SIZE}
+              handleChange={value => handleSubChange('workDisplaySize', value)}
+              direction={false} />
+          </SelectBoxWrapper>
+          <SelectBoxWrapper>
+            <SelectBox
+              value={initialWorkAlignment || DisplayAlignment.CENTER}
+              selectType={SelectType.DISPLAY_ALIGNMENT}
+              handleChange={value => handleSubChange('workAlignment', value)}
+              direction={false} />
+          </SelectBoxWrapper>
         </SelectBoxContainer>
       }
       <ImgWrapper>
@@ -295,6 +313,12 @@ export const TitleInfoWrpper = styled.div`
 export const WorkInfo = styled.div`
   display: flex;
   gap: 4px;
+`;
+
+export const SelectBoxWrapper = styled.article`
+  width: 8vw;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const Info = styled.div`

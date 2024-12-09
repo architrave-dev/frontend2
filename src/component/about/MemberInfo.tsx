@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAui } from '../../shared/hooks/useAui';
 import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
 import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
-import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Loading from '../../shared/component/Loading';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
 import MemberTitle from './MemberTitle';
@@ -14,14 +11,16 @@ import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/Tex
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
-import { isModified } from '../../shared/hooks/useIsModified';
+import { useValidation } from '../../shared/hooks/useValidation';
+import { CountryType } from '../../shared/enum/EnumRepository';
+import MemberInfoSelect from './MemberInfoSelect';
 
 
 const MemberInfo: React.FC = () => {
   const { aui } = useAui();
-  const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, memberInfo, getMemberInfo, updateMemberInfo } = useMemberInfo();
+  const { isLoading, memberInfo, getMemberInfo } = useMemberInfo();
   const { updateMemberInfoDto, setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
+  const { checkType } = useValidation();
 
 
   useEffect(() => {
@@ -40,7 +39,10 @@ const MemberInfo: React.FC = () => {
     return null;
   }
 
-  const handleChange = (field: keyof MemberInfoData, value: string | number) => {
+  const handleChange = (field: keyof MemberInfoData, value: string) => {
+    if (!checkType(field, value)) {
+      return;
+    };
     setUpdateMemberInfoDto({ ...updateMemberInfoDto, [field]: value });
   }
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
@@ -50,18 +52,6 @@ const MemberInfo: React.FC = () => {
       thumbnailUrl,
     });
   }
-
-  const handleConfirm = async () => {
-    if (!memberInfo) return;
-    if (!updateMemberInfoDto) return;
-
-    try {
-      await updateMemberInfo(aui, updateMemberInfoDto);
-    } catch (err) {
-    } finally {
-      setEditMode(false);
-    }
-  };
 
   // 로딩 상태를 처리합니다.
   if (isLoading) return <Loading />;
@@ -80,7 +70,7 @@ const MemberInfo: React.FC = () => {
             handleChange={(e) => handleChange('name', e.target.value)}
           />
           <MemberInfoEach name={"Born"} value={updateMemberInfoDto.year} handleChange={(e) => handleChange('year', e.target.value)} />
-          <MemberInfoEach name={"Country"} value={updateMemberInfoDto.country} handleChange={(e) => handleChange('country', e.target.value)} />
+          <MemberInfoSelect name={"Country"} value={updateMemberInfoDto.country} handleChange={(value: CountryType) => handleChange('country', value)} />
           <MemberInfoEach name={"Email"} value={updateMemberInfoDto.email} handleChange={(e) => handleChange('email', e.target.value)} />
           <MemberInfoEach name={"Contact"} value={updateMemberInfoDto.contact} handleChange={(e) => handleChange('contact', e.target.value)} />
         </InfoContainer>
@@ -93,13 +83,6 @@ const MemberInfo: React.FC = () => {
           StyledDescription={Description}
         />
       </DescriptionWrapper>
-      {isEditMode && isModified(memberInfo, updateMemberInfoDto) &&
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
-      }
     </MemberInfoComp>
   );
 };

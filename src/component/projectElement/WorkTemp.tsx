@@ -8,8 +8,9 @@ import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '..
 import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
-import { ImgWrapper, SelectBoxContainer, TitleInfoWrpper, WorkImage, WorkInfo, WorkWrapper } from './Work';
+import { ImgWrapper, SelectBoxContainer, SelectBoxWrapper, TitleInfoWrpper, WorkImage, WorkInfo, WorkWrapper } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
+import { useValidation } from '../../shared/hooks/useValidation';
 
 export interface WorkProps {
   tempId: string;
@@ -20,8 +21,12 @@ export interface WorkProps {
 
 const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, displaySize: initialDisplaySize, data: initialData }) => {
   const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
+  const { checkType } = useValidation();
 
   const handleChange = (field: keyof CreateWorkReq, value: string | SizeData) => {
+    if (!checkType(field, value)) {
+      return;
+    };
     const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
       each.tempId === tempId ? { ...each, createWorkReq: { ...each.createWorkReq, [field]: value } as CreateWorkReq } : each
     )
@@ -41,19 +46,33 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
     setCreatedProjectElements(updatedCreatedProjectElements);
   }
 
-  const handleSizeChange = (value: WorkDisplaySize) => {
+  const handleSubChange = (
+    key: 'workDisplaySize' | 'workAlignment',
+    value: WorkDisplaySize | DisplayAlignment
+  ) => {
     const updatedProjectElementList = createdProjectElements.map(each =>
-      each.tempId === tempId ? { ...each, workDisplaySize: value } : each
+      each.tempId === tempId ? { ...each, [key]: value } : each
     );
     setCreatedProjectElements(updatedProjectElementList);
   };
+
   return (
     <WorkWrapper>
       <SelectBoxContainer>
-        <SelectBox
-          value={initialDisplaySize || WorkDisplaySize.BIG}
-          selectType={SelectType.WORK_SIZE}
-          handleChange={handleSizeChange} />
+        <SelectBoxWrapper>
+          <SelectBox
+            value={initialDisplaySize || WorkDisplaySize.BIG}
+            selectType={SelectType.WORK_SIZE}
+            handleChange={value => handleSubChange('workDisplaySize', value)}
+            direction={false} />
+        </SelectBoxWrapper>
+        <SelectBoxWrapper>
+          <SelectBox
+            value={initialWorkAlignment || DisplayAlignment.CENTER}
+            selectType={SelectType.DISPLAY_ALIGNMENT}
+            handleChange={value => handleSubChange('workAlignment', value)}
+            direction={false} />
+        </SelectBoxWrapper>
       </SelectBoxContainer>
       <ImgWrapper>
         <MoleculeImg
