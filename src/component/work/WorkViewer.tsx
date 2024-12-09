@@ -44,7 +44,7 @@ const WorkViewer: React.FC = () => {
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkReq, aui: string): Promise<UpdateWorkReq> => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(serviceType, '', localImageUrl);
+    const file = base64ToFileWithMime(serviceType, prevData.id, localImageUrl);
     try {
       const { originUrl, thumbnailUrl } = await uploadToS3(file, aui);
       return {
