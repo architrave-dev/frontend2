@@ -63,7 +63,7 @@ const About: React.FC = () => {
   const imageChecker = () => {
     if (!memberInfo) return;
     if (!updateMemberInfoDto) return;
-    return memberInfo.uploadFile.originUrl != updateMemberInfoDto.uploadFile.originUrl;
+    return memberInfo.uploadFile.originUrl !== updateMemberInfoDto.uploadFile.originUrl;
   }
 
   const handleConfirm = async () => {

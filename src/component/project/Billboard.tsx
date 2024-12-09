@@ -72,7 +72,7 @@ const Billboard: React.FC = () => {
   }
 
   const imageChecker = () => {
-    return billboard.uploadFile.originUrl != updateBillboardDto.uploadFile.originUrl;
+    return billboard.uploadFile.originUrl !== updateBillboardDto.uploadFile.originUrl;
   }
   const handleConfirm = async () => {
     if (!billboard) return;
