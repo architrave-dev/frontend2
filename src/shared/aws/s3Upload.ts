@@ -113,23 +113,19 @@ const getMimeTypeFromBase64 = (base64: string): string => {
   throw new Error("Invalid Base64 string"); // 잘못된 Base64 데이터 처리
 }
 
-const makeFilename = (prefix: string, mimeType: string): string => {
-  return prefix + '/' + Date.now().toString() + '.' + mimeType.split("/")[1];
-}
-
-const makePrefix = (serviceType: ServiceType, identifier: string): string => {
+const makeFilename = (serviceType: ServiceType, identifier: string, mimeType: string): string => {
   switch (serviceType) {
     case ServiceType.WORK:
-      return 'work-' + identifier;
+      return `work/${identifier}-${Date.now()}.${mimeType.split("/")[1]}`;
     case ServiceType.PROJECT:
-      return 'project-' + identifier;
+      return `project/${identifier}-${Date.now()}.${mimeType.split("/")[1]}`;
     // Document, WorkDetail은 부모 identifier가 필요함
     // Document은 project의 id, workDetail은 work의 id
     case ServiceType.MEMBER_INFO:
-      return 'memberInfo'
+      return `memberInfo/${Date.now()}.${mimeType.split("/")[1]}`;
     case ServiceType.BILLBOARD:
     default:
-      return 'billboard';
+      return `billboard/${Date.now()}.${mimeType.split("/")[1]}`;
   }
 }
 
@@ -145,8 +141,6 @@ export const base64ToFileWithMime = (serviceType: ServiceType, identifier: strin
   }
   // Blob 생성
   const blob = new Blob([arrayBuffer], { type: mimeType });
-
-  const prefix = makePrefix(serviceType, identifier);
   // File 객체 생성
-  return new File([blob], makeFilename(prefix, mimeType), { type: mimeType });
+  return new File([blob], makeFilename(serviceType, identifier, mimeType), { type: mimeType });
 }
