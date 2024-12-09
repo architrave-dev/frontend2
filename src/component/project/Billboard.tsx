@@ -71,11 +71,14 @@ const Billboard: React.FC = () => {
     }
   }
 
+  const imageChecker = () => {
+    return billboard.uploadFile.originUrl != updateBillboardDto.uploadFile.originUrl;
+  }
   const handleConfirm = async () => {
     if (!billboard) return;
     if (!updateBillboardDto) return;
 
-    const updateBillboardReq: UpdateBillboardReq = {
+    let updateBillboardReq: UpdateBillboardReq = {
       ...updateBillboardDto,
       updateUploadFileReq: {
         ...updateBillboardDto.uploadFile,
@@ -83,9 +86,10 @@ const Billboard: React.FC = () => {
       }
     }
     try {
-      //여기서 img를 upload 해야해
-      const convertedData = await uploadFileWithLocalUrl(ServiceType.BILLBOARD, updateBillboardReq, aui);
-      await updateBillboard(aui, convertedData);
+      if (imageChecker()) {
+        updateBillboardReq = await uploadFileWithLocalUrl(ServiceType.BILLBOARD, updateBillboardReq, aui);
+      }
+      await updateBillboard(aui, updateBillboardReq);
     } catch (err) {
     } finally {
       setEditMode(false);
