@@ -318,6 +318,7 @@ export const WorkInfo = styled.div`
 export const SelectBoxWrapper = styled.article`
   width: 8vw;
   color: ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const Info = styled.div`

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { SelectType, SortOrder, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
+import { SelectType, SortOrder, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
 
 
 const selectOptions = {
@@ -9,9 +9,10 @@ const selectOptions = {
   [SelectType.WORK_SIZE]: Object.values(WorkDisplaySize),
   [SelectType.SORT_ORDER]: Object.values(SortOrder),
   [SelectType.WORK_TYPE]: Object.values(WorkType),
+  [SelectType.COUNTRY]: Object.values(CountryType),
 };
 
-type SelectValue = TextAlignment | DisplayAlignment | WorkDisplaySize | SortOrder | WorkType;
+type SelectValue = TextAlignment | DisplayAlignment | WorkDisplaySize | SortOrder | WorkType | CountryType;
 
 interface SelectBoxProps<T extends SelectValue> {
   value: T;
@@ -48,7 +49,6 @@ const SelectBox = <T extends SelectValue>({
         <span>{value}</span>
         <SelectDirection $isOpen={isOpen}>▼</SelectDirection>
       </SelectButton>
-
       {isOpen && (
         <OptionsContainer $direction={direction}>
           {options.map((option) => (
@@ -90,7 +90,6 @@ const SelectButton = styled.div`
   &:focus {
     outline: none;
     }
-  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const SelectDirection = styled.span<{ $isOpen: boolean }>`
@@ -113,9 +112,7 @@ const OptionsContainer = styled.div<{ $direction: boolean }>`
 const Option = styled.div<{ $isSelected: boolean }>`
   padding: 2px;
   cursor: pointer;
-  ${({ theme }) => theme.typography.Body_04};
   background-color: ${({ $isSelected }) => $isSelected ? '#f5f5f5' : 'transparent'};
-
   &:hover {
     background-color: #f5f5f5;
   }

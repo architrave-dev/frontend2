@@ -85,6 +85,8 @@ const SortingStation = styled.article`
 
 const SelectBoxWrapper = styled.article`
   width: 8vw;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 export default SortStation;

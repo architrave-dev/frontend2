@@ -244,6 +244,8 @@ const DividerSmall = styled.span`
 
 const SelectBoxWrapper = styled.article`
   width: 50%;
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const Description = styled.div`

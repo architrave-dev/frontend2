@@ -71,7 +71,8 @@ export enum SelectType {
   DISPLAY_ALIGNMENT = 'DISPLAY_ALIGNMENT',
   WORK_SIZE = 'WORK_SIZE',
   SORT_ORDER = 'SORT_ORDER',
-  WORK_TYPE = 'WORK_TYPE'
+  WORK_TYPE = 'WORK_TYPE',
+  COUNTRY = 'COUNTRY'
 }
 
 export enum TextAlignment {
