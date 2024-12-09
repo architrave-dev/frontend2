@@ -5,17 +5,17 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import { CareerType } from '../../shared/enum/EnumRepository';
-import { CreateCareerReq, UpdatedCareerListReq } from '../../shared/dto/ReqDtoRepository';
-import { BtnConfirm, BtnCreate } from '../../shared/component/headless/button/BtnBody';
+import { CreateCareerReq } from '../../shared/dto/ReqDtoRepository';
+import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import Loading from '../../shared/component/Loading';
 import Space from '../../shared/Space';
 import CareerSection from './CareerSection';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 const CareerList: React.FC = () => {
-  const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, careerList, getCareerList, updateCareerList } = useCareer();
-  const { createdCareers, setCreatedCareers, updatedCareers, removedCareers } = useCareerListStoreForUpdate();
+  const { isEditMode } = useEditMode();
+  const { isLoading, careerList, getCareerList } = useCareer();
+  const { createdCareers, setCreatedCareers } = useCareerListStoreForUpdate();
   const { aui } = useAui();
 
   useEffect(() => {
@@ -39,28 +39,6 @@ const CareerList: React.FC = () => {
 
     setCreatedCareers([...createdCareers, newElement]);
   };
-
-  const handleConfirm = async () => {
-    const updatedData: UpdatedCareerListReq = {
-      createCareerReqList: createdCareers,
-      updateCareerReqList: updatedCareers,
-      removeCareerReqList: removedCareers
-    }
-    try {
-      await updateCareerList(aui, updatedData);
-    } catch (err) {
-    } finally {
-      setEditMode(false);
-    }
-  }
-
-  const isChanged = (): boolean => {
-    return (
-      createdCareers.length > 0 ||
-      updatedCareers.length > 0 ||
-      removedCareers.length > 0
-    );
-  }
 
   const careerSections = [
     { type: CareerType.EDU, title: 'Education' },
@@ -138,13 +116,6 @@ const CareerList: React.FC = () => {
             />
           </CreateButtonGroup>
         </Space>
-      }
-      {isEditMode && isChanged() &&
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
       }
     </CareerListComp>
   );

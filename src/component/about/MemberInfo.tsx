@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAui } from '../../shared/hooks/useAui';
 import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
 import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
-import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Loading from '../../shared/component/Loading';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
 import MemberTitle from './MemberTitle';
@@ -16,12 +13,12 @@ import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import { useValidation } from '../../shared/hooks/useValidation';
 import { CountryType } from '../../shared/enum/EnumRepository';
+import MemberInfoSelect from './MemberInfoSelect';
 
 
 const MemberInfo: React.FC = () => {
   const { aui } = useAui();
-  const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, memberInfo, getMemberInfo, updateMemberInfo } = useMemberInfo();
+  const { isLoading, memberInfo, getMemberInfo } = useMemberInfo();
   const { updateMemberInfoDto, setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
   const { checkType } = useValidation();
 
@@ -55,18 +52,6 @@ const MemberInfo: React.FC = () => {
       thumbnailUrl,
     });
   }
-
-  const handleConfirm = async () => {
-    if (!memberInfo) return;
-    if (!updateMemberInfoDto) return;
-
-    try {
-      await updateMemberInfo(aui, updateMemberInfoDto);
-    } catch (err) {
-    } finally {
-      setEditMode(false);
-    }
-  };
 
   // 로딩 상태를 처리합니다.
   if (isLoading) return <Loading />;
