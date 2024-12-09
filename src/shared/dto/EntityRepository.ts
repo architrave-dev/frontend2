@@ -126,8 +126,7 @@ export interface ProjectData {
   id: string;
   title: string;
   description: string;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   projectInfoList: ProjectInfoData[];
   piIndex: string;
 }
