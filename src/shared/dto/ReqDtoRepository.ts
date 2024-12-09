@@ -18,14 +18,14 @@ export interface RefreshReq {
 }
 
 export interface UpdateUploadFileReq {
-  uploadFileId: number;
+  uploadFileId: string;
   originUrl: string;
   thumbnailUrl: string;
 }
 
 //-------------- Billboard
 export interface UpdateBillboardReq {
-  id: number;
+  id: string;
   updateUploadFileReq: UpdateUploadFileReq;
   title: string;
   description: string;
@@ -49,8 +49,7 @@ export interface CreateWorkReq {
 export interface UpdateWorkReq {
   id: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  updateUploadFileReq: UpdateUploadFileReq;
   title: string;
   description: string;
   size: SizeData;
@@ -212,7 +211,7 @@ export interface UpdateProjectElementListReq {
 
 //-------------- MemberInfo
 export interface UpdateMemberInfoReq {
-  id: number;
+  id: string;
   updateUploadFileReq: UpdateUploadFileReq;
   name: string;
   year: string;

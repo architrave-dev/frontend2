@@ -5,7 +5,7 @@ import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment
  */
 
 export interface UserData {
-  id: number;
+  id: string;
   email: string;
   username: string;
   aui: string;
@@ -17,13 +17,13 @@ export interface UserDataWithRefreshToken extends UserData {
 }
 
 export interface UploadFileData {
-  id: number;
+  id: string;
   originUrl: string;
   thumbnailUrl: string;
 }
 
 export interface BillboardData {
-  id: number;
+  id: string;
   uploadFile: UploadFileData;
   title: string;
   description: string;
@@ -74,8 +74,7 @@ export const convertStringToSize = (value: string): SizeData => {
 export interface WorkData {
   id: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   title: string;
   description: string;
   size: SizeData;
@@ -162,7 +161,7 @@ export interface ProjectElementData {
 }
 
 export interface MemberInfoData {
-  id: number;
+  id: string;
   uploadFile: UploadFileData;
   name: string;
   year: string;
