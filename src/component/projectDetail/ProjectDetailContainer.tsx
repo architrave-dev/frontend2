@@ -2,14 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import Divider from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
-import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import { useAui } from '../../shared/hooks/useAui';
-import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
 import Loading from '../../shared/component/Loading';
 import { DividerType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { UpdateProjectReq } from '../../shared/dto/ReqDtoRepository';
-import { IndexData, ProjectData } from '../../shared/dto/EntityRepository';
+import { ProjectData } from '../../shared/dto/EntityRepository';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
@@ -18,35 +14,13 @@ import MoleculeTextareaDescription from '../../shared/component/molecule/Molecul
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { InputTitle } from '../../shared/component/headless/input/InputBody';
 
+
 const ProjectDetailContainer: React.FC = () => {
-  const { setEditMode } = useEditMode();
-  const { isLoading, project, updateProject } = useProjectDetail();
+  const { isLoading, project } = useProjectDetail();
   const { updatedProjectDto, setUpdatedProjectDto } = useProjectStoreForUpdate();
-  const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
-  const { aui } = useAui();
-
-
   if (!project || !updatedProjectDto) {
     return null;
   }
-  const convertToPiIndexList = (): IndexData[] => {
-    return [];
-  }
-  const handleConfirm = async () => {
-    const newUpdateProjectReq: UpdateProjectReq = {
-      ...updatedProjectDto,
-      piIndexList: convertToPiIndexList(),
-      createdProjectInfoList: createPiList,
-      updatedProjectInfoList: updatePiList,
-      removedProjectInfoList: removePiList
-    }
-    try {
-      await updateProject(aui, newUpdateProjectReq);
-    } catch (err) {
-    } finally {
-      setEditMode(false);
-    }
-  };
 
   const handleChange = (field: keyof ProjectData, value: string) => {
     setUpdatedProjectDto({ ...updatedProjectDto, [field]: value });
