@@ -6,8 +6,8 @@ import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessT
 import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
 import { SelectType, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { CreateDocumentReq, CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
-import { DocumentWrapper } from './Document';
-import { ImgWrapper, SelectBoxWrapper, WorkImage } from './Work';
+import { DocumentWrapper, ImgWrapper } from './Document';
+import { SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 
 

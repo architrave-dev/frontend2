@@ -8,7 +8,7 @@ import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '..
 import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
-import { ImgWrapper, SelectBoxContainer, SelectBoxWrapper, TitleInfoWrpper, WorkImage, WorkInfo, WorkWrapper } from './Work';
+import { ImgWrapper, SelectBoxContainer, SelectBoxWrapper, TitleInfoWrpper, WorkCoreWrapper, WorkImage, WorkInfo, WorkWrapper } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import { useValidation } from '../../shared/hooks/useValidation';
 
@@ -74,50 +74,52 @@ const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment
             direction={false} />
         </SelectBoxWrapper>
       </SelectBoxContainer>
-      <ImgWrapper>
-        <MoleculeImg
-          srcUrl={initialData.originUrl}
-          alt={initialData.title}
-          displaySize={initialDisplaySize}
-          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
-          StyledImg={WorkImage}
-        />
-      </ImgWrapper>
-      <TitleInfoWrpper>
-        <HeadlessInput
-          value={initialData.title}
-          handleChange={(e) => handleChange("title", e.target.value)}
-          placeholder="Title"
-          StyledInput={InputWorkTitle}
-        />
-        <HeadlessTextArea
-          alignment={TextAlignment.CENTER}
-          content={initialData.description}
-          placeholder={"Description"}
-          handleChange={(e) => handleChange("description", e.target.value)}
-          StyledTextArea={TextAreaWork}
-        />
-        <WorkInfo>
-          <HeadlessInput
-            value={initialData.material}
-            placeholder={"Material"}
-            handleChange={(e) => handleChange("material", e.target.value)}
-            StyledInput={InputWork}
+      <WorkCoreWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+          <MoleculeImg
+            srcUrl={initialData.originUrl}
+            alt={initialData.title}
+            displaySize={initialDisplaySize}
+            handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+            StyledImg={WorkImage}
           />
+        </ImgWrapper>
+        <TitleInfoWrpper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
           <HeadlessInput
-            value={convertSizeToString(initialData.size)}
-            placeholder={"Size"}
-            handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
-            StyledInput={InputWork}
+            value={initialData.title}
+            handleChange={(e) => handleChange("title", e.target.value)}
+            placeholder="Title"
+            StyledInput={InputWorkTitle}
           />
-          <HeadlessInput
-            value={initialData.prodYear}
-            placeholder={"Year"}
-            handleChange={(e) => handleChange("prodYear", e.target.value)}
-            StyledInput={InputWork}
+          <HeadlessTextArea
+            alignment={TextAlignment.CENTER}
+            content={initialData.description}
+            placeholder={"Description"}
+            handleChange={(e) => handleChange("description", e.target.value)}
+            StyledTextArea={TextAreaWork}
           />
-        </WorkInfo>
-      </TitleInfoWrpper>
+          <WorkInfo>
+            <HeadlessInput
+              value={initialData.material}
+              placeholder={"Material"}
+              handleChange={(e) => handleChange("material", e.target.value)}
+              StyledInput={InputWork}
+            />
+            <HeadlessInput
+              value={convertSizeToString(initialData.size)}
+              placeholder={"Size"}
+              handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
+              StyledInput={InputWork}
+            />
+            <HeadlessInput
+              value={initialData.prodYear}
+              placeholder={"Year"}
+              handleChange={(e) => handleChange("prodYear", e.target.value)}
+              StyledInput={InputWork}
+            />
+          </WorkInfo>
+        </TitleInfoWrpper>
+      </WorkCoreWrapper>
     </WorkWrapper>
   );
 };

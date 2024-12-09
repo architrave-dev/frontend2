@@ -7,7 +7,7 @@ import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/t
 import { DocumentData, ProjectElementData } from '../../shared/dto/EntityRepository';
 import { SelectType, TextAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { UpdateDocumentReq, UpdateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
-import { ImgWrapper, SelectBoxWrapper, WorkImage } from './Work';
+import { SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
@@ -212,5 +212,17 @@ const DocumentContent = styled.div<{ $alignment: TextAlignment }>`
   color: ${({ theme }) => theme.colors.color_Gray_03};
   text-align: ${({ $alignment }) => getAlignment($alignment)};
 `;
+
+export const ImgWrapper = styled.div`
+  position: relative;
+  margin-bottom: 16px;
+`
+
+export const TitleInfoWrpper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 export default Document;

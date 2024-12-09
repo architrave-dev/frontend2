@@ -195,73 +195,75 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
           </SelectBoxWrapper>
         </SelectBoxContainer>
       }
-      <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={initialData.originUrl} styledBtn={OriginBtnBottom} />
-        <MoleculeImg
-          srcUrl={initialData.originUrl}
-          alt={initialData.title}
-          displaySize={initialDisplaySize}
-          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
-          StyledImg={WorkImage}
-        />
-      </ImgWrapper>
-      {isEditMode ? (
-        <>
-          <TitleInfoWrpper>
-            <HeadlessInput
-              value={initialData.title}
-              handleChange={(e) => handleChange("title", e.target.value)}
-              placeholder="Title"
-              StyledInput={InputWorkTitle}
-            />
-            <HeadlessTextArea
-              alignment={TextAlignment.CENTER}
-              content={initialData.description}
-              placeholder={"Description"}
-              handleChange={(e) => handleChange("description", e.target.value)}
-              StyledTextArea={TextAreaWork}
-            />
-            <WorkInfo>
+      <WorkCoreWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+          <MoleculeShowOriginBtn originUrl={initialData.originUrl} styledBtn={OriginBtnBottom} />
+          <MoleculeImg
+            srcUrl={initialData.originUrl}
+            alt={initialData.title}
+            displaySize={initialDisplaySize}
+            handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+            StyledImg={WorkImage}
+          />
+        </ImgWrapper>
+        {isEditMode ? (
+          <>
+            <TitleInfoWrpper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
               <HeadlessInput
-                value={initialData.material}
-                placeholder={"Material"}
-                handleChange={(e) => handleChange("material", e.target.value)}
-                StyledInput={InputWork}
+                value={initialData.title}
+                handleChange={(e) => handleChange("title", e.target.value)}
+                placeholder="Title"
+                StyledInput={InputWorkTitle}
               />
-              <HeadlessInput
-                value={convertSizeToString(initialData.size)}
-                placeholder={"Size"}
-                handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
-                StyledInput={InputWork}
+              <HeadlessTextArea
+                alignment={TextAlignment.CENTER}
+                content={initialData.description}
+                placeholder={"Description"}
+                handleChange={(e) => handleChange("description", e.target.value)}
+                StyledTextArea={TextAreaWork}
               />
-              <HeadlessInput
-                value={initialData.prodYear}
-                placeholder={"Year"}
-                handleChange={(e) => handleChange("prodYear", e.target.value)}
-                StyledInput={InputWork}
-              />
-            </WorkInfo>
-          </TitleInfoWrpper>
-        </>
-      ) : (
-        <>
-          <TitleInfoWrpper>
-            <Title>[ {initialData.title} ]</Title>
-            <Description>
-              {initialData.description.split('\n').map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}<br />
-                </React.Fragment>
-              ))}
-            </Description>
-            <WorkInfo>
-              <Info>{initialData.material},</Info>
-              <Info>{convertSizeToString(initialData.size)},</Info>
-              <Info>{initialData.prodYear}</Info>
-            </WorkInfo>
-          </TitleInfoWrpper>
-        </>
-      )}
+              <WorkInfo>
+                <HeadlessInput
+                  value={initialData.material}
+                  placeholder={"Material"}
+                  handleChange={(e) => handleChange("material", e.target.value)}
+                  StyledInput={InputWork}
+                />
+                <HeadlessInput
+                  value={convertSizeToString(initialData.size)}
+                  placeholder={"Size"}
+                  handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
+                  StyledInput={InputWork}
+                />
+                <HeadlessInput
+                  value={initialData.prodYear}
+                  placeholder={"Year"}
+                  handleChange={(e) => handleChange("prodYear", e.target.value)}
+                  StyledInput={InputWork}
+                />
+              </WorkInfo>
+            </TitleInfoWrpper>
+          </>
+        ) : (
+          <>
+            <TitleInfoWrpper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+              <Title>[ {initialData.title} ]</Title>
+              <Description>
+                {initialData.description.split('\n').map((line, index) => (
+                  <React.Fragment key={index}>
+                    {line}<br />
+                  </React.Fragment>
+                ))}
+              </Description>
+              <WorkInfo>
+                <Info>{initialData.material},</Info>
+                <Info>{convertSizeToString(initialData.size)},</Info>
+                <Info>{initialData.prodYear}</Info>
+              </WorkInfo>
+            </TitleInfoWrpper>
+          </>
+        )}
+      </WorkCoreWrapper>
     </WorkWrapper>
   );
 };
@@ -272,7 +274,6 @@ export const WorkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  // background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 
 export const SelectBoxContainer = styled.div`
@@ -282,11 +283,7 @@ export const SelectBoxContainer = styled.div`
   display: flex;
   gap: 20px;
 `
-export const ImgWrapper = styled.div`
-  position: relative;
 
-  margin-bottom: 16px;
-`
 
 export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
   max-width: 100%;
@@ -304,12 +301,65 @@ export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
   object-fit: contain;
 `;
 
-export const TitleInfoWrpper = styled.div`
-  width: 100%;
+export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+  display: flex;
+  flex-direction: ${({ $workAlignment }) => {
+    switch ($workAlignment) {
+      case DisplayAlignment.CENTER:
+        return 'column';
+      case DisplayAlignment.RIGHT:
+        return 'row-reverse';
+      case DisplayAlignment.LEFT:
+      default:
+        return 'row';
+    }
+  }};
+  gap: ${({ $workAlignment }) => {
+    switch ($workAlignment) {
+      case DisplayAlignment.CENTER:
+        return '16px';
+      default:
+        return '10px';
+    }
+  }};
+`;
+
+export const ImgWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+  position: relative;
+  width: ${({ $workAlignment }) => {
+    switch ($workAlignment) {
+      case DisplayAlignment.CENTER:
+        return '100%';
+      default:
+        return '80%';
+    }
+  }};
+`
+
+export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
+  width: ${({ $workAlignment }) => {
+    switch ($workAlignment) {
+      case DisplayAlignment.CENTER:
+        return '100%';
+      default:
+        return '20%';
+    }
+  }};
+
   display: flex;
   flex-direction: column;
+  justify-content: ${({ $workAlignment }) => {
+    switch ($workAlignment) {
+      case DisplayAlignment.CENTER:
+        return 'flex-start';
+      default:
+        return 'flex-end';
+    }
+  }};
   align-items: center;
+
 `
+
 export const WorkInfo = styled.div`
   display: flex;
   gap: 4px;
