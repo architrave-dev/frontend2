@@ -14,7 +14,8 @@ import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/Tex
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
-import { isModified } from '../../shared/hooks/useIsModified';
+import { useValidation } from '../../shared/hooks/useValidation';
+import { CountryType } from '../../shared/enum/EnumRepository';
 
 
 const MemberInfo: React.FC = () => {
@@ -22,6 +23,7 @@ const MemberInfo: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { isLoading, memberInfo, getMemberInfo, updateMemberInfo } = useMemberInfo();
   const { updateMemberInfoDto, setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
+  const { checkType } = useValidation();
 
 
   useEffect(() => {
@@ -40,7 +42,10 @@ const MemberInfo: React.FC = () => {
     return null;
   }
 
-  const handleChange = (field: keyof MemberInfoData, value: string | number) => {
+  const handleChange = (field: keyof MemberInfoData, value: string) => {
+    if (!checkType(field, value)) {
+      return;
+    };
     setUpdateMemberInfoDto({ ...updateMemberInfoDto, [field]: value });
   }
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
@@ -80,7 +85,7 @@ const MemberInfo: React.FC = () => {
             handleChange={(e) => handleChange('name', e.target.value)}
           />
           <MemberInfoEach name={"Born"} value={updateMemberInfoDto.year} handleChange={(e) => handleChange('year', e.target.value)} />
-          <MemberInfoEach name={"Country"} value={updateMemberInfoDto.country} handleChange={(e) => handleChange('country', e.target.value)} />
+          <MemberInfoSelect name={"Country"} value={updateMemberInfoDto.country} handleChange={(value: CountryType) => handleChange('country', value)} />
           <MemberInfoEach name={"Email"} value={updateMemberInfoDto.email} handleChange={(e) => handleChange('email', e.target.value)} />
           <MemberInfoEach name={"Contact"} value={updateMemberInfoDto.contact} handleChange={(e) => handleChange('contact', e.target.value)} />
         </InfoContainer>
@@ -93,13 +98,6 @@ const MemberInfo: React.FC = () => {
           StyledDescription={Description}
         />
       </DescriptionWrapper>
-      {isEditMode && isModified(memberInfo, updateMemberInfoDto) &&
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
-      }
     </MemberInfoComp>
   );
 };

@@ -1,5 +1,5 @@
-import { SizeData, WorkData } from '../dto/EntityRepository';
-import { AlertPosition, AlertType, WorkType } from '../enum/EnumRepository';
+import { MemberInfoData, SizeData, WorkData } from '../dto/EntityRepository';
+import { AlertPosition, AlertType, CountryType, WorkType } from '../enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { CreateWorkReq } from '../dto/ReqDtoRepository';
 
@@ -67,6 +67,19 @@ export const useValidation = () => {
     return true;
   };
 
+  const isValidCountry = (value: string): boolean => {
+    const isValid = Object.values(CountryType).includes(value as CountryType);
+    if (!isValid) {
+      setStandardAlert({
+        type: AlertType.CONFIRM,
+        position: AlertPosition.TOP,
+        content: "Country not supported yet.",
+      });
+      return false;
+    }
+    return true;
+  };
+
   const isValidPrice = (value: string): boolean => {
     const regex = /^[0-9]+$/;
     const isValid = regex.test(value);
@@ -81,9 +94,10 @@ export const useValidation = () => {
     return isValid;
   };
 
-  const checkType = (field: keyof WorkData | CreateWorkReq, value: string | SizeData): boolean | void => {
+  const checkType = (field: keyof WorkData | keyof CreateWorkReq | keyof MemberInfoData, value: string | SizeData): boolean | void => {
     switch (field) {
       case 'prodYear':
+      case 'year':
         if (!isValidYear(value as string)) {
           return;
         }
@@ -100,6 +114,11 @@ export const useValidation = () => {
         break;
       case 'price':
         if (!isValidPrice(value as string)) {
+          return;
+        }
+        break;
+      case 'country':
+        if (!isValidCountry(value as string)) {
           return;
         }
         break;

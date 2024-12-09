@@ -166,7 +166,7 @@ export interface MemberInfoData {
   originUrl: string;
   thumbnailUrl: string;
   name: string;
-  year: number;
+  year: string;
   country: CountryType;
   email: string;
   contact: string;
