@@ -51,8 +51,11 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         updateWorkReq: {
           id: targetWork.id,
           workType: targetWork.workType,
-          originUrl: targetWork.originUrl,
-          thumbnailUrl: targetWork.thumbnailUrl,
+          updateUploadFileReq: {
+            uploadFileId: targetWork.uploadFile.id,
+            originUrl: targetWork.uploadFile.originUrl,
+            thumbnailUrl: targetWork.uploadFile.thumbnailUrl,
+          },
           title: targetWork.title,
           description: targetWork.description,
           size: targetWork.size,
@@ -107,8 +110,11 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         updateWorkReq: {
           id: targetWork.id,
           workType: targetWork.workType,
-          originUrl: targetWork.originUrl,
-          thumbnailUrl: targetWork.thumbnailUrl,
+          updateUploadFileReq: {
+            uploadFileId: targetWork.uploadFile.id,
+            originUrl: targetWork.uploadFile.originUrl,
+            thumbnailUrl: targetWork.uploadFile.thumbnailUrl,
+          },
           title: targetWork.title,
           description: targetWork.description,
           size: targetWork.size,
@@ -155,10 +161,16 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
       setUpdatedProjectElements(updatedProjectElementList);
     } else {
       const target = projectElementList.find(pe => pe.work?.id === initialData.id);
-      if (!target) return;
+      if (!target || !target.work) return;
       const newUpdateProjectElementReq: UpdateProjectElementReq = {
         projectElementId: target.id,
-        updateWorkReq: initialData,
+        updateWorkReq: {
+          ...target.work,
+          updateUploadFileReq: {
+            uploadFileId: target.work.uploadFile.id,
+            ...target.work.uploadFile
+          }
+        },
         workDisplaySize: key === 'workDisplaySize' ? (value as WorkDisplaySize) : null,
         workAlignment: key === 'workAlignment' ? (value as DisplayAlignment) : null,
         updateTextBoxReq: null,
@@ -197,9 +209,9 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
       }
       <WorkCoreWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
         <ImgWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-          <MoleculeShowOriginBtn originUrl={initialData.originUrl} styledBtn={OriginBtnBottom} />
+          <MoleculeShowOriginBtn originUrl={initialData.uploadFile.originUrl} styledBtn={OriginBtnBottom} />
           <MoleculeImg
-            srcUrl={initialData.originUrl}
+            srcUrl={initialData.uploadFile.originUrl}
             alt={initialData.title}
             displaySize={initialDisplaySize}
             handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}

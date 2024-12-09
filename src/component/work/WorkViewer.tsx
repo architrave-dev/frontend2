@@ -6,7 +6,7 @@ import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
@@ -19,6 +19,9 @@ import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowO
 import { isModified } from '../../shared/hooks/useIsModified';
 import { useValidation } from '../../shared/hooks/useValidation';
 import SelectBox from '../../shared/component/SelectBox';
+import { ErrorCode } from '../../shared/api/errorCode';
+import { base64ToFileWithMime, uploadToS3 } from '../../shared/aws/s3Upload';
+import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 
 
 const WorkViewer: React.FC = () => {
@@ -39,12 +42,41 @@ const WorkViewer: React.FC = () => {
     setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
   }
 
+  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkReq, aui: string): Promise<UpdateWorkReq> => {
+    const localImageUrl = prevData.updateUploadFileReq.originUrl;
+    const file = base64ToFileWithMime(serviceType, '', localImageUrl);
+    try {
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui);
+      return {
+        ...prevData,
+        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
+      };
+    } catch (error) {
+      throw new Error(ErrorCode.AWS);
+    }
+  }
+
+  const imageChecker = () => {
+    return activeWork.uploadFile.originUrl !== updatedActiveWork.uploadFile.originUrl;
+  }
+
   const handleConfirm = async () => {
     if (!isModified(activeWork, updatedActiveWork)) {
       return;
     }
+    let updateWorkdReq: UpdateWorkReq = {
+      ...updatedActiveWork,
+      updateUploadFileReq: {
+        ...updatedActiveWork.uploadFile,
+        uploadFileId: updatedActiveWork.uploadFile.id
+      }
+    }
+
     try {
-      await updateWork(aui, updatedActiveWork);
+      if (imageChecker()) {
+        updateWorkdReq = await uploadFileWithLocalUrl(ServiceType.WORK, updateWorkdReq, aui);
+      }
+      await updateWork(aui, updateWorkdReq);
     } catch (err) {
     } finally {
       setEditMode(false);
@@ -72,8 +104,11 @@ const WorkViewer: React.FC = () => {
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
     setUpdatedActiveWork({
       ...updatedActiveWork,
-      originUrl,
-      thumbnailUrl,
+      uploadFile: {
+        ...updatedActiveWork.uploadFile,
+        originUrl,
+        thumbnailUrl
+      },
     });
   }
 
@@ -152,9 +187,9 @@ const WorkViewer: React.FC = () => {
         />
       </WorkInfoContainer>
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={updatedActiveWork.originUrl} styledBtn={OriginBtnBottom} />
+        <MoleculeShowOriginBtn originUrl={updatedActiveWork.uploadFile.originUrl} styledBtn={OriginBtnBottom} />
         <MoleculeImg
-          srcUrl={updatedActiveWork.originUrl}
+          srcUrl={updatedActiveWork.uploadFile.originUrl}
           alt={updatedActiveWork.title}
           displaySize={null}
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
