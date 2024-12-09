@@ -5,13 +5,14 @@ import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { MemberInfoData } from '../../dto/EntityRepository';
 import { MemberInfoResponse } from '../../dto/ResDtoRepository';
+import { UpdateMemberInfoReq } from '../../dto/ReqDtoRepository';
 
 
 interface UseMemberInfoResult {
   isLoading: boolean;
   memberInfo: MemberInfoData | null;
   getMemberInfo: (aui: string) => Promise<void>;
-  updateMemberInfo: (aui: string, data: MemberInfoData) => Promise<void>;
+  updateMemberInfo: (aui: string, data: UpdateMemberInfoReq) => Promise<void>;
 }
 
 export const useMemberInfo = (): UseMemberInfoResult => {
@@ -30,7 +31,7 @@ export const useMemberInfo = (): UseMemberInfoResult => {
   const handleMemberInfoRequest = async (
     aui: string,
     action: 'get' | 'update',
-    data?: MemberInfoData
+    data?: UpdateMemberInfoReq
   ) => {
     setIsLoading(true);
     clearErr();
@@ -39,7 +40,7 @@ export const useMemberInfo = (): UseMemberInfoResult => {
         const response = await getMemberInfo(aui);
         handleMemberInfoSuccess(response);
       } else {
-        const response = await updateMemberInfo(aui, data);
+        const response = await updateMemberInfo(aui, data as UpdateMemberInfoReq);
         handleMemberInfoSuccess(response);
       }
     } catch (err) {
@@ -56,7 +57,7 @@ export const useMemberInfo = (): UseMemberInfoResult => {
   };
 
   const getMemberInfoHandler = (aui: string) => handleMemberInfoRequest(aui, 'get');
-  const updateMemberInfoHandler = (aui: string, data: MemberInfoData) => handleMemberInfoRequest(aui, 'update', data);
+  const updateMemberInfoHandler = (aui: string, data: UpdateMemberInfoReq) => handleMemberInfoRequest(aui, 'update', data);
 
 
   return {

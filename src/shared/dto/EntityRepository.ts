@@ -163,8 +163,7 @@ export interface ProjectElementData {
 
 export interface MemberInfoData {
   id: number;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   name: string;
   year: string;
   country: CountryType;

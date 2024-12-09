@@ -45,11 +45,15 @@ const MemberInfo: React.FC = () => {
     };
     setUpdateMemberInfoDto({ ...updateMemberInfoDto, [field]: value });
   }
+
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
     setUpdateMemberInfoDto({
       ...updateMemberInfoDto,
-      originUrl,
-      thumbnailUrl,
+      uploadFile: {
+        ...updateMemberInfoDto.uploadFile,
+        originUrl,
+        thumbnailUrl
+      }
     });
   }
 
@@ -60,7 +64,7 @@ const MemberInfo: React.FC = () => {
     <MemberInfoComp>
       <ProfileAndInfo>
         <MoleculeImgDivContainer
-          backgroundImg={updateMemberInfoDto.originUrl}
+          backgroundImg={updateMemberInfoDto.uploadFile.originUrl}
           handleChange={setOriginThumbnailUrl}
           StyledImgDivContainer={Profile}
         />

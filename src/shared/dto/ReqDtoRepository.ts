@@ -1,4 +1,4 @@
-import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
+import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
 import { IndexData, SizeData } from './EntityRepository';
 
 //-------------- Auth
@@ -208,6 +208,18 @@ export interface UpdateProjectElementListReq {
   createProjectElements: CreateProjectElementReq[];
   updatedProjectElements: UpdateProjectElementReq[];
   removedProjectElements: RemoveProjectElementReq[];
+}
+
+//-------------- MemberInfo
+export interface UpdateMemberInfoReq {
+  id: number;
+  updateUploadFileReq: UpdateUploadFileReq;
+  name: string;
+  year: string;
+  country: CountryType;
+  email: string;
+  contact: string;
+  description: string;
 }
 
 //-------------- Career
