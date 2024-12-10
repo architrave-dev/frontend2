@@ -48,9 +48,9 @@ const About: React.FC = () => {
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateMemberInfoReq, aui: string): Promise<UpdateMemberInfoReq> => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(serviceType, '', localImageUrl);
+    const file = base64ToFileWithMime(localImageUrl);
     try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui);
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, []);
       return {
         ...prevData,
         updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
