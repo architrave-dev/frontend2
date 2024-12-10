@@ -93,8 +93,7 @@ export interface WorkSimpleData {
 export interface WorkDetailData {
   id: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   description: string;
 }
 export interface WorkWithDetailData extends WorkData {

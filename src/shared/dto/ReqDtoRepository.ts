@@ -85,8 +85,7 @@ export interface CreateWorkDetailReq {
 export interface UpdateWorkDetailReq {
   workDetailId: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  updateUploadFileReq: UpdateUploadFileReq;
   description: string;
 }
 
