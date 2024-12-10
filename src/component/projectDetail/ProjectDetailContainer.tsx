@@ -28,8 +28,11 @@ const ProjectDetailContainer: React.FC = () => {
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
     setUpdatedProjectDto({
       ...updatedProjectDto,
-      originUrl,
-      thumbnailUrl
+      uploadFile: {
+        ...updatedProjectDto.uploadFile,
+        originUrl,
+        thumbnailUrl
+      }
     });
   }
 
@@ -39,7 +42,7 @@ const ProjectDetailContainer: React.FC = () => {
   return (
     <ProjectDetailContainerComp>
       <MoleculeImgDivContainer
-        backgroundImg={updatedProjectDto.originUrl}
+        backgroundImg={updatedProjectDto.uploadFile.originUrl}
         handleChange={setOriginThumbnailUrl}
         StyledImgDivContainer={RepresentImgContainer}
       />

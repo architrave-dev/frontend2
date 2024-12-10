@@ -15,6 +15,9 @@ import { useProjectElementListStoreForUpdate } from '../shared/store/projectElem
 import { UpdateProjectElementListReq, UpdateProjectReq } from '../shared/dto/ReqDtoRepository';
 import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
 import { IndexData } from '../shared/dto/EntityRepository';
+import { ServiceType } from '../shared/enum/EnumRepository';
+import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
+import { ErrorCode } from '../shared/api/errorCode';
 
 
 const ProjectDetail: React.FC = () => {
@@ -43,13 +46,10 @@ const ProjectDetail: React.FC = () => {
     getProjectWithApi();
   }, [aui, projectId]);
 
+  if (!project || !updatedProjectDto) return null;
   const projectDetailCheck = (): boolean => {
-    if (!project || !updatedProjectDto) {
-      return false;
-    }
     return (
-      project.originUrl !== updatedProjectDto.originUrl ||
-      project.thumbnailUrl !== updatedProjectDto.thumbnailUrl ||
+      project.uploadFile !== updatedProjectDto.uploadFile ||
       project.title !== updatedProjectDto.title ||
       project.description !== updatedProjectDto.description ||
       (createPiList.length ?? 0) > 0 ||
@@ -75,21 +75,47 @@ const ProjectDetail: React.FC = () => {
     return [];
   }
 
+  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateProjectReq, aui: string): Promise<UpdateProjectReq> => {
+    const localImageUrl = prevData.updateUploadFileReq.originUrl;
+    const file = base64ToFileWithMime(serviceType, prevData.id, localImageUrl);
+    try {
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui);
+      return {
+        ...prevData,
+        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
+      };
+    } catch (error) {
+      throw new Error(ErrorCode.AWS);
+    }
+  }
+
+  const imageChecker = () => {
+    return project.uploadFile.originUrl !== updatedProjectDto.uploadFile.originUrl;
+  }
+
   const handleConfirm = async () => {
+    if (updatedProjectDto == null) return null;
     try {
       if (projectDetailCheck()) {
-        const newUpdateProjectReq: UpdateProjectReq = {
-          ...updatedProjectDto!,  //projectDetailCheck에서 확인 함
+        let newUpdateProjectReq: UpdateProjectReq = {
+          ...updatedProjectDto,  //projectDetailCheck에서 확인 함
+          updateUploadFileReq: {
+            uploadFileId: updatedProjectDto.uploadFile.id,
+            ...updatedProjectDto.uploadFile
+          },
           piIndexList: convertToPiIndexList(),
           createdProjectInfoList: createPiList,
           updatedProjectInfoList: updatePiList,
           removedProjectInfoList: removePiList
         }
+        if (imageChecker()) {
+          newUpdateProjectReq = await uploadFileWithLocalUrl(ServiceType.PROJECT, newUpdateProjectReq, aui);
+        }
         await updateProject(aui, newUpdateProjectReq);
       }
       if (peListCheck()) {
         const updatedData: UpdateProjectElementListReq = {
-          projectId: project!.id, //peListCheck 확인 함
+          projectId: project.id, //peListCheck 확인 함
           peIndexList: [],
           createProjectElements: createdProjectElements,
           updatedProjectElements: updatedProjectElements,
