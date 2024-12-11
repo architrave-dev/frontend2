@@ -13,8 +13,8 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
 }));
 
 interface ProjectElementListStateForUpdate {
-  createdProjectElements: CreateProjectElementReq[];
-  setCreatedProjectElements: (createProjectElements: CreateProjectElementReq[]) => void;
+  // createdProjectElements: CreateProjectElementReq[];
+  // setCreatedProjectElements: (createProjectElements: CreateProjectElementReq[]) => void;
   updatedProjectElements: UpdateProjectElementReq[];
   setUpdatedProjectElements: (updatedProjectElements: UpdateProjectElementReq[]) => void;
   removedProjectElements: RemoveProjectElementReq[];
@@ -23,11 +23,12 @@ interface ProjectElementListStateForUpdate {
 }
 
 export const useProjectElementListStoreForUpdate = create<ProjectElementListStateForUpdate>((set) => ({
-  createdProjectElements: [],
-  setCreatedProjectElements: (createdProjectElements) => set({ createdProjectElements }),
+  // createdProjectElements: [],
+  // setCreatedProjectElements: (createdProjectElements) => set({ createdProjectElements }),
   updatedProjectElements: [],
   setUpdatedProjectElements: (updatedProjectElements) => set({ updatedProjectElements }),
   removedProjectElements: [],
   setRemovedProjectElements: (removedProjectElements) => set({ removedProjectElements }),
-  clearAll: () => set({ createdProjectElements: [], updatedProjectElements: [], removedProjectElements: [] })
+  clearAll: () => set({ updatedProjectElements: [], removedProjectElements: [] })
+  // clearAll: () => set({ createdProjectElements: [], updatedProjectElements: [], removedProjectElements: [] })
 }));

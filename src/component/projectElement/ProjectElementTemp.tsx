@@ -23,36 +23,37 @@ const ProjectElementTemp: React.FC<CreateProjectElementReq> = ({
   documentAlignment,
   dividerType
 }) => {
-  const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
-  const contentRouter = () => {
-    switch (projectElementType) {
-      case ProjectElementType.WORK:
-        return work && <WorkTemp tempId={tempId} alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
-      case ProjectElementType.TEXTBOX:
-        return textBox && <TextBoxTemp tempId={tempId} alignment={textBoxAlignment} data={textBox} />;
-      case ProjectElementType.DOCUMENT:
-        return document && documentAlignment && <DocumentTemp tempId={tempId} alignment={documentAlignment} data={document} />;
-      case ProjectElementType.DIVIDER:
-        return dividerType && <DividerTemp tempId={tempId} dividerType={dividerType} />;
-      default:
-        return null;
-    }
-  }
-  const handleDelete = () => {
-    const filteredList = createdProjectElements.filter((each) => each.tempId !== tempId);
-    setCreatedProjectElements(filteredList);
-  };
+  return null;
+  // const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
+  // const contentRouter = () => {
+  //   switch (projectElementType) {
+  //     case ProjectElementType.WORK:
+  //       return work && <WorkTemp tempId={tempId} alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
+  //     case ProjectElementType.TEXTBOX:
+  //       return textBox && <TextBoxTemp tempId={tempId} alignment={textBoxAlignment} data={textBox} />;
+  //     case ProjectElementType.DOCUMENT:
+  //       return document && documentAlignment && <DocumentTemp tempId={tempId} alignment={documentAlignment} data={document} />;
+  //     case ProjectElementType.DIVIDER:
+  //       return dividerType && <DividerTemp tempId={tempId} dividerType={dividerType} />;
+  //     default:
+  //       return null;
+  //   }
+  // }
+  // const handleDelete = () => {
+  //   const filteredList = createdProjectElements.filter((each) => each.tempId !== tempId);
+  //   setCreatedProjectElements(filteredList);
+  // };
 
-  return (
-    <ProjectElementListWrapper $elementType={projectElementType}>
-      {contentRouter()}
-      <HeadlessBtn
-        value={"Delete"}
-        handleClick={handleDelete}
-        StyledBtn={BtnDelete}
-      />
-    </ProjectElementListWrapper>
-  );
+  // return (
+  //   <ProjectElementListWrapper $elementType={projectElementType}>
+  //     {contentRouter()}
+  //     <HeadlessBtn
+  //       value={"Delete"}
+  //       handleClick={handleDelete}
+  //       StyledBtn={BtnDelete}
+  //     />
+  //   </ProjectElementListWrapper>
+  // );
 }
 
 const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType }>`

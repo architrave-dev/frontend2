@@ -20,108 +20,109 @@ export interface WorkProps {
 }
 
 const WorkTemp: React.FC<WorkProps> = ({ tempId, alignment: initialWorkAlignment, displaySize: initialDisplaySize, data: initialData }) => {
-  const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
-  const { checkType } = useValidation();
+  return null;
+  // const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
+  // const { checkType } = useValidation();
 
-  const handleChange = (field: keyof CreateWorkReq, value: string | SizeData) => {
-    if (!checkType(field, value)) {
-      return;
-    };
-    const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
-      each.tempId === tempId ? { ...each, createWorkReq: { ...each.createWorkReq, [field]: value } as CreateWorkReq } : each
-    )
-    setCreatedProjectElements(newCreatedProjectElements);
-  }
+  // const handleChange = (field: keyof CreateWorkReq, value: string | SizeData) => {
+  //   if (!checkType(field, value)) {
+  //     return;
+  //   };
+  //   const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
+  //     each.tempId === tempId ? { ...each, createWorkReq: { ...each.createWorkReq, [field]: value } as CreateWorkReq } : each
+  //   )
+  //   setCreatedProjectElements(newCreatedProjectElements);
+  // }
 
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    const updatedCreatedProjectElements = createdProjectElements.map((each) =>
-      each.tempId === tempId ? {
-        ...each,
-        createWorkReq: {
-          ...each.createWorkReq,
-          thumbnailUrl,
-          originUrl,
-        } as CreateWorkReq
-      } : each);
-    setCreatedProjectElements(updatedCreatedProjectElements);
-  }
+  // const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
+  //   const updatedCreatedProjectElements = createdProjectElements.map((each) =>
+  //     each.tempId === tempId ? {
+  //       ...each,
+  //       createWorkReq: {
+  //         ...each.createWorkReq,
+  //         thumbnailUrl,
+  //         originUrl,
+  //       } as CreateWorkReq
+  //     } : each);
+  //   setCreatedProjectElements(updatedCreatedProjectElements);
+  // }
 
-  const handleSubChange = (
-    key: 'workDisplaySize' | 'workAlignment',
-    value: WorkDisplaySize | DisplayAlignment
-  ) => {
-    const updatedProjectElementList = createdProjectElements.map(each =>
-      each.tempId === tempId ? { ...each, [key]: value } : each
-    );
-    setCreatedProjectElements(updatedProjectElementList);
-  };
+  // const handleSubChange = (
+  //   key: 'workDisplaySize' | 'workAlignment',
+  //   value: WorkDisplaySize | DisplayAlignment
+  // ) => {
+  //   const updatedProjectElementList = createdProjectElements.map(each =>
+  //     each.tempId === tempId ? { ...each, [key]: value } : each
+  //   );
+  //   setCreatedProjectElements(updatedProjectElementList);
+  // };
 
-  return (
-    <WorkWrapper>
-      <SelectBoxContainer>
-        <SelectBoxWrapper>
-          <SelectBox
-            value={initialDisplaySize || WorkDisplaySize.BIG}
-            selectType={SelectType.WORK_SIZE}
-            handleChange={value => handleSubChange('workDisplaySize', value)}
-            direction={false} />
-        </SelectBoxWrapper>
-        <SelectBoxWrapper>
-          <SelectBox
-            value={initialWorkAlignment || DisplayAlignment.CENTER}
-            selectType={SelectType.DISPLAY_ALIGNMENT}
-            handleChange={value => handleSubChange('workAlignment', value)}
-            direction={false} />
-        </SelectBoxWrapper>
-      </SelectBoxContainer>
-      <WorkCoreWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-        <ImgWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-          <MoleculeImg
-            srcUrl={initialData.originUrl}
-            alt={initialData.title}
-            displaySize={initialDisplaySize}
-            handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
-            StyledImg={WorkImage}
-          />
-        </ImgWrapper>
-        <TitleInfoWrpper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-          <HeadlessInput
-            value={initialData.title}
-            handleChange={(e) => handleChange("title", e.target.value)}
-            placeholder="Title"
-            StyledInput={InputWorkTitle}
-          />
-          <HeadlessTextArea
-            alignment={TextAlignment.CENTER}
-            content={initialData.description}
-            placeholder={"Description"}
-            handleChange={(e) => handleChange("description", e.target.value)}
-            StyledTextArea={TextAreaWork}
-          />
-          <WorkInfo>
-            <HeadlessInput
-              value={initialData.material}
-              placeholder={"Material"}
-              handleChange={(e) => handleChange("material", e.target.value)}
-              StyledInput={InputWork}
-            />
-            <HeadlessInput
-              value={convertSizeToString(initialData.size)}
-              placeholder={"Size"}
-              handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
-              StyledInput={InputWork}
-            />
-            <HeadlessInput
-              value={initialData.prodYear}
-              placeholder={"Year"}
-              handleChange={(e) => handleChange("prodYear", e.target.value)}
-              StyledInput={InputWork}
-            />
-          </WorkInfo>
-        </TitleInfoWrpper>
-      </WorkCoreWrapper>
-    </WorkWrapper>
-  );
+  // return (
+  //   <WorkWrapper>
+  //     <SelectBoxContainer>
+  //       <SelectBoxWrapper>
+  //         <SelectBox
+  //           value={initialDisplaySize || WorkDisplaySize.BIG}
+  //           selectType={SelectType.WORK_SIZE}
+  //           handleChange={value => handleSubChange('workDisplaySize', value)}
+  //           direction={false} />
+  //       </SelectBoxWrapper>
+  //       <SelectBoxWrapper>
+  //         <SelectBox
+  //           value={initialWorkAlignment || DisplayAlignment.CENTER}
+  //           selectType={SelectType.DISPLAY_ALIGNMENT}
+  //           handleChange={value => handleSubChange('workAlignment', value)}
+  //           direction={false} />
+  //       </SelectBoxWrapper>
+  //     </SelectBoxContainer>
+  //     <WorkCoreWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+  //       <ImgWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+  //         <MoleculeImg
+  //           srcUrl={initialData.originUrl}
+  //           alt={initialData.title}
+  //           displaySize={initialDisplaySize}
+  //           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+  //           StyledImg={WorkImage}
+  //         />
+  //       </ImgWrapper>
+  //       <TitleInfoWrpper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+  //         <HeadlessInput
+  //           value={initialData.title}
+  //           handleChange={(e) => handleChange("title", e.target.value)}
+  //           placeholder="Title"
+  //           StyledInput={InputWorkTitle}
+  //         />
+  //         <HeadlessTextArea
+  //           alignment={TextAlignment.CENTER}
+  //           content={initialData.description}
+  //           placeholder={"Description"}
+  //           handleChange={(e) => handleChange("description", e.target.value)}
+  //           StyledTextArea={TextAreaWork}
+  //         />
+  //         <WorkInfo>
+  //           <HeadlessInput
+  //             value={initialData.material}
+  //             placeholder={"Material"}
+  //             handleChange={(e) => handleChange("material", e.target.value)}
+  //             StyledInput={InputWork}
+  //           />
+  //           <HeadlessInput
+  //             value={convertSizeToString(initialData.size)}
+  //             placeholder={"Size"}
+  //             handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
+  //             StyledInput={InputWork}
+  //           />
+  //           <HeadlessInput
+  //             value={initialData.prodYear}
+  //             placeholder={"Year"}
+  //             handleChange={(e) => handleChange("prodYear", e.target.value)}
+  //             StyledInput={InputWork}
+  //           />
+  //         </WorkInfo>
+  //       </TitleInfoWrpper>
+  //     </WorkCoreWrapper>
+  //   </WorkWrapper>
+  // );
 };
 
 export default WorkTemp;

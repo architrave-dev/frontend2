@@ -201,7 +201,7 @@ export interface RemoveProjectElementReq {
 export interface UpdateProjectElementListReq {
   projectId: string;
   peIndexList: IndexData[];
-  createProjectElements: CreateProjectElementReq[];
+  // createProjectElements: CreateProjectElementReq[];
   updatedProjectElements: UpdateProjectElementReq[];
   removedProjectElements: RemoveProjectElementReq[];
 }

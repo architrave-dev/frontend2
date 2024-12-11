@@ -16,42 +16,43 @@ export interface TextBoxProps {
 }
 
 const TextBoxTemp: React.FC<TextBoxProps> = ({ tempId, alignment: initialTexBoxAlignment, data: initialData }) => {
-  const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
+  return null;
+  // const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();
 
-  const handleAlignmentChange = (value: TextAlignment) => {
-    const updatedProjectElementList = createdProjectElements.map(each =>
-      each.tempId === tempId ? { ...each, textBoxAlignment: value } : each
-    );
-    setCreatedProjectElements(updatedProjectElementList);
-  };
+  // const handleAlignmentChange = (value: TextAlignment) => {
+  //   const updatedProjectElementList = createdProjectElements.map(each =>
+  //     each.tempId === tempId ? { ...each, textBoxAlignment: value } : each
+  //   );
+  //   setCreatedProjectElements(updatedProjectElementList);
+  // };
 
-  const handlechange = (field: keyof CreateTextBoxReq, value: string) => {
-    const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
-      each.tempId === tempId ? { ...each, createTextBoxReq: { ...each.createTextBoxReq, [field]: value } as CreateTextBoxReq } : each
-    )
-    setCreatedProjectElements(newCreatedProjectElements);
-  }
+  // const handlechange = (field: keyof CreateTextBoxReq, value: string) => {
+  //   const newCreatedProjectElements: CreateProjectElementReq[] = createdProjectElements.map(each =>
+  //     each.tempId === tempId ? { ...each, createTextBoxReq: { ...each.createTextBoxReq, [field]: value } as CreateTextBoxReq } : each
+  //   )
+  //   setCreatedProjectElements(newCreatedProjectElements);
+  // }
 
-  return (
-    <TextBoxWrapper>
-      <SelectBoxContainer>
-        <SelectBoxWrapper>
-          <SelectBox
-            value={initialTexBoxAlignment || TextAlignment.CENTER}
-            selectType={SelectType.TEXT_ALIGNMENT}
-            handleChange={handleAlignmentChange}
-            direction={false} />
-        </SelectBoxWrapper>
-      </SelectBoxContainer>
-      <HeadlessTextArea
-        alignment={initialTexBoxAlignment || TextAlignment.CENTER}
-        content={initialData.content}
-        placeholder={"text"}
-        handleChange={(e) => handlechange("content", e.target.value)}
-        StyledTextArea={TextAreaTextBox}
-      />
-    </TextBoxWrapper>
-  );
+  // return (
+  //   <TextBoxWrapper>
+  //     <SelectBoxContainer>
+  //       <SelectBoxWrapper>
+  //         <SelectBox
+  //           value={initialTexBoxAlignment || TextAlignment.CENTER}
+  //           selectType={SelectType.TEXT_ALIGNMENT}
+  //           handleChange={handleAlignmentChange}
+  //           direction={false} />
+  //       </SelectBoxWrapper>
+  //     </SelectBoxContainer>
+  //     <HeadlessTextArea
+  //       alignment={initialTexBoxAlignment || TextAlignment.CENTER}
+  //       content={initialData.content}
+  //       placeholder={"text"}
+  //       handleChange={(e) => handlechange("content", e.target.value)}
+  //       StyledTextArea={TextAreaTextBox}
+  //     />
+  //   </TextBoxWrapper>
+  // );
 }
 
 export default TextBoxTemp;
