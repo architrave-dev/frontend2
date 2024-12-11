@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { createProjectElementWithWork, getProjectElementList, updateProjectElementList } from '../../api/projectElementApi';
+import { createProjectElement, createProjectElementWithWork, getProjectElementList, updateProjectElementList } from '../../api/projectElementApi';
 import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../store/projectElementStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectElementData } from '../../dto/EntityRepository';
-import { CreateProjectElementWithWorkReq, UpdateProjectElementListReq } from '../../dto/ReqDtoRepository';
+import { CreateProjectElementReq, CreateProjectElementWithWorkReq, UpdateProjectElementListReq } from '../../dto/ReqDtoRepository';
 import { ProjectElementListResponse, ProjectElementResponse } from '../../dto/ResDtoRepository';
 
 
@@ -13,6 +13,7 @@ interface UseProjectElementResult {
   projectElementList: ProjectElementData[];
   getProjectElementList: (aui: string, projectId: string) => Promise<void>;
   updateProjectElementList: (aui: string, data: UpdateProjectElementListReq) => Promise<void>;
+  createProjectElement: (aui: string, data: CreateProjectElementReq) => Promise<void>;
   createProjectElementWithWork: (aui: string, data: CreateProjectElementWithWorkReq) => Promise<void>;
 }
 
@@ -38,16 +39,25 @@ export const useProjectElement = (): UseProjectElementResult => {
     // clearAll();
   };
 
+  const handleCreateProjectElementSuccess = (response: ProjectElementResponse) => {
+    const createdProjectElement = response.data;
+    console.log("createdProjectElement: ", createdProjectElement);
+    setProjectElementList([...projectElementList, createdProjectElement]);
+  };
+
   const handleProjectElementRequest = async (
     aui: string,
-    action: 'get' | 'update' | 'import',
+    action: 'get' | 'create' | 'update' | 'import',
     projectId: string | null,
-    data?: UpdateProjectElementListReq | CreateProjectElementWithWorkReq
+    data?: UpdateProjectElementListReq | CreateProjectElementWithWorkReq | CreateProjectElementReq
   ) => {
     setIsLoading(true);
     clearErr();
     try {
       switch (action) {
+        case 'create':
+          handleCreateProjectElementSuccess(await createProjectElement(aui, data as CreateProjectElementReq));
+          break;
         case 'update':
           handleProjectElementSuccess(await updateProjectElementList(aui, data as UpdateProjectElementListReq));
           break;
@@ -73,6 +83,7 @@ export const useProjectElement = (): UseProjectElementResult => {
   };
 
   const getProjectElementHandler = (aui: string, projectId: string) => handleProjectElementRequest(aui, 'get', projectId);
+  const createProjectElementHandler = (aui: string, data: CreateProjectElementReq) => handleProjectElementRequest(aui, 'create', null, data);
   const createProjectElementWithWorkHandler = (aui: string, data: CreateProjectElementWithWorkReq) => handleProjectElementRequest(aui, 'import', null, data);
   const updateProjectDetailHandler = (aui: string, data: UpdateProjectElementListReq) => handleProjectElementRequest(aui, 'update', null, data);
 
@@ -82,6 +93,7 @@ export const useProjectElement = (): UseProjectElementResult => {
     projectElementList,
     getProjectElementList: getProjectElementHandler,
     updateProjectElementList: updateProjectDetailHandler,
+    createProjectElement: createProjectElementHandler,
     createProjectElementWithWork: createProjectElementWithWorkHandler,
   };
 };

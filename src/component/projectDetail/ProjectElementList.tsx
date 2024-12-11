@@ -24,10 +24,9 @@ const ProjectElementList: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { project } = useProjectDetail();
   const { getSimpleWorkList } = useWorkList();
-  const { isLoading, projectElementList, getProjectElementList } = useProjectElement();
+  const { isLoading, projectElementList, getProjectElementList, createProjectElement } = useProjectElement();
   const {
-    createdProjectElements,
-    setCreatedProjectElements
+    // createdProjectElements,
   } = useProjectElementListStoreForUpdate();
 
   const { openModal } = useModal();
@@ -43,53 +42,58 @@ const ProjectElementList: React.FC = () => {
     getProjectElementListWithApi();
   }, [aui, projectId]);
 
-  const handleCreateElement = (elementType: ProjectElementType) => {
-    if (!project) {
-      return;
+  if (!project) return null;
+
+  const handleCreateElement = async (elementType: ProjectElementType) => {
+    const createPe = async () => {
+      try {
+        const newElement: CreateProjectElementReq = {
+          tempId: Math.floor(Math.random() * 100) + "",
+          projectId: project.id,
+          projectElementType: elementType,
+          // Work
+          createWorkReq: elementType === ProjectElementType.WORK ?
+            {
+              workType: WorkType.NONE,
+              originUrl: '',
+              thumbnailUrl: '',
+              title: "New Work",
+              description: "This is New Work",
+              size: {
+                width: "000",
+                height: "000"
+              },
+              material: "",
+              prodYear: new Date().getFullYear().toString(),
+              price: '',
+              collection: ''
+            } : null,
+          workAlignment: elementType === ProjectElementType.WORK ? DisplayAlignment.CENTER : null,
+          workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
+
+          // TextBox
+          createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
+            content: "New TextBox"
+          } : null,
+          textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextAlignment.CENTER : null,
+
+          // DOC
+          createDocumentReq: elementType === ProjectElementType.DOCUMENT ? {
+            originUrl: '',
+            thumbnailUrl: '',
+            description: "New Doc",
+          } : null,
+          documentAlignment: elementType === ProjectElementType.DOCUMENT ? TextAlignment.CENTER : null,
+
+          // Divider
+          dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
+        };
+        await createProjectElement(aui, newElement)
+      } catch (err) {
+      } finally {
+      }
     }
-    const newElement: CreateProjectElementReq = {
-      tempId: Math.floor(Math.random() * 100) + "",
-      projectId: project.id,
-      projectElementType: elementType,
-      // Work
-      createWorkReq: elementType === ProjectElementType.WORK ?
-        {
-          workType: WorkType.NONE,
-          originUrl: '',
-          thumbnailUrl: '',
-          title: "New Work",
-          description: "This is New Work",
-          size: {
-            width: "000",
-            height: "000"
-          },
-          material: "",
-          prodYear: new Date().getFullYear().toString(),
-          price: '',
-          collection: ''
-        } : null,
-      workAlignment: elementType === ProjectElementType.WORK ? DisplayAlignment.CENTER : null,
-      workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
-
-      // TextBox
-      createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
-        content: "New TextBox"
-      } : null,
-      textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextAlignment.CENTER : null,
-
-      // DOC
-      createDocumentReq: elementType === ProjectElementType.DOCUMENT ? {
-        originUrl: '',
-        thumbnailUrl: '',
-        description: "New Doc",
-      } : null,
-      documentAlignment: elementType === ProjectElementType.DOCUMENT ? TextAlignment.CENTER : null,
-
-      // Divider
-      dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
-    };
-
-    setCreatedProjectElements([...createdProjectElements, newElement]);
+    createPe();
   };
 
   const handleImportElement = async (elementType: ProjectElementType) => {
@@ -122,58 +126,40 @@ const ProjectElementList: React.FC = () => {
         />
       ))}
       {isEditMode && (
-        <>
-          {createdProjectElements.map((each) => (
-            <ProjectElementTemp
-              key={each.tempId}
-              tempId={each.tempId}
-              projectId={each.projectId}
-              projectElementType={each.projectElementType}
-              createWorkReq={each.createWorkReq}
-              workAlignment={each.workAlignment}
-              workDisplaySize={each.workDisplaySize}
-              createTextBoxReq={each.createTextBoxReq}
-              textBoxAlignment={each.textBoxAlignment}
-              createDocumentReq={each.createDocumentReq}
-              documentAlignment={each.documentAlignment}
-              dividerType={each.dividerType}
+        <Space $align={"center"} $height={"calc(6vw)"}>
+          <CreateButtonGroup>
+            <HeadlessBtn
+              value={"Import"}
+              handleClick={() => handleImportElement(ProjectElementType.WORK)}
+              StyledBtn={BtnCreate}
             />
-          ))}
-          <Space $align={"center"} $height={"calc(6vw)"}>
-            <CreateButtonGroup>
-              <HeadlessBtn
-                value={"Import"}
-                handleClick={() => handleImportElement(ProjectElementType.WORK)}
-                StyledBtn={BtnCreate}
-              />
-              <HeadlessBtn
-                value={"Work"}
-                handleClick={() => handleCreateElement(ProjectElementType.WORK)}
-                StyledBtn={BtnCreate}
-              />
-              <HeadlessBtn
-                value={"Detail"}
-                handleClick={() => handleCreateElement(ProjectElementType.DETAIL)}
-                StyledBtn={BtnCreate}
-              />
-              <HeadlessBtn
-                value={"Doc"}
-                handleClick={() => handleCreateElement(ProjectElementType.DOCUMENT)}
-                StyledBtn={BtnCreate}
-              />
-              <HeadlessBtn
-                value={"Text"}
-                handleClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}
-                StyledBtn={BtnCreate}
-              />
-              <HeadlessBtn
-                value={"Divider"}
-                handleClick={() => handleCreateElement(ProjectElementType.DIVIDER)}
-                StyledBtn={BtnCreate}
-              />
-            </CreateButtonGroup>
-          </Space>
-        </>
+            <HeadlessBtn
+              value={"Work"}
+              handleClick={() => handleCreateElement(ProjectElementType.WORK)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Detail"}
+              handleClick={() => handleCreateElement(ProjectElementType.DETAIL)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Doc"}
+              handleClick={() => handleCreateElement(ProjectElementType.DOCUMENT)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Text"}
+              handleClick={() => handleCreateElement(ProjectElementType.TEXTBOX)}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Divider"}
+              handleClick={() => handleCreateElement(ProjectElementType.DIVIDER)}
+              StyledBtn={BtnCreate}
+            />
+          </CreateButtonGroup>
+        </Space>
       )}
     </ProjectElementListComp>
   );
