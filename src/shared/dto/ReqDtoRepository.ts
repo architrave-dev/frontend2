@@ -114,8 +114,7 @@ export interface CreateDocumentReq {
 
 export interface UpdateDocumentReq {
   id: string;
-  originUrl: string;
-  thumbnailUrl: string;
+  updateUploadFileReq: UpdateUploadFileReq;
   description: string;
 }
 

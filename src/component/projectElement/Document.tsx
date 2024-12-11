@@ -42,7 +42,14 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         workDisplaySize: null,
         updateTextBoxReq: null,
         textBoxAlignment: null,
-        updateDocumentReq: initialData,
+        updateDocumentReq: {
+          id: initialData.id,
+          updateUploadFileReq: {
+            uploadFileId: initialData.uploadFile.id,
+            ...initialData.uploadFile
+          },
+          description: initialData.description,
+        },
         documentAlignment: value,
         dividerType: null
       }
@@ -80,10 +87,11 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         textBoxAlignment: null,
         updateDocumentReq: {
           id: targetDocument.id,
-          originUrl: targetDocument.originUrl,
-          thumbnailUrl: targetDocument.thumbnailUrl,
+          updateUploadFileReq: {
+            uploadFileId: targetDocument.id,
+            ...targetDocument.uploadFile
+          },
           description: targetDocument.description,
-
         },
         documentAlignment: target.documentAlignment,
         dividerType: null
@@ -131,8 +139,10 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         textBoxAlignment: null,
         updateDocumentReq: {
           id: targetDocument.id,
-          originUrl: targetDocument.originUrl,
-          thumbnailUrl: targetDocument.thumbnailUrl,
+          updateUploadFileReq: {
+            uploadFileId: targetDocument.id,
+            ...targetDocument.uploadFile
+          },
           description: targetDocument.description,
         } as UpdateDocumentReq,
         documentAlignment: target.documentAlignment,
@@ -170,9 +180,9 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         </SelectBoxContainer>
       }
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={initialData.originUrl} styledBtn={OriginBtnRight} />
+        <MoleculeShowOriginBtn originUrl={initialData.uploadFile.originUrl} styledBtn={OriginBtnRight} />
         <MoleculeImg
-          srcUrl={initialData.originUrl}
+          srcUrl={initialData.uploadFile.originUrl}
           alt={initialData.description}
           displaySize={WorkDisplaySize.REGULAR}
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}

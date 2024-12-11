@@ -111,8 +111,7 @@ export interface WorkPropertyVisibleData {
 
 export interface DocumentData {
   id: string;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   description: string;
 }
 
