@@ -40,13 +40,11 @@ export const useAuth = (): UseAuthResult => {
 
   const handleRefreshSuccess = (response: AuthResponse) => {
     const { data, authToken } = response;
-    console.log("data: ", data);
     localStorage.setItem('authToken', authToken);
   };
 
   const handleSignupSuccess = (response: AuthResponse) => {
     const { data } = response;
-    console.log('data: ', data);
   };
 
 

@@ -30,13 +30,11 @@ const MoleculeValue: React.FC<MoleculeValueProps> = ({
 
   const handleChange = (value: string | number) => {
     if (tempId) {
-      console.log("tempId");
       const newCreatedCareers: CreateCareerReq[] = createdCareers.map(each =>
         each.tempId === tempId ? { ...each, [targetField]: value } : each
       )
       setCreatedCareers(newCreatedCareers);
     } else {
-      console.log("careerId");
       const targetCareer = updatedCareers.find((c) => c.careerId === careerId);
       if (targetCareer) {
         //updatedCareers에 있다면
