@@ -5,7 +5,7 @@ import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment
  */
 
 export interface UserData {
-  id: number;
+  id: string;
   email: string;
   username: string;
   aui: string;
@@ -17,13 +17,13 @@ export interface UserDataWithRefreshToken extends UserData {
 }
 
 export interface UploadFileData {
-  id: number;
+  id: string;
   originUrl: string;
   thumbnailUrl: string;
 }
 
 export interface BillboardData {
-  id: number;
+  id: string;
   uploadFile: UploadFileData;
   title: string;
   description: string;
@@ -74,8 +74,7 @@ export const convertStringToSize = (value: string): SizeData => {
 export interface WorkData {
   id: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   title: string;
   description: string;
   size: SizeData;
@@ -94,8 +93,7 @@ export interface WorkSimpleData {
 export interface WorkDetailData {
   id: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   description: string;
 }
 export interface WorkWithDetailData extends WorkData {
@@ -113,8 +111,7 @@ export interface WorkPropertyVisibleData {
 
 export interface DocumentData {
   id: string;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   description: string;
 }
 
@@ -127,8 +124,7 @@ export interface ProjectData {
   id: string;
   title: string;
   description: string;
-  originUrl: string;
-  thumbnailUrl: string;
+  uploadFile: UploadFileData;
   projectInfoList: ProjectInfoData[];
   piIndex: string;
 }
@@ -162,9 +158,8 @@ export interface ProjectElementData {
 }
 
 export interface MemberInfoData {
-  id: number;
-  originUrl: string;
-  thumbnailUrl: string;
+  id: string;
+  uploadFile: UploadFileData;
   name: string;
   year: string;
   country: CountryType;

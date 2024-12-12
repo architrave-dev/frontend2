@@ -8,12 +8,15 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { BtnWorkViewer, OriginBtnRight } from '../../shared/component/headless/button/BtnBody';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, ServiceType } from '../../shared/enum/EnumRepository';
 import { useAui } from '../../shared/hooks/useAui';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { isModified } from '../../shared/hooks/useIsModified';
+import { ErrorCode } from '../../shared/api/errorCode';
+import { base64ToFileWithMime, uploadToS3 } from '../../shared/aws/s3Upload';
+import { UpdateWorkDetailReq } from '../../shared/dto/ReqDtoRepository';
 
 interface WorkDetailProps {
   index: number;
@@ -28,7 +31,8 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
   const { setStandardAlert } = useStandardAlertStore();
   const { updateWorkDetail, deleteWorkDetail } = useWorkDetail();
   const { activeWorkDetailList, setActiveWorkDetailList } = useWorkViewStore();
-  const { updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+  const { updatedActiveWork, updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+
 
   const handleChange = (field: keyof WorkDetailData, value: string) => {
     const afterUpdated = updateActiveWorkDetailList.map((wd) => wd.id === data.id ? { ...wd, [field]: value } : wd);
@@ -41,16 +45,43 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     return isModified(data, target);
   }
 
+  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkDetailReq, aui: string): Promise<UpdateWorkDetailReq> => {
+    const localImageUrl = prevData.updateUploadFileReq.originUrl;
+    const file = base64ToFileWithMime(localImageUrl);
+    try {
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [updatedActiveWork!.id, prevData.workDetailId]);
+      return {
+        ...prevData,
+        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
+      };
+    } catch (error) {
+      throw new Error(ErrorCode.AWS);
+    }
+  }
+
+  const imageChecker = (): boolean => {
+    const target = activeWorkDetailList.find(wd => wd.id === data.id);
+    if (!target) return false;
+    return target.uploadFile.originUrl !== data.uploadFile.originUrl;
+  }
+
+
   const handleUpdate = async () => {
     const updateDetail = async () => {
       try {
-        await updateWorkDetail(aui, {
+        let updateWorkDetailReq: UpdateWorkDetailReq = {
           workDetailId: data.id,
           workType: data.workType,
-          originUrl: data.originUrl,
-          thumbnailUrl: data.thumbnailUrl,
+          updateUploadFileReq: {
+            ...data.uploadFile,
+            uploadFileId: data.uploadFile.id
+          },
           description: data.description,
-        });
+        }
+        if (imageChecker()) {
+          updateWorkDetailReq = await uploadFileWithLocalUrl(ServiceType.DETAIL, updateWorkDetailReq, aui);
+        }
+        await updateWorkDetail(aui, updateWorkDetailReq);
       } catch (err) {
       } finally {
       }
@@ -85,8 +116,11 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     const afterUpdated = updateActiveWorkDetailList.map((wd) =>
       wd.id === data.id ? {
         ...wd,
-        originUrl,
-        thumbnailUrl
+        uploadFile: {
+          ...wd.uploadFile,
+          originUrl,
+          thumbnailUrl
+        }
       } : wd);
     setUpdateActiveWorkDetailList(afterUpdated);
   }
@@ -115,9 +149,9 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
         </>
       </>
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={data.originUrl} styledBtn={OriginBtnRight} />
+        <MoleculeShowOriginBtn originUrl={data.uploadFile.originUrl} styledBtn={OriginBtnRight} />
         <MoleculeImg
-          srcUrl={data.originUrl}
+          srcUrl={data.uploadFile.originUrl}
           alt={"Work Detail"}
           displaySize={null}
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}

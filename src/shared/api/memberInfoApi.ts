@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
 import { ErrorResponse, MemberInfoResponse } from '../dto/ResDtoRepository';
-import { MemberInfoData } from '../dto/EntityRepository';
+import { UpdateMemberInfoReq } from '../dto/ReqDtoRepository';
 
 const config = getConfig();
 
@@ -23,7 +23,7 @@ export const getMemberInfo = async (aui: string): Promise<MemberInfoResponse> =>
   }
 };
 
-export const updateMemberInfo = async (aui: string, data: MemberInfoData): Promise<MemberInfoResponse> => {
+export const updateMemberInfo = async (aui: string, data: UpdateMemberInfoReq): Promise<MemberInfoResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {

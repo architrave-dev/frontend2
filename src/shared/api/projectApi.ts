@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { DeleteResponse, ErrorResponse, ProjectListResponse, ProjectResponse } from '../dto/ResDtoRepository';
+import { CreatedProjectResponse, DeleteResponse, ErrorResponse, ProjectListResponse, ProjectResponse } from '../dto/ResDtoRepository';
 import { CreateProjectReq, RemoveProjectReq, UpdateProjectReq } from '../dto/ReqDtoRepository';
 
 const config = getConfig();
@@ -47,13 +47,13 @@ export const updateProject = async (aui: string, data: UpdateProjectReq): Promis
   }
 };
 
-export const createProject = async (aui: string, data: CreateProjectReq): Promise<ProjectResponse> => {
+export const createProject = async (aui: string, data: CreateProjectReq): Promise<CreatedProjectResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await projectApi.post<ProjectResponse>(`/api/v1/project?aui=${aui}`, data, {
+    const response = await projectApi.post<CreatedProjectResponse>(`/api/v1/project?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

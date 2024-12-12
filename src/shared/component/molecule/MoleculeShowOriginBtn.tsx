@@ -5,6 +5,7 @@ import { AlertPosition, AlertType, ModalType } from '../../enum/EnumRepository';
 import HeadlessBtn from '../headless/button/HeadlessBtn';
 import { StyledBtnComponent } from '../../dto/StyleCompRepository';
 import { useStandardAlertStore } from '../../store/portal/alertStore';
+import { useEditMode } from '../../hooks/useEditMode';
 
 export interface MoleculeShowOriginBtnProps {
   originUrl: string;
@@ -13,6 +14,7 @@ export interface MoleculeShowOriginBtnProps {
 
 const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl, styledBtn }) => {
   const { openModal } = useModal();
+  const { isEditMode } = useEditMode();
   const { setOriginUrl } = useOriginImgStore();
   const { setStandardAlert } = useStandardAlertStore();
 
@@ -27,6 +29,9 @@ const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl
     }
     setOriginUrl(originUrl);
     openModal(ModalType.ORIGIN_IMG);
+  }
+  if (isEditMode) {
+    return null;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
+import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
 import { IndexData, SizeData } from './EntityRepository';
 
 //-------------- Auth
@@ -18,14 +18,14 @@ export interface RefreshReq {
 }
 
 export interface UpdateUploadFileReq {
-  uploadFileId: number;
+  uploadFileId: string;
   originUrl: string;
   thumbnailUrl: string;
 }
 
 //-------------- Billboard
 export interface UpdateBillboardReq {
-  id: number;
+  id: string;
   updateUploadFileReq: UpdateUploadFileReq;
   title: string;
   description: string;
@@ -49,8 +49,7 @@ export interface CreateWorkReq {
 export interface UpdateWorkReq {
   id: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  updateUploadFileReq: UpdateUploadFileReq;
   title: string;
   description: string;
   size: SizeData;
@@ -86,8 +85,7 @@ export interface CreateWorkDetailReq {
 export interface UpdateWorkDetailReq {
   workDetailId: string;
   workType: WorkType;
-  originUrl: string;
-  thumbnailUrl: string;
+  updateUploadFileReq: UpdateUploadFileReq;
   description: string;
 }
 
@@ -116,8 +114,7 @@ export interface CreateDocumentReq {
 
 export interface UpdateDocumentReq {
   id: string;
-  originUrl: string;
-  thumbnailUrl: string;
+  updateUploadFileReq: UpdateUploadFileReq;
   description: string;
 }
 
@@ -131,10 +128,9 @@ export interface CreateProjectReq {
 
 export interface UpdateProjectReq {
   id: string;
-  title?: string;
-  description?: string;
-  originUrl?: string;
-  thumbnailUrl?: string;
+  title: string;
+  description: string;
+  updateUploadFileReq: UpdateUploadFileReq;
   piIndexList: IndexData[];
   createdProjectInfoList?: CreateProjectInfoReq[];
   updatedProjectInfoList?: UpdatedProjectInfoReq[];
@@ -205,9 +201,21 @@ export interface RemoveProjectElementReq {
 export interface UpdateProjectElementListReq {
   projectId: string;
   peIndexList: IndexData[];
-  createProjectElements: CreateProjectElementReq[];
+  // createProjectElements: CreateProjectElementReq[];
   updatedProjectElements: UpdateProjectElementReq[];
   removedProjectElements: RemoveProjectElementReq[];
+}
+
+//-------------- MemberInfo
+export interface UpdateMemberInfoReq {
+  id: string;
+  updateUploadFileReq: UpdateUploadFileReq;
+  name: string;
+  year: string;
+  country: CountryType;
+  email: string;
+  contact: string;
+  description: string;
 }
 
 //-------------- Career

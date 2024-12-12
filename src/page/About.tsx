@@ -10,9 +10,12 @@ import { useCareerListStoreForUpdate } from '../shared/store/careerStore';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import { isModified } from '../shared/hooks/useIsModified';
-import { UpdatedCareerListReq } from '../shared/dto/ReqDtoRepository';
+import { UpdateMemberInfoReq, UpdatedCareerListReq } from '../shared/dto/ReqDtoRepository';
 import { useCareer } from '../shared/hooks/useApi/useCareer';
 import { useAui } from '../shared/hooks/useAui';
+import { ServiceType } from '../shared/enum/EnumRepository';
+import { ErrorCode } from '../shared/api/errorCode';
+import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 
 
 const About: React.FC = () => {
@@ -43,10 +46,42 @@ const About: React.FC = () => {
     return memberInfoCheck() || careerListCheck();
   }
 
+  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateMemberInfoReq, aui: string): Promise<UpdateMemberInfoReq> => {
+    const localImageUrl = prevData.updateUploadFileReq.originUrl;
+    const file = base64ToFileWithMime(localImageUrl);
+    try {
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, []);
+      return {
+        ...prevData,
+        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
+      };
+    } catch (error) {
+      throw new Error(ErrorCode.AWS);
+    }
+  }
+
+  const imageChecker = () => {
+    if (!memberInfo) return;
+    if (!updateMemberInfoDto) return;
+    return memberInfo.uploadFile.originUrl !== updateMemberInfoDto.uploadFile.originUrl;
+  }
+
   const handleConfirm = async () => {
     try {
       if (memberInfoCheck()) {
-        await updateMemberInfo(aui, updateMemberInfoDto!);
+        if (!updateMemberInfoDto) return;
+
+        let updateMemberInfoReq: UpdateMemberInfoReq = {
+          ...updateMemberInfoDto,
+          updateUploadFileReq: {
+            ...updateMemberInfoDto.uploadFile,
+            uploadFileId: updateMemberInfoDto.uploadFile.id
+          }
+        }
+        if (imageChecker()) {
+          updateMemberInfoReq = await uploadFileWithLocalUrl(ServiceType.MEMBER_INFO, updateMemberInfoReq, aui);
+        }
+        await updateMemberInfo(aui, updateMemberInfoReq);
       }
       if (careerListCheck()) {
         const updatedData: UpdatedCareerListReq = {

@@ -7,7 +7,7 @@ import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/t
 import { DocumentData, ProjectElementData } from '../../shared/dto/EntityRepository';
 import { SelectType, TextAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { UpdateDocumentReq, UpdateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
-import { ImgWrapper, SelectBoxWrapper, WorkImage } from './Work';
+import { SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
@@ -42,7 +42,14 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         workDisplaySize: null,
         updateTextBoxReq: null,
         textBoxAlignment: null,
-        updateDocumentReq: initialData,
+        updateDocumentReq: {
+          id: initialData.id,
+          updateUploadFileReq: {
+            uploadFileId: initialData.uploadFile.id,
+            ...initialData.uploadFile
+          },
+          description: initialData.description,
+        },
         documentAlignment: value,
         dividerType: null
       }
@@ -80,10 +87,11 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         textBoxAlignment: null,
         updateDocumentReq: {
           id: targetDocument.id,
-          originUrl: targetDocument.originUrl,
-          thumbnailUrl: targetDocument.thumbnailUrl,
+          updateUploadFileReq: {
+            uploadFileId: targetDocument.id,
+            ...targetDocument.uploadFile
+          },
           description: targetDocument.description,
-
         },
         documentAlignment: target.documentAlignment,
         dividerType: null
@@ -127,31 +135,33 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
         updateDocumentReq: {
           id: targetDocument.id,
-          originUrl: targetDocument.originUrl,
-          thumbnailUrl: targetDocument.thumbnailUrl,
+          updateUploadFileReq: {
+            uploadFileId: targetDocument.id,
+            originUrl,
+            thumbnailUrl
+          },
           description: targetDocument.description,
         } as UpdateDocumentReq,
         documentAlignment: target.documentAlignment,
+        updateTextBoxReq: null,
+        textBoxAlignment: null,
         dividerType: null
       }
-      //projectElementList에서 id로 찾고
-      //updatedProjectElements에 추가한다.
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...convetedToProjectElementReq,
-        updateDocumentReq: {
-          ...convetedToProjectElementReq.updateDocumentReq,
-          thumbnailUrl,
-          originUrl
-        } as UpdateDocumentReq
-      };
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
+      setUpdatedProjectElements([...updatedProjectElements, convetedToProjectElementReq]);
     }
     const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.work?.id === initialData.id ? { ...each, document: { ...each.document, thumbnailUrl, originUrl } as DocumentData } : each
+      each.document?.id === initialData.id ? {
+        ...each,
+        document: {
+          ...each.document,
+          uploadFile: {
+            originUrl,
+            thumbnailUrl
+          }
+        } as DocumentData
+      } : each
     )
     setProjectElementList(updatedProjectElementList);
   }
@@ -170,9 +180,9 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         </SelectBoxContainer>
       }
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={initialData.originUrl} styledBtn={OriginBtnRight} />
+        <MoleculeShowOriginBtn originUrl={initialData.uploadFile.originUrl} styledBtn={OriginBtnRight} />
         <MoleculeImg
-          srcUrl={initialData.originUrl}
+          srcUrl={initialData.uploadFile.originUrl}
           alt={initialData.description}
           displaySize={WorkDisplaySize.REGULAR}
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
@@ -212,5 +222,17 @@ const DocumentContent = styled.div<{ $alignment: TextAlignment }>`
   color: ${({ theme }) => theme.colors.color_Gray_03};
   text-align: ${({ $alignment }) => getAlignment($alignment)};
 `;
+
+export const ImgWrapper = styled.div`
+  position: relative;
+  margin-bottom: 16px;
+`
+
+export const TitleInfoWrpper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 export default Document;

@@ -27,7 +27,7 @@ export const useBillboard = (): UseBillboardResult => {
     setUpdateBillboardDto(billboardData);
   };
 
-  const handleUpdateBillboardSuccess = async (response: BillboardResponse, aui: string) => {
+  const handleUpdateBillboardSuccess = async (response: BillboardResponse) => {
     const billboardData = response.data;
     setBillboard(billboardData);
     setUpdateBillboardDto(billboardData);
@@ -43,8 +43,7 @@ export const useBillboard = (): UseBillboardResult => {
     try {
       switch (action) {
         case 'update':
-          const response = await updateBillboard(aui, data as UpdateBillboardReq);
-          await handleUpdateBillboardSuccess(response, aui);
+          await handleUpdateBillboardSuccess(await updateBillboard(aui, data as UpdateBillboardReq));
           break;
         case 'get':
         default:

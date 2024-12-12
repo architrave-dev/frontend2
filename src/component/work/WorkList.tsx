@@ -28,8 +28,11 @@ const WorkList: React.FC = () => {
     const defaultWork: WorkData = {
       id: '',
       workType: WorkType.NONE,
-      originUrl: '',
-      thumbnailUrl: '',
+      uploadFile: {
+        id: '',
+        originUrl: '',
+        thumbnailUrl: ''
+      },
       title: 'Select Work',
       description: 'Description section',
       size: { width: '000', height: '000' },
@@ -95,7 +98,6 @@ const WorkList: React.FC = () => {
             />
           </Space>
         }
-
       </WorkListComp>
       <WorkViewer />
     </WorkListContainer>

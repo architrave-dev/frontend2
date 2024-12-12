@@ -18,15 +18,15 @@ const s3Client = new S3Client({
   },
 });
 
-export async function uploadToS3(file: File, aui: string): Promise<AwsS3UploadResult> {
+export async function uploadToS3(file: File, aui: string, serviceType: ServiceType, identifier: string[],): Promise<AwsS3UploadResult> {
   if (file.size < MIN_SIZE) {
     console.log("file.size 가 너무 작아. 최소 50KB 이상!!")
   }
+  const prefix = makePrefix(serviceType, identifier);
 
   const bucketName = process.env.REACT_APP_S3_BUCKET_NAME!;
-  const originalFileKey = `uploads/${aui}/${file.name}`;
-  const thumbnailFileKey = `uploads/${aui}/thumbnails/${file.name}`;
-
+  const originalFileKey = `uploads/${aui}/${prefix}/origin-${file.name}`;
+  const thumbnailFileKey = `uploads/${aui}/${prefix}/thumbnails-${file.name}`;
   const originParams = {
     Bucket: bucketName,
     Key: originalFileKey,
@@ -113,27 +113,29 @@ const getMimeTypeFromBase64 = (base64: string): string => {
   throw new Error("Invalid Base64 string"); // 잘못된 Base64 데이터 처리
 }
 
-const makeFilename = (prefix: string, mimeType: string): string => {
-  return prefix + '/' + Date.now().toString() + '.' + mimeType.split("/")[1];
-}
-
-const makePrefix = (serviceType: ServiceType, identifier: string): string => {
+const makePrefix = (serviceType: ServiceType, identifier: string[]): string => {
   switch (serviceType) {
     case ServiceType.WORK:
-      return 'work-' + identifier;
+      return `work/${identifier[0]}`;
     case ServiceType.PROJECT:
-      return 'project-' + identifier;
-    // Document, WorkDetail은 부모 identifier가 필요함
-    // Document은 project의 id, workDetail은 work의 id
+      return `project/${identifier[0]}`;
+    case ServiceType.DETAIL:
+      return `work/${identifier[0]}/detail/${identifier[1]}`;
+    case ServiceType.DOCUMENT:
+      return `project/${identifier[0]}/document/${identifier[1]}`;
     case ServiceType.MEMBER_INFO:
-      return 'memberInfo'
+      return `memberInfo`;
     case ServiceType.BILLBOARD:
     default:
-      return 'billboard';
+      return `billboard`;
   }
 }
+const makeFilename = (mimeType: string): string => {
+  const fileExtension = mimeType.split("/")[1];
+  return `${Date.now()}.${fileExtension}`;
+}
 
-export const base64ToFileWithMime = (serviceType: ServiceType, identifier: string, base64: string): File => {
+export const base64ToFileWithMime = (base64: string): File => {
   const mimeType = getMimeTypeFromBase64(base64); // MIME 타입 추출
   const base64Data = base64.split(',')[1]; // Base64 헤더 제거
   const binaryData = atob(base64Data); // Base64를 디코딩하여 바이너리 데이터로 변환
@@ -145,8 +147,6 @@ export const base64ToFileWithMime = (serviceType: ServiceType, identifier: strin
   }
   // Blob 생성
   const blob = new Blob([arrayBuffer], { type: mimeType });
-
-  const prefix = makePrefix(serviceType, identifier);
   // File 객체 생성
-  return new File([blob], makeFilename(prefix, mimeType), { type: mimeType });
+  return new File([blob], makeFilename(mimeType), { type: mimeType });
 }
