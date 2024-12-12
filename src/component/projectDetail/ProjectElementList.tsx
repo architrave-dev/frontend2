@@ -135,11 +135,11 @@ const ProjectElementList: React.FC = () => {
               handleClick={() => handleCreateElement(ProjectElementType.WORK)}
               StyledBtn={BtnCreate}
             />
-            <HeadlessBtn
+            {/* <HeadlessBtn
               value={"Detail"}
               handleClick={() => handleCreateElement(ProjectElementType.DETAIL)}
               StyledBtn={BtnCreate}
-            />
+            /> */}
             <HeadlessBtn
               value={"Doc"}
               handleClick={() => handleCreateElement(ProjectElementType.DOCUMENT)}
