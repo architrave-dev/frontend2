@@ -135,33 +135,33 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
         updateDocumentReq: {
           id: targetDocument.id,
           updateUploadFileReq: {
             uploadFileId: targetDocument.id,
-            ...targetDocument.uploadFile
+            originUrl,
+            thumbnailUrl
           },
           description: targetDocument.description,
         } as UpdateDocumentReq,
         documentAlignment: target.documentAlignment,
+        updateTextBoxReq: null,
+        textBoxAlignment: null,
         dividerType: null
       }
-      //projectElementList에서 id로 찾고
-      //updatedProjectElements에 추가한다.
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...convetedToProjectElementReq,
-        updateDocumentReq: {
-          ...convetedToProjectElementReq.updateDocumentReq,
-          thumbnailUrl,
-          originUrl
-        } as UpdateDocumentReq
-      };
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
+      setUpdatedProjectElements([...updatedProjectElements, convetedToProjectElementReq]);
     }
     const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.work?.id === initialData.id ? { ...each, document: { ...each.document, thumbnailUrl, originUrl } as DocumentData } : each
+      each.document?.id === initialData.id ? {
+        ...each,
+        document: {
+          ...each.document,
+          uploadFile: {
+            originUrl,
+            thumbnailUrl
+          }
+        } as DocumentData
+      } : each
     )
     setProjectElementList(updatedProjectElementList);
   }

@@ -12,7 +12,6 @@ import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkD
 import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import ProjectElement from '../../component/projectElement/ProjectElement';
-import ProjectElementTemp from '../projectElement/ProjectElementTemp';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
 import Loading from '../../shared/component/Loading';
@@ -25,9 +24,7 @@ const ProjectElementList: React.FC = () => {
   const { project } = useProjectDetail();
   const { getSimpleWorkList } = useWorkList();
   const { isLoading, projectElementList, getProjectElementList, createProjectElement } = useProjectElement();
-  const {
-    // createdProjectElements,
-  } = useProjectElementListStoreForUpdate();
+  const { updatedProjectElements } = useProjectElementListStoreForUpdate();
 
   const { openModal } = useModal();
 

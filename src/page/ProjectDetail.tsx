@@ -12,10 +12,10 @@ import { useEditMode } from '../shared/hooks/useEditMode';
 import { useProjectStoreForUpdate } from '../shared/store/projectStore';
 import { useProjectInfoListStoreForUpdate } from '../shared/store/projectInfoListStore';
 import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
-import { CreateDocumentReq, CreateProjectElementReq, CreateWorkReq, UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
+import { UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
 import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
 import { IndexData } from '../shared/dto/EntityRepository';
-import { ProjectElementType, ServiceType } from '../shared/enum/EnumRepository';
+import { ServiceType } from '../shared/enum/EnumRepository';
 import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 import { ErrorCode } from '../shared/api/errorCode';
 
@@ -28,9 +28,8 @@ const ProjectDetail: React.FC = () => {
   const { project, getProject, updateProject } = useProjectDetail();
   const { updatedProjectDto } = useProjectStoreForUpdate();
   const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
-  const { updateProjectElementList } = useProjectElement();
+  const { projectElementList, updateProjectElementList } = useProjectElement();
   const {
-    // createdProjectElements,
     updatedProjectElements,
     removedProjectElements
   } = useProjectElementListStoreForUpdate();
@@ -101,7 +100,15 @@ const ProjectDetail: React.FC = () => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
     try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]);
+      let originUrl, thumbnailUrl;
+
+      if (serviceType === ServiceType.WORK) {
+        ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]));
+      } else if (serviceType === ServiceType.DOCUMENT) {
+        ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [project.id, prevData.id]));
+      } else {
+        throw new Error("Unsupported service type");
+      }
       return {
         ...prevData,
         updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
@@ -111,28 +118,10 @@ const ProjectDetail: React.FC = () => {
     }
   };
 
-  // const uploadFileWithLocalUrlCreates = async <T extends { originUrl: string, thumbnailUrl: string }>(
-  //   serviceType: ServiceType,
-  //   prevData: T,
-  //   aui: string
-  // ): Promise<T> => {
-  //   const localImageUrl = prevData.originUrl;
-  //   const file = base64ToFileWithMime(localImageUrl);
-  //   try {
-  //     //work면 work에,
-  //     //document면 project에
-
-  //     //import 애들은...?
-  //     const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData ]);
-  //     return {
-  //       ...prevData,
-  //       originUrl,
-  //       thumbnailUrl
-  //     };
-  //   } catch (error) {
-  //     throw new Error(ErrorCode.AWS);
-  //   }
-  // };
+  const isBase64Image = (input: string): boolean => {
+    const base64Pattern = /^data:image\/[a-zA-Z]+;base64,[A-Za-z0-9+/]+={0,2}$/;
+    return base64Pattern.test(input);
+  }
 
   const handleConfirm = async () => {
     if (updatedProjectDto == null) return null;
@@ -154,57 +143,45 @@ const ProjectDetail: React.FC = () => {
         }
         await updateProject(aui, newUpdateProjectReq);
       }
+
       if (peListCheck()) {
-        // updatedProjectElements 돌면서 변경되었다면 upload
         const updatespromises = updatedProjectElements.map(async (pe) => {
+          console.log("each pe: ", pe);
           if (pe.updateWorkReq != null) {
-            const convertedUpdateWorkReq = await uploadFileWithLocalUrlUpdates<UpdateWorkReq>(ServiceType.WORK, pe.updateWorkReq, aui);
-            return {
-              ...pe,
-              updateWorkReq: convertedUpdateWorkReq,
-            };
+            console.log("pe is work: ");
+            if (isBase64Image(pe.updateWorkReq.updateUploadFileReq.originUrl)) {
+              // if (peImageChecker(pe.projectElementId, pe.updateWorkReq)) {
+              console.log("imaged changed pe: ", pe);
+              const convertedUpdateWorkReq = await uploadFileWithLocalUrlUpdates<UpdateWorkReq>(ServiceType.WORK, pe.updateWorkReq, aui);
+              return {
+                ...pe,
+                updateWorkReq: convertedUpdateWorkReq,
+              };
+            }
+            return pe;
           } else if (pe.updateDocumentReq != null) {
-            const convertedUpdateDocumentReq = await uploadFileWithLocalUrlUpdates<UpdateDocumentReq>(ServiceType.DOCUMENT, pe.updateDocumentReq, aui);
-            return { ...pe, updateDocumentReq: convertedUpdateDocumentReq };
+            console.log("pe is document: ");
+            if (isBase64Image(pe.updateDocumentReq.updateUploadFileReq.originUrl)) {
+              console.log("imaged changed pe: ", pe);
+              const convertedUpdateDocumentReq = await uploadFileWithLocalUrlUpdates<UpdateDocumentReq>(ServiceType.DOCUMENT, pe.updateDocumentReq, aui);
+              return { ...pe, updateDocumentReq: convertedUpdateDocumentReq };
+            }
+            return pe;
           } else {
+            console.log("pe is not work or document");
             return pe;
           }
         });
-
+        console.log("updatespromises: ", updatespromises);
         const afterUploadUpdates: UpdateProjectElementReq[] = await Promise.all(updatespromises);
-        console.log("afterUpload: ", afterUploadUpdates);
-
-        // const createspromises = createdProjectElements.map(async (pe) => {
-        //   if (pe.projectElementType === ProjectElementType.WORK &&
-        //     pe.createWorkReq != null
-        //   ) {
-        //     const convertedUpdateWorkReq: CreateWorkReq = await uploadFileWithLocalUrlCreates<CreateWorkReq>(ServiceType.WORK, pe.createWorkReq, aui);
-        //     return {
-        //       ...pe,
-        //       createWorkReq: convertedUpdateWorkReq,
-        //     };
-        //   } else if (pe.projectElementType === ProjectElementType.DOCUMENT &&
-        //     pe.createDocumentReq != null) {
-        //     const convertedUpdateDocumentReq: CreateDocumentReq = await uploadFileWithLocalUrlCreates<CreateDocumentReq>(ServiceType.DOCUMENT, pe.createDocumentReq, aui);
-        //     return { ...pe, createDocumentReq: convertedUpdateDocumentReq };
-        //   } else {
-        //     return pe;
-        //   }
-        // });
-
-        // const afterUploadCreates: CreateProjectElementReq[] = await Promise.all(createspromises);
-        // console.log("afterUploadCreates: ", afterUploadCreates);
-
-
+        console.log("afterUploadUpdates: ", afterUploadUpdates);
 
         const updatedData: UpdateProjectElementListReq = {
           projectId: project.id, //peListCheck 확인 함
           peIndexList: [],
-          // createProjectElements: createdProjectElements,
           updatedProjectElements: afterUploadUpdates,
           removedProjectElements: removedProjectElements
         }
-
         await updateProjectElementList(aui, updatedData);
       }
     } catch (err) {

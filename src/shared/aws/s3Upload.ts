@@ -121,7 +121,7 @@ const makePrefix = (serviceType: ServiceType, identifier: string[]): string => {
       return `project/${identifier[0]}`;
     case ServiceType.DETAIL:
       return `work/${identifier[0]}/detail/${identifier[1]}`;
-    case ServiceType.DETAIL:
+    case ServiceType.DOCUMENT:
       return `project/${identifier[0]}/document/${identifier[1]}`;
     case ServiceType.MEMBER_INFO:
       return `memberInfo`;

@@ -112,8 +112,8 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
           workType: targetWork.workType,
           updateUploadFileReq: {
             uploadFileId: targetWork.uploadFile.id,
-            originUrl: targetWork.uploadFile.originUrl,
-            thumbnailUrl: targetWork.uploadFile.thumbnailUrl,
+            originUrl: originUrl,
+            thumbnailUrl: thumbnailUrl,
           },
           title: targetWork.title,
           description: targetWork.description,
@@ -121,7 +121,7 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
           material: targetWork.material,
           prodYear: targetWork.prodYear,
           price: targetWork.price,
-          collection: targetWork.collection
+          collection: targetWork.collection,
         },
         workAlignment: target.workAlignment,
         workDisplaySize: target.workDisplaySize,
@@ -131,20 +131,20 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         documentAlignment: null,
         dividerType: null
       }
-      //projectElementList에서 id로 찾고
-      //updatedProjectElements에 추가한다.
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...convetedToProjectElementReq,
-        updateWorkReq: {
-          ...convetedToProjectElementReq.updateWorkReq,
-          thumbnailUrl,
-          originUrl
-        } as UpdateWorkReq
-      };
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
+      setUpdatedProjectElements([...updatedProjectElements, convetedToProjectElementReq]);
     }
     const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.work?.id === initialData.id ? { ...each, work: { ...each.work, thumbnailUrl, originUrl } as WorkData } : each
+      each.work?.id === initialData.id ? {
+        ...each,
+        work: {
+          ...each.work,
+          uploadFile: {
+            ...each.work.uploadFile,
+            originUrl,
+            thumbnailUrl
+          }
+        } as WorkData
+      } : each
     )
     setProjectElementList(updatedProjectElementList);
   }
