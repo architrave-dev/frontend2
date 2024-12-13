@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useMember } from '../../shared/hooks/useApi/useMember';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,14 @@ const SearchBar: React.FC = () => {
   const [searchString, setSearchString] = useState('');
   const { isLoading, checkAui, result } = useMember();
   const navigate = useNavigate();
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (searchRef.current) {
+      searchRef.current.focus();
+    }
+  }, []);
+
 
   const handleSearch = () => {
     if (!searchString.trim()) return;
@@ -27,7 +35,7 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <SearchWrapper>
+    <SearchWrapper ref={searchRef} onKeyDown={handleKeyDown} tabIndex={-1}>
       <InputWrapper>
         <HeadlessInput
           type="text"
@@ -50,6 +58,7 @@ const SearchWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
+  outline: none;
 `;
 
 const InputWrapper = styled.div`
