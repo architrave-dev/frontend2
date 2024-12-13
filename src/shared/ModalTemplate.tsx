@@ -109,28 +109,30 @@ const WorkStationContent = styled.div`
 
 const OriginImgContent = styled.div`
   position: fixed;
-  top: calc(1.4vh);
+  top: calc(0px);
+  // top: calc(1.4vh);
    /* 화면 가운데 정렬 */
   left: 50%;
   transform: translateX(-50%);
 
   width: 100vw;
-  height: 97.2vh;
+  height: 100vh;
+  // height: 97.2vh;
 
   display: flex;
-  justify-content: center;
-  align-items: center;
 
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
   border-radius: 2px;
   background-color: ${({ theme }) => theme.colors.color_Alpha_04};
   backdrop-filter: blur(8px);
+  padding: 2vw 1vw;
+  overflow-y: scroll;
   z-index: 5; 
 `;
 
 const FullOriginImg = styled.img`
   width: 100%;
-  height: 100%; 
+  height: auto; 
   object-fit: contain;
 `;
 
