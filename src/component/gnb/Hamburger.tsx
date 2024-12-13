@@ -4,8 +4,11 @@ import hamburger128 from '../../asset/gnb/hamburger_128.png';
 import { useMenu } from '../../shared/hooks/useMenu';
 import { extractUsernameFromAui } from '../../shared/hooks/useApi/useAuth';
 import { useAui } from '../../shared/hooks/useAui';
+import { useLocation } from 'react-router-dom';
+import logo from '../../asset/gnb/logo_small.png';
 
 const Hamburger: React.FC = () => {
+  const location = useLocation();
   const { aui } = useAui();
   const { isMenuOpen, openMenu, closeMenu } = useMenu();
 
@@ -15,9 +18,17 @@ const Hamburger: React.FC = () => {
     else
       openMenu();
   }
+  if (location.pathname == '/') {
+    return (
+      <ServiceLogoContainer>
+        <LogoImg src={logo} alt='toggle menu icon' />
+        <ServiceName>Architrave</ServiceName>
+      </ServiceLogoContainer>
+    );
+  }
   return (
     <LogoComp onClick={showGnb}>
-      <LogoImg src={hamburger128} alt='toggle menu icon' />
+      <HamburgerComp src={hamburger128} alt='toggle menu icon' />
       <Username>
         {extractUsernameFromAui(aui)}
       </Username>
@@ -33,7 +44,7 @@ const LogoComp = styled.article`
   z-index: 4;
 `;
 
-const LogoImg = styled.img`
+const HamburgerComp = styled.img`
   width: calc(1.2vw);
   cursor: pointer;
 `;
@@ -47,5 +58,22 @@ const Username = styled.div`
   cursor: pointer;
   ${({ theme }) => theme.typography.Body_00_1};
 `;
+
+
+const ServiceLogoContainer = styled.article`
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+`;
+
+const ServiceName = styled.div`
+  ${({ theme }) => theme.typography.Body_00_1};
+`;
+
+const LogoImg = styled.img`
+  width: calc(2.5vw);
+  padding-bottom: 2px;
+`;
+
 
 export default Hamburger;
