@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
@@ -14,7 +14,8 @@ import { CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkListStore } from '../../shared/store/WorkListStore';
 import Space from '../../shared/Space';
-import { WorkType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, WorkType } from '../../shared/enum/EnumRepository';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 const WorkList: React.FC = () => {
   const { isEditMode } = useEditMode();
@@ -23,6 +24,20 @@ const WorkList: React.FC = () => {
   const { aui } = useAui();
   const { setActiveWork } = useWorkViewStore();
   const { setUpdatedActiveWork, clearAll } = useWorkViewStoreForUpdate();
+
+  const { getWork } = useWorkList();
+  const { setStandardAlert } = useStandardAlertStore();
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const workListRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    if (workListRef.current) {
+      // 컨테이너에 포커스 설정
+      workListRef.current.focus();
+    }
+  }, [workListRef]);
+
 
   const setDefaultWorkView = () => {
     const defaultWork: WorkData = {
@@ -83,11 +98,63 @@ const WorkList: React.FC = () => {
     } catch (err) { };
   };
 
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!sortedWorkList.length) return;
+    let newIndex = selectedIndex;
+    if (e.key === 'ArrowDown') {
+      if (selectedIndex < sortedWorkList.length - 1) {
+        newIndex = selectedIndex + 1;
+      }
+    } else if (e.key === 'ArrowUp') {
+      if (selectedIndex > 0) {
+        newIndex = selectedIndex - 1;
+      }
+    }
+    changeActiveWork(newIndex);
+  };
+
+  const handleClick = (i: number) => {
+    if (!sortedWorkList.length) return;
+    let newIndex = i;
+    changeActiveWork(newIndex);
+  };
+
+  const changeActiveWork = (newIndex: number) => {
+    if (newIndex !== selectedIndex) {
+      if (isEditMode) {
+        setStandardAlert({
+          type: AlertType.ALERT,
+          position: AlertPosition.TOP,
+          content: "Exit edit mode."
+        })
+        return;
+      }
+      const getWorkWithDetailWithApi = async () => {
+        try {
+          console.log("getting work Detail List...")
+          await getWork(sortedWorkList[newIndex].id);
+          setSelectedIndex(newIndex);
+        } catch (error) { }
+      }
+
+      getWorkWithDetailWithApi();
+    }
+  }
+
   return (
-    <WorkListContainer>
+    <WorkListContainer
+      tabIndex={0}
+      ref={workListRef}
+      onKeyDown={handleKeyDown}>
       <WorkListComp>
-        {sortedWorkList.map((each: WorkData) =>
-          <WorkInfo key={each.id} data={each} />
+        {sortedWorkList.map((each: WorkData, i: number) =>
+          <WorkInfo
+            key={each.id}
+            data={each}
+            isSelected={i === selectedIndex}
+            handleClick={() => handleClick(i)}
+          />
         )}
         {isEditMode &&
           <Space $height='80px'>
@@ -108,6 +175,7 @@ const WorkListContainer = styled.div`
   height: 100%;
   display: flex;
   padding-bottom: calc(9vh);
+  outline: none;
 `;
 
 const WorkListComp = styled.section`

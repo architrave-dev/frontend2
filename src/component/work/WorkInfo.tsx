@@ -1,46 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useWorkViewStore } from '../../shared/store/WorkViewStore';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { AlertPosition, AlertType, WorkType } from '../../shared/enum/EnumRepository';
+import { WorkType } from '../../shared/enum/EnumRepository';
 import { WorkData, convertSizeToString } from '../../shared/dto/EntityRepository';
-import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
 import BlockWithVisible from './BlockWithVisible';
 
 
 interface WorkInfoProps {
   data: WorkData;
+  isSelected: boolean;
+  handleClick: () => void
 }
 
-const WorkInfo: React.FC<WorkInfoProps> = ({ data }) => {
-  const { isEditMode } = useEditMode();
+const WorkInfo: React.FC<WorkInfoProps> = ({ data, handleClick }) => {
   const { activeWork } = useWorkViewStore();
-  const { setStandardAlert } = useStandardAlertStore();
-  const { getWork } = useWorkList();
   const { workPropertyVisible } = useWorkPropertyVisible();
-
-
-  const handleClick = () => {
-    if (isEditMode) {
-      setStandardAlert({
-        type: AlertType.ALERT,
-        position: AlertPosition.TOP,
-        content: "Exit edit mode."
-      })
-      return;
-    }
-    const getWorkWithDetailWithApi = async () => {
-      try {
-        console.log("getting work Detail List...")
-        await getWork(data.id);
-      } catch (error) { }
-    }
-
-    getWorkWithDetailWithApi();
-  }
-
 
   if (!data || !workPropertyVisible) return null;
 
