@@ -34,14 +34,11 @@ export const useProjectElement = (): UseProjectElementResult => {
 
   const handleCreateProjectElementWithWorkSuccess = (response: ProjectElementResponse) => {
     const createdProjectElement = response.data;
-    console.log("createdProjectElement: ", createdProjectElement);
     setProjectElementList([...projectElementList, createdProjectElement]);
-    // clearAll();
   };
 
   const handleCreateProjectElementSuccess = (response: ProjectElementResponse) => {
     const createdProjectElement = response.data;
-    console.log("createdProjectElement: ", createdProjectElement);
     setProjectElementList([...projectElementList, createdProjectElement]);
   };
 

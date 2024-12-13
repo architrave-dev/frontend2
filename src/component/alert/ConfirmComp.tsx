@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 
 const ConfirmComp: React.FC = () => {
   const { standardAlert, clearAlert } = useStandardAlertStore();
+  const alertRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (alertRef.current) {
+      alertRef.current.focus();
+    }
+  }, []);
 
   if (!standardAlert) return null;
 
@@ -19,8 +26,19 @@ const ConfirmComp: React.FC = () => {
     clearAlert();
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'Enter':
+      case 'Escape':
+        clearAlert();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <ConfirmContent>
+    <ConfirmContent ref={alertRef} onKeyDown={handleKeyDown} tabIndex={-1}>
       <Title>Wait..</Title>
       <Content>{standardAlert.content}</Content>
       <ButtonContainer>
@@ -76,6 +94,7 @@ const ConfirmContent = styled.div`
   min-height: 50px;
   width: fit-content;
   height: fit-content;
+  outline: none;
 
   padding: 20px;
 

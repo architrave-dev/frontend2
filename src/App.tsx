@@ -9,6 +9,7 @@ import Works from './page/Works';
 import About from './page/About';
 import ErrorPage from './page/Error';
 import { useGlobalError } from './shared/hooks/useGlobalError';
+import Contact from './page/Contact';
 
 const App: React.FC = () => {
   useGlobalError();
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           <Route path="/:AUI/projects/:projectId" element={<ProjectDetail />} />
           <Route path="/:AUI/works" element={<Works />} />
           <Route path="/:AUI/about" element={<About />} />
+          <Route path="/:AUI/contact" element={<Contact />} />
           <Route path="/error" element={<ErrorPage />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

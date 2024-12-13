@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 
 const AlertComp: React.FC = () => {
   const { standardAlert, clearAlert } = useStandardAlertStore();
+  const alertRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (alertRef.current) {
+      alertRef.current.focus();
+    }
+  }, []);
 
   if (!standardAlert) return null;
 
@@ -19,8 +26,19 @@ const AlertComp: React.FC = () => {
     clearAlert();
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'Enter':
+      case 'Escape':
+        clearAlert();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <AlertContent>
+    <AlertContent ref={alertRef} onKeyDown={handleKeyDown} tabIndex={-1}>
       <Title>Sorry,</Title>
       <Content>{standardAlert.content}</Content>
       <ButtonContainer>
@@ -68,6 +86,7 @@ const AlertContent = styled.div`
   min-height: 50px;
   width: fit-content;
   height: fit-content;
+  outline: none;
 
   padding: 20px;
 

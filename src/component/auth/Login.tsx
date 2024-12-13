@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
@@ -18,6 +18,13 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (modalRef.current) {
+      modalRef.current.focus();
+    }
+  }, []);
 
   const isValid = () => {
     return (email !== '' && password !== '' && !emailError && !passwordError)
@@ -59,8 +66,24 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (isLoading) {
+      return null;
+    }
+    switch (event.key) {
+      case 'Enter':
+        handleSubmit();
+        break;
+      case 'Escape':
+        closeModal();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <LoginComp>
+    <LoginComp ref={modalRef} onKeyDown={handleKeyDown} tabIndex={-1}>
       <Title>Login</Title>
       <MoleculeInput
         name={"Email"}
@@ -97,6 +120,7 @@ const LoginComp = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   padding: 17px 14px;
+  outline: none;
 `
 
 const Title = styled.h2`

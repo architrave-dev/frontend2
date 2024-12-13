@@ -146,12 +146,8 @@ const ProjectDetail: React.FC = () => {
 
       if (peListCheck()) {
         const updatespromises = updatedProjectElements.map(async (pe) => {
-          console.log("each pe: ", pe);
           if (pe.updateWorkReq != null) {
-            console.log("pe is work: ");
             if (isBase64Image(pe.updateWorkReq.updateUploadFileReq.originUrl)) {
-              // if (peImageChecker(pe.projectElementId, pe.updateWorkReq)) {
-              console.log("imaged changed pe: ", pe);
               const convertedUpdateWorkReq = await uploadFileWithLocalUrlUpdates<UpdateWorkReq>(ServiceType.WORK, pe.updateWorkReq, aui);
               return {
                 ...pe,
@@ -160,21 +156,16 @@ const ProjectDetail: React.FC = () => {
             }
             return pe;
           } else if (pe.updateDocumentReq != null) {
-            console.log("pe is document: ");
             if (isBase64Image(pe.updateDocumentReq.updateUploadFileReq.originUrl)) {
-              console.log("imaged changed pe: ", pe);
               const convertedUpdateDocumentReq = await uploadFileWithLocalUrlUpdates<UpdateDocumentReq>(ServiceType.DOCUMENT, pe.updateDocumentReq, aui);
               return { ...pe, updateDocumentReq: convertedUpdateDocumentReq };
             }
             return pe;
           } else {
-            console.log("pe is not work or document");
             return pe;
           }
         });
-        console.log("updatespromises: ", updatespromises);
         const afterUploadUpdates: UpdateProjectElementReq[] = await Promise.all(updatespromises);
-        console.log("afterUploadUpdates: ", afterUploadUpdates);
 
         const updatedData: UpdateProjectElementListReq = {
           projectId: project.id, //peListCheck 확인 함
