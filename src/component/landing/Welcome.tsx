@@ -21,7 +21,7 @@ const WelcomContainer = styled.header`
 
 const Slogan = styled.h1`
   text-align: left;
-  ${({ theme }) => theme.typography.H_015};
+  ${({ theme }) => theme.typography.H_02};
 `;
 
 
