@@ -125,7 +125,7 @@ const OriginImgContent = styled.div`
   border-radius: 2px;
   background-color: ${({ theme }) => theme.colors.color_Alpha_04};
   backdrop-filter: blur(8px);
-  z-index: 3; 
+  z-index: 5; 
 `;
 
 const FullOriginImg = styled.img`
