@@ -2,8 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchBar from '../component/landing/SearchBar';
 import Welcome from '../component/landing/Welcome';
+// import { useHealthCheck } from '../shared/hooks/useHealthCheck';
 
 const Landing: React.FC = () => {
+  // useHealthCheck();
   return (
     <LandingContainer>
       <Welcome />
