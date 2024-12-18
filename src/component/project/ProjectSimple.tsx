@@ -10,6 +10,7 @@ import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import defaultImg from '../../asset/project/default_1.png'
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 
 interface ProjectSimpleProps {
@@ -59,7 +60,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
         <ProjectSimpleTitle>{initialTitle}</ProjectSimpleTitle>
         <ProjectSimpleDescription>{initialDescription}</ProjectSimpleDescription>
       </ProjectSimpleInfo>
-      <ProjectRepresent $backgroundImg={initialImage !== '' ? initialImage : defaultImg} />
+      <ProjectRepresent $backgroundImg={initialImage !== '' ? convertS3UrlToCloudFrontUrl(initialImage) : defaultImg} />
       {isEditMode &&
         <HeadlessBtn
           value={"Delete"}

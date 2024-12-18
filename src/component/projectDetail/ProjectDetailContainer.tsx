@@ -13,6 +13,7 @@ import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { InputTitle } from '../../shared/component/headless/input/InputBody';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 
 const ProjectDetailContainer: React.FC = () => {
@@ -42,7 +43,7 @@ const ProjectDetailContainer: React.FC = () => {
   return (
     <ProjectDetailContainerComp>
       <MoleculeImgDivContainer
-        backgroundImg={updatedProjectDto.uploadFile.originUrl}
+        backgroundImg={convertS3UrlToCloudFrontUrl(updatedProjectDto.uploadFile.originUrl)}
         handleChange={setOriginThumbnailUrl}
         StyledImgDivContainer={RepresentImgContainer}
       />

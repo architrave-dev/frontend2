@@ -15,7 +15,7 @@ import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { isModified } from '../../shared/hooks/useIsModified';
 import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, uploadToS3 } from '../../shared/aws/s3Upload';
+import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
 import { UpdateWorkDetailReq } from '../../shared/dto/ReqDtoRepository';
 
 interface WorkDetailProps {
@@ -149,9 +149,9 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
         </>
       </>
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={data.uploadFile.originUrl} styledBtn={OriginBtnRight} />
+        <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnRight} />
         <MoleculeImg
-          srcUrl={data.uploadFile.originUrl}
+          srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
           alt={"Work Detail"}
           displaySize={null}
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}

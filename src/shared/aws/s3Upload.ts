@@ -150,3 +150,19 @@ export const base64ToFileWithMime = (base64: string): File => {
   // File 객체 생성
   return new File([blob], makeFilename(mimeType), { type: mimeType });
 }
+
+export const convertS3UrlToCloudFrontUrl = (s3Url: string): string => {
+  const s3Domain = process.env.REACT_APP_BUCKET_DOMAIN!;
+  const cloudFrontDomain = process.env.REACT_APP_DOMAIN!;
+
+  try {
+    const url = new URL(s3Url);
+    if (url.hostname === s3Domain) {
+      url.hostname = cloudFrontDomain;
+    }
+    return url.toString();
+  } catch (error) {
+    console.error("Invalid URL:", error);
+    return s3Url;
+  }
+}
