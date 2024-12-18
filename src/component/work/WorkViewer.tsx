@@ -20,7 +20,7 @@ import { isModified } from '../../shared/hooks/useIsModified';
 import { useValidation } from '../../shared/hooks/useValidation';
 import SelectBox from '../../shared/component/SelectBox';
 import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, uploadToS3 } from '../../shared/aws/s3Upload';
+import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 
 
@@ -187,9 +187,9 @@ const WorkViewer: React.FC = () => {
         />
       </WorkInfoContainer>
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={updatedActiveWork.uploadFile.originUrl} styledBtn={OriginBtnBottom} />
+        <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(updatedActiveWork.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
         <MoleculeImg
-          srcUrl={updatedActiveWork.uploadFile.originUrl}
+          srcUrl={convertS3UrlToCloudFrontUrl(updatedActiveWork.uploadFile.originUrl)}
           alt={updatedActiveWork.title}
           displaySize={null}
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}

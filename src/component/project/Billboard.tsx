@@ -18,7 +18,7 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { UpdateBillboardReq } from '../../shared/dto/ReqDtoRepository';
 import { isModified } from '../../shared/hooks/useIsModified';
 import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, uploadToS3 } from '../../shared/aws/s3Upload';
+import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
 
 
 const Billboard: React.FC = () => {
@@ -101,7 +101,7 @@ const Billboard: React.FC = () => {
 
   return (
     <MoleculeImgDivContainer
-      backgroundImg={updateBillboardDto.uploadFile.originUrl}
+      backgroundImg={convertS3UrlToCloudFrontUrl(updateBillboardDto.uploadFile.originUrl)}
       handleChange={setOriginThumbnailUrl}
       StyledImgDivContainer={Container}
     >

@@ -12,6 +12,7 @@ import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { OriginBtnRight } from '../../shared/component/headless/button/BtnBody';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 
 export interface DocumentProps {
@@ -180,9 +181,9 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         </SelectBoxContainer>
       }
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={initialData.uploadFile.originUrl} styledBtn={OriginBtnRight} />
+        <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)} styledBtn={OriginBtnRight} />
         <MoleculeImg
-          srcUrl={initialData.uploadFile.originUrl}
+          srcUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)}
           alt={initialData.description}
           displaySize={WorkDisplaySize.REGULAR}
           handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}

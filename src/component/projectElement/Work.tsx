@@ -14,6 +14,7 @@ import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 import { useValidation } from '../../shared/hooks/useValidation';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 export interface WorkProps {
   alignment: DisplayAlignment | null;
@@ -209,9 +210,9 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
       }
       <WorkCoreWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
         <ImgWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-          <MoleculeShowOriginBtn originUrl={initialData.uploadFile.originUrl} styledBtn={OriginBtnBottom} />
+          <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
           <MoleculeImg
-            srcUrl={initialData.uploadFile.originUrl}
+            srcUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)}
             alt={initialData.title}
             displaySize={initialDisplaySize}
             handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}

@@ -14,6 +14,7 @@ import MoleculeTextareaDescription from '../../shared/component/molecule/Molecul
 import { useValidation } from '../../shared/hooks/useValidation';
 import { CountryType } from '../../shared/enum/EnumRepository';
 import MemberInfoSelect from './MemberInfoSelect';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 
 const MemberInfo: React.FC = () => {
@@ -64,7 +65,7 @@ const MemberInfo: React.FC = () => {
     <MemberInfoComp>
       <ProfileAndInfo>
         <MoleculeImgDivContainer
-          backgroundImg={updateMemberInfoDto.uploadFile.originUrl}
+          backgroundImg={convertS3UrlToCloudFrontUrl(updateMemberInfoDto.uploadFile.originUrl)}
           handleChange={setOriginThumbnailUrl}
           StyledImgDivContainer={Profile}
         />
