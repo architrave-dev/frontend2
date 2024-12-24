@@ -7,6 +7,7 @@ import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
 import { useModal } from '../../shared/hooks/useModal';
 import defaultImg from '../../asset/project/default_1.png'
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 
 const WorkImport: React.FC = () => {
@@ -42,7 +43,7 @@ const WorkImport: React.FC = () => {
       {simpleWorkList.map((sw) =>
         <SimpleWork key={sw.id} onClick={() => onClickHandler(sw.id)}>
           <ImgWrapper>
-            <WorkImage src={sw.thumbnailUrl === '' ? defaultImg : sw.thumbnailUrl} alt={sw.title} />
+            <WorkImage src={sw.thumbnailUrl === '' ? defaultImg : convertS3UrlToCloudFrontUrl(sw.thumbnailUrl)} alt={sw.title} />
           </ImgWrapper>
           <SimpleDiv>{sw.title}</SimpleDiv>
         </SimpleWork>

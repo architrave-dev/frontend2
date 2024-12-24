@@ -30,7 +30,11 @@ export enum CountryType {
   KR = 'KR',      //Korea
   US = 'US',      //United States
   UK = 'UK',      //United Kingdom
-  NL = 'NL'       //Netherlands
+  NL = 'NL',       //Netherlands
+  FR = 'FR',      //France
+  JP = 'JP',      //Japan
+  CN = 'CN',      //China
+  NONE = 'NONE'  // private or None selected
 }
 
 export enum CareerType {
