@@ -37,6 +37,9 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
+        updateWorkDetailReq: null,
+        workDetailAlignment: null,
+        workDetailDisplaySize: null,
         updateTextBoxReq: initialData,
         textBoxAlignment: value,
         updateDocumentReq: null,
@@ -73,6 +76,9 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
+        updateWorkDetailReq: null,
+        workDetailAlignment: null,
+        workDetailDisplaySize: null,
         updateTextBoxReq: {
           id: targetTextBox.id,
           content: targetTextBox.content
