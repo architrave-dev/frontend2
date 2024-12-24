@@ -71,7 +71,6 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
       try {
         let updateWorkDetailReq: UpdateWorkDetailReq = {
           workDetailId: data.id,
-          workType: data.workType,
           updateUploadFileReq: {
             ...data.uploadFile,
             uploadFileId: data.uploadFile.id
