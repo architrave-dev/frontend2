@@ -12,7 +12,7 @@ import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkD
 import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import ProjectElement from '../projectElement/ProjectElement';
-import ProjectElementTemp from '../projectElement/ProjectElementTemp';
+import ProjectElementTemp from '../../nouse/ProjectElementTemp';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
 import Loading from '../../shared/component/Loading';

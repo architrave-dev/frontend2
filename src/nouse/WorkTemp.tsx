@@ -1,16 +1,16 @@
 import React from 'react';
-import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
-import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
-import { CreateProjectElementReq, CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
-import { SizeData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
-import SelectBox from '../../shared/component/SelectBox';
-import { ImgWrapper, SelectBoxContainer, SelectBoxWrapper, TitleInfoWrpper, WorkCoreWrapper, WorkImage, WorkInfo, WorkWrapper } from './Work';
-import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
-import { useValidation } from '../../shared/hooks/useValidation';
+import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
+import { InputWork, InputWorkTitle } from '../shared/component/headless/input/InputBody';
+import HeadlessInput from '../shared/component/headless/input/HeadlessInput';
+import HeadlessTextArea from '../shared/component/headless/textarea/HeadlessTextArea';
+import { TextAreaWork } from '../shared/component/headless/textarea/TextAreaBody';
+import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../shared/enum/EnumRepository';
+import { CreateProjectElementReq, CreateWorkReq } from '../shared/dto/ReqDtoRepository';
+import { SizeData, convertSizeToString, convertStringToSize } from '../shared/dto/EntityRepository';
+import SelectBox from '../shared/component/SelectBox';
+import { ImgWrapper, SelectBoxContainer, SelectBoxWrapper, TitleInfoWrpper, WorkCoreWrapper, WorkImage, WorkInfo, WorkWrapper } from '../component/projectElement/Work';
+import MoleculeImg from '../shared/component/molecule/MoleculeImg';
+import { useValidation } from '../shared/hooks/useValidation';
 
 export interface WorkProps {
   tempId: string;
