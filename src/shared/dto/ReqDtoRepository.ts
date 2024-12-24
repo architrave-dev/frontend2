@@ -76,7 +76,6 @@ export interface UpdateWorkPropertyVisibleReq {
 //-------------- WorkDetail
 export interface CreateWorkDetailReq {
   workId: string;
-  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   description: string;
@@ -84,7 +83,6 @@ export interface CreateWorkDetailReq {
 
 export interface UpdateWorkDetailReq {
   workDetailId: string;
-  workType: WorkType;
   updateUploadFileReq: UpdateUploadFileReq;
   description: string;
 }
