@@ -173,6 +173,9 @@ export interface CreateProjectElementReq {
   createWorkReq: CreateWorkReq | null;
   workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
+  createWorkDetailReq: CreateWorkDetailReq | null;
+  workDetailAlignment: DisplayAlignment | null;
+  workDetailDisplaySize: WorkDisplaySize | null;
   createTextBoxReq: CreateTextBoxReq | null,
   textBoxAlignment: TextAlignment | null;
   createDocumentReq: CreateDocumentReq | null;
@@ -185,7 +188,10 @@ export interface UpdateProjectElementReq {
   updateWorkReq: UpdateWorkReq | null;
   workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
-  updateTextBoxReq: UpdateTextBoxReq | null,
+  updateWorkDetailReq: UpdateWorkDetailReq | null;
+  workDetailAlignment: DisplayAlignment | null;
+  workDetailDisplaySize: WorkDisplaySize | null;
+  updateTextBoxReq: UpdateTextBoxReq | null;
   textBoxAlignment: TextAlignment | null;
   updateDocumentReq: UpdateDocumentReq | null;
   documentAlignment: TextAlignment | null;
