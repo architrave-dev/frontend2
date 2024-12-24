@@ -141,6 +141,7 @@ export const base64ToFileWithMime = (base64: string): File => {
 }
 
 export const convertS3UrlToCloudFrontUrl = (s3Url: string): string => {
+  if (s3Url === "") return s3Url;
   const s3Domain = process.env.REACT_APP_BUCKET_DOMAIN!;
   const cloudFrontDomain = process.env.REACT_APP_DOMAIN!;
 
