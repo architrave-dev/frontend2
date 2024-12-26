@@ -89,6 +89,10 @@ export interface WorkSimpleData {
   thumbnailUrl: string;
   title: string;
 }
+export interface WorkDetailSimpleData {
+  id: string;
+  thumbnailUrl: string;
+}
 
 export interface WorkDetailData {
   id: string;
