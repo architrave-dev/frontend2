@@ -93,7 +93,7 @@ const ProjectElementList: React.FC = () => {
     createPe();
   };
 
-  const handleImportElement = async (elementType: ProjectElementType) => {
+  const handleImportElement = async () => {
     try {
       await getSimpleWorkList(aui);
       openModal(ModalType.WORK_STATION);
@@ -127,7 +127,7 @@ const ProjectElementList: React.FC = () => {
           <CreateButtonGroup>
             <HeadlessBtn
               value={"Import"}
-              handleClick={() => handleImportElement(ProjectElementType.WORK)}
+              handleClick={() => handleImportElement()}
               StyledBtn={BtnCreate}
             />
             <HeadlessBtn

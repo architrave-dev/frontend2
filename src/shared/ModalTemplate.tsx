@@ -91,8 +91,6 @@ const WorkStationOverlay = styled.div`
   width: 100%;
   height: 100%;
   align-items: center;
-  
-  // background-color: ${({ theme }) => theme.colors.color_Alpha_02};
 `;
 
 const WorkStationContent = styled.div`
@@ -103,7 +101,7 @@ const WorkStationContent = styled.div`
   padding: 20px;
   border-radius: 2px;
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  width: 200px;
+  width: 230px;
   //height은 각자 정해
 `;
 
