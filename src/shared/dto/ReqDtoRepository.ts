@@ -165,6 +165,12 @@ export interface CreateProjectElementWithWorkReq {
   workAlignment: DisplayAlignment;
   workDisplaySize: WorkDisplaySize;
 }
+export interface CreateProjectElementWithWorkDetailReq {
+  projectId: string;
+  workDetailId: string;
+  workDetailAlignment: DisplayAlignment;
+  workDetailDisplaySize: WorkDisplaySize;
+}
 
 export interface CreateProjectElementReq {
   tempId: string;
