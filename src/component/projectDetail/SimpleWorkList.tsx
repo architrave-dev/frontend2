@@ -6,12 +6,11 @@ import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
 import { useModal } from '../../shared/hooks/useModal';
-import defaultImg from '../../asset/project/default_1.png'
-import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import WorkDetailImport from './SimpleWorkDetailList';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { SmallestBtn } from '../../shared/component/headless/button/BtnBody';
+import SimpleWork from './SimpleWork';
 
 
 const WorkImport: React.FC = () => {
@@ -28,7 +27,6 @@ const WorkImport: React.FC = () => {
       Work does not exist.
     </NoWorkContainer>
   );
-
 
   const onClickHandler = async (workId: string) => {
     try {
@@ -54,14 +52,12 @@ const WorkImport: React.FC = () => {
 
   return (
     <SimpleWorkContainer>
-      {simpleList.map((sw) =>
+      {simpleList.map((sw, i) =>
         <>
-          <SimpleWork key={sw.simpleWork.id} onClick={() => onClickHandler(sw.simpleWork.id)}>
-            <ImgWrapper>
-              <WorkImage src={sw.simpleWork.thumbnailUrl === '' ? defaultImg : convertS3UrlToCloudFrontUrl(sw.simpleWork.thumbnailUrl)} alt={sw.simpleWork.title} />
-            </ImgWrapper>
-            <SimpleDiv>{sw.simpleWork.title}</SimpleDiv>
-          </SimpleWork>
+          <SimpleWork
+            key={sw.simpleWork.title + i}
+            data={sw.simpleWork}
+            onClickHandler={onClickHandler} />
           {sw.simpleWorkDetail.length > 0 ?
             <WorkDetailImport simpleWorkDetailList={sw.simpleWorkDetail} />
             :
@@ -87,7 +83,6 @@ const NoWorkContainer = styled.div`
   height: 500px;
 `
 
-
 const SimpleWorkContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -102,37 +97,6 @@ const SimpleWorkContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`
-
-const SimpleWork = styled.div`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-`
-
-const ImgWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: fit-content;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 4px;
-
-  cursor: pointer;
-`
-const WorkImage = styled.img`
-  //부모 크기에 맞춤
-  width: 100%;
-  height: 100%; 
-  object-fit: contain;
-`;
-
-const SimpleDiv = styled.div`
-text-align: right;
-${({ theme }) => theme.typography.Body_03_2};
 `
 
 export default WorkImport;
