@@ -6,6 +6,7 @@ import Signin from '../component/auth/SignIn';
 import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
+import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetail';
 import { useModal } from './hooks/useModal';
 import { useOriginImgStore } from './store/portal/originImgStore';
 
@@ -13,7 +14,6 @@ const ModalTemplate: React.FC = () => {
   const { closeModal } = useModal();
   const { modalType } = useModalStore();
   const { originUrl } = useOriginImgStore();
-
 
   const renderModalContent = () => {
     switch (modalType) {
@@ -28,6 +28,14 @@ const ModalTemplate: React.FC = () => {
           <WorkStationOverlay onClick={closeModal}>
             <WorkStationContent onClick={(e) => e.stopPropagation()}>
               <WorkImport />
+            </WorkStationContent>
+          </WorkStationOverlay>
+        )
+      case ModalType.TEMP_WORK:
+        return (
+          <WorkStationOverlay onClick={closeModal}>
+            <WorkStationContent onClick={(e) => e.stopPropagation()}>
+              <WorkListForDetail />
             </WorkStationContent>
           </WorkStationOverlay>
         )

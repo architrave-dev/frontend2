@@ -5,7 +5,6 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useParams } from 'react-router-dom';
 import { useModal } from '../../shared/hooks/useModal';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
-import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, ModalType } from '../../shared/enum/EnumRepository';
@@ -24,8 +23,6 @@ const ProjectElementList: React.FC = () => {
   const { project } = useProjectDetail();
   const { getSimpleWorkList } = useWorkList();
   const { isLoading, projectElementList, getProjectElementList, createProjectElement } = useProjectElement();
-  const { updatedProjectElements } = useProjectElementListStoreForUpdate();
-
   const { openModal } = useModal();
 
   useEffect(() => {
@@ -68,6 +65,11 @@ const ProjectElementList: React.FC = () => {
           workAlignment: elementType === ProjectElementType.WORK ? DisplayAlignment.CENTER : null,
           workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
 
+          // WorkDetail은 여기서 생성하지 않는다.
+          createWorkDetailReq: null,
+          workDetailAlignment: null,
+          workDetailDisplaySize: null,
+
           // TextBox
           createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
             content: "New TextBox"
@@ -102,6 +104,14 @@ const ProjectElementList: React.FC = () => {
     }
   }
 
+  const openSimpleWorkForCreateDetail = async () => {
+    try {
+      await getSimpleWorkList(aui);
+      openModal(ModalType.TEMP_WORK);
+    } catch (err) {
+    } finally {
+    }
+  }
   // 로딩 상태를 처리합니다.
   if (isLoading) return <Loading />;
 
@@ -115,6 +125,9 @@ const ProjectElementList: React.FC = () => {
           work={each.work}
           workAlignment={each.workAlignment}
           workDisplaySize={each.workDisplaySize}
+          workDetail={each.workDetail}
+          workDetailAlignment={each.workDetailAlignment}
+          workDetailDisplaySize={each.workDetailDisplaySize}
           textBox={each.textBox}
           textBoxAlignment={each.textBoxAlignment}
           document={each.document}
@@ -135,11 +148,11 @@ const ProjectElementList: React.FC = () => {
               handleClick={() => handleCreateElement(ProjectElementType.WORK)}
               StyledBtn={BtnCreate}
             />
-            {/* <HeadlessBtn
+            <HeadlessBtn
               value={"Detail"}
-              handleClick={() => handleCreateElement(ProjectElementType.DETAIL)}
+              handleClick={() => openSimpleWorkForCreateDetail()}
               StyledBtn={BtnCreate}
-            /> */}
+            />
             <HeadlessBtn
               value={"Doc"}
               handleClick={() => handleCreateElement(ProjectElementType.DOCUMENT)}
