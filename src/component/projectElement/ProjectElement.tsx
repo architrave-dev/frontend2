@@ -11,7 +11,7 @@ import { ProjectElementType } from '../../shared/enum/EnumRepository';
 import { ProjectElementData } from '../../shared/dto/EntityRepository';
 import { RemoveProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import Document from './Document';
-
+import Detail from './Detail';
 
 
 const ProjectElement: React.FC<ProjectElementData> = ({
@@ -20,6 +20,9 @@ const ProjectElement: React.FC<ProjectElementData> = ({
   work,
   workAlignment,
   workDisplaySize,
+  workDetail,
+  workDetailAlignment,
+  workDetailDisplaySize,
   textBox,
   textBoxAlignment,
   document,
@@ -34,6 +37,8 @@ const ProjectElement: React.FC<ProjectElementData> = ({
     switch (projectElementType) {
       case ProjectElementType.WORK:
         return work && <Work alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
+      case ProjectElementType.DETAIL:
+        return workDetail && <Detail alignment={workDetailAlignment} displaySize={workDetailDisplaySize} data={workDetail} />;
       case ProjectElementType.TEXTBOX:
         return textBox && <TextBox alignment={textBoxAlignment} data={textBox} />;
       case ProjectElementType.DOCUMENT:
@@ -89,6 +94,8 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
     /* 각 Element를 순수하게 남기기 위해 여기서 설정 */
     switch ($elementType) {
       case ProjectElementType.WORK:
+      case ProjectElementType.DETAIL:
+      case ProjectElementType.DOCUMENT:
         return 'calc(16vh)';
       case ProjectElementType.TEXTBOX:
         return 'calc(10vh)';
