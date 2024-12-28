@@ -5,11 +5,14 @@ export enum ErrorCode {
   NFR = 'NFR', // Not Found Result
   NAU = 'NAU', // Not Authorized User
   AEV = 'AEV', // Already Exist Value
-  ATX = 'ATX',  // Access Token Expired
-  RTX = 'RTX',  // Refresh Token Expired
-  UME = 'UME',  // UnManaged Error
+  ATX = 'ATX', // Access Token Expired
+  RTX = 'RTX', // Refresh Token Expired
+  UME = 'UME', // UnManaged Error
 
-  AWS = 'AWS',  // Error about AWS
+  AWS = 'AWS', // Error about AWS
+
+  DUK = 'DUK',  // Duplicated Unique Key
+  DBE = 'DBE',   // Database Error
 
   WEF = 'WEF',  // Wrong Error Format
 }

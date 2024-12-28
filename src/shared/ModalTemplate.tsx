@@ -6,6 +6,7 @@ import Signin from '../component/auth/SignIn';
 import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
+import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetail';
 import { useModal } from './hooks/useModal';
 import { useOriginImgStore } from './store/portal/originImgStore';
 
@@ -13,7 +14,6 @@ const ModalTemplate: React.FC = () => {
   const { closeModal } = useModal();
   const { modalType } = useModalStore();
   const { originUrl } = useOriginImgStore();
-
 
   const renderModalContent = () => {
     switch (modalType) {
@@ -28,6 +28,14 @@ const ModalTemplate: React.FC = () => {
           <WorkStationOverlay onClick={closeModal}>
             <WorkStationContent onClick={(e) => e.stopPropagation()}>
               <WorkImport />
+            </WorkStationContent>
+          </WorkStationOverlay>
+        )
+      case ModalType.TEMP_WORK:
+        return (
+          <WorkStationOverlay onClick={closeModal}>
+            <WorkStationContent onClick={(e) => e.stopPropagation()}>
+              <WorkListForDetail />
             </WorkStationContent>
           </WorkStationOverlay>
         )
@@ -91,8 +99,6 @@ const WorkStationOverlay = styled.div`
   width: 100%;
   height: 100%;
   align-items: center;
-  
-  // background-color: ${({ theme }) => theme.colors.color_Alpha_02};
 `;
 
 const WorkStationContent = styled.div`
@@ -103,7 +109,7 @@ const WorkStationContent = styled.div`
   padding: 20px;
   border-radius: 2px;
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  width: 200px;
+  width: 230px;
   //height은 각자 정해
 `;
 

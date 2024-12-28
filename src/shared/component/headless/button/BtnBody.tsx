@@ -120,3 +120,16 @@ export const OriginBtnRight = styled.button`
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_04};
 `;
+
+export const SmallestBtn = styled.button`
+  ${commonBtnStyles}
+  padding: 0.2rem 0.3rem;
+  background-color: ${({ theme }) => theme.colors.color_White};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  }
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  ${({ theme }) => theme.typography.Body_04};
+`;

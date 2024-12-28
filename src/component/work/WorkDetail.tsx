@@ -49,7 +49,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
     try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [updatedActiveWork!.id, prevData.workDetailId]);
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [updatedActiveWork!.id, prevData.id]);
       return {
         ...prevData,
         updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
@@ -70,13 +70,12 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     const updateDetail = async () => {
       try {
         let updateWorkDetailReq: UpdateWorkDetailReq = {
-          workDetailId: data.id,
-          workType: data.workType,
+          ...data,
+          workId,
           updateUploadFileReq: {
             ...data.uploadFile,
             uploadFileId: data.uploadFile.id
           },
-          description: data.description,
         }
         if (imageChecker()) {
           updateWorkDetailReq = await uploadFileWithLocalUrl(ServiceType.DETAIL, updateWorkDetailReq, aui);

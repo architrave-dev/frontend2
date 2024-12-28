@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { DeleteResponse, ErrorResponse, WorkDetailListResponse, WorkDetailResponse, WorkWithDetailResponse } from '../dto/ResDtoRepository';
+import { DeleteResponse, ErrorResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailSimpleListResponse, WorkWithDetailResponse } from '../dto/ResDtoRepository';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../dto/ReqDtoRepository';
 
 
@@ -16,6 +16,15 @@ const workDetailApi = axios.create({
 export const getWorkDetail = async (aui: string, workDetailId: string): Promise<WorkDetailResponse> => {
   try {
     const response = await workDetailApi.get<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}&workDetailId=${workDetailId}`);
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+export const getSimpleWorkDetailList = async (aui: string, workId: string): Promise<WorkDetailSimpleListResponse> => {
+  try {
+    const response = await workDetailApi.get<WorkDetailSimpleListResponse>(`/api/v1/work-detail/list/simple?aui=${aui}&workId=${workId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);

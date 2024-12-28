@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../../dto/ReqDtoRepository';
-import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse } from '../../dto/ResDtoRepository';
-import { createWorkDetail, deleteWorkDetail, getWorkDetail, getWorkDetailList, updateWorkDetail } from '../../api/workDetailApi';
+import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailSimpleListResponse } from '../../dto/ResDtoRepository';
+import { createWorkDetail, deleteWorkDetail, getSimpleWorkDetailList, getWorkDetail, getWorkDetailList, updateWorkDetail } from '../../api/workDetailApi';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
+import { useWorkStationStore } from '../../store/workStationStore';
 
 
 interface UseWorkListResult {
   isLoading: boolean;
-  // workDetailList: WorkDetailData[];
   getWorkDetail: (aui: string, workDetailId: string) => Promise<void>;
+  getSimpleWorkDetailList: (aui: string, workId: string) => Promise<void>;
   getWorkDetailList: (aui: string, workId: string) => Promise<void>;
   updateWorkDetail: (aui: string, data: UpdateWorkDetailReq) => Promise<void>;
   createWorkDetail: (aui: string, data: CreateWorkDetailReq) => Promise<void>;
@@ -22,6 +23,7 @@ export const useWorkDetail = (): UseWorkListResult => {
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { activeWorkDetailList, setActiveWorkDetailList } = useWorkViewStore();
   const { updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+  const { setSimpleWorkDetailList } = useWorkStationStore();
 
   const handleGetWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
@@ -30,6 +32,11 @@ export const useWorkDetail = (): UseWorkListResult => {
   const handleGetWorkDetailListSuccess = (response: WorkDetailListResponse) => {
     const data = response.data;
     setUpdateActiveWorkDetailList(data);
+  };
+
+  const handleGetSimpleWorkDetailListSuccess = (workId: string, response: WorkDetailSimpleListResponse) => {
+    const data = response.data;
+    setSimpleWorkDetailList(workId, data);
   };
 
   const handleUpdateWorkDetailSuccess = (response: WorkDetailResponse) => {
@@ -52,7 +59,7 @@ export const useWorkDetail = (): UseWorkListResult => {
 
   const handleWorkDetailRequest = async (
     aui: string,
-    action: 'get' | 'get list' | 'update' | 'create' | 'delete',
+    action: 'get' | 'get list' | 'get simple list' | 'update' | 'create' | 'delete',
     data: UpdateWorkDetailReq | CreateWorkDetailReq | DeleteWorkDetailReq | string
   ) => {
     setIsLoading(true);
@@ -70,6 +77,9 @@ export const useWorkDetail = (): UseWorkListResult => {
           break;
         case 'get list':
           handleGetWorkDetailListSuccess(await getWorkDetailList(aui, data as string));
+          break;
+        case 'get simple list':
+          handleGetSimpleWorkDetailListSuccess(data as string, await getSimpleWorkDetailList(aui, data as string));
           break;
         case 'get':
         default:
@@ -90,7 +100,8 @@ export const useWorkDetail = (): UseWorkListResult => {
   };
 
   const getWorkDetailHandler = (aui: string, data: string) => handleWorkDetailRequest(aui, 'get', data);
-  const getWorkDetailListHandler = (aui: string, data: string) => handleWorkDetailRequest(aui, 'get list', data);
+  const getSimpleWorkDetailListHandler = (aui: string, workId: string) => handleWorkDetailRequest(aui, 'get simple list', workId);
+  const getWorkDetailListHandler = (aui: string, workId: string) => handleWorkDetailRequest(aui, 'get list', workId);
   const updateWorkDetailHandler = (aui: string, data: UpdateWorkDetailReq) => handleWorkDetailRequest(aui, 'update', data);
   const createWorkDetailHandler = (aui: string, data: CreateWorkDetailReq) => handleWorkDetailRequest(aui, 'create', data);
   const deleteWorkDetailHandler = (aui: string, data: DeleteWorkDetailReq) => handleWorkDetailRequest(aui, 'delete', data);
@@ -99,6 +110,7 @@ export const useWorkDetail = (): UseWorkListResult => {
   return {
     isLoading,
     getWorkDetail: getWorkDetailHandler,
+    getSimpleWorkDetailList: getSimpleWorkDetailListHandler,
     getWorkDetailList: getWorkDetailListHandler,
     updateWorkDetail: updateWorkDetailHandler,
     createWorkDetail: createWorkDetailHandler,

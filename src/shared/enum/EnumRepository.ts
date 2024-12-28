@@ -3,6 +3,7 @@ export enum ModalType {
   SIGNIN = 'SIGNIN',
   LOGIN = 'LOGIN',
   WORK_STATION = 'WORK_STATION',
+  TEMP_WORK = 'TEMP_WORK',
   ORIGIN_IMG = 'ORIGIN_IMG',
   ALERT = 'ALERT',
 }
@@ -18,7 +19,6 @@ export enum AlertPosition {
 }
 
 export enum ProjectElementType {
-  I_WORK = 'I_WORK',
   WORK = 'WORK',
   DETAIL = 'DETAIL',
   DOCUMENT = 'DOCUMENT',

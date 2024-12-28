@@ -6,24 +6,27 @@ import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
 import { useModal } from '../../shared/hooks/useModal';
-import defaultImg from '../../asset/project/default_1.png'
-import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
+import WorkDetailImport from './SimpleWorkDetailList';
+import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { SmallestBtn } from '../../shared/component/headless/button/BtnBody';
+import SimpleWork from './SimpleWork';
 
 
 const WorkImport: React.FC = () => {
   const { aui } = useAui();
   const { closeModal } = useModal();
   const { project } = useProjectDetail();
-  const { simpleWorkList } = useWorkStationStore();
+  const { simpleList } = useWorkStationStore();
   const { createProjectElementWithWork } = useProjectElement();
+  const { getSimpleWorkDetailList } = useWorkDetail();
 
   if (!project) return null;
-  if (simpleWorkList.length === 0) return (
+  if (simpleList.length === 0) return (
     <NoWorkContainer onClick={closeModal}>
       Work does not exist.
     </NoWorkContainer>
   );
-
 
   const onClickHandler = async (workId: string) => {
     try {
@@ -38,15 +41,33 @@ const WorkImport: React.FC = () => {
     closeModal();
   };
 
+  const onClickDetailHandler = async (workId: string) => {
+    try {
+      await getSimpleWorkDetailList(aui, workId);
+    } catch (err) {
+    } finally {
+    }
+  };
+
+
   return (
     <SimpleWorkContainer>
-      {simpleWorkList.map((sw) =>
-        <SimpleWork key={sw.id} onClick={() => onClickHandler(sw.id)}>
-          <ImgWrapper>
-            <WorkImage src={sw.thumbnailUrl === '' ? defaultImg : convertS3UrlToCloudFrontUrl(sw.thumbnailUrl)} alt={sw.title} />
-          </ImgWrapper>
-          <SimpleDiv>{sw.title}</SimpleDiv>
-        </SimpleWork>
+      {simpleList.map((sw, i) =>
+        <>
+          <SimpleWork
+            key={sw.simpleWork.title + i}
+            data={sw.simpleWork}
+            onClickHandler={onClickHandler} />
+          {sw.simpleWorkDetail.length > 0 ?
+            <WorkDetailImport simpleWorkDetailList={sw.simpleWorkDetail} />
+            :
+            <HeadlessBtn
+              value={"Details"}
+              handleClick={() => onClickDetailHandler(sw.simpleWork.id)}
+              StyledBtn={SmallestBtn}
+            />
+          }
+        </>
       )}
     </SimpleWorkContainer>
   );
@@ -62,47 +83,20 @@ const NoWorkContainer = styled.div`
   height: 500px;
 `
 
-
 const SimpleWorkContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 20px;
+  align-items: flex-end;
+  gap: 10px;
   
   width: 100%;
   height: 500px;
   
   overflow-y: scroll;
-`
-
-const SimpleWork = styled.div`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-`
-
-const ImgWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: fit-content;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-bottom: 4px;
-`
-const WorkImage = styled.img`
-  //부모 크기에 맞춤
-  width: 100%;
-  height: 100%; 
-  object-fit: contain;
-`;
-
-const SimpleDiv = styled.div`
-text-align: right;
-${({ theme }) => theme.typography.Body_03_2};
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 export default WorkImport;

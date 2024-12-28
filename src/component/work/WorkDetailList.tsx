@@ -27,7 +27,6 @@ const WorkDetailList: React.FC = () => {
       try {
         await createWorkDetail(aui, {
           workId: activeWork.id,
-          workType: WorkType.NONE,
           originUrl: "",
           thumbnailUrl: "",
           description: "",

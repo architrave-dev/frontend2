@@ -89,10 +89,14 @@ export interface WorkSimpleData {
   thumbnailUrl: string;
   title: string;
 }
+export interface WorkDetailSimpleData {
+  id: string;
+  thumbnailUrl: string;
+}
 
 export interface WorkDetailData {
   id: string;
-  workType: WorkType;
+  workId: string;
   uploadFile: UploadFileData;
   description: string;
 }
@@ -150,6 +154,9 @@ export interface ProjectElementData {
   work: WorkData | null;
   workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
+  workDetail: WorkDetailData | null;
+  workDetailAlignment: DisplayAlignment | null;
+  workDetailDisplaySize: WorkDisplaySize | null;
   textBox: TextBoxData | null;
   textBoxAlignment: TextAlignment | null;
   document: DocumentData | null;

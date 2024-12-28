@@ -1,14 +1,14 @@
 import React from 'react';
-import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import SelectBox from '../../shared/component/SelectBox';
-import { SelectBoxContainer } from './TextBox';
-import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
-import { TextAreaTextBox } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
-import { CreateDocumentReq, CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
-import { DocumentWrapper, ImgWrapper } from './Document';
-import { SelectBoxWrapper, WorkImage } from './Work';
-import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
+import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
+import SelectBox from '../shared/component/SelectBox';
+import { SelectBoxContainer } from '../component/projectElement/TextBox';
+import HeadlessTextArea from '../shared/component/headless/textarea/HeadlessTextArea';
+import { TextAreaTextBox } from '../shared/component/headless/textarea/TextAreaBody';
+import { SelectType, WorkDisplaySize, TextAlignment } from '../shared/enum/EnumRepository';
+import { CreateDocumentReq, CreateProjectElementReq } from '../shared/dto/ReqDtoRepository';
+import { DocumentWrapper, ImgWrapper } from '../component/projectElement/Document';
+import { SelectBoxWrapper, WorkImage } from '../component/projectElement/Work';
+import MoleculeImg from '../shared/component/molecule/MoleculeImg';
 
 
 export interface DocumentProps {

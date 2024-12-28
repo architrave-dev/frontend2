@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useAui } from '../../shared/hooks/useAui';
-import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useAui } from '../shared/hooks/useAui';
+import { useEditMode } from '../shared/hooks/useEditMode';
 import { useParams } from 'react-router-dom';
-import { useModal } from '../../shared/hooks/useModal';
-import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
-import { useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
-import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, ModalType } from '../../shared/enum/EnumRepository';
-import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
-import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
-import ProjectElement from '../projectElement/ProjectElement';
-import ProjectElementTemp from '../projectElement/ProjectElementTemp';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import Space from '../../shared/Space';
-import Loading from '../../shared/component/Loading';
+import { useModal } from '../shared/hooks/useModal';
+import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
+import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
+import { useProjectDetail } from '../shared/hooks/useApi/useProjectDetail';
+import { BtnCreate } from '../shared/component/headless/button/BtnBody';
+import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, ModalType } from '../shared/enum/EnumRepository';
+import { CreateProjectElementReq } from '../shared/dto/ReqDtoRepository';
+import { useWorkList } from '../shared/hooks/useApi/useWorkList';
+import ProjectElement from '../component/projectElement/ProjectElement';
+import ProjectElementTemp from './ProjectElementTemp';
+import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
+import Space from '../shared/Space';
+import Loading from '../shared/component/Loading';
 
 
 const ProjectElementList: React.FC = () => {

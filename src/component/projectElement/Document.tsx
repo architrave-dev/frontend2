@@ -41,6 +41,9 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
+        updateWorkDetailReq: null,
+        workDetailAlignment: null,
+        workDetailDisplaySize: null,
         updateTextBoxReq: null,
         textBoxAlignment: null,
         updateDocumentReq: {
@@ -84,6 +87,9 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
+        updateWorkDetailReq: null,
+        workDetailAlignment: null,
+        workDetailDisplaySize: null,
         updateTextBoxReq: null,
         textBoxAlignment: null,
         updateDocumentReq: {
@@ -136,6 +142,9 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         updateWorkReq: null,
         workAlignment: null,
         workDisplaySize: null,
+        updateWorkDetailReq: null,
+        workDetailAlignment: null,
+        workDetailDisplaySize: null,
         updateDocumentReq: {
           id: targetDocument.id,
           updateUploadFileReq: {

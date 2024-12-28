@@ -76,15 +76,14 @@ export interface UpdateWorkPropertyVisibleReq {
 //-------------- WorkDetail
 export interface CreateWorkDetailReq {
   workId: string;
-  workType: WorkType;
   originUrl: string;
   thumbnailUrl: string;
   description: string;
 }
 
 export interface UpdateWorkDetailReq {
-  workDetailId: string;
-  workType: WorkType;
+  id: string;
+  workId: string;
   updateUploadFileReq: UpdateUploadFileReq;
   description: string;
 }
@@ -167,6 +166,12 @@ export interface CreateProjectElementWithWorkReq {
   workAlignment: DisplayAlignment;
   workDisplaySize: WorkDisplaySize;
 }
+export interface CreateProjectElementWithWorkDetailReq {
+  projectId: string;
+  workDetailId: string;
+  workDetailAlignment: DisplayAlignment;
+  workDetailDisplaySize: WorkDisplaySize;
+}
 
 export interface CreateProjectElementReq {
   tempId: string;
@@ -175,6 +180,9 @@ export interface CreateProjectElementReq {
   createWorkReq: CreateWorkReq | null;
   workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
+  createWorkDetailReq: CreateWorkDetailReq | null;
+  workDetailAlignment: DisplayAlignment | null;
+  workDetailDisplaySize: WorkDisplaySize | null;
   createTextBoxReq: CreateTextBoxReq | null,
   textBoxAlignment: TextAlignment | null;
   createDocumentReq: CreateDocumentReq | null;
@@ -187,7 +195,10 @@ export interface UpdateProjectElementReq {
   updateWorkReq: UpdateWorkReq | null;
   workAlignment: DisplayAlignment | null;
   workDisplaySize: WorkDisplaySize | null;
-  updateTextBoxReq: UpdateTextBoxReq | null,
+  updateWorkDetailReq: UpdateWorkDetailReq | null;
+  workDetailAlignment: DisplayAlignment | null;
+  workDetailDisplaySize: WorkDisplaySize | null;
+  updateTextBoxReq: UpdateTextBoxReq | null;
   textBoxAlignment: TextAlignment | null;
   updateDocumentReq: UpdateDocumentReq | null;
   documentAlignment: TextAlignment | null;
