@@ -96,6 +96,7 @@ export interface WorkDetailSimpleData {
 
 export interface WorkDetailData {
   id: string;
+  workId: string;
   uploadFile: UploadFileData;
   description: string;
 }

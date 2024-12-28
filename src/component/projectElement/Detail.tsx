@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import { SelectType, DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { ProjectElementData, WorkDetailData } from '../../shared/dto/EntityRepository';
@@ -29,14 +28,15 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
   const { checkType } = useValidation();
 
   const handleChange = (field: keyof WorkDetailData, value: string) => {
+    if (field == 'workId') return null;
     if (!checkType(field, value)) {
       return;
     };
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.workDetailId === initialData.id);
+    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.id === initialData.id);
     if (targetElement) {
       //updatedProjectElements에 있다면
       const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkDetailReq?.workDetailId === initialData.id ? { ...each, updateWorkDetailReq: { ...each.updateWorkDetailReq, [field]: value } as UpdateWorkDetailReq } : each
+        each.updateWorkDetailReq?.id === initialData.id ? { ...each, updateWorkDetailReq: { ...each.updateWorkDetailReq, [field]: value } as UpdateWorkDetailReq } : each
       )
       setUpdatedProjectElements(updatedProjectElementList);
     } else {
@@ -53,12 +53,11 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
         workAlignment: null,
         workDisplaySize: null,
         updateWorkDetailReq: {
-          workDetailId: targetDetail.id,
+          ...targetDetail,
           updateUploadFileReq: {
             uploadFileId: targetDetail.uploadFile.id,
             ...targetDetail.uploadFile
           },
-          description: targetDetail.description,
         },
         workDetailAlignment: target.workDetailAlignment,
         workDetailDisplaySize: target.workDetailDisplaySize,
@@ -86,11 +85,11 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
   }
 
   const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.workDetailId === initialData.id);
+    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.id === initialData.id);
     if (targetElement) {
       //updatedProjectElements에 있다면
       const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkDetailReq?.workDetailId === initialData.id ? { ...each, updateWorkDetailReq: { ...each.updateWorkDetailReq, thumbnailUrl, originUrl } as UpdateWorkDetailReq } : each
+        each.updateWorkDetailReq?.id === initialData.id ? { ...each, updateWorkDetailReq: { ...each.updateWorkDetailReq, thumbnailUrl, originUrl } as UpdateWorkDetailReq } : each
       )
       setUpdatedProjectElements(updatedProjectElementList);
     } else {
@@ -107,13 +106,12 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
         workAlignment: null,
         workDisplaySize: null,
         updateWorkDetailReq: {
-          workDetailId: targetDetail.id,
+          ...targetDetail,
           updateUploadFileReq: {
             uploadFileId: targetDetail.uploadFile.id,
             originUrl: originUrl,
             thumbnailUrl: thumbnailUrl,
           },
-          description: targetDetail.description,
         },
         workDetailAlignment: target.workDetailAlignment,
         workDetailDisplaySize: target.workDetailDisplaySize,
@@ -145,12 +143,11 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
     key: 'workDetailDisplaySize' | 'workDetailAlignment',
     value: WorkDisplaySize | DisplayAlignment
   ) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.workDetailId === initialData.id);
+    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.id === initialData.id);
     if (targetElement) {
       const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkDetailReq?.workDetailId === initialData.id ? { ...each, [key]: value } : each
+        each.updateWorkDetailReq?.id === initialData.id ? { ...each, [key]: value } : each
       )
-      console.log("updatedProjectElementList: ", updatedProjectElementList);
       setUpdatedProjectElements(updatedProjectElementList);
     } else {
       const target = projectElementList.find(pe => pe.workDetail?.id === initialData.id);
@@ -161,12 +158,11 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
         workAlignment: null,
         workDisplaySize: null,
         updateWorkDetailReq: {
-          workDetailId: target.workDetail.id,
+          ...target.workDetail,
           updateUploadFileReq: {
             uploadFileId: target.workDetail.uploadFile.id,
             ...target.workDetail.uploadFile
           },
-          ...target.workDetail
         },
         workDetailAlignment: key === 'workDetailAlignment' ? (value as DisplayAlignment) : target.workDetailAlignment,
         workDetailDisplaySize: key === 'workDetailDisplaySize' ? (value as WorkDisplaySize) : target.workDetailDisplaySize,
@@ -176,7 +172,6 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
         documentAlignment: null,
         dividerType: null
       }
-      console.log("newUpdateProjectElementReq: ", newUpdateProjectElementReq);
       setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
     }
     const updatedProjectElementList = projectElementList.map(each =>

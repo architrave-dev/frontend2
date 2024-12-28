@@ -12,7 +12,7 @@ import { useEditMode } from '../shared/hooks/useEditMode';
 import { useProjectStoreForUpdate } from '../shared/store/projectStore';
 import { useProjectInfoListStoreForUpdate } from '../shared/store/projectInfoListStore';
 import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
-import { UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
+import { UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkDetailReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
 import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
 import { IndexData } from '../shared/dto/EntityRepository';
 import { ServiceType } from '../shared/enum/EnumRepository';
@@ -92,7 +92,7 @@ const ProjectDetail: React.FC = () => {
     return project.uploadFile.originUrl !== updatedProjectDto.uploadFile.originUrl;
   }
 
-  const uploadFileWithLocalUrlUpdates = async <T extends { id: string, updateUploadFileReq: UpdateUploadFileReq }>(
+  const uploadFileWithLocalUrlUpdates = async <T extends { id: string, updateUploadFileReq: UpdateUploadFileReq, workId?: string }>(
     serviceType: ServiceType,
     prevData: T,
     aui: string
@@ -104,6 +104,8 @@ const ProjectDetail: React.FC = () => {
 
       if (serviceType === ServiceType.WORK) {
         ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]));
+      } else if (serviceType === ServiceType.DETAIL) {
+        ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.workId!, prevData.id]));
       } else if (serviceType === ServiceType.DOCUMENT) {
         ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [project.id, prevData.id]));
       } else {
@@ -152,6 +154,15 @@ const ProjectDetail: React.FC = () => {
               return {
                 ...pe,
                 updateWorkReq: convertedUpdateWorkReq,
+              };
+            }
+            return pe;
+          } else if (pe.updateWorkDetailReq != null) {
+            if (isBase64Image(pe.updateWorkDetailReq.updateUploadFileReq.originUrl)) {
+              const convertedUpdateWorkDetailReq = await uploadFileWithLocalUrlUpdates<UpdateWorkDetailReq>(ServiceType.DETAIL, pe.updateWorkDetailReq, aui);
+              return {
+                ...pe,
+                updateWorkDetailReq: convertedUpdateWorkDetailReq,
               };
             }
             return pe;
