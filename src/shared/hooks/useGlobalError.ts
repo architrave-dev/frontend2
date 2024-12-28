@@ -75,6 +75,15 @@ export const useGlobalError = () => {
       callBack: clearErr
     });
   }
+  const handleDUK = async () => {
+    console.log("handleDUK: Already existed Object.");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Already existed Object.",
+      callBack: clearErr
+    });
+  }
 
   const handleGlobalErr = async () => {
     if (managedErr === null) {
@@ -96,6 +105,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.AWS:
         await handleAWS();
+        break;
+      case ErrorCode.DUK:
+        await handleDUK();
         break;
       case ErrorCode.WEF:
       default:
