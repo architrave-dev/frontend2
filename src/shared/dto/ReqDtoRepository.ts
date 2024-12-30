@@ -1,5 +1,5 @@
 import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
-import { IndexData, SizeData } from './EntityRepository';
+import { IndexData, SizeData, SocialMedia } from './EntityRepository';
 
 //-------------- Auth
 export interface SignUpReq {
@@ -251,4 +251,13 @@ export interface UpdatedCareerListReq {
   createCareerReqList?: CreateCareerReq[];
   updateCareerReqList?: UpdateCareerReq[];
   removeCareerReqList?: RemoveCareerReq[];
+}
+
+//-------------- Contact
+export interface UpdateContactReq {
+  id: string;
+  address: string;
+  email: string;
+  contact: string;
+  sns: SocialMedia;
 }

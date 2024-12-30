@@ -173,7 +173,25 @@ export interface MemberInfoData {
   email: string;
   contact: string;
   description: string;
-  // 각종 SNS(인스타, 유튜브, 트위터 등등)
+}
+
+export interface ContactData {
+  id: string;
+  address: string;
+  email: string;
+  contact: string;
+  sns: SocialMedia;
+}
+
+export interface SocialMedia {
+  twitter: string;
+  instagram: string;
+  facebook: string;
+  threads: string;
+  behance: string;
+  youtube: string;
+  vimeo: string;
+  url1: string;
 }
 
 export interface CareerData {
