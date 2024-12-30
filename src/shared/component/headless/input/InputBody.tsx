@@ -167,3 +167,14 @@ export const WorkDetailInputDescription = styled.input`
   text-align: right;
   ${({ theme }) => theme.typography.Body_03_2};
 `;
+
+export const ContactInput = styled.input`
+  ${commonInputStyles}
+  width: 100%;
+  height: fit-content;
+
+  padding: 3px 0px 2px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  ${({ theme }) => theme.typography.Body_02_1};
+`;

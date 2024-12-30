@@ -15,7 +15,7 @@ interface UseContactResult {
   updateContact: (aui: string, data: UpdateContactReq) => Promise<void>;
 }
 
-export const useMemberInfo = (): UseContactResult => {
+export const useContact = (): UseContactResult => {
   const [isLoading, setIsLoading] = useState(false);
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { contact, setContact } = useContactStore();

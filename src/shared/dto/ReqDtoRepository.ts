@@ -259,5 +259,12 @@ export interface UpdateContactReq {
   address: string;
   email: string;
   contact: string;
-  sns: SocialMedia;
+  twitter: string;
+  instagram: string;
+  facebook: string;
+  threads: string;
+  behance: string;
+  youtube: string;
+  vimeo: string;
+  url1: string;
 }
