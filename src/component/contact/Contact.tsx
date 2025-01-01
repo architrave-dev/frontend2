@@ -8,6 +8,7 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { ContactInput } from '../../shared/component/headless/input/InputBody';
 import { UpdateContactReq } from '../../shared/dto/ReqDtoRepository';
 import { SocialMedia } from '../../shared/dto/EntityRepository';
+import MoleculeInputAnchor from '../../shared/component/molecule/MoleculeInputAnchor';
 
 
 const ContactComp: React.FC = () => {
@@ -80,33 +81,37 @@ const ContactComp: React.FC = () => {
           />
         </Contact_1>
         <Contact_1>
-          <MoleculeInputDiv
+          <MoleculeInputAnchor
             value={updateContactDto.sns.instagram}
+            defaultValue={"Instagram"}
             placeholder={"Instagram"}
             handleChange={(e) => handleSnsChange("instagram", e.target.value)}
             inputStyle={ContactInput}
-            StyledDiv={ContactDiv}
+            StyledAnchor={ContactAnchor}
           />
-          <MoleculeInputDiv
+          <MoleculeInputAnchor
             value={updateContactDto.sns.twitter}
+            defaultValue={"X"}
             placeholder={"X"}
             handleChange={(e) => handleSnsChange("twitter", e.target.value)}
             inputStyle={ContactInput}
-            StyledDiv={ContactDiv}
+            StyledAnchor={ContactAnchor}
           />
-          <MoleculeInputDiv
+          <MoleculeInputAnchor
             value={updateContactDto.sns.facebook}
+            defaultValue={"Facebook"}
             placeholder={"Facebook"}
             handleChange={(e) => handleSnsChange("facebook", e.target.value)}
             inputStyle={ContactInput}
-            StyledDiv={ContactDiv}
+            StyledAnchor={ContactAnchor}
           />
-          <MoleculeInputDiv
+          <MoleculeInputAnchor
             value={updateContactDto.sns.url1}
+            defaultValue={"Website"}
             placeholder={"URL"}
             handleChange={(e) => handleSnsChange("url1", e.target.value)}
             inputStyle={ContactInput}
-            StyledDiv={ContactDiv}
+            StyledAnchor={ContactAnchor}
           />
         </Contact_1>
       </Contact1Container>
@@ -157,6 +162,22 @@ const ContactDiv = styled.div`
   ${({ theme }) => theme.typography.Body_02_2};
 `
 
+const ContactAnchor = styled.a`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  width: 20%;
+  height: 20px;
+
+  padding: 2px 0px;
+  text-decoration: underline;
+
+  color: ${({ theme }) => theme.colors.color_Gray_02};
+  ${({ theme }) => theme.typography.Body_02_2};
+  cursor: pointer;
+`
 
 
 
