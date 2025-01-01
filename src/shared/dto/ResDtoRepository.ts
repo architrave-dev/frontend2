@@ -1,4 +1,4 @@
-import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData } from './EntityRepository';
+import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData, ContactData } from './EntityRepository';
 
 
 export interface AuthResponse {
@@ -89,5 +89,9 @@ export interface DeleteResponse {
 export interface ErrorResponse {
   errorCode: string;
   timestamp: string;
+}
+//-------------- Contact
+export interface ContactResponse {
+  data: ContactData;
 }
 

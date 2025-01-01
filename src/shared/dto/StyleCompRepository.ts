@@ -7,6 +7,8 @@ export type StyledDivComponent = React.ComponentType<React.HTMLAttributes<HTMLDi
   $alignment?: Alignment;
 }>;
 
+export type StyledAnchorComponent = React.ComponentType<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
+
 type StyledTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   $alignment: Alignment;
 };

@@ -94,7 +94,12 @@ export const useValidation = () => {
     return isValid;
   };
 
-  const checkType = (field: keyof WorkData | keyof CreateWorkReq | keyof MemberInfoData, value: string | SizeData): boolean | void => {
+  const checkType = (
+    field:
+      keyof WorkData |
+      keyof CreateWorkReq |
+      keyof MemberInfoData,
+    value: string | SizeData): boolean | void => {
     switch (field) {
       case 'prodYear':
       case 'year':
