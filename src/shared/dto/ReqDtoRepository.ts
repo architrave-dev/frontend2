@@ -268,3 +268,14 @@ export interface UpdateContactReq {
   vimeo: string;
   url1: string;
 }
+
+//-------------- Setting
+export interface UpdateSettingReq {
+  id: string;
+  pageName: string;
+  pageVisible: string;
+  projects: string;
+  works: string;
+  about: string;
+  contact: string;
+}
