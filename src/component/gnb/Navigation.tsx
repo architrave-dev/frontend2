@@ -15,6 +15,7 @@ const Navigation: React.FC = () => {
     { path: `/${aui}/works`, label: 'Works' },
     { path: `/${aui}/about`, label: 'About' },
     { path: `/${aui}/contact`, label: 'Contact' },
+    { path: `/${aui}/settings`, label: 'Settings' },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
