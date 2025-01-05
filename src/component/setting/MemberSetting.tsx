@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import Loading from '../../shared/component/Loading';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { useEditMode } from '../../shared/hooks/useEditMode';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import MoleculeDivBtn from '../../shared/component/molecule/MoleculeDivBtn';
 
 const MemberSetting: React.FC = () => {
-  const { isLoading, user } = useAuth();
-  const { isEditMode } = useEditMode();
+  const { user } = useAuth();
   const { setStandardAlert } = useStandardAlertStore();
 
   const handleChangePw = () => {
@@ -20,7 +17,6 @@ const MemberSetting: React.FC = () => {
     })
   }
   // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
   if (!user) return null;
 
   return (
@@ -41,20 +37,14 @@ const MemberSetting: React.FC = () => {
         </SubWrapper>
         <SubWrapper>
           <SubTitle>Password</SubTitle>
-          <SubBtnValue>
-            {isEditMode ?
-              <>
-                <SubValueChange>********</SubValueChange>
-                <HeadlessBtn
-                  value={"Change"}
-                  handleClick={handleChangePw}
-                  StyledBtn={SubValueBtn}
-                />
-              </>
-              :
-              <SubValue>********</SubValue>
-            }
-          </SubBtnValue>
+          <MoleculeDivBtn
+            value={""}
+            defaultValue={"********"}
+            handleClick={handleChangePw}
+            DivChangeStyle={SubValueChange}
+            DivStyle={SubValue}
+            StyledBtn={SubValueBtn}
+          />
         </SubWrapper>
       </SubContainer>
     </MemberSettingComp>
