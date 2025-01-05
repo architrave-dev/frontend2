@@ -21,7 +21,9 @@ export const getSetting = async (aui: string): Promise<SettingResponse> => {
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await settingApi.get<SettingResponse>(`/api/v1/setting?aui=${aui}`);
+    const response = await settingApi.get<SettingResponse>(`/api/v1/setting?aui=${aui}`, {
+      headers: { Authorization: `${authToken}` }
+    });
     return response.data;
   } catch (error) {
     throw handleApiError(error);

@@ -19,7 +19,6 @@ const NotYetComp = styled.div`
   justify-content: center;
   font-size: ${({ theme }) => theme.fontSize.font_H02};
   font-weight: ${({ theme }) => theme.fontWeight.semi_bold};
-  
 `
 
 
