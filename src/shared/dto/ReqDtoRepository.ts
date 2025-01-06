@@ -1,5 +1,5 @@
 import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
-import { IndexData, SizeData, SocialMedia } from './EntityRepository';
+import { IndexData, MenuVisible, SizeData, SocialMedia } from './EntityRepository';
 
 //-------------- Auth
 export interface SignUpReq {
@@ -274,8 +274,5 @@ export interface UpdateSettingReq {
   id: string;
   pageName: string;
   pageVisible: string;
-  projects: string;
-  works: string;
-  about: string;
-  contact: string;
+  menuVisible: MenuVisible;
 }

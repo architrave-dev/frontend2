@@ -5,7 +5,7 @@ import ToggleSwitch from '../ToggleSwtich';
 interface MoleculeDivToggleProps {
   value: boolean;
   name: string;
-  handleToggle: (checked: boolean) => void;
+  handleToggle: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const MoleculeDivToggle: React.FC<MoleculeDivToggleProps> = ({
@@ -38,7 +38,7 @@ const SubSubValue = styled.div<{ $isVisible: boolean }>`
   padding: 6px 0px;
   ${({ theme }) => theme.typography.Body_03_2};
 
-  color: ${({ theme, $isVisible }) => $isVisible ? theme.colors.color_Gray_01 : theme.colors.color_Gray_03};
+  color: ${({ theme, $isVisible }) => $isVisible ? theme.colors.color_Gray_01 : theme.colors.color_Gray_05};
 `;
 const ToggleWrapper = styled.div`
   width: 36px;
