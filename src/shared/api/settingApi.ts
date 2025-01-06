@@ -14,16 +14,14 @@ const settingApi = axios.create({
   },
 });
 
-//get해오는 것도 authToken 필요!!!
+//get해오는 것도 authToken 필요!!! => 아니!! 필요없다!!!
 export const getSetting = async (aui: string): Promise<SettingResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await settingApi.get<SettingResponse>(`/api/v1/setting?aui=${aui}`, {
-      headers: { Authorization: `${authToken}` }
-    });
+    const response = await settingApi.get<SettingResponse>(`/api/v1/setting?aui=${aui}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);

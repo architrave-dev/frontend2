@@ -76,6 +76,7 @@ const Btn = styled.article`
   justify-content: space-between;
 
   transition: all 0.2s ease;
+  cursor: pointer;
 
   z-index: 3;
   ${({ theme }) => theme.typography.Body_02_2};

@@ -1,22 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useMenu } from '../../shared/hooks/useMenu';
 import { useCheckLoginOwner } from '../../shared/hooks/useCheckLoginOwner';
+import { useSetting } from '../../shared/hooks/useApi/useSetting';
 
 
 const Navigation: React.FC = () => {
   const { aui } = useAui();
+  const { setting, getSetting } = useSetting();
   const { isLoggedInOwner } = useCheckLoginOwner();
   const location = useLocation();
   const { isMenuOpen, closeMenu } = useMenu();
 
+  useEffect(() => {
+    const getSettingWithApi = async () => {
+      if (!aui) return;
+      try {
+        console.log("getting setting...")
+        await getSetting(aui);
+      } catch (error) { }
+    }
+    getSettingWithApi();
+  }, [aui]);
+
+  if (!setting) return null;
+
   const navItems = [
-    { path: `/${aui}/projects`, label: 'Projects' },
-    { path: `/${aui}/works`, label: 'Works' },
-    { path: `/${aui}/about`, label: 'About' },
-    { path: `/${aui}/contact`, label: 'Contact' },
+    { path: `/${aui}/projects`, label: 'Projects', isVisible: setting.menuVisible.projects },
+    { path: `/${aui}/works`, label: 'Works', isVisible: setting.menuVisible.works },
+    { path: `/${aui}/about`, label: 'About', isVisible: setting.menuVisible.about },
+    { path: `/${aui}/contact`, label: 'Contact', isVisible: setting.menuVisible.contact },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -30,16 +45,19 @@ const Navigation: React.FC = () => {
   return (
     <NavigationComp>
       <NavList>
-        {navItems.map((item) => (
-          <NavItem key={item.path}>
-            <StyledLink
-              to={item.path}
-              $isActive={location.pathname === item.path}
-              $isMenuOpen={isMenuOpen}
-              onClick={(e) => handleLinkClick(e)}
-            >{item.label}</StyledLink>
-          </NavItem>
-        ))}
+        {navItems.map((item) =>
+          item.isVisible && (
+            <NavItem key={item.path}>
+              <StyledLink
+                to={item.path}
+                $isActive={location.pathname === item.path}
+                $isMenuOpen={isMenuOpen}
+                onClick={(e) => handleLinkClick(e)}>
+                {item.label}
+              </StyledLink>
+            </NavItem>
+          )
+        )}
         {isLoggedInOwner() &&
           <NavItem>
             <StyledLink
