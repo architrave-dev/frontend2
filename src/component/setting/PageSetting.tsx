@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { useSettingStoreForUpdate } from '../../shared/store/settingStore';
 import { SubContainer, SubTitle, SubValue, SubValueBtn, SubValueChange, SubWrapper, Title } from './MemberSetting';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
-import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
-import { SettingInput } from '../../shared/component/headless/input/InputBody';
 import { UpdateSettingReq } from '../../shared/dto/ReqDtoRepository';
 import { MenuVisible } from '../../shared/dto/EntityRepository';
 import MoleculeDivToggle from '../../shared/component/molecule/MoleculeDivToggle';

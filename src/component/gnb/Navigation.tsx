@@ -3,10 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useMenu } from '../../shared/hooks/useMenu';
+import { useCheckLoginOwner } from '../../shared/hooks/useCheckLoginOwner';
 
 
 const Navigation: React.FC = () => {
   const { aui } = useAui();
+  const { isLoggedInOwner } = useCheckLoginOwner();
   const location = useLocation();
   const { isMenuOpen, closeMenu } = useMenu();
 
@@ -15,7 +17,6 @@ const Navigation: React.FC = () => {
     { path: `/${aui}/works`, label: 'Works' },
     { path: `/${aui}/about`, label: 'About' },
     { path: `/${aui}/contact`, label: 'Contact' },
-    { path: `/${aui}/settings`, label: 'Settings' },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -39,6 +40,16 @@ const Navigation: React.FC = () => {
             >{item.label}</StyledLink>
           </NavItem>
         ))}
+        {isLoggedInOwner() &&
+          <NavItem>
+            <StyledLink
+              to={`/${aui}/settings`}
+              $isActive={location.pathname === `/${aui}/settings`}
+              $isMenuOpen={isMenuOpen}
+              onClick={(e) => handleLinkClick(e)}
+            >{"Settings"}</StyledLink>
+          </NavItem>
+        }
       </NavList>
     </NavigationComp>
   );
