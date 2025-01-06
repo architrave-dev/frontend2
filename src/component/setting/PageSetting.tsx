@@ -1,32 +1,51 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useSettingStoreForUpdate } from '../../shared/store/settingStore';
-import { SubContainer, SubTitle, SubValue, SubWrapper, Title } from './MemberSetting';
+import { SubContainer, SubTitle, SubValue, SubValueBtn, SubValueChange, SubWrapper, Title } from './MemberSetting';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { SettingInput } from '../../shared/component/headless/input/InputBody';
 import { UpdateSettingReq } from '../../shared/dto/ReqDtoRepository';
-import ToggleSwitch from '../../shared/component/ToggleSwtich';
 import { MenuVisible } from '../../shared/dto/EntityRepository';
 import MoleculeDivToggle from '../../shared/component/molecule/MoleculeDivToggle';
+import { useAui } from '../../shared/hooks/useAui';
+import MoleculeDivBtn from '../../shared/component/molecule/MoleculeDivBtn';
 
 const PageSetting: React.FC = () => {
-  const { setting } = useSetting();
+  const { aui } = useAui();
+  const { setting, updateSetting } = useSetting();
   const { updateSettingDto, setUpdateSettingDto } = useSettingStoreForUpdate();
-
-  const handleChange = (field: keyof UpdateSettingReq, value: string | boolean) => {
-    // setUpdateSettingDto({ ...updateSettingDto, [field]: value });
-  }
-  const handleMenuVisibilityChange = (field: keyof MenuVisible, value: boolean) => {
-    // setUpdateSettingDto({ ...updateSettingDto, [field]: value });
-  }
-  const handleToggleChange = (checked: boolean) => {
-    console.log('현재 토글 상태:', checked ? 'ON' : 'OFF');
-  };
 
   if (!setting || !updateSettingDto) return null;
 
+  const handleChangeTitleName = () => {
+    console.log("Change title name!!!");
+  }
+
+  const handlePageVisibilityChange = async (field: keyof UpdateSettingReq, value: boolean) => {
+    try {
+      await updateSetting(aui, {
+        ...updateSettingDto,
+        [field]: value
+      });
+    } catch (err) {
+    } finally {
+    }
+  }
+
+  const handleMenuVisibilityChange = async (field: keyof MenuVisible, value: boolean) => {
+    try {
+      await updateSetting(aui, {
+        ...updateSettingDto,
+        menuVisible: {
+          ...updateSettingDto.menuVisible,
+          [field]: value
+        }
+      });
+    } catch (err) {
+    } finally {
+    }
+  };
 
   return (
     <PageSettingComp>
@@ -36,12 +55,13 @@ const PageSetting: React.FC = () => {
           <SubTitle>Title Name
             <SubExplain>The value displayed in uppercase next to the Menu icon.</SubExplain>
           </SubTitle>
-          <MoleculeInputDiv
+          <MoleculeDivBtn
             value={updateSettingDto.pageName}
-            placeholder={"address"}
-            handleChange={(e) => handleChange("pageName", e.target.value)}
-            inputStyle={SettingInput}
-            StyledDiv={SubValue}
+            defaultValue={"Title Name"}
+            handleClick={handleChangeTitleName}
+            DivChangeStyle={SubValueChange}
+            DivStyle={SubValue}
+            StyledBtn={SubValueBtn}
           />
         </SubWrapper>
         <SubWrapper>
@@ -53,34 +73,33 @@ const PageSetting: React.FC = () => {
               }
             </SubExplain>
           </SubTitle>
-          <SubToggleValue>
-            <SubSubValue $isVisible={updateSettingDto.pageVisible}>{updateSettingDto.pageVisible === true ? "Public" : "Private"}</SubSubValue>
-            <ToggleWrapper>
-              <ToggleSwitch onChange={handleToggleChange} defaultChecked={updateSettingDto.menuVisible.projects} />
-            </ToggleWrapper>
-          </SubToggleValue>
+          <MoleculeDivToggle
+            value={updateSettingDto.pageVisible}
+            name={updateSettingDto.pageVisible === true ? "Public" : "Private"}
+            handleToggle={(e) => handlePageVisibilityChange("pageVisible", e.target.checked)}
+          />
         </SubWrapper>
         <SubWrapper>
           <SubTitle>Menu Visibility</SubTitle>
           <MoleculeDivToggle
             value={updateSettingDto.menuVisible.projects}
             name={"Projects"}
-            handleToggle={handleToggleChange}
+            handleToggle={(e) => handleMenuVisibilityChange("projects", e.target.checked)}
           />
           <MoleculeDivToggle
             value={updateSettingDto.menuVisible.works}
             name={"Works"}
-            handleToggle={handleToggleChange}
+            handleToggle={(e) => handleMenuVisibilityChange("works", e.target.checked)}
           />
           <MoleculeDivToggle
             value={updateSettingDto.menuVisible.about}
             name={"About"}
-            handleToggle={handleToggleChange}
+            handleToggle={(e) => handleMenuVisibilityChange("about", e.target.checked)}
           />
           <MoleculeDivToggle
             value={updateSettingDto.menuVisible.contact}
             name={"Contact"}
-            handleToggle={handleToggleChange}
+            handleToggle={(e) => handleMenuVisibilityChange("contact", e.target.checked)}
           />
         </SubWrapper>
       </SubContainer>
@@ -95,10 +114,6 @@ const PageSettingComp = styled.section`
   flex-direction: column;
 `;
 
-const ToggleWrapper = styled.div`
-  width: 36px;
-`
-
 const SubExplain = styled.div`
   width: fit-content;
   // margin-left: 14px;
@@ -106,19 +121,5 @@ const SubExplain = styled.div`
   color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_04};
 `
-
-const SubToggleValue = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  ${({ theme }) => theme.typography.Body_03_2};
-`;
-const SubSubValue = styled.div<{ $isVisible: boolean }>`
-  width: fit-content;
-  padding: 6px 0px;
-  ${({ theme }) => theme.typography.Body_03_2};
-
-  color: ${({ theme, $isVisible }) => $isVisible ? theme.colors.color_Gray_01 : theme.colors.color_Gray_03};
-`;
 
 export default PageSetting;

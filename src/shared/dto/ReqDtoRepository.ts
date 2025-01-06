@@ -273,6 +273,6 @@ export interface UpdateContactReq {
 export interface UpdateSettingReq {
   id: string;
   pageName: string;
-  pageVisible: string;
+  pageVisible: boolean;
   menuVisible: MenuVisible;
 }
