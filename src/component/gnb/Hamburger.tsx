@@ -6,9 +6,11 @@ import { extractUsernameFromAui } from '../../shared/hooks/useApi/useAuth';
 import { useLocation } from 'react-router-dom';
 import logo from '../../asset/gnb/logo_small.png';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
+import { useAui } from '../../shared/hooks/useAui';
 
 const Hamburger: React.FC = () => {
   const location = useLocation();
+  const { aui } = useAui();
   const { isMenuOpen, openMenu, closeMenu } = useMenu();
   const { setting } = useSetting();
 
@@ -31,7 +33,7 @@ const Hamburger: React.FC = () => {
     <LogoComp onClick={showGnb}>
       <HamburgerComp src={hamburger128} alt='toggle menu icon' />
       <Username>
-        {extractUsernameFromAui(setting.pageName)}
+        {setting.pageName !== extractUsernameFromAui(aui) ? setting.pageName.toUpperCase() : aui}
       </Username>
     </LogoComp>
   );
