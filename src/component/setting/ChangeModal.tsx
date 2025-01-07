@@ -48,11 +48,11 @@ const ChangeModal: React.FC = () => {
 
 const ChangeModalComp = styled.div`
   width: 100%;
-  height: 500px;
 
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 2vh 1vw;
 `
 
 const Title = styled.h2`
@@ -66,6 +66,8 @@ const BtnContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 1vw;
+
+  margin-top: 2.5vh;
 `
 
 export default ChangeModal;

@@ -43,11 +43,11 @@ const ModalTemplate: React.FC = () => {
         )
       case ModalType.CHANGE_STATION:
         return (
-          <ModalOverlay onClick={clearModal}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>
+          <ModalOverlayBrighter onClick={clearModal}>
+            <ModalContentBlur onClick={(e) => e.stopPropagation()}>
               <ChangeModal />
-            </ModalContent>
-          </ModalOverlay>
+            </ModalContentBlur>
+          </ModalOverlayBrighter>
         )
       case ModalType.SIGNIN:
         return (
@@ -88,6 +88,29 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ModalOverlayBrighter = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.color_Alpha_03};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 5; 
+`;
+
+const ModalContentBlur = styled.div`
+  background-color: ${({ theme }) => theme.colors.color_Alpha_04};
+  padding: 20px;
+  width: 440px;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
 `;
 
 const ModalContent = styled.div`
