@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { useEditMode } from '../../hooks/useEditMode';
-import { StyledBtnComponent, StyledDivComponent, StyledInputComponent } from '../../dto/StyleCompRepository';
+import { StyledBtnComponent, StyledDivComponent } from '../../dto/StyleCompRepository';
 import HeadlessBtn from '../headless/button/HeadlessBtn';
 
 interface MoleculeDivBtnProps {

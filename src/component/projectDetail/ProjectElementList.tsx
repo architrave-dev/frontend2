@@ -34,7 +34,7 @@ const ProjectElementList: React.FC = () => {
       }
     }
     getProjectElementListWithApi();
-  }, [aui, projectId]);
+  }, [aui, projectId, getProjectElementList]);
 
   if (!project) return null;
 

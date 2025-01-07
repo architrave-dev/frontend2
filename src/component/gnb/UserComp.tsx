@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
 import { useAui } from '../../shared/hooks/useAui';

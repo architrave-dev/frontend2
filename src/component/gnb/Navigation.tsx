@@ -23,7 +23,7 @@ const Navigation: React.FC = () => {
       } catch (error) { }
     }
     getSettingWithApi();
-  }, [aui]);
+  }, [aui, getSetting]);
 
   if (!setting) return null;
 
