@@ -1,61 +1,34 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useInitPage } from '../shared/hooks/useInitPage';
 import { useAui } from '../shared/hooks/useAui';
-import { useEditMode } from '../shared/hooks/useEditMode';
-import { isModified } from '../shared/hooks/useIsModified';
-import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
-import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
+import MemberSetting from '../component/setting/MemberSetting';
+import PageSetting from '../component/setting/PageSetting';
+import Subscription from '../component/setting/Subscription';
+import { useSetting } from '../shared/hooks/useApi/useSetting';
+import { useCheckLoginOwner } from '../shared/hooks/useCheckLoginOwner';
+import Loading from '../shared/component/Loading';
 
 
 const Settings: React.FC = () => {
   useInitPage();
+  const navigate = useNavigate();
   const { aui } = useAui();
-  const { isEditMode, setEditMode } = useEditMode();
+  const { isLoading } = useSetting();
+  const { isLoggedInOwner } = useCheckLoginOwner();
 
-  const settingsCheck = (): boolean => {
-    // if (!settings || !updateSettingsDto) {
-    //   return false;
-    // }
-    // return isModified(Settings, updateSettingsDto);
-    return true;
+  if (!isLoggedInOwner()) {
+    navigate(`/${aui}`);
   }
 
-
-  const handleConfirm = async () => {
-    // try {
-    //   if (settingsCheck()) {
-    //     // if (!updateSettingsDto) return;
-    //     // const haha: UpdateSettingsReq = {
-    //     //   ...updateSettingsDto,
-    //     //   twitter: updateSettingsDto.sns.twitter,
-    //     //   instagram: updateSettingsDto.sns.instagram,
-    //     //   facebook: updateSettingsDto.sns.facebook,
-    //     //   threads: updateSettingsDto.sns.threads,
-    //     //   behance: updateSettingsDto.sns.behance,
-    //     //   youtube: updateSettingsDto.sns.youtube,
-    //     //   vimeo: updateSettingsDto.sns.vimeo,
-    //     //   url1: updateSettingsDto.sns.url1,
-    //     // }
-
-    //     await updateSettings(aui, haha);
-    //   }
-    // } catch (err) {
-    // } finally {
-    //   setEditMode(false);
-    // }
-  };
+  if (isLoading) return <Loading />;
 
   return (
     <SettingsContainer>
-      this is setting page!!
-      {isEditMode && settingsCheck() &&
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
-      }
+      <MemberSetting />
+      <PageSetting />
+      <Subscription />
     </SettingsContainer>
   );
 }
@@ -68,8 +41,10 @@ const SettingsContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 12px;
 
   padding: calc(8vh) calc(6vw);
+  padding-top: calc(10vh);
 
   overflow-y: scroll;
   &::-webkit-scrollbar {
