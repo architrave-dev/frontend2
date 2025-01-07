@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useAui } from '../shared/hooks/useAui';
 import { useEditMode } from '../shared/hooks/useEditMode';
 import { useParams } from 'react-router-dom';
-import { useModal } from '../shared/hooks/useModal';
 import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
 import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
 import { useProjectDetail } from '../shared/hooks/useApi/useProjectDetail';

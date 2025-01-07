@@ -7,25 +7,25 @@ import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
 import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetail';
-import { useModal } from './hooks/useModal';
-import { useOriginImgStore } from './store/portal/originImgStore';
+import ChangeModal from '../component/setting/ChangeModal';
 
 const ModalTemplate: React.FC = () => {
-  const { closeModal } = useModal();
-  const { modalType } = useModalStore();
-  const { originUrl } = useOriginImgStore();
+  const { standardModal, clearModal } = useModalStore();
+
+  if (!standardModal || standardModal.modalType === ModalType.NONE) return null;
+
 
   const renderModalContent = () => {
-    switch (modalType) {
+    switch (standardModal.modalType) {
       case ModalType.ORIGIN_IMG:
         return (
-          <OriginImgContent onClick={closeModal}>
-            <FullOriginImg src={originUrl} alt={"full screen size origin Img"} />
+          <OriginImgContent onClick={clearModal}>
+            <FullOriginImg src={standardModal.value!} alt={"full screen size origin Img"} />
           </OriginImgContent>
         )
       case ModalType.WORK_STATION:
         return (
-          <WorkStationOverlay onClick={closeModal}>
+          <WorkStationOverlay onClick={clearModal}>
             <WorkStationContent onClick={(e) => e.stopPropagation()}>
               <WorkImport />
             </WorkStationContent>
@@ -33,15 +33,23 @@ const ModalTemplate: React.FC = () => {
         )
       case ModalType.TEMP_WORK:
         return (
-          <WorkStationOverlay onClick={closeModal}>
+          <WorkStationOverlay onClick={clearModal}>
             <WorkStationContent onClick={(e) => e.stopPropagation()}>
               <WorkListForDetail />
             </WorkStationContent>
           </WorkStationOverlay>
         )
+      case ModalType.CHANGE_STATION:
+        return (
+          <ModalOverlayBrighter onClick={clearModal}>
+            <ModalContentBlur onClick={(e) => e.stopPropagation()}>
+              <ChangeModal />
+            </ModalContentBlur>
+          </ModalOverlayBrighter>
+        )
       case ModalType.SIGNIN:
         return (
-          <ModalOverlay onClick={closeModal}>
+          <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Signin />
             </ModalContent>
@@ -49,7 +57,7 @@ const ModalTemplate: React.FC = () => {
         )
       case ModalType.LOGIN:
         return (
-          <ModalOverlay onClick={closeModal}>
+          <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Login />
             </ModalContent>
@@ -59,8 +67,6 @@ const ModalTemplate: React.FC = () => {
         return null;
     }
   };
-
-  if (modalType === ModalType.NONE) return null;
 
   return (
     <Portal>
@@ -80,6 +86,29 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ModalOverlayBrighter = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.color_Alpha_03};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 5; 
+`;
+
+const ModalContentBlur = styled.div`
+  background-color: ${({ theme }) => theme.colors.color_Alpha_04};
+  padding: 20px;
+  width: 440px;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
 `;
 
 const ModalContent = styled.div`

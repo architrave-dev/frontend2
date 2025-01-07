@@ -1,11 +1,10 @@
 import React from 'react';
-import { useModal } from '../../hooks/useModal';
-import { useOriginImgStore } from '../../store/portal/originImgStore';
 import { AlertPosition, AlertType, ModalType } from '../../enum/EnumRepository';
 import HeadlessBtn from '../headless/button/HeadlessBtn';
 import { StyledBtnComponent } from '../../dto/StyleCompRepository';
 import { useStandardAlertStore } from '../../store/portal/alertStore';
 import { useEditMode } from '../../hooks/useEditMode';
+import { useModalStore } from '../../store/portal/modalStore';
 
 export interface MoleculeShowOriginBtnProps {
   originUrl: string;
@@ -13,9 +12,8 @@ export interface MoleculeShowOriginBtnProps {
 }
 
 const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl, styledBtn }) => {
-  const { openModal } = useModal();
+  const { setStandardModal } = useModalStore();
   const { isEditMode } = useEditMode();
-  const { setOriginUrl } = useOriginImgStore();
   const { setStandardAlert } = useStandardAlertStore();
 
   const showOriginImg = () => {
@@ -27,8 +25,12 @@ const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl
       })
       return;
     }
-    setOriginUrl(originUrl);
-    openModal(ModalType.ORIGIN_IMG);
+    setStandardModal({
+      modalType: ModalType.ORIGIN_IMG,
+      title: null,
+      value: originUrl,
+      handleChange: () => { }
+    });
   }
   if (isEditMode) {
     return null;

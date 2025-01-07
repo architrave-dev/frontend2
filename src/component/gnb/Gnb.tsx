@@ -5,10 +5,12 @@ import Navigation from './Navigation';
 import Hamburger from './Hamburger';
 import User from './UserComp';
 import { useMenu } from '../../shared/hooks/useMenu';
+import { useTitle } from '../../shared/hooks/useTitle';
 
 const Gnb: React.FC = () => {
   const location = useLocation();
   const { isMenuOpen, closeMenu } = useMenu();
+  useTitle();
 
   return (
     <>

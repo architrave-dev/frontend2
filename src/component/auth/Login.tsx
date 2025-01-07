@@ -6,12 +6,12 @@ import MoleculeInput from './molecules/MoleculeInput';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnCancel } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
-import { useModal } from '../../shared/hooks/useModal';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 
 const Login: React.FC = () => {
   const { isLoading, login } = useAuth();
-  const { closeModal } = useModal();
+  const { clearModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
 
   const [email, setEmail] = useState('');
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
     }
     try {
       await login({ email, password });
-      closeModal();
+      clearModal();
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -75,7 +75,7 @@ const Login: React.FC = () => {
         handleSubmit();
         break;
       case 'Escape':
-        closeModal();
+        clearModal();
         break;
       default:
         break;
@@ -107,7 +107,7 @@ const Login: React.FC = () => {
         </SubmitButton>
         <HeadlessBtn
           value={"Cancel"}
-          handleClick={closeModal}
+          handleClick={clearModal}
           StyledBtn={BtnCancel}
         />
       </ButtonContainer>

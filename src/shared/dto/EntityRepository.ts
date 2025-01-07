@@ -202,6 +202,20 @@ export interface CareerData {
   index: number;
 }
 
+export interface SettingData {
+  id: string
+  pageName: string;
+  pageVisible: boolean;
+  menuVisible: MenuVisible;
+}
+
+export interface MenuVisible {
+  projects: boolean;
+  works: boolean;
+  about: boolean;
+  contact: boolean;
+}
+
 export interface IndexData {
   id: string;
   tempId: string;

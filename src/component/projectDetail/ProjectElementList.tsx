@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useParams } from 'react-router-dom';
-import { useModal } from '../../shared/hooks/useModal';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
@@ -14,6 +13,7 @@ import ProjectElement from '../../component/projectElement/ProjectElement';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
 import Loading from '../../shared/component/Loading';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 
 const ProjectElementList: React.FC = () => {
@@ -23,7 +23,7 @@ const ProjectElementList: React.FC = () => {
   const { project } = useProjectDetail();
   const { getSimpleWorkList } = useWorkList();
   const { isLoading, projectElementList, getProjectElementList, createProjectElement } = useProjectElement();
-  const { openModal } = useModal();
+  const { setStandardModal } = useModalStore();
 
   useEffect(() => {
     const getProjectElementListWithApi = async () => {
@@ -98,7 +98,12 @@ const ProjectElementList: React.FC = () => {
   const handleImportElement = async () => {
     try {
       await getSimpleWorkList(aui);
-      openModal(ModalType.WORK_STATION);
+      setStandardModal({
+        modalType: ModalType.WORK_STATION,
+        title: null,
+        value: null,
+        handleChange: () => { }
+      });
     } catch (err) {
     } finally {
     }
@@ -107,7 +112,12 @@ const ProjectElementList: React.FC = () => {
   const openSimpleWorkForCreateDetail = async () => {
     try {
       await getSimpleWorkList(aui);
-      openModal(ModalType.TEMP_WORK);
+      setStandardModal({
+        modalType: ModalType.TEMP_WORK,
+        title: null,
+        value: null,
+        handleChange: () => { }
+      });
     } catch (err) {
     } finally {
     }

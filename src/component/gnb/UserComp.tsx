@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { useModal } from '../../shared/hooks/useModal';
 import { useAui } from '../../shared/hooks/useAui';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
 import { useMenu } from '../../shared/hooks/useMenu';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 const UserComp: React.FC = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const UserComp: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { user, logout } = useAuth();
   const { isMenuOpen, closeMenu } = useMenu();
-  const { openModal } = useModal();
+  const { setStandardModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
 
 
@@ -24,7 +24,12 @@ const UserComp: React.FC = () => {
   };
 
   const loginHandler = () => {
-    openModal(ModalType.LOGIN);
+    setStandardModal({
+      modalType: ModalType.LOGIN,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
   };
 
   const logoutHandler = () => {
@@ -76,6 +81,7 @@ const Btn = styled.article`
   justify-content: space-between;
 
   transition: all 0.2s ease;
+  cursor: pointer;
 
   z-index: 3;
   ${({ theme }) => theme.typography.Body_02_2};

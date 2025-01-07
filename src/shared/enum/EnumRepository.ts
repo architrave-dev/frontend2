@@ -5,7 +5,7 @@ export enum ModalType {
   WORK_STATION = 'WORK_STATION',
   TEMP_WORK = 'TEMP_WORK',
   ORIGIN_IMG = 'ORIGIN_IMG',
-  ALERT = 'ALERT',
+  CHANGE_STATION = 'CHANGE_STATION'
 }
 
 export enum AlertType {

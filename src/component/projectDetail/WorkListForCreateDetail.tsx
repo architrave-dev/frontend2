@@ -7,14 +7,14 @@ import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { DisplayAlignment, ProjectElementType, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
-import { useModal } from '../../shared/hooks/useModal';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 const WorkListForDetail: React.FC = () => {
   const { aui } = useAui();
   const { project } = useProjectDetail();
   const { createProjectElement } = useProjectElement();
   const { simpleList } = useWorkStationStore();
-  const { closeModal } = useModal();
+  const { clearModal } = useModalStore();
 
   if (!project) return null;
 
@@ -46,7 +46,7 @@ const WorkListForDetail: React.FC = () => {
         await createProjectElement(aui, newElement)
       } catch (err) {
       } finally {
-        closeModal();
+        clearModal();
       }
     }
     createPe();

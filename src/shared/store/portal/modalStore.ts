@@ -2,16 +2,20 @@ import { create } from 'zustand';
 import { ModalType } from '../../enum/EnumRepository';
 
 
-interface ModalState {
+export interface StandardModal {
   modalType: ModalType;
+  title: string | null;
+  value: string | null;
+  handleChange: (value: string) => void;
 }
-interface ModalActions {
-  setModalType: (type: ModalType) => void;
+interface standardModalState {
+  standardModal: StandardModal | null;
+  setStandardModal: (standardModal: StandardModal) => void;
+  clearModal: () => void;
 }
 
-type ModalStore = ModalState & ModalActions;
-
-export const useModalStore = create<ModalStore>()((set) => ({
-  modalType: ModalType.NONE,
-  setModalType: (type) => set({ modalType: type }),
+export const useModalStore = create<standardModalState>()((set) => ({
+  standardModal: null,
+  setStandardModal: (standardModal: StandardModal) => set({ standardModal }),
+  clearModal: () => set({ standardModal: null })
 }));

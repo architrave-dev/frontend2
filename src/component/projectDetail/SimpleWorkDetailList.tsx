@@ -4,10 +4,10 @@ import { useAui } from '../../shared/hooks/useAui';
 import { DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
-import { useModal } from '../../shared/hooks/useModal';
 import defaultImg from '../../asset/project/default_1.png'
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { WorkDetailSimpleData } from '../../shared/dto/EntityRepository';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 interface WorkDetailImportProps {
   simpleWorkDetailList: WorkDetailSimpleData[];
@@ -15,7 +15,7 @@ interface WorkDetailImportProps {
 
 const WorkDetailImport: React.FC<WorkDetailImportProps> = ({ simpleWorkDetailList }) => {
   const { aui } = useAui();
-  const { closeModal } = useModal();
+  const { clearModal } = useModalStore();
   const { project } = useProjectDetail();
   const { createProjectElementWithWorkDetail } = useProjectElement();
 
@@ -33,7 +33,7 @@ const WorkDetailImport: React.FC<WorkDetailImportProps> = ({ simpleWorkDetailLis
       });
     } catch (err) {
     }
-    closeModal();
+    clearModal();
   };
 
   return (
