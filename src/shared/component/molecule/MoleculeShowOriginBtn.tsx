@@ -1,5 +1,4 @@
 import React from 'react';
-import { useOriginImgStore } from '../../store/portal/originImgStore';
 import { AlertPosition, AlertType, ModalType } from '../../enum/EnumRepository';
 import HeadlessBtn from '../headless/button/HeadlessBtn';
 import { StyledBtnComponent } from '../../dto/StyleCompRepository';
@@ -15,7 +14,6 @@ export interface MoleculeShowOriginBtnProps {
 const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl, styledBtn }) => {
   const { setStandardModal } = useModalStore();
   const { isEditMode } = useEditMode();
-  const { setOriginUrl } = useOriginImgStore();
   const { setStandardAlert } = useStandardAlertStore();
 
   const showOriginImg = () => {
@@ -27,11 +25,10 @@ const MoleculeShowOriginBtn: React.FC<MoleculeShowOriginBtnProps> = ({ originUrl
       })
       return;
     }
-    setOriginUrl(originUrl);
     setStandardModal({
-      modalType: ModalType.LOGIN,
+      modalType: ModalType.ORIGIN_IMG,
       title: null,
-      value: null,
+      value: originUrl,
       handleChange: () => { }
     });
   }
