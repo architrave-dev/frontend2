@@ -7,25 +7,27 @@ import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
 import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetail';
-import { useModal } from './hooks/useModal';
 import { useOriginImgStore } from './store/portal/originImgStore';
+import ChangeModal from '../component/setting/ChangeModal';
 
 const ModalTemplate: React.FC = () => {
-  const { closeModal } = useModal();
-  const { modalType } = useModalStore();
+  const { standardModal, clearModal } = useModalStore();
   const { originUrl } = useOriginImgStore();
 
+  if (!standardModal || standardModal.modalType === ModalType.NONE) return null;
+
+
   const renderModalContent = () => {
-    switch (modalType) {
+    switch (standardModal.modalType) {
       case ModalType.ORIGIN_IMG:
         return (
-          <OriginImgContent onClick={closeModal}>
+          <OriginImgContent onClick={clearModal}>
             <FullOriginImg src={originUrl} alt={"full screen size origin Img"} />
           </OriginImgContent>
         )
       case ModalType.WORK_STATION:
         return (
-          <WorkStationOverlay onClick={closeModal}>
+          <WorkStationOverlay onClick={clearModal}>
             <WorkStationContent onClick={(e) => e.stopPropagation()}>
               <WorkImport />
             </WorkStationContent>
@@ -33,15 +35,23 @@ const ModalTemplate: React.FC = () => {
         )
       case ModalType.TEMP_WORK:
         return (
-          <WorkStationOverlay onClick={closeModal}>
+          <WorkStationOverlay onClick={clearModal}>
             <WorkStationContent onClick={(e) => e.stopPropagation()}>
               <WorkListForDetail />
             </WorkStationContent>
           </WorkStationOverlay>
         )
+      case ModalType.CHANGE_STATION:
+        return (
+          <ModalOverlay onClick={clearModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <ChangeModal />
+            </ModalContent>
+          </ModalOverlay>
+        )
       case ModalType.SIGNIN:
         return (
-          <ModalOverlay onClick={closeModal}>
+          <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Signin />
             </ModalContent>
@@ -49,7 +59,7 @@ const ModalTemplate: React.FC = () => {
         )
       case ModalType.LOGIN:
         return (
-          <ModalOverlay onClick={closeModal}>
+          <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Login />
             </ModalContent>
@@ -59,8 +69,6 @@ const ModalTemplate: React.FC = () => {
         return null;
     }
   };
-
-  if (modalType === ModalType.NONE) return null;
 
   return (
     <Portal>
