@@ -5,17 +5,17 @@ import { DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumReposit
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
-import { useModal } from '../../shared/hooks/useModal';
 import WorkDetailImport from './SimpleWorkDetailList';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { SmallestBtn } from '../../shared/component/headless/button/BtnBody';
 import SimpleWork from './SimpleWork';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 
 const WorkImport: React.FC = () => {
   const { aui } = useAui();
-  const { closeModal } = useModal();
+  const { clearModal } = useModalStore();
   const { project } = useProjectDetail();
   const { simpleList } = useWorkStationStore();
   const { createProjectElementWithWork } = useProjectElement();
@@ -23,7 +23,7 @@ const WorkImport: React.FC = () => {
 
   if (!project) return null;
   if (simpleList.length === 0) return (
-    <NoWorkContainer onClick={closeModal}>
+    <NoWorkContainer onClick={clearModal}>
       Work does not exist.
     </NoWorkContainer>
   );
@@ -38,7 +38,7 @@ const WorkImport: React.FC = () => {
       });
     } catch (err) {
     }
-    closeModal();
+    clearModal();
   };
 
   const onClickDetailHandler = async (workId: string) => {
