@@ -7,12 +7,10 @@ import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
 import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetail';
-import { useOriginImgStore } from './store/portal/originImgStore';
 import ChangeModal from '../component/setting/ChangeModal';
 
 const ModalTemplate: React.FC = () => {
   const { standardModal, clearModal } = useModalStore();
-  const { originUrl } = useOriginImgStore();
 
   if (!standardModal || standardModal.modalType === ModalType.NONE) return null;
 
@@ -22,7 +20,7 @@ const ModalTemplate: React.FC = () => {
       case ModalType.ORIGIN_IMG:
         return (
           <OriginImgContent onClick={clearModal}>
-            <FullOriginImg src={originUrl} alt={"full screen size origin Img"} />
+            <FullOriginImg src={standardModal.value!} alt={"full screen size origin Img"} />
           </OriginImgContent>
         )
       case ModalType.WORK_STATION:
