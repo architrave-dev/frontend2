@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { SettingInput } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
+import { BtnModalMain, BtnModalSub } from '../../shared/component/headless/button/BtnBody';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 
 
@@ -13,6 +13,12 @@ const ChangeModal: React.FC = () => {
 
   if (standardModal == null) return null;
 
+  const handleChange = () => {
+    if (standardModal.handleChange) {
+      standardModal.handleChange(temp);
+    }
+    clearModal();
+  };
 
   return (
     <ChangeModalComp>
@@ -27,13 +33,13 @@ const ChangeModal: React.FC = () => {
       <BtnContainer>
         <HeadlessBtn
           value={"Change"}
-          handleClick={standardModal.handleChange}
-          StyledBtn={BtnWorkViewer}
+          handleClick={handleChange}
+          StyledBtn={BtnModalMain}
         />
         <HeadlessBtn
           value={"Cancel"}
           handleClick={clearModal}
-          StyledBtn={BtnWorkViewer}
+          StyledBtn={BtnModalSub}
         />
       </BtnContainer>
     </ChangeModalComp>

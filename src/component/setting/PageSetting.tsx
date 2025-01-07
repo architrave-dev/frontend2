@@ -8,19 +8,28 @@ import { MenuVisible } from '../../shared/dto/EntityRepository';
 import MoleculeDivToggle from '../../shared/component/molecule/MoleculeDivToggle';
 import { useAui } from '../../shared/hooks/useAui';
 import MoleculeDivBtn from '../../shared/component/molecule/MoleculeDivBtn';
+import { ModalType } from '../../shared/enum/EnumRepository';
+import { useModalStore } from '../../shared/store/portal/modalStore';
+
 
 const PageSetting: React.FC = () => {
   const { aui } = useAui();
   const { setting, updateSetting } = useSetting();
-  const { updateSettingDto, setUpdateSettingDto } = useSettingStoreForUpdate();
+  const { setStandardModal } = useModalStore();
+  const { updateSettingDto } = useSettingStoreForUpdate();
 
   if (!setting || !updateSettingDto) return null;
 
   const handleChangeTitleName = () => {
-    console.log("Change title name!!!");
+    setStandardModal({
+      modalType: ModalType.CHANGE_STATION,
+      title: "Title Name",
+      value: setting.pageName,
+      handleChange: (value: string) => handlePageChange('pageName', value)
+    });
   }
 
-  const handlePageVisibilityChange = async (field: keyof UpdateSettingReq, value: boolean) => {
+  const handlePageChange = async (field: keyof UpdateSettingReq, value: string | boolean) => {
     try {
       await updateSetting(aui, {
         ...updateSettingDto,
@@ -74,7 +83,7 @@ const PageSetting: React.FC = () => {
           <MoleculeDivToggle
             value={updateSettingDto.pageVisible}
             name={updateSettingDto.pageVisible === true ? "Public" : "Private"}
-            handleToggle={(e) => handlePageVisibilityChange("pageVisible", e.target.checked)}
+            handleToggle={(e) => handlePageChange("pageVisible", e.target.checked)}
           />
         </SubWrapper>
         <SubWrapper>

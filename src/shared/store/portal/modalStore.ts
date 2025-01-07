@@ -6,7 +6,7 @@ export interface StandardModal {
   modalType: ModalType;
   title: string | null;
   value: string | null;
-  handleChange: () => void;
+  handleChange: (value: string) => void;
 }
 interface standardModalState {
   standardModal: StandardModal | null;
