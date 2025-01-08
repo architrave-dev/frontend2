@@ -4,13 +4,16 @@ import WorkList from '../component/work/WorkList';
 import { useInitPage } from '../shared/hooks/useInitPage';
 import SortStation from '../component/work/SortStation';
 import ColumnInfo from '../component/work/ColumnInfo';
+import { useLoadingStore } from '../shared/store/loadingStore';
+import Loading from '../shared/component/Loading';
 
 const Works: React.FC = () => {
   useInitPage();
-
+  const { isLoading } = useLoadingStore();
 
   return (
     <WorkContainer>
+      <Loading isLoading={isLoading} />
       <SortStation />
       <ColumnInfo />
       <WorkList />

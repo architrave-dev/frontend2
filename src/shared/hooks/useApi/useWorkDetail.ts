@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../../dto/ReqDtoRepository';
@@ -6,10 +5,10 @@ import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailS
 import { createWorkDetail, deleteWorkDetail, getSimpleWorkDetailList, getWorkDetail, getWorkDetailList, updateWorkDetail } from '../../api/workDetailApi';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
 import { useWorkStationStore } from '../../store/workStationStore';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseWorkListResult {
-  isLoading: boolean;
   getWorkDetail: (aui: string, workDetailId: string) => Promise<void>;
   getSimpleWorkDetailList: (aui: string, workId: string) => Promise<void>;
   getWorkDetailList: (aui: string, workId: string) => Promise<void>;
@@ -19,7 +18,7 @@ interface UseWorkListResult {
 }
 
 export const useWorkDetail = (): UseWorkListResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { activeWorkDetailList, setActiveWorkDetailList } = useWorkViewStore();
   const { updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
@@ -108,7 +107,6 @@ export const useWorkDetail = (): UseWorkListResult => {
 
 
   return {
-    isLoading,
     getWorkDetail: getWorkDetailHandler,
     getSimpleWorkDetailList: getSimpleWorkDetailListHandler,
     getWorkDetailList: getWorkDetailListHandler,

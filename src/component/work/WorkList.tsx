@@ -18,13 +18,12 @@ import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 const WorkList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { workList, getWorkList, createWork } = useWorkList();
+  const { workList, getWorkList, getWork, createWork } = useWorkList();
   const { sortBy } = useWorkListStore();
   const { aui } = useAui();
   const { setActiveWork } = useWorkViewStore();
   const { setUpdatedActiveWork, clearAll } = useWorkViewStoreForUpdate();
 
-  const { getWork } = useWorkList();
   const { setStandardAlert } = useStandardAlertStore();
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const workListRef = useRef<HTMLDivElement>(null);
