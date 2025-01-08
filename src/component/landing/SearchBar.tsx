@@ -8,7 +8,7 @@ import { InputBox } from '../../shared/component/headless/input/InputBody';
 
 const SearchBar: React.FC = () => {
   const [searchString, setSearchString] = useState('');
-  const { isLoading, checkAui, result } = useMember();
+  const { checkAui, result } = useMember();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +46,7 @@ const SearchBar: React.FC = () => {
           StyledInput={InputBox}
         />
         <Button onClick={handleSearch}>
-          {isLoading ? 'Search...' : 'Search'}
+          Search
         </Button>
       </InputWrapper>
     </SearchWrapper>

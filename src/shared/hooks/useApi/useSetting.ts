@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useSettingStore, useSettingStoreForUpdate } from '../../store/settingStore';
 import { getSetting, updateSetting } from '../../api/settingApi';
 import { useGlobalErrStore } from '../../store/errorStore';

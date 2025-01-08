@@ -3,16 +3,16 @@ import { checkAui } from '../../api/memberApi';
 import { MemberResponse } from '../../dto/ResDtoRepository';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseMemberResult {
-  isLoading: boolean;
   checkAui: (aui: string) => Promise<void>;
   result: boolean;
 }
 
 export const useMember = (): UseMemberResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const [result, setResult] = useState(false);
 
@@ -50,7 +50,6 @@ export const useMember = (): UseMemberResult => {
 
 
   return {
-    isLoading,
     checkAui: checkAuiHandler,
     result
   };

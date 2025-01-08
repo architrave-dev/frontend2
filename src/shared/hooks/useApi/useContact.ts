@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { ContactData } from '../../dto/EntityRepository';
