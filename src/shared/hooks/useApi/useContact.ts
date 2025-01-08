@@ -6,17 +6,17 @@ import { ContactResponse } from '../../dto/ResDtoRepository';
 import { UpdateContactReq } from '../../dto/ReqDtoRepository';
 import { getContact, updateContact } from '../../api/contactApi';
 import { useContactStore, useContactStoreForUpdate } from '../../store/contactStore';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseContactResult {
-  isLoading: boolean;
   contact: ContactData | null;
   getContact: (aui: string) => Promise<void>;
   updateContact: (aui: string, data: UpdateContactReq) => Promise<void>;
 }
 
 export const useContact = (): UseContactResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { contact, setContact } = useContactStore();
   const { setUpdateContactDto } = useContactStoreForUpdate();
@@ -61,7 +61,6 @@ export const useContact = (): UseContactResult => {
 
 
   return {
-    isLoading,
     contact,
     getContact: getContactHandler,
     updateContact: updateContactHandler,

@@ -10,6 +10,8 @@ import { UpdateContactReq } from '../shared/dto/ReqDtoRepository';
 import ContactComp from '../component/contact/Contact';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
+import { useLoadingStore } from '../shared/store/loadingStore';
+import Loading from '../shared/component/Loading';
 
 
 const Contact: React.FC = () => {
@@ -18,6 +20,7 @@ const Contact: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { contact, updateContact } = useContact();
   const { updateContactDto } = useContactStoreForUpdate()
+  const { isLoading } = useLoadingStore();
 
   const contactCheck = (): boolean => {
     if (!contact || !updateContactDto) {
@@ -53,6 +56,7 @@ const Contact: React.FC = () => {
 
   return (
     <ContactContainer>
+      <Loading isLoading={isLoading} />
       <ContactComp />
       {isEditMode && contactCheck() &&
         <HeadlessBtn
