@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useProjectStore, useProjectStoreForUpdate } from '../../store/projectStore';
 import { getProjectDetail, updateProject } from '../../api/projectApi';
 import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../store/projectInfoListStore';
@@ -7,17 +6,17 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectData } from '../../dto/EntityRepository';
 import { UpdateProjectReq } from '../../dto/ReqDtoRepository';
 import { ProjectResponse } from '../../dto/ResDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseProjectResult {
-  isLoading: boolean;
   project: ProjectData | null;
   getProject: (aui: string, projectId: string) => Promise<void>;
   updateProject: (aui: string, data: UpdateProjectReq) => Promise<void>;
 }
 
 export const useProjectDetail = (): UseProjectResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { project, setProject } = useProjectStore();
   const { setUpdatedProjectDto } = useProjectStoreForUpdate();
@@ -67,7 +66,6 @@ export const useProjectDetail = (): UseProjectResult => {
 
 
   return {
-    isLoading,
     project,
     getProject: getProjectHandler,
     updateProject: updateProjectHandler

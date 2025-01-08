@@ -18,17 +18,20 @@ import { IndexData } from '../shared/dto/EntityRepository';
 import { ServiceType } from '../shared/enum/EnumRepository';
 import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 import { ErrorCode } from '../shared/api/errorCode';
+import { useLoadingStore } from '../shared/store/loadingStore';
+import Loading from '../shared/component/Loading';
 
 
 const ProjectDetail: React.FC = () => {
   useInitPage();
+  const { isLoading } = useLoadingStore();
   const { projectId } = useParams<{ projectId: string }>();
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
   const { updatedProjectDto } = useProjectStoreForUpdate();
   const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
-  const { projectElementList, updateProjectElementList } = useProjectElement();
+  const { updateProjectElementList } = useProjectElement();
   const {
     updatedProjectElements,
     removedProjectElements
@@ -195,6 +198,7 @@ const ProjectDetail: React.FC = () => {
 
   return (
     <ProjectDetailPage>
+      <Loading isLoading={isLoading} />
       <ProjectDetailContainer />
       <ProjectElementList />
       {isEditMode && isUnitedChanged() &&
@@ -204,6 +208,8 @@ const ProjectDetail: React.FC = () => {
           StyledBtn={BtnConfirm}
         />
       }
+
+      {/* <Loading isVisible={(isLoading1 || isLoading2)} /> */}
     </ProjectDetailPage>
   );
 }

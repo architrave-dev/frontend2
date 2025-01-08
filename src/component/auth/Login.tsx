@@ -7,10 +7,12 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnCancel } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useLoadingStore } from '../../shared/store/loadingStore';
 
 
 const Login: React.FC = () => {
-  const { isLoading, login } = useAuth();
+  const { login } = useAuth();
+  const { isLoading } = useLoadingStore();
   const { clearModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
 
@@ -103,7 +105,7 @@ const Login: React.FC = () => {
       />
       <ButtonContainer>
         <SubmitButton onClick={handleSubmit} disabled={isLoading}>
-          {isLoading ? 'Login...' : 'Login'}
+          Login
         </SubmitButton>
         <HeadlessBtn
           value={"Cancel"}

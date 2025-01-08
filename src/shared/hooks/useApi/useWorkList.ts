@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { getWorkList, updateWork, createWork, deleteWork, getWork, getSimpleWorkList } from '../../api/workListApi';
 import { useWorkListStore } from '../../store/WorkListStore';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
@@ -8,10 +7,10 @@ import { WorkData } from '../../dto/EntityRepository';
 import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../../dto/ReqDtoRepository';
 import { DeleteResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../../dto/ResDtoRepository';
 import { useWorkStationStore } from '../../store/workStationStore';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseWorkListResult {
-  isLoading: boolean;
   workList: WorkData[];
   getWork: (workId: string) => Promise<void>;
   getWorkList: (aui: string) => Promise<void>;
@@ -22,7 +21,7 @@ interface UseWorkListResult {
 }
 
 export const useWorkList = (): UseWorkListResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
   const { setSimpleWorkList } = useWorkStationStore();
@@ -116,7 +115,6 @@ export const useWorkList = (): UseWorkListResult => {
 
 
   return {
-    isLoading,
     workList,
     getWork: getWorkHandler,
     getWorkList: getWorkListHandler,

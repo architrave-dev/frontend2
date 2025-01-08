@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { getMemberInfo, updateMemberInfo } from '../../api/memberInfoApi';
 import { useMemberInfoStore, useMemberInfoStoreForUpdate } from '../../store/memberInfoStore';
 import { useGlobalErrStore } from '../../store/errorStore';
@@ -6,17 +5,17 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { MemberInfoData } from '../../dto/EntityRepository';
 import { MemberInfoResponse } from '../../dto/ResDtoRepository';
 import { UpdateMemberInfoReq } from '../../dto/ReqDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseMemberInfoResult {
-  isLoading: boolean;
   memberInfo: MemberInfoData | null;
   getMemberInfo: (aui: string) => Promise<void>;
   updateMemberInfo: (aui: string, data: UpdateMemberInfoReq) => Promise<void>;
 }
 
 export const useMemberInfo = (): UseMemberInfoResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { memberInfo, setMemberInfo } = useMemberInfoStore();
   const { setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
@@ -61,7 +60,6 @@ export const useMemberInfo = (): UseMemberInfoResult => {
 
 
   return {
-    isLoading,
     memberInfo,
     getMemberInfo: getMemberInfoHandler,
     updateMemberInfo: updateMemberInfoHandler,

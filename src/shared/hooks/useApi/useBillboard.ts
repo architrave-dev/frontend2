@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useBillboardStore, useBillboardStoreForUpdate } from '../../store/billboardStore';
 import { getBillboard, updateBillboard } from '../../api/billboardApi';
 import { useGlobalErrStore } from '../../store/errorStore';
@@ -6,17 +5,17 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { BillboardData } from '../../dto/EntityRepository';
 import { BillboardResponse } from '../../dto/ResDtoRepository';
 import { UpdateBillboardReq } from '../../dto/ReqDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseBillboardResult {
-  isLoading: boolean;
   billboard: BillboardData | null;
   getBillboard: (aui: string) => Promise<void>;
   updateBillboard: (aui: string, data: UpdateBillboardReq) => Promise<void>;
 }
 
 export const useBillboard = (): UseBillboardResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { billboard, setBillboard } = useBillboardStore();
   const { setUpdateBillboardDto } = useBillboardStoreForUpdate();
@@ -67,7 +66,6 @@ export const useBillboard = (): UseBillboardResult => {
   const updateBillboardHandler = (aui: string, data: UpdateBillboardReq) => handleBillboardRequest(aui, 'update', data);
 
   return {
-    isLoading,
     billboard,
     getBillboard: getBillboardHandler,
     updateBillboard: updateBillboardHandler

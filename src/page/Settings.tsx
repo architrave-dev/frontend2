@@ -6,26 +6,25 @@ import { useAui } from '../shared/hooks/useAui';
 import MemberSetting from '../component/setting/MemberSetting';
 import PageSetting from '../component/setting/PageSetting';
 import Subscription from '../component/setting/Subscription';
-import { useSetting } from '../shared/hooks/useApi/useSetting';
 import { useCheckLoginOwner } from '../shared/hooks/useCheckLoginOwner';
 import Loading from '../shared/component/Loading';
+import { useLoadingStore } from '../shared/store/loadingStore';
 
 
 const Settings: React.FC = () => {
   useInitPage();
   const navigate = useNavigate();
   const { aui } = useAui();
-  const { isLoading } = useSetting();
+  const { isLoading } = useLoadingStore();
   const { isLoggedInOwner } = useCheckLoginOwner();
 
   if (!isLoggedInOwner()) {
     navigate(`/${aui}`);
   }
 
-  if (isLoading) return <Loading />;
-
   return (
     <SettingsContainer>
+      <Loading isLoading={isLoading} />
       <MemberSetting />
       <PageSetting />
       <Subscription />

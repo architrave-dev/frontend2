@@ -4,11 +4,13 @@ import { useMember } from '../../shared/hooks/useApi/useMember';
 import { useNavigate } from 'react-router-dom';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputBox } from '../../shared/component/headless/input/InputBody';
+import { useLoadingStore } from '../../shared/store/loadingStore';
 
 
 const SearchBar: React.FC = () => {
   const [searchString, setSearchString] = useState('');
-  const { isLoading, checkAui, result } = useMember();
+  const { checkAui, result } = useMember();
+  const { isLoading } = useLoadingStore();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +31,9 @@ const SearchBar: React.FC = () => {
   }, [result])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isLoading) {
+      return null;
+    }
     if (e.key === 'Enter') {
       handleSearch();
     }
@@ -46,7 +51,7 @@ const SearchBar: React.FC = () => {
           StyledInput={InputBox}
         />
         <Button onClick={handleSearch}>
-          {isLoading ? 'Search...' : 'Search'}
+          Search
         </Button>
       </InputWrapper>
     </SearchWrapper>

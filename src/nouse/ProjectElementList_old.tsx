@@ -14,7 +14,6 @@ import ProjectElement from '../component/projectElement/ProjectElement';
 import ProjectElementTemp from './ProjectElementTemp';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import Space from '../shared/Space';
-import Loading from '../shared/component/Loading';
 
 
 const ProjectElementList: React.FC = () => {
@@ -24,7 +23,7 @@ const ProjectElementList: React.FC = () => {
   // const { isEditMode } = useEditMode();
   // const { project } = useProjectDetail();
   // const { getSimpleWorkList } = useWorkList();
-  // const { isLoading, projectElementList, getProjectElementList } = useProjectElement();
+  // const { projectElementList, getProjectElementList } = useProjectElement();
   // const {
   //   createdProjectElements,
   //   setCreatedProjectElements
@@ -100,9 +99,6 @@ const ProjectElementList: React.FC = () => {
   //   } finally {
   //   }
   // }
-
-  // // 로딩 상태를 처리합니다.
-  // if (isLoading) return <Loading />;
 
   // return (
   //   <ProjectElementListComp>

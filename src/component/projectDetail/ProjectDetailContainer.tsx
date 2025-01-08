@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Divider from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import Loading from '../../shared/component/Loading';
 import { DividerType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { ProjectData } from '../../shared/dto/EntityRepository';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
@@ -17,7 +16,7 @@ import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 
 const ProjectDetailContainer: React.FC = () => {
-  const { isLoading, project } = useProjectDetail();
+  const { project } = useProjectDetail();
   const { updatedProjectDto, setUpdatedProjectDto } = useProjectStoreForUpdate();
   if (!project || !updatedProjectDto) {
     return null;
@@ -36,9 +35,6 @@ const ProjectDetailContainer: React.FC = () => {
       }
     });
   }
-
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
 
   return (
     <ProjectDetailContainerComp>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useProjectListStore } from '../../store/projectListStore';
 import { createProject, deleteProject, getProjectList } from '../../api/projectApi';
 import { useGlobalErrStore } from '../../store/errorStore';
@@ -6,10 +5,10 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectSimpleData } from '../../dto/EntityRepository';
 import { CreateProjectReq, RemoveProjectReq } from '../../dto/ReqDtoRepository';
 import { CreatedProjectResponse, DeleteResponse, ProjectListResponse } from '../../dto/ResDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseProjectListResult {
-  isLoading: boolean;
   projects: ProjectSimpleData[];
   getProjectList: (aui: string) => Promise<void>;
   createProject: (aui: string, data: CreateProjectReq) => Promise<void>;
@@ -17,7 +16,7 @@ interface UseProjectListResult {
 }
 
 export const useProjectList = (): UseProjectListResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projects, setProjects } = useProjectListStore();
 
@@ -76,7 +75,6 @@ export const useProjectList = (): UseProjectListResult => {
 
 
   return {
-    isLoading,
     projects,
     getProjectList: getProjectListHandler,
     createProject: createProjectHandler,

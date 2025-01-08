@@ -6,10 +6,10 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectElementData } from '../../dto/EntityRepository';
 import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, UpdateProjectElementListReq } from '../../dto/ReqDtoRepository';
 import { ProjectElementListResponse, ProjectElementResponse } from '../../dto/ResDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseProjectElementResult {
-  isLoading: boolean;
   projectElementList: ProjectElementData[];
   getProjectElementList: (aui: string, projectId: string) => Promise<void>;
   updateProjectElementList: (aui: string, data: UpdateProjectElementListReq) => Promise<void>;
@@ -19,7 +19,7 @@ interface UseProjectElementResult {
 }
 
 export const useProjectElement = (): UseProjectElementResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { clearAll } = useProjectElementListStoreForUpdate();
@@ -86,7 +86,6 @@ export const useProjectElement = (): UseProjectElementResult => {
 
 
   return {
-    isLoading,
     projectElementList,
     getProjectElementList: getProjectElementHandler,
     updateProjectElementList: updateProjectDetailHandler,

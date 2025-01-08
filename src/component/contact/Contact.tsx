@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useContactStoreForUpdate } from '../../shared/store/contactStore';
 import { useContact } from '../../shared/hooks/useApi/useContact';
-import Loading from '../../shared/component/Loading';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { ContactInput } from '../../shared/component/headless/input/InputBody';
 import { UpdateContactReq } from '../../shared/dto/ReqDtoRepository';
@@ -13,7 +12,7 @@ import MoleculeInputAnchor from '../../shared/component/molecule/MoleculeInputAn
 
 const ContactComp: React.FC = () => {
   const { aui } = useAui();
-  const { isLoading, contact, getContact } = useContact();
+  const { contact, getContact } = useContact();
   const { updateContactDto, setUpdateContactDto } = useContactStoreForUpdate();
 
 
@@ -47,9 +46,6 @@ const ContactComp: React.FC = () => {
     });
   }
 
-
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
 
   return (
     <ContactContainer>

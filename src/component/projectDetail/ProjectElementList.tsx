@@ -12,7 +12,6 @@ import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import ProjectElement from '../../component/projectElement/ProjectElement';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
-import Loading from '../../shared/component/Loading';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 
 
@@ -22,7 +21,7 @@ const ProjectElementList: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { project } = useProjectDetail();
   const { getSimpleWorkList } = useWorkList();
-  const { isLoading, projectElementList, getProjectElementList, createProjectElement } = useProjectElement();
+  const { projectElementList, getProjectElementList, createProjectElement } = useProjectElement();
   const { setStandardModal } = useModalStore();
 
   useEffect(() => {
@@ -122,8 +121,6 @@ const ProjectElementList: React.FC = () => {
     } finally {
     }
   }
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
 
   return (
     <ProjectElementListComp>

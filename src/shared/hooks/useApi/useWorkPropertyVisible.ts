@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useWorkPropertyVisibleStore } from '../../store/workPropertyVisibleStore';
 import { getWorkPropertyVisible, updateWorkPropertyVisible } from '../../api/workPropertyVisibleApi';
 import { useGlobalErrStore } from '../../store/errorStore';
@@ -6,17 +5,17 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { WorkPropertyVisibleData } from '../../dto/EntityRepository';
 import { WorkPropertyVisibleResponse } from '../../dto/ResDtoRepository';
 import { UpdateWorkPropertyVisibleReq } from '../../dto/ReqDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseWorkPropertyVisibleResult {
-  isLoading: boolean;
   workPropertyVisible: WorkPropertyVisibleData | null;
   getWorkPropertyVisible: (aui: string) => Promise<void>;
   updateWorkPropertyVisible: (aui: string, data: UpdateWorkPropertyVisibleReq) => Promise<void>;
 }
 
 export const useWorkPropertyVisible = (): UseWorkPropertyVisibleResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workPropertyVisible, setWorkPropertyVisible } = useWorkPropertyVisibleStore();
 
@@ -57,7 +56,6 @@ export const useWorkPropertyVisible = (): UseWorkPropertyVisibleResult => {
   const updateWorkPropertyVisibleHandler = (aui: string, data: UpdateWorkPropertyVisibleReq) => handleWorkPropertyVisibleRequest(aui, 'update', data);
 
   return {
-    isLoading,
     workPropertyVisible,
     getWorkPropertyVisible: getWorkPropertyVisibleHandler,
     updateWorkPropertyVisible: updateWorkPropertyVisibleHandler

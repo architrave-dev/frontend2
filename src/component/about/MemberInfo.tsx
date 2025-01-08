@@ -4,7 +4,6 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
 import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
-import Loading from '../../shared/component/Loading';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
 import MemberTitle from './MemberTitle';
 import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
@@ -19,7 +18,7 @@ import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 const MemberInfo: React.FC = () => {
   const { aui } = useAui();
-  const { isLoading, memberInfo, getMemberInfo } = useMemberInfo();
+  const { memberInfo, getMemberInfo } = useMemberInfo();
   const { updateMemberInfoDto, setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
   const { checkType } = useValidation();
 
@@ -57,9 +56,6 @@ const MemberInfo: React.FC = () => {
       }
     });
   }
-
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
 
   return (
     <MemberInfoComp>

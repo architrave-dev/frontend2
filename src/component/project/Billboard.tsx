@@ -7,7 +7,6 @@ import { TextAreaBillboard } from '../../shared/component/headless/textarea/Text
 import { InputBillboard } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
-import Loading from '../../shared/component/Loading';
 import { BillboardData } from '../../shared/dto/EntityRepository';
 import { ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { useBillboardStoreForUpdate } from '../../shared/store/billboardStore';
@@ -23,7 +22,7 @@ import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '.
 
 const Billboard: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, billboard, getBillboard, updateBillboard } = useBillboard();
+  const { billboard, getBillboard, updateBillboard } = useBillboard();
   const { updateBillboardDto, setUpdateBillboardDto } = useBillboardStoreForUpdate();
   const { aui } = useAui();
 
@@ -95,9 +94,6 @@ const Billboard: React.FC = () => {
       setEditMode(false);
     }
   };
-
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
 
   return (
     <MoleculeImgDivContainer
