@@ -6,6 +6,7 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { SettingData } from '../../dto/EntityRepository';
 import { SettingResponse } from '../../dto/ResDtoRepository';
 import { UpdateSettingReq } from '../../dto/ReqDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseSettingResult {
@@ -16,7 +17,7 @@ interface UseSettingResult {
 }
 
 export const useSetting = (): UseSettingResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { setting, setSetting } = useSettingStore();
   const { setUpdateSettingDto } = useSettingStoreForUpdate();
@@ -38,6 +39,7 @@ export const useSetting = (): UseSettingResult => {
     action: 'get' | 'update',
     data?: UpdateSettingReq
   ) => {
+    console.log("make true!!!!");
     setIsLoading(true);
     clearErr();
     try {
@@ -59,6 +61,7 @@ export const useSetting = (): UseSettingResult => {
       });
       throw err;
     } finally {
+      console.log("make false!!!!");
       setIsLoading(false);
     }
   };
