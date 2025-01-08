@@ -8,20 +8,18 @@ import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
 import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetail';
 import ChangeModal from '../component/setting/ChangeModal';
+import FullImageViewer from './component/FullImageViewer';
 
 const ModalTemplate: React.FC = () => {
   const { standardModal, clearModal } = useModalStore();
 
   if (!standardModal || standardModal.modalType === ModalType.NONE) return null;
 
-
   const renderModalContent = () => {
     switch (standardModal.modalType) {
       case ModalType.ORIGIN_IMG:
         return (
-          <OriginImgContent onClick={clearModal}>
-            <FullOriginImg src={standardModal.value!} alt={"full screen size origin Img"} />
-          </OriginImgContent>
+          <FullImageViewer />
         )
       case ModalType.WORK_STATION:
         return (
@@ -140,35 +138,6 @@ const WorkStationContent = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   width: 230px;
   //height은 각자 정해
-`;
-
-const OriginImgContent = styled.div`
-  position: fixed;
-  top: calc(0px);
-  // top: calc(1.4vh);
-   /* 화면 가운데 정렬 */
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 100vw;
-  height: 100vh;
-  // height: 97.2vh;
-
-  display: flex;
-
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-  border-radius: 2px;
-  background-color: ${({ theme }) => theme.colors.color_Alpha_04};
-  backdrop-filter: blur(8px);
-  padding: 2vw 1vw;
-  overflow-y: scroll;
-  z-index: 5; 
-`;
-
-const FullOriginImg = styled.img`
-  width: 100%;
-  height: auto; 
-  object-fit: contain;
 `;
 
 export default ModalTemplate;
