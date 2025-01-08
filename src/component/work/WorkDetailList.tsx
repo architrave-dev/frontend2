@@ -7,7 +7,7 @@ import WorkDetail from './WorkDetail';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
-import { WorkType } from '../../shared/enum/EnumRepository';
+import { detailBuilder } from '../../shared/converter/EntityBuilder';
 
 
 
@@ -25,12 +25,7 @@ const WorkDetailList: React.FC = () => {
   const handleAddWorkDetail = async () => {
     const createDetail = async () => {
       try {
-        await createWorkDetail(aui, {
-          workId: activeWork.id,
-          originUrl: "",
-          thumbnailUrl: "",
-          description: "",
-        });
+        await createWorkDetail(aui, detailBuilder(activeWork.id));
       } catch (err) {
       } finally {
       }
@@ -82,8 +77,6 @@ const WorkDetailContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
-
-  // background-color: #eae7dc;
 `;
 
 

@@ -2,7 +2,7 @@
 
 // project
 
-import { CreateCareerReq } from '../dto/ReqDtoRepository';
+import { CreateCareerReq, CreateWorkDetailReq } from '../dto/ReqDtoRepository';
 import { CareerType } from '../enum/EnumRepository';
 
 // projectInfo
@@ -11,6 +11,14 @@ import { CareerType } from '../enum/EnumRepository';
 // Work
 
 // WorkDetail
+export const detailBuilder = (parentId: string): CreateWorkDetailReq => {
+  return {
+    workId: parentId,
+    originUrl: "",
+    thumbnailUrl: "",
+    description: "",
+  };
+}
 
 // Career
 export const careerBuilder = (careerType: CareerType): CreateCareerReq => {
