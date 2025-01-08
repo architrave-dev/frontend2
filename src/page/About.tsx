@@ -16,6 +16,8 @@ import { useAui } from '../shared/hooks/useAui';
 import { ServiceType } from '../shared/enum/EnumRepository';
 import { ErrorCode } from '../shared/api/errorCode';
 import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
+import { useLoadingStore } from '../shared/store/loadingStore';
+import Loading from '../shared/component/Loading';
 
 
 const About: React.FC = () => {
@@ -26,6 +28,7 @@ const About: React.FC = () => {
   const { updateMemberInfoDto } = useMemberInfoStoreForUpdate();
   const { updateCareerList } = useCareer();
   const { createdCareers, updatedCareers, removedCareers } = useCareerListStoreForUpdate();
+  const { isLoading } = useLoadingStore();
 
   const memberInfoCheck = (): boolean => {
     if (!memberInfo || !updateMemberInfoDto) {
@@ -100,6 +103,7 @@ const About: React.FC = () => {
 
   return (
     <AboutContainer>
+      <Loading isLoading={isLoading} />
       <MemberInfo />
       <CareerList />
       {isEditMode && isUnitedChanged() &&

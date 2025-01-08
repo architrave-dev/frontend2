@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { getCareerList, updateCareerList } from '../../api/careerApi';
 import { useCareerListStore, useCareerListStoreForUpdate } from '../../store/careerStore';
 import { useGlobalErrStore } from '../../store/errorStore';
@@ -6,17 +5,17 @@ import { convertStringToErrorCode } from '../../api/errorCode';
 import { CareerData } from '../../dto/EntityRepository';
 import { UpdatedCareerListReq } from '../../dto/ReqDtoRepository';
 import { CareerListResponse } from '../../dto/ResDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseCareerResult {
-  isLoading: boolean;
   careerList: CareerData[];
   getCareerList: (aui: string) => Promise<void>;
   updateCareerList: (aui: string, data: UpdatedCareerListReq) => Promise<void>;
 }
 
 export const useCareer = (): UseCareerResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { careers, setCareers } = useCareerListStore();
   const { clearAll } = useCareerListStoreForUpdate();
@@ -61,7 +60,6 @@ export const useCareer = (): UseCareerResult => {
 
 
   return {
-    isLoading,
     careerList: careers,
     getCareerList: getCareerHandler,
     updateCareerList: updateCareerHandler,
