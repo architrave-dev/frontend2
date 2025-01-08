@@ -10,14 +10,13 @@ import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseSettingResult {
-  isLoading: boolean;
   setting: SettingData | null;
   getSetting: (aui: string) => Promise<void>;
   updateSetting: (aui: string, data: UpdateSettingReq) => Promise<void>;
 }
 
 export const useSetting = (): UseSettingResult => {
-  const { isLoading, setIsLoading } = useLoadingStore();
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { setting, setSetting } = useSettingStore();
   const { setUpdateSettingDto } = useSettingStoreForUpdate();
@@ -70,7 +69,6 @@ export const useSetting = (): UseSettingResult => {
   const updateSettingHandler = (aui: string, data: UpdateSettingReq) => handleSettingRequest(aui, 'update', data);
 
   return {
-    isLoading,
     setting,
     getSetting: getSettingHandler,
     updateSetting: updateSettingHandler
