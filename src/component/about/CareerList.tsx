@@ -5,11 +5,11 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import { CareerType } from '../../shared/enum/EnumRepository';
-import { CreateCareerReq } from '../../shared/dto/ReqDtoRepository';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import Space from '../../shared/Space';
 import CareerSection from './CareerSection';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { careerBuilder } from '../../shared/converter/EntityBuilder';
 
 const CareerList: React.FC = () => {
   const { isEditMode } = useEditMode();
@@ -29,14 +29,8 @@ const CareerList: React.FC = () => {
   }, [aui]);
 
   const handleCreateElement = (careerType: CareerType) => {
-    const newElement: CreateCareerReq = {
-      tempId: Math.floor(Math.random() * 1000) + "",
-      careerType,
-      yearFrom: new Date().getFullYear(),
-      content: ""
-    };
-
-    setCreatedCareers([...createdCareers, newElement]);
+    const newCareer = careerBuilder(careerType);
+    setCreatedCareers([...createdCareers, newCareer]);
   };
 
   const careerSections = [
