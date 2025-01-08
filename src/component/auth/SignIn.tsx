@@ -3,14 +3,17 @@ import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
 import { ModalType } from '../../shared/enum/EnumRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useLoadingStore } from '../../shared/store/loadingStore';
 
 
 const SignIn: React.FC = () => {
+  const { signUp } = useAuth();
+  const { isLoading } = useLoadingStore();
+  const { setStandardModal } = useModalStore();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const { isLoading, signUp } = useAuth();
-  const { setStandardModal } = useModalStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,21 +31,20 @@ const SignIn: React.FC = () => {
 
   return (
     <SignUpComp>
-      <Title>회원가입</Title>
-      {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
+      <Title>Sigin Up</Title>
       <form onSubmit={handleSubmit}>
         <InputField
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="이메일"
+          placeholder="username@email.com"
           required
         />
         <InputField
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호"
+          placeholder="Password"
           required
         />
         <InputField
@@ -53,7 +55,7 @@ const SignIn: React.FC = () => {
           required
         />
         <SubmitButton type="submit" disabled={isLoading}>
-          {isLoading ? '처리 중...' : '회원가입'}
+          Sigin Up
         </SubmitButton>
       </form>
       <ToggleText onClick={() => openLoginModal()}>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { signUp, login, refresh } from '../../api/authAPI';
 import { convertStringToErrorCode } from '../../api/errorCode';
@@ -6,10 +5,10 @@ import { useGlobalErrStore } from '../../store/errorStore';
 import { UserData } from '../../dto/EntityRepository';
 import { LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
 import { AuthResponse } from '../../dto/ResDtoRepository';
+import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseAuthResult {
-  isLoading: boolean;
   user: UserData | null;
   setUser: (user: UserData) => void;
   signUp: (data: SignUpReq) => Promise<void>;
@@ -19,7 +18,7 @@ interface UseAuthResult {
 }
 
 export const useAuth = (): UseAuthResult => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { user, setUser, clearAuth } = useAuthStore();
 
@@ -92,7 +91,6 @@ export const useAuth = (): UseAuthResult => {
   };
 
   return {
-    isLoading,
     user,
     setUser,
     signUp: signUpHandler,
