@@ -7,14 +7,13 @@ import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import { CareerType } from '../../shared/enum/EnumRepository';
 import { CreateCareerReq } from '../../shared/dto/ReqDtoRepository';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
-import Loading from '../../shared/component/Loading';
 import Space from '../../shared/Space';
 import CareerSection from './CareerSection';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 const CareerList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { isLoading, careerList, getCareerList } = useCareer();
+  const { getCareerList } = useCareer();
   const { createdCareers, setCreatedCareers } = useCareerListStoreForUpdate();
   const { aui } = useAui();
 
@@ -53,8 +52,6 @@ const CareerList: React.FC = () => {
     { type: CareerType.COL, title: 'Collections' },
   ];
 
-  // 로딩 상태를 처리합니다.
-  if (isLoading || !careerList) return <Loading />;
 
   return (
     <CareerListComp>

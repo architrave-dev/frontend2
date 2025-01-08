@@ -7,12 +7,11 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import Space from '../../shared/Space';
 import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import Loading from '../../shared/component/Loading';
 import { CreateProjectReq } from '../../shared/dto/ReqDtoRepository';
 
 const ProjectList: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
-  const { isLoading, projects, getProjectList, createProject } = useProjectList();
+  const { projects, getProjectList, createProject } = useProjectList();
 
   const { aui } = useAui();
 
@@ -43,9 +42,6 @@ const ProjectList: React.FC = () => {
       setEditMode(false);
     }
   };
-
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
 
   return (
     <ProjectSimpleList>

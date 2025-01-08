@@ -5,7 +5,6 @@ import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import WorkInfo from './WorkInfo';
 import { sortWorkList } from './SortStation';
 import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
-import Loading from '../../shared/component/Loading';
 import { WorkData } from '../../shared/dto/EntityRepository';
 import WorkViewer from './WorkViewer';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
@@ -19,7 +18,7 @@ import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 const WorkList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { isLoading, workList, getWorkList, createWork } = useWorkList();
+  const { workList, getWorkList, createWork } = useWorkList();
   const { sortBy } = useWorkListStore();
   const { aui } = useAui();
   const { setActiveWork } = useWorkViewStore();
@@ -72,8 +71,6 @@ const WorkList: React.FC = () => {
     getWorkListWithApi();
   }, [aui]);
 
-  // 로딩 상태를 처리합니다.
-  if (isLoading) return <Loading />;
 
   const sortedWorkList = Array.isArray(workList) ? sortWorkList(workList, sortBy) : [];
 
