@@ -1,28 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import ProjectInfo from './ProjectInfo';
-import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
-import ProjectInfoTemp from './ProjectInfoTemp';
-import Space from '../../shared/Space';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { useProjectInfoListStore } from '../../shared/store/projectInfoStore';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
-import { CreateProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
+import { piBuilder } from '../../shared/converter/EntityBuilder';
+import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
+import { useProjectInfo } from '../../shared/hooks/useApi/useProjectInfo';
+import { useAui } from '../../shared/hooks/useAui';
+import ProjectInfo from './ProjectInfo';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import Space from '../../shared/Space';
 
 const ProjectInfoList: React.FC = () => {
+  const { aui } = useAui();
   const { isEditMode } = useEditMode();
+  const { project } = useProjectDetail();
   const { projectInfoList } = useProjectInfoListStore();
-  const { createPiList, setCreatePiList } = useProjectInfoListStoreForUpdate();
+  const { createProjectInfo } = useProjectInfo();
 
-  const handleCreateInfo = () => {
-    const newInfo: CreateProjectInfoReq = {
-      tempId: Math.floor(Math.random() * 100) + "",
-      customName: '',
-      customValue: ''
-    };
-    setCreatePiList([...createPiList, newInfo]);
+  if (project == null) return null;
+
+  const handleCreateInfo = async () => {
+    try {
+      await createProjectInfo(aui, piBuilder(project.id));
+    } catch (err) {
+    }
   };
-
 
   return (
     <ProjectInfoListComp>
@@ -34,18 +37,6 @@ const ProjectInfoList: React.FC = () => {
           initialCustomValue={each.customValue}
         />
       )}
-      {isEditMode &&
-        <>
-          {createPiList.map((each) => (
-            <ProjectInfoTemp
-              key={each.tempId}
-              tempId={each.tempId}
-              initialCustomName={each.customName}
-              initialCustomValue={each.customValue}
-            />
-          ))}
-        </>
-      }
       <Space $align={"center"} $height={"calc(6vw)"}>
         {isEditMode &&
           <HeadlessBtn

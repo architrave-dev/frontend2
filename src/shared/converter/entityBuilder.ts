@@ -1,11 +1,20 @@
+import { CreateCareerReq, CreateProjectInfoReq, CreateWorkDetailReq, CreateWorkReq } from '../dto/ReqDtoRepository';
+import { CareerType, WorkType } from '../enum/EnumRepository';
 
 
 // project
 
-import { CreateCareerReq, CreateWorkDetailReq, CreateWorkReq } from '../dto/ReqDtoRepository';
-import { CareerType, WorkType } from '../enum/EnumRepository';
 
 // projectInfo
+export const piBuilder = (parentId: string): CreateProjectInfoReq => {
+  return {
+    tempId: Math.floor(Math.random() * 100) + "",
+    projectId: parentId,
+    customName: '',
+    customValue: ''
+  };
+}
+
 // projectElement
 
 // Work
