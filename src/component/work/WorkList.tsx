@@ -9,19 +9,19 @@ import { WorkData } from '../../shared/dto/EntityRepository';
 import WorkViewer from './WorkViewer';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
-import { CreateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkListStore } from '../../shared/store/WorkListStore';
 import Space from '../../shared/Space';
 import { AlertPosition, AlertType, WorkType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { workBuilder } from '../../shared/converter/EntityBuilder';
 
 const WorkList: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { workList, getWorkList, getWork, createWork } = useWorkList();
   const { sortBy } = useWorkListStore();
   const { aui } = useAui();
-  const { setActiveWork } = useWorkViewStore();
+  const { activeWork, setActiveWork } = useWorkViewStore();
   const { setUpdatedActiveWork, clearAll } = useWorkViewStoreForUpdate();
 
   const { setStandardAlert } = useStandardAlertStore();
@@ -36,27 +36,6 @@ const WorkList: React.FC = () => {
     }
   }, [workListRef]);
 
-
-  const setDefaultWorkView = () => {
-    const defaultWork: WorkData = {
-      id: '',
-      workType: WorkType.NONE,
-      uploadFile: {
-        id: '',
-        originUrl: '',
-        thumbnailUrl: ''
-      },
-      title: 'Select Work',
-      description: 'Description section',
-      size: { width: '000', height: '000' },
-      material: 'material',
-      prodYear: '0000',
-      price: '',
-      collection: ''
-    };
-    setActiveWork(defaultWork);
-    setUpdatedActiveWork(defaultWork);
-  }
   useEffect(() => {
     const getWorkListWithApi = async () => {
       if (!aui) return;
@@ -64,7 +43,6 @@ const WorkList: React.FC = () => {
         clearAll();
         console.log("getting work List...")
         await getWorkList(aui);
-        setDefaultWorkView();
       } catch (error) { }
     }
     getWorkListWithApi();
@@ -73,24 +51,17 @@ const WorkList: React.FC = () => {
 
   const sortedWorkList = Array.isArray(workList) ? sortWorkList(workList, sortBy) : [];
 
-  const handleCreateWork = async () => {
-    const newWork: CreateWorkReq = {
-      workType: WorkType.NONE,
-      originUrl: '',
-      thumbnailUrl: '',
-      title: "New Work",
-      description: "This is New Work",
-      size: {
-        width: "000",
-        height: "000"
-      },
-      material: "material",
-      prodYear: new Date().getFullYear().toString(),
-      price: "",
-      collection: ""
+  useEffect(() => {
+    if (sortedWorkList.length > 0 && activeWork === null) {
+      const defaultWork: WorkData = sortedWorkList[0];
+      setActiveWork(defaultWork);
+      setUpdatedActiveWork(defaultWork);
     }
+  }, [sortedWorkList.length])
+
+  const handleCreateWork = async () => {
     try {
-      await createWork(aui, newWork);
+      await createWork(aui, workBuilder());
     } catch (err) { };
   };
 

@@ -61,6 +61,8 @@ export const useWorkList = (): UseWorkListResult => {
     setWorkList([...workList, data]);
     setActiveWork(data);
     setUpdatedActiveWork(data);
+    setActiveWorkDetailList([]);
+    setUpdateActiveWorkDetailList([]);
   };
 
   const handleWorkRequest = async (

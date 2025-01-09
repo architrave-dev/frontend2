@@ -23,14 +23,10 @@ const WorkDetailList: React.FC = () => {
   }
 
   const handleAddWorkDetail = async () => {
-    const createDetail = async () => {
-      try {
-        await createWorkDetail(aui, detailBuilder(activeWork.id));
-      } catch (err) {
-      } finally {
-      }
+    try {
+      await createWorkDetail(aui, detailBuilder(activeWork.id));
+    } catch (err) {
     }
-    createDetail();
   };
 
   return (

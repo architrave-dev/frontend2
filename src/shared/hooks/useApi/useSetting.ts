@@ -37,7 +37,6 @@ export const useSetting = (): UseSettingResult => {
     action: 'get' | 'update',
     data?: UpdateSettingReq
   ) => {
-    console.log("make true!!!!");
     setIsLoading(true);
     clearErr();
     try {
@@ -59,7 +58,6 @@ export const useSetting = (): UseSettingResult => {
       });
       throw err;
     } finally {
-      console.log("make false!!!!");
       setIsLoading(false);
     }
   };

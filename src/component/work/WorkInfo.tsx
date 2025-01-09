@@ -50,7 +50,7 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data, handleClick }) => {
           width={"1.2"}
           field={"collection"}
           value={data.collection === "" ? "-" : data.collection} />
-        <SpaceBlock />
+        {activeWork && <SpaceBlock />}
       </ContentWrapper>
       {isActive && <ArrowBlock>{"----->"}</ArrowBlock>}
     </WorkInfoComp>
