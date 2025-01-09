@@ -131,9 +131,6 @@ export interface UpdateProjectReq {
   description: string;
   updateUploadFileReq: UpdateUploadFileReq;
   piIndexList: IndexData[];
-  createdProjectInfoList?: CreateProjectInfoReq[];
-  updatedProjectInfoList?: UpdatedProjectInfoReq[];
-  removedProjectInfoList?: RemoveProjectInfoReq[];
 }
 
 export interface RemoveProjectReq {
@@ -144,11 +141,12 @@ export interface RemoveProjectReq {
 //-------------- ProjectInfo
 export interface CreateProjectInfoReq {
   tempId: string;
+  projectId: string;
   customName: string;
   customValue: string;
 }
 
-export interface UpdatedProjectInfoReq {
+export interface UpdateProjectInfoReq {
   id: string;
   customName: string;
   customValue: string;

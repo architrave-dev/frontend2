@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
+import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
