@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
-import { InputNameNew, InputValueNew } from '../../shared/component/headless/input/InputBody';
-import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { CreateProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
+import { InputNameNew, InputValueNew } from '../shared/component/headless/input/InputBody';
+import HeadlessInput from '../shared/component/headless/input/HeadlessInput';
+import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../shared/component/headless/button/BtnBody';
+import { CreateProjectInfoReq } from '../shared/dto/ReqDtoRepository';
 
 interface ProjectInfoTempProps {
   tempId: string;
@@ -18,24 +17,23 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
   initialCustomName,
   initialCustomValue
 }) => {
-  const { createPiList, setCreatePiList } = useProjectInfoListStoreForUpdate();
 
 
-  const handleChange = (field: keyof CreateProjectInfoReq, value: string) => {
-    const newCreatePiList: CreateProjectInfoReq[] = createPiList.map(each =>
-      each.tempId === tempId ? { ...each, [field]: value } : each
-    )
-    setCreatePiList(newCreatePiList);
-  }
+  // const handleChange = (field: keyof CreateProjectInfoReq, value: string) => {
+  //   const newCreatePiList: CreateProjectInfoReq[] = createPiList.map(each =>
+  //     each.tempId === tempId ? { ...each, [field]: value } : each
+  //   )
+  //   setCreatePiList(newCreatePiList);
+  // }
 
-  const handleDelete = () => {
-    const filteredList = createPiList.filter((each) => each.tempId !== tempId);
-    setCreatePiList(filteredList);
-  };
+  // const handleDelete = () => {
+  //   const filteredList = createPiList.filter((each) => each.tempId !== tempId);
+  //   setCreatePiList(filteredList);
+  // };
 
   return (
     <ProjectInfoItem>
-      <HeadlessInput
+      {/* <HeadlessInput
         value={initialCustomName}
         placeholder={"Enter info"}
         handleChange={(e) => handleChange("customName", e.target.value)}
@@ -51,7 +49,7 @@ const ProjectInfoTemp: React.FC<ProjectInfoTempProps> = ({
         value={"Delete"}
         handleClick={handleDelete}
         StyledBtn={BtnDelete}
-      />
+      /> */}
     </ProjectInfoItem>
   );
 };

@@ -10,7 +10,6 @@ import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import { useEditMode } from '../shared/hooks/useEditMode';
 import { useProjectStoreForUpdate } from '../shared/store/projectStore';
-import { useProjectInfoListStoreForUpdate } from '../shared/store/projectInfoListStore';
 import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
 import { UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkDetailReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
 import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
@@ -30,7 +29,6 @@ const ProjectDetail: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
   const { updatedProjectDto } = useProjectStoreForUpdate();
-  const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
   const { updateProjectElementList } = useProjectElement();
   const {
     updatedProjectElements,
@@ -53,10 +51,7 @@ const ProjectDetail: React.FC = () => {
     return (
       project.uploadFile !== updatedProjectDto.uploadFile ||
       project.title !== updatedProjectDto.title ||
-      project.description !== updatedProjectDto.description ||
-      (createPiList.length ?? 0) > 0 ||
-      (updatePiList.length ?? 0) > 0 ||
-      (removePiList.length ?? 0) > 0
+      project.description !== updatedProjectDto.description
     );
   }
 
@@ -139,9 +134,6 @@ const ProjectDetail: React.FC = () => {
             ...updatedProjectDto.uploadFile
           },
           piIndexList: convertToPiIndexList(),
-          createdProjectInfoList: createPiList,
-          updatedProjectInfoList: updatePiList,
-          removedProjectInfoList: removePiList
         }
         if (imageChecker()) {
           newUpdateProjectReq = await uploadFileWithLocalUrl(ServiceType.PROJECT, newUpdateProjectReq, aui);

@@ -1,6 +1,6 @@
 import { useProjectStore, useProjectStoreForUpdate } from '../../store/projectStore';
 import { getProjectDetail, updateProject } from '../../api/projectApi';
-import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../store/projectInfoListStore';
+import { useProjectInfoListStore } from '../../store/projectInfoStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectData } from '../../dto/EntityRepository';
@@ -21,7 +21,6 @@ export const useProjectDetail = (): UseProjectResult => {
   const { project, setProject } = useProjectStore();
   const { setUpdatedProjectDto } = useProjectStoreForUpdate();
   const { setProjectInfoList } = useProjectInfoListStore()
-  const { clearAll } = useProjectInfoListStoreForUpdate()
 
 
   const handleProjectSuccess = (response: ProjectResponse) => {
@@ -29,7 +28,6 @@ export const useProjectDetail = (): UseProjectResult => {
     setProject(projectData);
     setUpdatedProjectDto(projectData);
     setProjectInfoList(projectData.projectInfoList);
-    clearAll();
   };
 
   const handleProjectRequest = async (
