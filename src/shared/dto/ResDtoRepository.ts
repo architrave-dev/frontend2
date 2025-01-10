@@ -70,10 +70,7 @@ export interface ProjectInfoResponse {
   data: ProjectInfoData;
 }
 export interface ProjectInfoListResponse {
-  data: {
-    piIndex: string;
-    projectInfoList: ProjectInfoData[];
-  }
+  data: ProjectInfoData[];
 }
 
 //-------------- Member

@@ -23,9 +23,7 @@ export const useProjectInfo = (): UseProjectInfoResult => {
 
   const handleProjectInfoListSuccess = (response: ProjectInfoListResponse) => {
     const projectInfoListData = response.data;
-    const piIndex = projectInfoListData.piIndex;
-    console.log("piIndex: ", piIndex);
-    setProjectInfoList(projectInfoListData.projectInfoList);
+    setProjectInfoList(projectInfoListData);
   };
 
   const handleCreateProjectInfoSuccess = (response: ProjectInfoResponse) => {

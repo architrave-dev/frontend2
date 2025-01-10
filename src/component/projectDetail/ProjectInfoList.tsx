@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectInfoListStore } from '../../shared/store/projectInfoStore';
@@ -16,7 +16,18 @@ const ProjectInfoList: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { project } = useProjectDetail();
   const { projectInfoList } = useProjectInfoListStore();
-  const { createProjectInfo } = useProjectInfo();
+  const { getProjectInfoList, createProjectInfo } = useProjectInfo();
+
+  useEffect(() => {
+    const getProjectInfoListWithApi = async () => {
+      if (!aui) return;
+      try {
+        console.log("getting projectInfoList...")
+        await getProjectInfoList(aui, project!.id);
+      } catch (error) { }
+    }
+    getProjectInfoListWithApi();
+  }, [aui]);
 
   if (project == null) return null;
 

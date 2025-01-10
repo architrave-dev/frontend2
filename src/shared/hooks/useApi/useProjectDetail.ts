@@ -20,14 +20,11 @@ export const useProjectDetail = (): UseProjectResult => {
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { project, setProject } = useProjectStore();
   const { setUpdatedProjectDto } = useProjectStoreForUpdate();
-  const { setProjectInfoList } = useProjectInfoListStore()
-
 
   const handleProjectSuccess = (response: ProjectResponse) => {
     const projectData = response.data;
     setProject(projectData);
     setUpdatedProjectDto(projectData);
-    setProjectInfoList(projectData.projectInfoList);
   };
 
   const handleProjectRequest = async (

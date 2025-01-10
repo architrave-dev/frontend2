@@ -129,7 +129,6 @@ export interface ProjectData {
   title: string;
   description: string;
   uploadFile: UploadFileData;
-  projectInfoList: ProjectInfoData[];
   piIndex: string;
 }
 
