@@ -4,54 +4,33 @@ import { useProjectInfoListStore } from '../../shared/store/projectInfoStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { UpdateProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
+import { BtnModalMain, BtnModalSub } from '../../shared/component/headless/button/BtnBody';
 import { ProjectInfoData } from '../../shared/dto/EntityRepository';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { useProjectInfo } from '../../shared/hooks/useApi/useProjectInfo';
 import { useAui } from '../../shared/hooks/useAui';
 
 interface ProjectInfoProps {
-  projectInfoId: string;
-  initialCustomName: string;
-  initialCustomValue: string;
+  data: ProjectInfoData;
 }
 
-const ProjectInfo: React.FC<ProjectInfoProps> = ({
-  projectInfoId,
-  initialCustomName,
-  initialCustomValue }) => {
-  const { isEditMode } = useEditMode();
-  const { projectInfoList, setProjectInfoList } = useProjectInfoListStore();
-  const { updateProjectInfo, deleteProjectInfo } = useProjectInfo();
+const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }) => {
   const { aui } = useAui();
-
-  const handleChange = (field: keyof UpdateProjectInfoReq, value: string) => {
-    const updatedProjectInfoList: ProjectInfoData[] = projectInfoList.map(each =>
-      each.id === projectInfoId ? { ...each, [field]: value } : each
-    )
-    setProjectInfoList(updatedProjectInfoList);
-  }
+  const { isEditMode } = useEditMode();
+  const { updateProjectInfo: handleChange, afterDeleteProjectInfo } = useProjectInfoListStore();
+  const { updateProjectInfo, deleteProjectInfo } = useProjectInfo();
 
   const handleUpdate = async () => {
     try {
-      const updatePiReq: UpdateProjectInfoReq = {
-        id: projectInfoId,
-        customName: initialCustomName,
-        customValue: initialCustomValue
-      }
-      await updateProjectInfo(aui, updatePiReq);
+      await updateProjectInfo(aui, data);
     } catch (err) {
-    } finally {
     }
   };
 
   const handleDelete = async () => {
     try {
-      await deleteProjectInfo(aui, { id: projectInfoId });
-      const newUpdatePiList = projectInfoList.filter((pi) => pi.id !== projectInfoId);
-
-      setProjectInfoList(newUpdatePiList);
+      await deleteProjectInfo(aui, { id: data.id });
+      afterDeleteProjectInfo(data.id);
     } catch (err) {
     }
   }
@@ -59,25 +38,35 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({
   return (
     <ProjectInfoItem $isEditMode={isEditMode}>
       <MoleculeInputDiv
-        value={initialCustomName}
+        value={data.customName}
         placeholder={"name"}
-        handleChange={(e) => handleChange("customName", e.target.value)}
+        handleChange={(e) => handleChange(data.id, { customName: e.target.value })}
         inputStyle={InputName}
         StyledDiv={NameSection}
       />
       <MoleculeInputDiv
-        value={initialCustomValue}
+        value={data.customValue}
         placeholder={"value"}
-        handleChange={(e) => handleChange("customValue", e.target.value)}
+        handleChange={(e) => handleChange(data.id, { customValue: e.target.value })}
         inputStyle={InputValue}
         StyledDiv={ValueSection}
       />
       {isEditMode &&
-        <HeadlessBtn
-          value={"Delete"}
-          handleClick={handleDelete}
-          StyledBtn={BtnDelete}
-        />}
+        <BtnContainer>
+          {data.hasChanged &&
+            <HeadlessBtn
+              value={"Update"}
+              handleClick={handleUpdate}
+              StyledBtn={BtnModalMain}
+            />
+          }
+          <HeadlessBtn
+            value={"Delete"}
+            handleClick={handleDelete}
+            StyledBtn={BtnModalSub}
+          />
+        </BtnContainer>
+      }
     </ProjectInfoItem>
   );
 }
@@ -108,4 +97,16 @@ const ValueSection = styled.div`
   ${({ theme }) => theme.typography.Body_03_1};
 `;
 
-export default ProjectInfo;
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0px;
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5vw;
+
+  padding: 4px 0px;
+`
+
+export default React.memo(ProjectInfo);

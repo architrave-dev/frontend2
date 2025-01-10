@@ -30,11 +30,13 @@ export const useProjectInfo = (): UseProjectInfoResult => {
 
   const handleCreateProjectInfoSuccess = (response: ProjectInfoResponse) => {
     const createdProjectElement = response.data;
+    setProjectInfoList([...projectInfoList, createdProjectElement]);
 
   };
   const handleUpdateProjectInfoSuccess = (response: ProjectInfoResponse) => {
     const updatedProjectElement = response.data;
-
+    const newPiList = projectInfoList.map((pi) => pi.id === updatedProjectElement.id ? updatedProjectElement : pi);
+    setProjectInfoList(newPiList);
   };
 
   const handleDeleteProjectInfoSuccess = (response: DeleteResponse) => {

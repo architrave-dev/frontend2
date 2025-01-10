@@ -137,6 +137,8 @@ export interface ProjectInfoData {
   id: string;
   customName: string;
   customValue: string;
+
+  hasChanged?: boolean;
 }
 
 // 뭔가 애매하네

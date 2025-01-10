@@ -30,12 +30,7 @@ const ProjectInfoList: React.FC = () => {
   return (
     <ProjectInfoListComp>
       {projectInfoList && projectInfoList.map((each, index) =>
-        <ProjectInfo
-          key={index}
-          projectInfoId={each.id}
-          initialCustomName={each.customName}
-          initialCustomValue={each.customValue}
-        />
+        <ProjectInfo key={index + "_" + each.id} data={each} />
       )}
       <Space $align={"center"} $height={"calc(6vw)"}>
         {isEditMode &&
