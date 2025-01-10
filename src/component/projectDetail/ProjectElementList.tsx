@@ -6,13 +6,14 @@ import { useParams } from 'react-router-dom';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
-import { DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, ModalType } from '../../shared/enum/EnumRepository';
+import { ProjectElementType, ModalType } from '../../shared/enum/EnumRepository';
 import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import ProjectElement from '../../component/projectElement/ProjectElement';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { peDividerBuilder, peDocBuilder, peTextBoxBuilder, peWorkBuilder } from '../../shared/converter/EntityBuilder';
 
 
 const ProjectElementList: React.FC = () => {
@@ -38,60 +39,28 @@ const ProjectElementList: React.FC = () => {
   if (!project) return null;
 
   const handleCreateElement = async (elementType: ProjectElementType) => {
-    const createPe = async () => {
-      try {
-        const newElement: CreateProjectElementReq = {
-          tempId: Math.floor(Math.random() * 100) + "",
-          projectId: project.id,
-          projectElementType: elementType,
-          // Work
-          createWorkReq: elementType === ProjectElementType.WORK ?
-            {
-              workType: WorkType.NONE,
-              originUrl: '',
-              thumbnailUrl: '',
-              title: "New Work",
-              description: "This is New Work",
-              size: {
-                width: "000",
-                height: "000"
-              },
-              material: "",
-              prodYear: new Date().getFullYear().toString(),
-              price: '',
-              collection: ''
-            } : null,
-          workAlignment: elementType === ProjectElementType.WORK ? DisplayAlignment.CENTER : null,
-          workDisplaySize: elementType === ProjectElementType.WORK ? WorkDisplaySize.BIG : null,
-
-          // WorkDetail은 여기서 생성하지 않는다.
-          createWorkDetailReq: null,
-          workDetailAlignment: null,
-          workDetailDisplaySize: null,
-
-          // TextBox
-          createTextBoxReq: elementType === ProjectElementType.TEXTBOX ? {
-            content: "New TextBox"
-          } : null,
-          textBoxAlignment: elementType === ProjectElementType.TEXTBOX ? TextAlignment.CENTER : null,
-
-          // DOC
-          createDocumentReq: elementType === ProjectElementType.DOCUMENT ? {
-            originUrl: '',
-            thumbnailUrl: '',
-            description: "New Doc",
-          } : null,
-          documentAlignment: elementType === ProjectElementType.DOCUMENT ? TextAlignment.CENTER : null,
-
-          // Divider
-          dividerType: elementType === ProjectElementType.DIVIDER ? DividerType.PLAIN : null
-        };
-        await createProjectElement(aui, newElement)
-      } catch (err) {
-      } finally {
+    try {
+      let newElement: CreateProjectElementReq;
+      switch (elementType) {
+        case ProjectElementType.WORK:
+          newElement = peWorkBuilder(project.id);
+          break;
+        case ProjectElementType.DOCUMENT:
+          newElement = peDocBuilder(project.id);
+          break;
+        case ProjectElementType.TEXTBOX:
+          newElement = peTextBoxBuilder(project.id);
+          break;
+        case ProjectElementType.DIVIDER:
+          newElement = peDividerBuilder(project.id);
+          break;
+        default:
+          throw new Error(`Unsupported ProjectElementType: ${elementType}`);
       }
+      await createProjectElement(aui, newElement)
+    } catch (err) {
+    } finally {
     }
-    createPe();
   };
 
   const handleImportElement = async () => {

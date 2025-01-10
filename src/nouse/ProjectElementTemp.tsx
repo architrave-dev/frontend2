@@ -12,16 +12,16 @@ import DocumentTemp from './DocumentTemp';
 
 
 const ProjectElementTemp: React.FC<CreateProjectElementReq> = ({
-  tempId,
-  projectElementType,
-  createWorkReq: work,
-  workAlignment,
-  workDisplaySize,
-  createTextBoxReq: textBox,
-  textBoxAlignment,
-  createDocumentReq: document,
-  documentAlignment,
-  dividerType
+  // tempId,
+  // projectElementType,
+  // createWorkReq: work,
+  // workAlignment,
+  // workDisplaySize,
+  // createTextBoxReq: textBox,
+  // textBoxAlignment,
+  // createDocumentReq: document,
+  // documentAlignment,
+  // dividerType
 }) => {
   return null;
   // const { createdProjectElements, setCreatedProjectElements } = useProjectElementListStoreForUpdate();

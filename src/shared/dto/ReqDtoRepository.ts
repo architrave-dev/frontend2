@@ -171,22 +171,50 @@ export interface CreateProjectElementWithWorkDetailReq {
   workDetailDisplaySize: WorkDisplaySize;
 }
 
-export interface CreateProjectElementReq {
+// This is key to making a union workable
+export interface CreateProjectElementReqBase {
   tempId: string;
   projectId: string;
   projectElementType: ProjectElementType;
-  createWorkReq: CreateWorkReq | null;
-  workAlignment: DisplayAlignment | null;
-  workDisplaySize: WorkDisplaySize | null;
-  createWorkDetailReq: CreateWorkDetailReq | null;
-  workDetailAlignment: DisplayAlignment | null;
-  workDetailDisplaySize: WorkDisplaySize | null;
-  createTextBoxReq: CreateTextBoxReq | null,
-  textBoxAlignment: TextAlignment | null;
-  createDocumentReq: CreateDocumentReq | null;
-  documentAlignment: TextAlignment | null;
-  dividerType: DividerType | null;
 }
+
+export interface CreateProjectElementReqWork extends CreateProjectElementReqBase {
+  projectElementType: ProjectElementType.WORK;
+  createWorkReq: CreateWorkReq;            // Not optional
+  workAlignment: DisplayAlignment;         // e.g. CENTER, LEFT, ...
+  workDisplaySize: WorkDisplaySize;        // e.g. BIG, SMALL, ...
+}
+
+export interface CreateProjectElementReqDetail extends CreateProjectElementReqBase {
+  projectElementType: ProjectElementType.DETAIL;
+  createWorkDetailReq: CreateWorkDetailReq;
+  workDetailAlignment: DisplayAlignment;
+  workDetailDisplaySize: WorkDisplaySize,
+}
+
+export interface CreateProjectElementReqDocument extends CreateProjectElementReqBase {
+  projectElementType: ProjectElementType.DOCUMENT;
+  createDocumentReq: CreateDocumentReq;
+  documentAlignment: TextAlignment;
+}
+
+export interface CreateProjectElementReqTextBox extends CreateProjectElementReqBase {
+  projectElementType: ProjectElementType.TEXTBOX;
+  createTextBoxReq: CreateTextBoxReq;
+  textBoxAlignment: TextAlignment;
+}
+
+export interface CreateProjectElementReqDivider extends CreateProjectElementReqBase {
+  projectElementType: ProjectElementType.DIVIDER;
+  dividerType: DividerType;
+}
+
+export type CreateProjectElementReq =
+  | CreateProjectElementReqWork
+  | CreateProjectElementReqDetail
+  | CreateProjectElementReqDocument
+  | CreateProjectElementReqTextBox
+  | CreateProjectElementReqDivider;
 
 export interface UpdateProjectElementReq {
   projectElementId: string;
