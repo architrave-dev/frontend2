@@ -7,23 +7,24 @@ import { TextAreaBillboard } from '../../shared/component/headless/textarea/Text
 import { InputBillboard } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
-import { BillboardData } from '../../shared/dto/EntityRepository';
 import { ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { useBillboardStoreForUpdate } from '../../shared/store/billboardStore';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { UpdateBillboardReq } from '../../shared/dto/ReqDtoRepository';
-import { isModified } from '../../shared/hooks/useIsModified';
 import { ErrorCode } from '../../shared/api/errorCode';
 import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
+import { useBillboardStore } from '../../shared/store/billboardStore';
 
 
 const Billboard: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { billboard, getBillboard, updateBillboard } = useBillboard();
-  const { updateBillboardDto, setUpdateBillboardDto } = useBillboardStoreForUpdate();
+  const { hasChanged, imageChanged,
+    updatBillboard: handleChange,
+    updateImage: handleImageChange
+  } = useBillboardStore();
   const { aui } = useAui();
 
   useEffect(() => {
@@ -37,24 +38,7 @@ const Billboard: React.FC = () => {
     getBillboardWithApi();
   }, [aui]);
 
-  if (!billboard || !updateBillboardDto) {
-    return null;
-  }
-
-  const handleChange = (field: keyof BillboardData, value: string | number) => {
-    setUpdateBillboardDto({ ...updateBillboardDto, [field]: value });
-  }
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    setUpdateBillboardDto({
-      ...updateBillboardDto,
-      uploadFile: {
-        ...updateBillboardDto.uploadFile,
-        originUrl,
-        thumbnailUrl
-      },
-    });
-  }
-
+  if (!billboard) { return null; }
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateBillboardReq, aui: string): Promise<UpdateBillboardReq> => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
@@ -70,22 +54,18 @@ const Billboard: React.FC = () => {
     }
   }
 
-  const imageChecker = () => {
-    return billboard.uploadFile.originUrl !== updateBillboardDto.uploadFile.originUrl;
-  }
   const handleConfirm = async () => {
     if (!billboard) return;
-    if (!updateBillboardDto) return;
 
     let updateBillboardReq: UpdateBillboardReq = {
-      ...updateBillboardDto,
+      ...billboard,
       updateUploadFileReq: {
-        ...updateBillboardDto.uploadFile,
-        uploadFileId: updateBillboardDto.uploadFile.id
+        ...billboard.uploadFile,
+        uploadFileId: billboard.uploadFile.id
       }
     }
     try {
-      if (imageChecker()) {
+      if (imageChanged) {
         updateBillboardReq = await uploadFileWithLocalUrl(ServiceType.BILLBOARD, updateBillboardReq, aui);
       }
       await updateBillboard(aui, updateBillboardReq);
@@ -97,25 +77,25 @@ const Billboard: React.FC = () => {
 
   return (
     <MoleculeImgDivContainer
-      backgroundImg={convertS3UrlToCloudFrontUrl(updateBillboardDto.uploadFile.originUrl)}
-      handleChange={setOriginThumbnailUrl}
+      backgroundImg={convertS3UrlToCloudFrontUrl(billboard.uploadFile.originUrl)}
+      handleChange={handleImageChange}
       StyledImgDivContainer={Container}
     >
       <MoleculeInputDiv
-        value={updateBillboardDto.title}
+        value={billboard.title}
         placeholder={"title"}
-        handleChange={(e) => handleChange('title', e.target.value)}
+        handleChange={(e) => handleChange({ title: e.target.value })}
         inputStyle={InputBillboard}
         StyledDiv={Title}
       />
       <MoleculeTextareaDescription
-        value={updateBillboardDto.description}
-        handleChange={(e) => handleChange('description', e.target.value)}
+        value={billboard.description}
+        handleChange={(e) => handleChange({ description: e.target.value })}
         alignment={TextAlignment.LEFT}
         StyledTextarea={TextAreaBillboard}
         StyledDescription={Description}
       />
-      {isEditMode && isModified(billboard, updateBillboardDto) &&
+      {isEditMode && hasChanged &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
