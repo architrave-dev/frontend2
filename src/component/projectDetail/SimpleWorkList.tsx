@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
-import { DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
@@ -11,6 +10,7 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { SmallestBtn } from '../../shared/component/headless/button/BtnBody';
 import SimpleWork from './SimpleWork';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { peWorkImportBuilder } from '../../shared/converter/EntityBuilder';
 
 
 const WorkImport: React.FC = () => {
@@ -30,12 +30,7 @@ const WorkImport: React.FC = () => {
 
   const onClickHandler = async (workId: string) => {
     try {
-      await createProjectElementWithWork(aui, {
-        projectId: project.id,
-        workId: workId,
-        workAlignment: DisplayAlignment.CENTER, //default
-        workDisplaySize: WorkDisplaySize.BIG    //default
-      });
+      await createProjectElementWithWork(aui, peWorkImportBuilder(project.id, workId));
     } catch (err) {
     }
     clearModal();

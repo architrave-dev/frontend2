@@ -1,4 +1,4 @@
-import { CreateCareerReq, CreateDocumentReq, CreateProjectElementReq, CreateProjectInfoReq, CreateProjectReq, CreateTextBoxReq, CreateWorkDetailReq, CreateWorkReq } from '../dto/ReqDtoRepository';
+import { CreateCareerReq, CreateDocumentReq, CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, CreateProjectInfoReq, CreateProjectReq, CreateTextBoxReq, CreateWorkDetailReq, CreateWorkReq } from '../dto/ReqDtoRepository';
 import { CareerType, DisplayAlignment, DividerType, ProjectElementType, TextAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
 
 
@@ -19,6 +19,24 @@ export const piBuilder = (parentId: string): CreateProjectInfoReq => {
     projectId: parentId,
     customName: '',
     customValue: ''
+  };
+}
+
+// import projectElement
+export const peWorkImportBuilder = (projectId: string, workId: string): CreateProjectElementWithWorkReq => {
+  return {
+    projectId: projectId,
+    workId: workId,
+    workAlignment: DisplayAlignment.CENTER,
+    workDisplaySize: WorkDisplaySize.BIG,
+  };
+}
+export const peDetailImportBuilder = (projectId: string, detailId: string): CreateProjectElementWithWorkDetailReq => {
+  return {
+    projectId: projectId,
+    workDetailId: detailId,
+    workDetailAlignment: DisplayAlignment.CENTER,
+    workDetailDisplaySize: WorkDisplaySize.BIG,
   };
 }
 
@@ -121,7 +139,7 @@ export const careerBuilder = (careerType: CareerType): CreateCareerReq => {
 // TextBox
 export const textBoxBuilder = (): CreateTextBoxReq => {
   return {
-    content: "New TextBox"
+    content: ""
   };
 }
 
@@ -129,6 +147,6 @@ export const documentBuilder = (): CreateDocumentReq => {
   return {
     originUrl: '',
     thumbnailUrl: '',
-    description: "New Doc",
+    description: "",
   };
 }
