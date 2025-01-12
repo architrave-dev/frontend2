@@ -4,20 +4,37 @@ import { MemberInfoData } from '../dto/EntityRepository';
 
 interface MemberInfoState {
   memberInfo: MemberInfoData | null;
+  hasChanged: boolean;
+  imageChanged: boolean;
   setMemberInfo: (memberInfo: MemberInfoData) => void;
+  updatMemberInfo: (updates: Partial<MemberInfoData>) => void;
+  updateImage: (thumbnailUrl: string, originUrl: string) => void;
 }
 
 export const useMemberInfoStore = create<MemberInfoState>((set) => ({
   memberInfo: null,
+  hasChanged: false,
+  imageChanged: false,
   setMemberInfo: (memberInfo) => set({ memberInfo }),
-}));
+  updatMemberInfo: (updates) =>
+    set(({ memberInfo }) => ({
+      memberInfo: memberInfo ?
+        { ...memberInfo, ...updates }
+        : null,
+      hasChanged: true
+    })),
 
-interface MemberInfoStateForUpdate {
-  updateMemberInfoDto: MemberInfoData | null;
-  setUpdateMemberInfoDto: (updateMemberInfoDto: MemberInfoData) => void;
-}
-
-export const useMemberInfoStoreForUpdate = create<MemberInfoStateForUpdate>((set) => ({
-  updateMemberInfoDto: null,
-  setUpdateMemberInfoDto: (updateMemberInfoDto) => set({ updateMemberInfoDto })
+  updateImage: (thumbnailUrl: string, originUrl: string) =>
+    set(({ memberInfo }) => ({
+      memberInfo: memberInfo ? {
+        ...memberInfo,
+        uploadFile: {
+          ...memberInfo.uploadFile,
+          originUrl,
+          thumbnailUrl
+        }
+      } : null,
+      hasChanged: true,
+      imageChanged: true,
+    })),
 }));

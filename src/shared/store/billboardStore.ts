@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { BillboardData, UploadFileData } from '../dto/EntityRepository';
+import { BillboardData } from '../dto/EntityRepository';
 
 interface BillboardState {
   billboard: BillboardData | null;

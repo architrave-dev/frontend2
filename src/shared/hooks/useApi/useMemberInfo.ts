@@ -1,5 +1,5 @@
 import { getMemberInfo, updateMemberInfo } from '../../api/memberInfoApi';
-import { useMemberInfoStore, useMemberInfoStoreForUpdate } from '../../store/memberInfoStore';
+import { useMemberInfoStore } from '../../store/memberInfoStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { MemberInfoData } from '../../dto/EntityRepository';
@@ -18,13 +18,11 @@ export const useMemberInfo = (): UseMemberInfoResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { memberInfo, setMemberInfo } = useMemberInfoStore();
-  const { setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
 
 
   const handleMemberInfoSuccess = (response: MemberInfoResponse) => {
     const memberInfoData = response.data;
     setMemberInfo(memberInfoData);
-    setUpdateMemberInfoDto(memberInfoData);
   };
 
   const handleMemberInfoRequest = async (
