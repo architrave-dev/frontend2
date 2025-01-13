@@ -5,11 +5,9 @@ import CareerList from '../component/about/CareerList';
 import { useInitPage } from '../shared/hooks/useInitPage';
 import { useEditMode } from '../shared/hooks/useEditMode';
 import { useMemberInfo } from '../shared/hooks/useApi/useMemberInfo';
-import { useCareerListStoreForUpdate } from '../shared/store/careerStore';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
-import { UpdateMemberInfoReq, UpdatedCareerListReq } from '../shared/dto/ReqDtoRepository';
-import { useCareer } from '../shared/hooks/useApi/useCareer';
+import { UpdateMemberInfoReq } from '../shared/dto/ReqDtoRepository';
 import { useAui } from '../shared/hooks/useAui';
 import { ServiceType } from '../shared/enum/EnumRepository';
 import { ErrorCode } from '../shared/api/errorCode';
@@ -25,21 +23,8 @@ const About: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { memberInfo, updateMemberInfo } = useMemberInfo();
   const { hasChanged: memberInfoChanged, imageChanged } = useMemberInfoStore();
-  const { updateCareerList } = useCareer();
-  const { createdCareers, updatedCareers, removedCareers } = useCareerListStoreForUpdate();
   const { isLoading } = useLoadingStore();
 
-  const careerListCheck = (): boolean => {
-    return (
-      createdCareers.length > 0 ||
-      updatedCareers.length > 0 ||
-      removedCareers.length > 0
-    );
-  }
-
-  const isUnitedChanged = (): boolean => {
-    return memberInfoChanged || careerListCheck();
-  }
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateMemberInfoReq, aui: string): Promise<UpdateMemberInfoReq> => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
@@ -72,14 +57,6 @@ const About: React.FC = () => {
         }
         await updateMemberInfo(aui, updateMemberInfoReq);
       }
-      if (careerListCheck()) {
-        const updatedData: UpdatedCareerListReq = {
-          createCareerReqList: createdCareers,
-          updateCareerReqList: updatedCareers,
-          removeCareerReqList: removedCareers
-        }
-        await updateCareerList(aui, updatedData);
-      }
     } catch (err) {
     } finally {
       setEditMode(false);
@@ -92,7 +69,7 @@ const About: React.FC = () => {
       <Loading isLoading={isLoading} />
       <MemberInfo />
       <CareerList />
-      {isEditMode && isUnitedChanged() &&
+      {isEditMode && memberInfoChanged &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}

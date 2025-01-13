@@ -198,9 +198,11 @@ export interface SocialMedia {
 export interface CareerData {
   id: string;
   careerType: CareerType;
-  yearFrom: number;
+  yearFrom: string;
   content: string;
   index: number;
+
+  hasChanged?: boolean;
 }
 
 export interface SettingData {

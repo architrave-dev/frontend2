@@ -87,7 +87,9 @@ export interface MemberInfoResponse {
 export interface CareerListResponse {
   data: CareerData[];
 }
-
+export interface CareerResponse {
+  data: CareerData;
+}
 
 export interface DeleteResponse {
   data: string;

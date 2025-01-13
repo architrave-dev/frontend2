@@ -1,11 +1,10 @@
 import React from 'react';
-import { useEditMode } from '../../shared/hooks/useEditMode';
-import { MemberInfoValue } from '../../shared/component/headless/input/InputBody';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
-import { CareerInfoComp, Content, Year, YearSection } from './CareerInfo';
-import MoleculeValue from './molecules/MoleculeValue';
+import { useEditMode } from '../shared/hooks/useEditMode';
+import { MemberInfoValue } from '../shared/component/headless/input/InputBody';
+import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
+import { BtnDelete } from '../shared/component/headless/button/BtnBody';
+import { CareerInfoComp, Content, Year, YearSection } from '../component/about/CareerInfo';
+import MoleculeValue from '../component/about/molecules/MoleculeValue';
 
 interface CareerInfoProps {
   tempId: string;
@@ -18,17 +17,17 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
   initialContent,
   initialYearFrom
 }) => {
-  const { isEditMode } = useEditMode();
-  const { createdCareers, setCreatedCareers } = useCareerListStoreForUpdate();
+  // const { isEditMode } = useEditMode();
+  // const { createdCareers, setCreatedCareers } = useCareerListStoreForUpdate();
 
-  const handleDelete = () => {
-    const filteredList = createdCareers.filter((each) => each.tempId !== tempId);
-    setCreatedCareers(filteredList);
-  }
+  // const handleDelete = () => {
+  //   const filteredList = createdCareers.filter((each) => each.tempId !== tempId);
+  //   setCreatedCareers(filteredList);
+  // }
 
   return (
     <CareerInfoComp>
-      <YearSection>
+      {/* <YearSection>
         <MoleculeValue
           tempId={tempId}
           value={initialYearFrom}
@@ -50,7 +49,7 @@ const CareerInfo: React.FC<CareerInfoProps> = ({
           handleClick={handleDelete}
           StyledBtn={BtnDelete}
         />
-      }
+      } */}
     </CareerInfoComp>
   );
 };

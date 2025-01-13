@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import { CareerType } from '../../shared/enum/EnumRepository';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import Space from '../../shared/Space';
@@ -13,8 +12,7 @@ import { careerBuilder } from '../../shared/converter/EntityBuilder';
 
 const CareerList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { getCareerList } = useCareer();
-  const { createdCareers, setCreatedCareers } = useCareerListStoreForUpdate();
+  const { getCareerList, createCareer } = useCareer();
   const { aui } = useAui();
 
   useEffect(() => {
@@ -28,9 +26,10 @@ const CareerList: React.FC = () => {
     getCareerListWithApi();
   }, [aui]);
 
-  const handleCreateElement = (careerType: CareerType) => {
-    const newCareer = careerBuilder(careerType);
-    setCreatedCareers([...createdCareers, newCareer]);
+  const handleCreateElement = async (careerType: CareerType) => {
+    try {
+      await createCareer(aui, careerBuilder(careerType));
+    } catch (err) { }
   };
 
   const careerSections = [

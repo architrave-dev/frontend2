@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { ProjectElementData } from '../dto/EntityRepository';
-import { CreateProjectElementReq, RemoveProjectElementReq, UpdateProjectElementReq } from '../dto/ReqDtoRepository';
+import { RemoveProjectElementReq, UpdateProjectElementReq } from '../dto/ReqDtoRepository';
 interface ProjectElementListState {
   projectElementList: ProjectElementData[];
   setProjectElementList: (projectElementList: ProjectElementData[]) => void;

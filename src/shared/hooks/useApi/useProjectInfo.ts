@@ -19,7 +19,7 @@ interface UseProjectInfoResult {
 export const useProjectInfo = (): UseProjectInfoResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
-  const { projectInfoList, setProjectInfoList } = useProjectInfoListStore();
+  const { projectInfoList, setProjectInfoList, setOnlyProjectInfoList } = useProjectInfoListStore();
 
   const handleProjectInfoListSuccess = (response: ProjectInfoListResponse) => {
     const projectInfoListData = response.data;
@@ -32,9 +32,9 @@ export const useProjectInfo = (): UseProjectInfoResult => {
 
   };
   const handleUpdateProjectInfoSuccess = (response: ProjectInfoResponse) => {
-    const updatedProjectElement = response.data;
-    const newPiList = projectInfoList.map((pi) => pi.id === updatedProjectElement.id ? updatedProjectElement : pi);
-    setProjectInfoList(newPiList);
+    const updatedProjectInfo = response.data;
+    const newPiList = projectInfoList.map((pi) => pi.id === updatedProjectInfo.id ? updatedProjectInfo : pi);
+    setOnlyProjectInfoList(newPiList);
   };
 
   const handleDeleteProjectInfoSuccess = (response: DeleteResponse) => {
