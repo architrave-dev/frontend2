@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
-import { useContactStoreForUpdate } from '../../shared/store/contactStore';
 import { useContact } from '../../shared/hooks/useApi/useContact';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { ContactInput } from '../../shared/component/headless/input/InputBody';
-import { UpdateContactReq } from '../../shared/dto/ReqDtoRepository';
-import { SocialMedia } from '../../shared/dto/EntityRepository';
 import MoleculeInputAnchor from '../../shared/component/molecule/MoleculeInputAnchor';
+import { useContactStore } from '../../shared/store/contactStore';
 
 
 const ContactComp: React.FC = () => {
   const { aui } = useAui();
   const { contact, getContact } = useContact();
-  const { updateContactDto, setUpdateContactDto } = useContactStoreForUpdate();
+  const { updateContact: handleChange, updateSns: handleSnsChange } = useContactStore();
 
 
   useEffect(() => {
@@ -28,23 +26,10 @@ const ContactComp: React.FC = () => {
   }, [aui]);
 
 
-  if (!contact || !updateContactDto) {
+  if (!contact) {
     return null;
   }
 
-  const handleChange = (field: keyof UpdateContactReq, value: string) => {
-    setUpdateContactDto({ ...updateContactDto, [field]: value });
-  }
-
-  const handleSnsChange = (field: keyof SocialMedia, value: string) => {
-    setUpdateContactDto({
-      ...updateContactDto,
-      sns: {
-        ...updateContactDto.sns,
-        [field]: value
-      }
-    });
-  }
 
 
   return (
@@ -53,59 +38,59 @@ const ContactComp: React.FC = () => {
       <Contact1Container>
         <Contact_1>
           <MoleculeInputDiv
-            value={updateContactDto.address}
+            value={contact.address}
             placeholder={"address"}
-            handleChange={(e) => handleChange("address", e.target.value)}
+            handleChange={(e) => handleChange({ address: e.target.value })}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
           />
         </Contact_1>
         <Contact_1>
           <MoleculeInputDiv
-            value={updateContactDto.email}
+            value={contact.email}
             placeholder={"email"}
-            handleChange={(e) => handleChange("email", e.target.value)}
+            handleChange={(e) => handleChange({ email: e.target.value })}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
           />
           <MoleculeInputDiv
-            value={updateContactDto.contact}
+            value={contact.contact}
             placeholder={"contact"}
-            handleChange={(e) => handleChange("contact", e.target.value)}
+            handleChange={(e) => handleChange({ contact: e.target.value })}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
           />
         </Contact_1>
         <Contact_1>
           <MoleculeInputAnchor
-            value={updateContactDto.sns.instagram}
+            value={contact.sns.instagram}
             defaultValue={"Instagram"}
             placeholder={"Instagram"}
-            handleChange={(e) => handleSnsChange("instagram", e.target.value)}
+            handleChange={(e) => handleSnsChange({ instagram: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={updateContactDto.sns.twitter}
+            value={contact.sns.twitter}
             defaultValue={"X"}
             placeholder={"X"}
-            handleChange={(e) => handleSnsChange("twitter", e.target.value)}
+            handleChange={(e) => handleSnsChange({ twitter: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={updateContactDto.sns.facebook}
+            value={contact.sns.facebook}
             defaultValue={"Facebook"}
             placeholder={"Facebook"}
-            handleChange={(e) => handleSnsChange("facebook", e.target.value)}
+            handleChange={(e) => handleSnsChange({ facebook: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={updateContactDto.sns.url1}
+            value={contact.sns.url1}
             defaultValue={"Website"}
             placeholder={"URL"}
-            handleChange={(e) => handleSnsChange("url1", e.target.value)}
+            handleChange={(e) => handleSnsChange({ url1: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
           />
