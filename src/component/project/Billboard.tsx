@@ -22,7 +22,7 @@ const Billboard: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { billboard, getBillboard, updateBillboard } = useBillboard();
   const { hasChanged, imageChanged,
-    updatBillboard: handleChange,
+    updateBillboard: handleChange,
     updateImage: handleImageChange
   } = useBillboardStore();
   const { aui } = useAui();

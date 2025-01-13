@@ -9,7 +9,6 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import { useEditMode } from '../shared/hooks/useEditMode';
-import { useProjectStoreForUpdate } from '../shared/store/projectStore';
 import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
 import { UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkDetailReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
 import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
@@ -19,6 +18,7 @@ import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 import { ErrorCode } from '../shared/api/errorCode';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
+import { useProjectStore } from '../shared/store/projectStore';
 
 
 const ProjectDetail: React.FC = () => {
@@ -28,8 +28,8 @@ const ProjectDetail: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
-  const { updatedProjectDto } = useProjectStoreForUpdate();
   const { updateProjectElementList } = useProjectElement();
+  const { hasChanged, imageChanged } = useProjectStore();
   const {
     updatedProjectElements,
     removedProjectElements
@@ -46,27 +46,19 @@ const ProjectDetail: React.FC = () => {
     getProjectWithApi();
   }, [aui, projectId]);
 
-  if (!project || !updatedProjectDto) return null;
-  const projectDetailCheck = (): boolean => {
-    return (
-      project.uploadFile !== updatedProjectDto.uploadFile ||
-      project.title !== updatedProjectDto.title ||
-      project.description !== updatedProjectDto.description
-    );
-  }
+  if (!project) return null;
 
   const peListCheck = (): boolean => {
     if (!project) {
       return false;
     }
     return (
-      // createdProjectElements.length > 0 ||
       updatedProjectElements.length > 0 ||
       removedProjectElements.length > 0
     );
   }
   const isUnitedChanged = (): boolean => {
-    return projectDetailCheck() || peListCheck();
+    return hasChanged || peListCheck();
   }
   const convertToPiIndexList = (): IndexData[] => {
     return [];
@@ -84,10 +76,6 @@ const ProjectDetail: React.FC = () => {
     } catch (error) {
       throw new Error(ErrorCode.AWS);
     }
-  }
-
-  const imageChecker = () => {
-    return project.uploadFile.originUrl !== updatedProjectDto.uploadFile.originUrl;
   }
 
   const uploadFileWithLocalUrlUpdates = async <T extends { id: string, updateUploadFileReq: UpdateUploadFileReq, workId?: string }>(
@@ -124,18 +112,18 @@ const ProjectDetail: React.FC = () => {
   }
 
   const handleConfirm = async () => {
-    if (updatedProjectDto == null) return null;
+    if (project == null) return null;
     try {
-      if (projectDetailCheck()) {
+      if (hasChanged) {
         let newUpdateProjectReq: UpdateProjectReq = {
-          ...updatedProjectDto,  //projectDetailCheck에서 확인 함
+          ...project,  //projectDetailCheck에서 확인 함
           updateUploadFileReq: {
-            uploadFileId: updatedProjectDto.uploadFile.id,
-            ...updatedProjectDto.uploadFile
+            uploadFileId: project.uploadFile.id,
+            ...project.uploadFile
           },
           piIndexList: convertToPiIndexList(),
         }
-        if (imageChecker()) {
+        if (imageChanged) {
           newUpdateProjectReq = await uploadFileWithLocalUrl(ServiceType.PROJECT, newUpdateProjectReq, aui);
         }
         await updateProject(aui, newUpdateProjectReq);
@@ -187,7 +175,6 @@ const ProjectDetail: React.FC = () => {
     }
   };
 
-
   return (
     <ProjectDetailPage>
       <Loading isLoading={isLoading} />
@@ -200,8 +187,6 @@ const ProjectDetail: React.FC = () => {
           StyledBtn={BtnConfirm}
         />
       }
-
-      {/* <Loading isVisible={(isLoading1 || isLoading2)} /> */}
     </ProjectDetailPage>
   );
 }

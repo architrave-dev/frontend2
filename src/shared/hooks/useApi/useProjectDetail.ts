@@ -1,6 +1,5 @@
-import { useProjectStore, useProjectStoreForUpdate } from '../../store/projectStore';
+import { useProjectStore } from '../../store/projectStore';
 import { getProjectDetail, updateProject } from '../../api/projectApi';
-import { useProjectInfoListStore } from '../../store/projectInfoStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectData } from '../../dto/EntityRepository';
@@ -19,12 +18,10 @@ export const useProjectDetail = (): UseProjectResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { project, setProject } = useProjectStore();
-  const { setUpdatedProjectDto } = useProjectStoreForUpdate();
 
   const handleProjectSuccess = (response: ProjectResponse) => {
     const projectData = response.data;
     setProject(projectData);
-    setUpdatedProjectDto(projectData);
   };
 
   const handleProjectRequest = async (

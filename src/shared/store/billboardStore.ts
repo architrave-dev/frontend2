@@ -6,7 +6,7 @@ interface BillboardState {
   hasChanged: boolean;
   imageChanged: boolean;
   setBillboard: (value: BillboardData) => void;
-  updatBillboard: (updates: Partial<BillboardData>) => void;
+  updateBillboard: (updates: Partial<BillboardData>) => void;
   updateImage: (thumbnailUrl: string, originUrl: string) => void;
 }
 
@@ -15,7 +15,7 @@ export const useBillboardStore = create<BillboardState>((set) => ({
   hasChanged: false,
   imageChanged: false,
   setBillboard: (value) => set({ billboard: { ...value } }),
-  updatBillboard: (updates) =>
+  updateBillboard: (updates) =>
     set(({ billboard }) => ({
       billboard: billboard ?
         { ...billboard, ...updates }

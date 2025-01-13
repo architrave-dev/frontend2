@@ -4,57 +4,42 @@ import Divider from '../../shared/Divider';
 import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { DividerType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { ProjectData } from '../../shared/dto/EntityRepository';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
-import { useProjectStoreForUpdate } from '../../shared/store/projectStore';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { InputTitle } from '../../shared/component/headless/input/InputBody';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
+import { useProjectStore } from '../../shared/store/projectStore';
 
 
 const ProjectDetailContainer: React.FC = () => {
   const { project } = useProjectDetail();
-  const { updatedProjectDto, setUpdatedProjectDto } = useProjectStoreForUpdate();
-  if (!project || !updatedProjectDto) {
+  const { updateProject: handleChange, updateImage: handleImageChange } = useProjectStore();
+  if (!project) {
     return null;
-  }
-
-  const handleChange = (field: keyof ProjectData, value: string) => {
-    setUpdatedProjectDto({ ...updatedProjectDto, [field]: value });
-  }
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    setUpdatedProjectDto({
-      ...updatedProjectDto,
-      uploadFile: {
-        ...updatedProjectDto.uploadFile,
-        originUrl,
-        thumbnailUrl
-      }
-    });
   }
 
   return (
     <ProjectDetailContainerComp>
       <MoleculeImgDivContainer
-        backgroundImg={convertS3UrlToCloudFrontUrl(updatedProjectDto.uploadFile.originUrl)}
-        handleChange={setOriginThumbnailUrl}
+        backgroundImg={convertS3UrlToCloudFrontUrl(project.uploadFile.originUrl)}
+        handleChange={handleImageChange}
         StyledImgDivContainer={RepresentImgContainer}
       />
       <ProjectDetailWrapper>
         <MoleculeInputDiv
-          value={updatedProjectDto.title}
+          value={project.title}
           placeholder={"title"}
-          handleChange={(e) => handleChange('title', e.target.value)}
+          handleChange={(e) => handleChange({ title: e.target.value })}
           inputStyle={InputTitle}
           StyledDiv={Title}
         />
         <Divider dividerType={DividerType.PLAIN} />
         <MoleculeTextareaDescription
-          value={updatedProjectDto.description}
-          handleChange={(e) => handleChange('description', e.target.value)}
+          value={project.description}
+          handleChange={(e) => handleChange({ description: e.target.value })}
           alignment={TextAlignment.LEFT}
           StyledTextarea={TextAreaTextBox}
           StyledDescription={Description}
