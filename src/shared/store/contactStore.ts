@@ -31,6 +31,5 @@ export const useContactStore = create<ContactState>((set) => ({
         }
       } : null,
       hasChanged: true,
-      imageChanged: true,
     })),
 }));

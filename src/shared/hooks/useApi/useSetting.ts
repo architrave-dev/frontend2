@@ -1,4 +1,4 @@
-import { useSettingStore, useSettingStoreForUpdate } from '../../store/settingStore';
+import { useSettingStore } from '../../store/settingStore';
 import { getSetting, updateSetting } from '../../api/settingApi';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
@@ -18,18 +18,15 @@ export const useSetting = (): UseSettingResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { setting, setSetting } = useSettingStore();
-  const { setUpdateSettingDto } = useSettingStoreForUpdate();
 
   const handleGetSettingSuccess = (response: SettingResponse) => {
     const settingData = response.data;
     setSetting(settingData);
-    setUpdateSettingDto(settingData);
   };
 
   const handleUpdateSettingSuccess = async (response: SettingResponse) => {
     const settingData = response.data;
     setSetting(settingData);
-    setUpdateSettingDto(settingData);
   };
 
   const handleSettingRequest = async (

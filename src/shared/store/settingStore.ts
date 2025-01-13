@@ -10,13 +10,3 @@ export const useSettingStore = create<SettingState>((set) => ({
   setting: null,
   setSetting: (value) => set({ setting: value }),
 }));
-
-interface SettingStateForUpdate {
-  updateSettingDto: SettingData | null;
-  setUpdateSettingDto: (updateSettingDto: SettingData) => void;
-}
-
-export const useSettingStoreForUpdate = create<SettingStateForUpdate>((set) => ({
-  updateSettingDto: null,
-  setUpdateSettingDto: (updateSettingDto) => set({ updateSettingDto })
-}));
