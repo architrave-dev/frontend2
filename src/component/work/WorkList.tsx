@@ -4,7 +4,7 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import WorkInfo from './WorkInfo';
 import { sortWorkList } from './SortStation';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import { WorkData } from '../../shared/dto/EntityRepository';
 import WorkViewer from './WorkViewer';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
@@ -22,7 +22,6 @@ const WorkList: React.FC = () => {
   const { sortBy } = useWorkListStore();
   const { aui } = useAui();
   const { activeWork, setActiveWork } = useWorkViewStore();
-  const { setUpdatedActiveWork, clearAll } = useWorkViewStoreForUpdate();
 
   const { setStandardAlert } = useStandardAlertStore();
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
@@ -40,7 +39,6 @@ const WorkList: React.FC = () => {
     const getWorkListWithApi = async () => {
       if (!aui) return;
       try {
-        clearAll();
         console.log("getting work List...")
         await getWorkList(aui);
       } catch (error) { }
@@ -55,7 +53,6 @@ const WorkList: React.FC = () => {
     if (sortedWorkList.length > 0 && activeWork === null) {
       const defaultWork: WorkData = sortedWorkList[0];
       setActiveWork(defaultWork);
-      setUpdatedActiveWork(defaultWork);
     }
   }, [sortedWorkList.length])
 
