@@ -1,5 +1,5 @@
 import { createProjectElement, createProjectElementWithWork, createProjectElementWithWorkDetail, getProjectElementList, updateProjectElementList } from '../../api/projectElementApi';
-import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../store/projectElementStore';
+import { useProjectElementListStore } from '../../store/projectElementStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectElementData } from '../../dto/EntityRepository';
@@ -21,7 +21,6 @@ export const useProjectElement = (): UseProjectElementResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
-  const { clearAll } = useProjectElementListStoreForUpdate();
 
 
   const handleProjectElementSuccess = (response: ProjectElementListResponse) => {
@@ -29,7 +28,6 @@ export const useProjectElement = (): UseProjectElementResult => {
     const peIndex = projectElementListData.peIndex;
     console.log("peIndex: ", peIndex);
     setProjectElementList(projectElementListData.projectElementList);
-    clearAll();
   };
 
   const handleCreateProjectElementSuccess = (response: ProjectElementResponse) => {

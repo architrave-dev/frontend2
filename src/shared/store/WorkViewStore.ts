@@ -15,7 +15,7 @@ interface WorkViewState {
   setActiveWorkDetailList: (activeWorkDetailList: WorkDetailData[]) => void;
   updateActiveWorkDetailList: (id: string, updates: Partial<WorkDetailData>) => void;
   updateImageActiveWorkDetailList: (id: string, thumbnailUrl: string, originUrl: string) => void;
-  afterDeleteActiveWorkDetailList: (id: string) => void;
+  afterDeleteActiveWorkDetail: (id: string) => void;
 }
 
 export const useWorkViewStore = create<WorkViewState>((set) => ({
@@ -74,7 +74,7 @@ export const useWorkViewStore = create<WorkViewState>((set) => ({
         } : awd
       ),
     })),
-  afterDeleteActiveWorkDetailList: (id) =>
+  afterDeleteActiveWorkDetail: (id) =>
     set(({ activeWorkDetailList }) => ({
       activeWorkDetailList: activeWorkDetailList.filter((awd) => awd.id !== id)
     })),

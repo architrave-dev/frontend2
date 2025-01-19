@@ -96,19 +96,7 @@ const ProjectElementList: React.FC = () => {
       {projectElementList.map((each, index) => (
         <ProjectElement
           key={index}
-          id={each.id}
-          projectElementType={each.projectElementType}
-          work={each.work}
-          workAlignment={each.workAlignment}
-          workDisplaySize={each.workDisplaySize}
-          workDetail={each.workDetail}
-          workDetailAlignment={each.workDetailAlignment}
-          workDetailDisplaySize={each.workDetailDisplaySize}
-          textBox={each.textBox}
-          textBoxAlignment={each.textBoxAlignment}
-          document={each.document}
-          documentAlignment={each.documentAlignment}
-          dividerType={each.dividerType}
+          data={each}
         />
       ))}
       {isEditMode && (

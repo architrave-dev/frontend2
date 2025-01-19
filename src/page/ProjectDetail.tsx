@@ -9,9 +9,7 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import { useEditMode } from '../shared/hooks/useEditMode';
-import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
-import { UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkDetailReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
-import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
+import { UpdateProjectReq, UpdateUploadFileReq } from '../shared/dto/ReqDtoRepository';
 import { IndexData } from '../shared/dto/EntityRepository';
 import { ServiceType } from '../shared/enum/EnumRepository';
 import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
@@ -28,12 +26,7 @@ const ProjectDetail: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
-  const { updateProjectElementList } = useProjectElement();
   const { hasChanged, imageChanged } = useProjectStore();
-  const {
-    updatedProjectElements,
-    removedProjectElements
-  } = useProjectElementListStoreForUpdate();
 
   useEffect(() => {
     const getProjectWithApi = async () => {
@@ -48,18 +41,6 @@ const ProjectDetail: React.FC = () => {
 
   if (!project) return null;
 
-  const peListCheck = (): boolean => {
-    if (!project) {
-      return false;
-    }
-    return (
-      updatedProjectElements.length > 0 ||
-      removedProjectElements.length > 0
-    );
-  }
-  const isUnitedChanged = (): boolean => {
-    return hasChanged || peListCheck();
-  }
   const convertToPiIndexList = (): IndexData[] => {
     return [];
   }
@@ -129,46 +110,46 @@ const ProjectDetail: React.FC = () => {
         await updateProject(aui, newUpdateProjectReq);
       }
 
-      if (peListCheck()) {
-        const updatespromises = updatedProjectElements.map(async (pe) => {
-          if (pe.updateWorkReq != null) {
-            if (isBase64Image(pe.updateWorkReq.updateUploadFileReq.originUrl)) {
-              const convertedUpdateWorkReq = await uploadFileWithLocalUrlUpdates<UpdateWorkReq>(ServiceType.WORK, pe.updateWorkReq, aui);
-              return {
-                ...pe,
-                updateWorkReq: convertedUpdateWorkReq,
-              };
-            }
-            return pe;
-          } else if (pe.updateWorkDetailReq != null) {
-            if (isBase64Image(pe.updateWorkDetailReq.updateUploadFileReq.originUrl)) {
-              const convertedUpdateWorkDetailReq = await uploadFileWithLocalUrlUpdates<UpdateWorkDetailReq>(ServiceType.DETAIL, pe.updateWorkDetailReq, aui);
-              return {
-                ...pe,
-                updateWorkDetailReq: convertedUpdateWorkDetailReq,
-              };
-            }
-            return pe;
-          } else if (pe.updateDocumentReq != null) {
-            if (isBase64Image(pe.updateDocumentReq.updateUploadFileReq.originUrl)) {
-              const convertedUpdateDocumentReq = await uploadFileWithLocalUrlUpdates<UpdateDocumentReq>(ServiceType.DOCUMENT, pe.updateDocumentReq, aui);
-              return { ...pe, updateDocumentReq: convertedUpdateDocumentReq };
-            }
-            return pe;
-          } else {
-            return pe;
-          }
-        });
-        const afterUploadUpdates: UpdateProjectElementReq[] = await Promise.all(updatespromises);
+      // if (peListCheck()) {
+      //   const updatespromises = updatedProjectElements.map(async (pe) => {
+      //     if (pe.updateWorkReq != null) {
+      //       if (isBase64Image(pe.updateWorkReq.updateUploadFileReq.originUrl)) {
+      //         const convertedUpdateWorkReq = await uploadFileWithLocalUrlUpdates<UpdateWorkReq>(ServiceType.WORK, pe.updateWorkReq, aui);
+      //         return {
+      //           ...pe,
+      //           updateWorkReq: convertedUpdateWorkReq,
+      //         };
+      //       }
+      //       return pe;
+      //     } else if (pe.updateWorkDetailReq != null) {
+      //       if (isBase64Image(pe.updateWorkDetailReq.updateUploadFileReq.originUrl)) {
+      //         const convertedUpdateWorkDetailReq = await uploadFileWithLocalUrlUpdates<UpdateWorkDetailReq>(ServiceType.DETAIL, pe.updateWorkDetailReq, aui);
+      //         return {
+      //           ...pe,
+      //           updateWorkDetailReq: convertedUpdateWorkDetailReq,
+      //         };
+      //       }
+      //       return pe;
+      //     } else if (pe.updateDocumentReq != null) {
+      //       if (isBase64Image(pe.updateDocumentReq.updateUploadFileReq.originUrl)) {
+      //         const convertedUpdateDocumentReq = await uploadFileWithLocalUrlUpdates<UpdateDocumentReq>(ServiceType.DOCUMENT, pe.updateDocumentReq, aui);
+      //         return { ...pe, updateDocumentReq: convertedUpdateDocumentReq };
+      //       }
+      //       return pe;
+      //     } else {
+      //       return pe;
+      //     }
+      //   });
+      //   const afterUploadUpdates: UpdateProjectElementReq[] = await Promise.all(updatespromises);
 
-        const updatedData: UpdateProjectElementListReq = {
-          projectId: project.id, //peListCheck 확인 함
-          peIndexList: [],
-          updatedProjectElements: afterUploadUpdates,
-          removedProjectElements: removedProjectElements
-        }
-        await updateProjectElementList(aui, updatedData);
-      }
+      //   const updatedData: UpdateProjectElementListReq = {
+      //     projectId: project.id, //peListCheck 확인 함
+      //     peIndexList: [],
+      //     updatedProjectElements: afterUploadUpdates,
+      //     removedProjectElements: removedProjectElements
+      //   }
+      //   await updateProjectElementList(aui, updatedData);
+      // }
     } catch (err) {
     } finally {
       setEditMode(false);
@@ -180,7 +161,7 @@ const ProjectDetail: React.FC = () => {
       <Loading isLoading={isLoading} />
       <ProjectDetailContainer />
       <ProjectElementList />
-      {isEditMode && isUnitedChanged() &&
+      {isEditMode && hasChanged &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}

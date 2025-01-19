@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStore } from '../../shared/store/projectElementStore';
 import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, DisplayAlignment, WorkDisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
-import { ProjectElementData, SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
-import { UpdateProjectElementReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
+import { SelectType, DisplayAlignment, DisplaySize, TextAlignment, ProjectElementType } from '../../shared/enum/EnumRepository';
+import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
@@ -17,185 +16,93 @@ import { useValidation } from '../../shared/hooks/useValidation';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 export interface WorkProps {
-  alignment: DisplayAlignment | null;
-  displaySize: WorkDisplaySize | null;
+  peId: string;
+  alignment: DisplayAlignment;
+  displaySize: DisplaySize;
   data: WorkData;
 }
 
-const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySize: initialDisplaySize, data: initialData }) => {
+const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
   const { isEditMode } = useEditMode();
-  const { projectElementList, setProjectElementList } = useProjectElementListStore();
-  const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
+  const {
+    updateWork: handleChange,
+    updateImage: handleImageChange,
+    updateDisplayAlignment: handleDisplayAlignmentChange,
+    updateDisplaySize: handleDisplaySizeChange
+  } = useProjectElementListStore();
   const { checkType } = useValidation();
 
-  const handleChange = (field: keyof WorkData, value: string | SizeData) => {
+  const handleChangeWithValidate = (field: keyof WorkData, value: string | SizeData) => {
     if (!checkType(field, value)) {
       return;
     };
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
-    if (targetElement) {
-      //updatedProjectElements에 있다면
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkReq?.id === initialData.id ? { ...each, updateWorkReq: { ...each.updateWorkReq, [field]: value } as UpdateWorkReq } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      //updatedProjectElements에 없다면
-      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
-
-      if (!target) return;
-      const targetWork = target.work;
-      if (!targetWork) return;
-      //target으로 UpdateProjectElementReq 를 생성 후 
-      const convetedToProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: {
-          id: targetWork.id,
-          workType: targetWork.workType,
-          updateUploadFileReq: {
-            uploadFileId: targetWork.uploadFile.id,
-            originUrl: targetWork.uploadFile.originUrl,
-            thumbnailUrl: targetWork.uploadFile.thumbnailUrl,
-          },
-          title: targetWork.title,
-          description: targetWork.description,
-          size: targetWork.size,
-          material: targetWork.material,
-          prodYear: targetWork.prodYear,
-          price: targetWork.price,
-          collection: targetWork.collection
-        },
-        workAlignment: target.workAlignment,
-        workDisplaySize: target.workDisplaySize,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      //projectElementList에서 id로 찾고
-      //updatedProjectElements에 추가한다.
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...convetedToProjectElementReq,
-        updateWorkReq: {
-          ...convetedToProjectElementReq.updateWorkReq,
-          [field]: value
-        } as UpdateWorkReq
-      };
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
-    }
-    const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.work?.id === initialData.id ? { ...each, work: { ...each.work, [field]: value } as WorkData } : each
-    )
-    setProjectElementList(updatedProjectElementList);
+    handleChange(peId, { [field]: value });
   }
 
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
-    if (targetElement) {
-      //updatedProjectElements에 있다면
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkReq?.id === initialData.id ? { ...each, updateWorkReq: { ...each.updateWorkReq, thumbnailUrl, originUrl } as UpdateWorkReq } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      //updatedProjectElements에 없다면
-      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
+  // const handleChange = (field: keyof WorkData, value: string | SizeData) => {
+  // if (!checkType(field, value)) {
+  //   return;
+  // };
+  // const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === data.id);
+  // if (targetElement) {
+  //   //updatedProjectElements에 있다면
+  //   const updatedProjectElementList = updatedProjectElements.map(each =>
+  //     each.updateWorkReq?.id === data.id ? { ...each, updateWorkReq: { ...each.updateWorkReq, [field]: value } as UpdateWorkReq } : each
+  //   )
+  //   setUpdatedProjectElements(updatedProjectElementList);
+  // } else {
+  //   //updatedProjectElements에 없다면
+  //   const target = projectElementList.find(pe => pe.work?.id === data.id);
 
-      if (!target) return;
-      const targetWork = target.work;
-      if (!targetWork) return;
-      //target으로 UpdateProjectElementReq 를 생성 후??
-      const convetedToProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: {
-          id: targetWork.id,
-          workType: targetWork.workType,
-          updateUploadFileReq: {
-            uploadFileId: targetWork.uploadFile.id,
-            originUrl: originUrl,
-            thumbnailUrl: thumbnailUrl,
-          },
-          title: targetWork.title,
-          description: targetWork.description,
-          size: targetWork.size,
-          material: targetWork.material,
-          prodYear: targetWork.prodYear,
-          price: targetWork.price,
-          collection: targetWork.collection,
-        },
-        workAlignment: target.workAlignment,
-        workDisplaySize: target.workDisplaySize,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      setUpdatedProjectElements([...updatedProjectElements, convetedToProjectElementReq]);
-    }
-    const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.work?.id === initialData.id ? {
-        ...each,
-        work: {
-          ...each.work,
-          uploadFile: {
-            ...each.work.uploadFile,
-            originUrl,
-            thumbnailUrl
-          }
-        } as WorkData
-      } : each
-    )
-    setProjectElementList(updatedProjectElementList);
-  }
-
-  const handleSubChange = (
-    key: 'workDisplaySize' | 'workAlignment',
-    value: WorkDisplaySize | DisplayAlignment
-  ) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === initialData.id);
-    if (targetElement) {
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkReq?.id === initialData.id ? { ...each, [key]: value } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      const target = projectElementList.find(pe => pe.work?.id === initialData.id);
-      if (!target || !target.work) return;
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: {
-          ...target.work,
-          updateUploadFileReq: {
-            uploadFileId: target.work.uploadFile.id,
-            ...target.work.uploadFile
-          }
-        },
-        workDisplaySize: key === 'workDisplaySize' ? (value as WorkDisplaySize) : null,
-        workAlignment: key === 'workAlignment' ? (value as DisplayAlignment) : null,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
-    }
-    const updatedProjectElementList = projectElementList.map(each =>
-      each.work?.id === initialData.id ? { ...each, [key]: value } : each
-    );
-    setProjectElementList(updatedProjectElementList);
-  };
+  //   if (!target) return;
+  //   const targetWork = target.work;
+  //   if (!targetWork) return;
+  //   //target으로 UpdateProjectElementReq 를 생성 후 
+  //   const convetedToProjectElementReq: UpdateProjectElementReq = {
+  //     projectElementId: target.id,
+  //     updateWorkReq: {
+  //       id: targetWork.id,
+  //       workType: targetWork.workType,
+  //       updateUploadFileReq: {
+  //         uploadFileId: targetWork.uploadFile.id,
+  //         originUrl: targetWork.uploadFile.originUrl,
+  //         thumbnailUrl: targetWork.uploadFile.thumbnailUrl,
+  //       },
+  //       title: targetWork.title,
+  //       description: targetWork.description,
+  //       size: targetWork.size,
+  //       material: targetWork.material,
+  //       prodYear: targetWork.prodYear,
+  //       price: targetWork.price,
+  //       collection: targetWork.collection
+  //     },
+  //     workAlignment: target.workAlignment,
+  //     DisplaySize: target.DisplaySize,
+  //     updateWorkDetailReq: null,
+  //     workDetailAlignment: null,
+  //     workDetailDisplaySize: null,
+  //     updateTextBoxReq: null,
+  //     textBoxAlignment: null,
+  //     updateDocumentReq: null,
+  //     documentAlignment: null,
+  //     dividerType: null
+  //   }
+  //   //projectElementList에서 id로 찾고
+  //   //updatedProjectElements에 추가한다.
+  //   const newUpdateProjectElementReq: UpdateProjectElementReq = {
+  //     ...convetedToProjectElementReq,
+  //     updateWorkReq: {
+  //       ...convetedToProjectElementReq.updateWorkReq,
+  //       [field]: value
+  //     } as UpdateWorkReq
+  //   };
+  //   setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
+  // }
+  // const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
+  //   each.work?.id === data.id ? { ...each, work: { ...each.work, [field]: value } as WorkData } : each
+  // )
+  // setProjectElementList(updatedProjectElementList);
+  // }
 
   return (
     <WorkWrapper>
@@ -203,64 +110,69 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
         <SelectBoxContainer>
           <SelectBoxWrapper>
             <SelectBox
-              value={initialDisplaySize || WorkDisplaySize.BIG}
+              value={displaySize || DisplaySize.BIG}
               selectType={SelectType.WORK_SIZE}
-              handleChange={value => handleSubChange('workDisplaySize', value)}
+              handleChange={(value) => handleDisplaySizeChange(peId, value)}
               direction={false} />
           </SelectBoxWrapper>
           <SelectBoxWrapper>
             <SelectBox
-              value={initialWorkAlignment || DisplayAlignment.CENTER}
+              value={alignment || DisplayAlignment.CENTER}
               selectType={SelectType.DISPLAY_ALIGNMENT}
-              handleChange={value => handleSubChange('workAlignment', value)}
+              handleChange={value => handleDisplayAlignmentChange(peId, value)}
               direction={false} />
           </SelectBoxWrapper>
         </SelectBoxContainer>
       }
-      <WorkCoreWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-        <ImgWrapper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-          <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
+      <WorkCoreWrapper $workAlignment={alignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $workAlignment={alignment || DisplayAlignment.CENTER}>
+          <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
           <MoleculeImg
-            srcUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)}
-            alt={initialData.title}
-            displaySize={initialDisplaySize}
-            handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+            srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
+            alt={data.title}
+            displaySize={displaySize}
+            handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(
+              peId,
+              ProjectElementType.WORK,
+              thumbnailUrl,
+              originUrl
+            )}
             StyledImg={WorkImage}
           />
         </ImgWrapper>
         {isEditMode ? (
           <>
-            <TitleInfoWrpper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
+            <TitleInfoWrpper $workAlignment={alignment || DisplayAlignment.CENTER}>
               <HeadlessInput
-                value={initialData.title}
-                handleChange={(e) => handleChange("title", e.target.value)}
+                value={data.title}
+                handleChange={(e) => handleChangeWithValidate("title", e.target.value)}
                 placeholder="Title"
                 StyledInput={InputWorkTitle}
               />
               <HeadlessTextArea
                 alignment={TextAlignment.CENTER}
-                content={initialData.description}
+                content={data.description}
                 placeholder={"Description"}
-                handleChange={(e) => handleChange("description", e.target.value)}
+                handleChange={(e) => handleChangeWithValidate("description", e.target.value)}
                 StyledTextArea={TextAreaWork}
               />
               <WorkInfo>
                 <HeadlessInput
-                  value={initialData.material}
+                  value={data.material}
                   placeholder={"Material"}
-                  handleChange={(e) => handleChange("material", e.target.value)}
+                  handleChange={(e) => handleChangeWithValidate("material", e.target.value)}
                   StyledInput={InputWork}
                 />
                 <HeadlessInput
-                  value={convertSizeToString(initialData.size)}
+                  value={convertSizeToString(data.size)}
                   placeholder={"Size"}
-                  handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
+                  handleChange={(e) => handleChangeWithValidate("size", convertStringToSize(e.target.value))}
                   StyledInput={InputWork}
                 />
                 <HeadlessInput
-                  value={initialData.prodYear}
+                  value={data.prodYear}
                   placeholder={"Year"}
-                  handleChange={(e) => handleChange("prodYear", e.target.value)}
+                  handleChange={(e) => handleChangeWithValidate("prodYear", e.target.value)}
                   StyledInput={InputWork}
                 />
               </WorkInfo>
@@ -268,19 +180,19 @@ const Work: React.FC<WorkProps> = ({ alignment: initialWorkAlignment, displaySiz
           </>
         ) : (
           <>
-            <TitleInfoWrpper $workAlignment={initialWorkAlignment || DisplayAlignment.CENTER}>
-              <Title>[ {initialData.title} ]</Title>
+            <TitleInfoWrpper $workAlignment={alignment || DisplayAlignment.CENTER}>
+              <Title>[ {data.title} ]</Title>
               <Description>
-                {initialData.description.split('\n').map((line, index) => (
+                {data.description.split('\n').map((line, index) => (
                   <React.Fragment key={index}>
                     {line}<br />
                   </React.Fragment>
                 ))}
               </Description>
               <WorkInfo>
-                <Info>{initialData.material},</Info>
-                <Info>{convertSizeToString(initialData.size)},</Info>
-                <Info>{initialData.prodYear}</Info>
+                <Info>{data.material},</Info>
+                <Info>{convertSizeToString(data.size)},</Info>
+                <Info>{data.prodYear}</Info>
               </WorkInfo>
             </TitleInfoWrpper>
           </>
@@ -307,15 +219,15 @@ export const SelectBoxContainer = styled.div`
 `
 
 
-export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
+export const WorkImage = styled.img<{ $displaySize: DisplaySize }>`
   max-width: 100%;
   max-height: ${({ $displaySize }) => {
     switch ($displaySize) {
-      case WorkDisplaySize.SMALL:
+      case DisplaySize.SMALL:
         return '35vh';
-      case WorkDisplaySize.REGULAR:
+      case DisplaySize.REGULAR:
         return '55vh';
-      case WorkDisplaySize.BIG:
+      case DisplaySize.BIG:
       default:
         return '90vh';
     }

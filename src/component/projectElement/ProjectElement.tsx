@@ -3,69 +3,54 @@ import styled from 'styled-components';
 import Work from './Work';
 import TextBox from './TextBox';
 import Divider from '../../shared/Divider';
-import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
 import { ProjectElementType } from '../../shared/enum/EnumRepository';
 import { ProjectElementData } from '../../shared/dto/EntityRepository';
-import { RemoveProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import Document from './Document';
 import Detail from './Detail';
 
+export interface ProjectElementProps {
+  data: ProjectElementData;
+}
 
-const ProjectElement: React.FC<ProjectElementData> = ({
-  id, //projectElementId
-  projectElementType,
-  work,
-  workAlignment,
-  workDisplaySize,
-  workDetail,
-  workDetailAlignment,
-  workDetailDisplaySize,
-  textBox,
-  textBoxAlignment,
-  document,
-  documentAlignment,
-  dividerType
-  // order,
-}) => {
+const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
   const { isEditMode } = useEditMode();
-  const { projectElementList, setProjectElementList } = useProjectElementListStore();
-  const { updatedProjectElements, setUpdatedProjectElements, removedProjectElements, setRemovedProjectElements } = useProjectElementListStoreForUpdate();
+
   const contentRouter = () => {
-    switch (projectElementType) {
+    switch (data.projectElementType) {
       case ProjectElementType.WORK:
-        return work && <Work alignment={workAlignment} displaySize={workDisplaySize} data={work} />;
+        return data.work && data.displayAlignment && data.displaySize && <Work peId={data.id} alignment={data.displayAlignment} displaySize={data.displaySize} data={data.work} />;
       case ProjectElementType.DETAIL:
-        return workDetail && <Detail alignment={workDetailAlignment} displaySize={workDetailDisplaySize} data={workDetail} />;
+        return data.workDetail && data.displayAlignment && data.displaySize && <Detail peId={data.id} alignment={data.displayAlignment} displaySize={data.displaySize} data={data.workDetail} />;
       case ProjectElementType.TEXTBOX:
-        return textBox && <TextBox alignment={textBoxAlignment} data={textBox} />;
+        return data.textBox && data.textAlignment && <TextBox peId={data.id} alignment={data.textAlignment} data={data.textBox} />;
       case ProjectElementType.DOCUMENT:
-        return document && documentAlignment && <Document alignment={documentAlignment} data={document} />;
+        return data.document && data.textAlignment && <Document peId={data.id} alignment={data.textAlignment} data={data.document} />;
       case ProjectElementType.DIVIDER:
-        return dividerType && <Divider dividerType={dividerType} />;
+        return data.dividerType && <Divider dividerType={data.dividerType} />;
       default:
         return null;
     }
   }
 
   const handleDelete = () => {
-    const targetElement = updatedProjectElements.find(each => each.projectElementId === id);
-    if (targetElement) {
-      const updatedInfoList = updatedProjectElements.filter((each) => each.projectElementId !== id)
-      setUpdatedProjectElements(updatedInfoList);
-    }
+    // const targetElement = projectElementList.find(each => each.id === data.id);
+    // if (targetElement) {
+    //   const updatedInfoList = projectElementList.filter((each) => each.id !== data.id)
+    //   setProjectElementList(updatedInfoList);
+    // }
 
-    const updatedProjectInfoList = projectElementList.filter((each) => each.id !== id)
-    setProjectElementList(updatedProjectInfoList);
+    // const updatedProjectInfoList = projectElementList.filter((each) => each.id !== data.id)
+    // setProjectElementList(updatedProjectInfoList);
 
-    const newRemovedElement: RemoveProjectElementReq = { projectElementId: id };
-    setRemovedProjectElements([...removedProjectElements, newRemovedElement]);
+    // const newRemovedElement: RemoveProjectElementReq = { projectElementId: data.id };
+    // setRemovedProjectElements([...removedProjectElements, newRemovedElement]);
   }
 
   return (
-    <ProjectElementListWrapper $elementType={projectElementType}>
+    <ProjectElementListWrapper $elementType={data.projectElementType}>
       {contentRouter()}
       {isEditMode &&
         <HeadlessBtn

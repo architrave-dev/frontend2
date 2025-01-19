@@ -31,7 +31,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
   const { activeWork,
     updateActiveWorkDetailList: handleChange,
     updateImageActiveWorkDetailList: handleImageChange,
-    afterDeleteActiveWorkDetailList } = useWorkViewStore();
+    afterDeleteActiveWorkDetail } = useWorkViewStore();
 
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkDetailReq, aui: string): Promise<UpdateWorkDetailReq> => {
@@ -74,7 +74,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     const callback = async () => {
       try {
         await deleteWorkDetail(aui, { workId, workDetailId: data.id });
-        afterDeleteActiveWorkDetailList(data.id)
+        afterDeleteActiveWorkDetail(data.id)
       } catch (err) { }
     }
     setStandardAlert({
