@@ -47,8 +47,8 @@ export const peWorkBuilder = (projectId: string): CreateProjectElementReq => {
     projectId: projectId,
     projectElementType: ProjectElementType.WORK,
     createWorkReq: workBuilder(),
-    workAlignment: DisplayAlignment.CENTER,
-    workDisplaySize: DisplaySize.BIG,
+    displayAlignment: DisplayAlignment.CENTER,
+    displaySize: DisplaySize.BIG,
   };
 }
 export const peDetailBuilder = (projectId: string, workId: string): CreateProjectElementReq => {
@@ -63,8 +63,8 @@ export const peDetailBuilder = (projectId: string, workId: string): CreateProjec
       thumbnailUrl: '',
       description: "",
     },
-    workDetailAlignment: DisplayAlignment.CENTER,
-    workDetailDisplaySize: DisplaySize.BIG,
+    displayAlignment: DisplayAlignment.CENTER,
+    displaySize: DisplaySize.BIG,
   };
 }
 export const peDocBuilder = (projectId: string): CreateProjectElementReq => {
@@ -73,7 +73,7 @@ export const peDocBuilder = (projectId: string): CreateProjectElementReq => {
     projectId: projectId,
     projectElementType: ProjectElementType.DOCUMENT,
     createDocumentReq: documentBuilder(),
-    documentAlignment: TextAlignment.CENTER,
+    textAlignment: TextAlignment.CENTER,
   };
 }
 export const peTextBoxBuilder = (projectId: string): CreateProjectElementReq => {
@@ -82,7 +82,7 @@ export const peTextBoxBuilder = (projectId: string): CreateProjectElementReq => 
     projectId: projectId,
     projectElementType: ProjectElementType.TEXTBOX,
     createTextBoxReq: textBoxBuilder(),
-    textBoxAlignment: TextAlignment.CENTER,
+    textAlignment: TextAlignment.CENTER,
   };
 }
 export const peDividerBuilder = (projectId: string): CreateProjectElementReq => {
@@ -93,8 +93,6 @@ export const peDividerBuilder = (projectId: string): CreateProjectElementReq => 
     dividerType: DividerType.PLAIN
   };
 }
-// 이거 하고 careerList 최신화 해볼까???
-
 
 
 // Work

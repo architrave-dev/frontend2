@@ -157,8 +157,9 @@ export interface ProjectElementData {
   projectElementType: ProjectElementType;
   work: WorkData | null;
   workDetail: WorkDetailData | null;
-  textBox: TextBoxData | null;
   document: DocumentData | null;
+  textBox: TextBoxData | null;
+
   displayAlignment: DisplayAlignment | null;
   displaySize: DisplaySize | null;
   textAlignment: TextAlignment | null;

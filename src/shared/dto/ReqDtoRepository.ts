@@ -1,5 +1,5 @@
 import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
-import { IndexData, MenuVisible, SizeData, SocialMedia } from './EntityRepository';
+import { IndexData, MenuVisible, SizeData } from './EntityRepository';
 
 //-------------- Auth
 export interface SignUpReq {
@@ -181,27 +181,27 @@ export interface CreateProjectElementReqBase {
 export interface CreateProjectElementReqWork extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.WORK;
   createWorkReq: CreateWorkReq;            // Not optional
-  workAlignment: DisplayAlignment;         // e.g. CENTER, LEFT, ...
-  workDisplaySize: DisplaySize;        // e.g. BIG, SMALL, ...
+  displayAlignment: DisplayAlignment;         // e.g. CENTER, LEFT, ...
+  displaySize: DisplaySize;        // e.g. BIG, SMALL, ...
 }
 
 export interface CreateProjectElementReqDetail extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.DETAIL;
   createWorkDetailReq: CreateWorkDetailReq;
-  workDetailAlignment: DisplayAlignment;
-  workDetailDisplaySize: DisplaySize,
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize,
 }
 
 export interface CreateProjectElementReqDocument extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.DOCUMENT;
   createDocumentReq: CreateDocumentReq;
-  documentAlignment: TextAlignment;
+  textAlignment: TextAlignment;
 }
 
 export interface CreateProjectElementReqTextBox extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.TEXTBOX;
   createTextBoxReq: CreateTextBoxReq;
-  textBoxAlignment: TextAlignment;
+  textAlignment: TextAlignment;
 }
 
 export interface CreateProjectElementReqDivider extends CreateProjectElementReqBase {
@@ -216,22 +216,51 @@ export type CreateProjectElementReq =
   | CreateProjectElementReqTextBox
   | CreateProjectElementReqDivider;
 
-export interface UpdateProjectElementReq {
+export interface UpdateProjectElementReqBase {
   projectElementId: string;
-  updateWorkReq: UpdateWorkReq | null;
-  workAlignment: DisplayAlignment | null;
-  workDisplaySize: DisplaySize | null;
-  updateWorkDetailReq: UpdateWorkDetailReq | null;
-  workDetailAlignment: DisplayAlignment | null;
-  workDetailDisplaySize: DisplaySize | null;
-  updateTextBoxReq: UpdateTextBoxReq | null;
-  textBoxAlignment: TextAlignment | null;
-  updateDocumentReq: UpdateDocumentReq | null;
-  documentAlignment: TextAlignment | null;
-  dividerType: DividerType | null;
+  projectElementType: ProjectElementType;
 }
 
-export interface RemoveProjectElementReq {
+export interface UpdateProjectElementReqWork extends UpdateProjectElementReqBase {
+  projectElementType: ProjectElementType.WORK;
+  updateWorkReq: UpdateWorkReq;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
+}
+
+export interface UpdateProjectElementReqDetail extends UpdateProjectElementReqBase {
+  projectElementType: ProjectElementType.DETAIL;
+  updateWorkDetailReq: UpdateWorkDetailReq;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
+}
+
+export interface UpdateProjectElementReqDocument extends UpdateProjectElementReqBase {
+  projectElementType: ProjectElementType.DOCUMENT;
+  updateDocumentReq: UpdateDocumentReq;
+  textAlignment: TextAlignment;
+}
+
+export interface UpdateProjectElementReqTextBox extends UpdateProjectElementReqBase {
+  projectElementType: ProjectElementType.TEXTBOX;
+  updateTextBoxReq: UpdateTextBoxReq;
+  textAlignment: TextAlignment;
+}
+
+export interface UpdateProjectElementReqDivider extends UpdateProjectElementReqBase {
+  projectElementType: ProjectElementType.DIVIDER;
+  dividerType: DividerType;
+}
+
+export type UpdateProjectElementReq =
+  | UpdateProjectElementReqWork
+  | UpdateProjectElementReqDetail
+  | UpdateProjectElementReqDocument
+  | UpdateProjectElementReqTextBox
+  | UpdateProjectElementReqDivider;
+
+
+export interface DeleteProjectElementReq {
   projectElementId: string;
 }
 
