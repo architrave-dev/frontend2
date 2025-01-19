@@ -3,7 +3,7 @@ import { useGlobalErrStore } from '../../store/errorStore';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../../dto/ReqDtoRepository';
 import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailSimpleListResponse } from '../../dto/ResDtoRepository';
 import { createWorkDetail, deleteWorkDetail, getSimpleWorkDetailList, getWorkDetail, getWorkDetailList, updateWorkDetail } from '../../api/workDetailApi';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
+import { useWorkViewStore } from '../../store/WorkViewStore';
 import { useWorkStationStore } from '../../store/workStationStore';
 import { useLoadingStore } from '../../store/loadingStore';
 
@@ -20,17 +20,18 @@ interface UseWorkListResult {
 export const useWorkDetail = (): UseWorkListResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
-  const { activeWorkDetailList, setActiveWorkDetailList } = useWorkViewStore();
-  const { updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+  const { activeWorkDetailList, setActiveWorkDetailList, setOnlyActiveWorkDetailList } = useWorkViewStore();
   const { setSimpleWorkDetailList } = useWorkStationStore();
 
   const handleGetWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
+    console.log("after handleGetWorkDetailSuccess: ", data);
   };
 
   const handleGetWorkDetailListSuccess = (response: WorkDetailListResponse) => {
     const data = response.data;
-    setUpdateActiveWorkDetailList(data);
+    console.log("after handleGetWorkDetailListSuccess: ", data);
+    setActiveWorkDetailList(data);
   };
 
   const handleGetSimpleWorkDetailListSuccess = (workId: string, response: WorkDetailSimpleListResponse) => {
@@ -40,10 +41,8 @@ export const useWorkDetail = (): UseWorkListResult => {
 
   const handleUpdateWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
-    const newUpdateWorkDetailList = updateActiveWorkDetailList.map((wd) => wd.id === data.id ? data : wd);
     const newWorkDetailList = activeWorkDetailList.map((wd) => wd.id === data.id ? data : wd);
-    setUpdateActiveWorkDetailList(newUpdateWorkDetailList);
-    setActiveWorkDetailList(newWorkDetailList);
+    setOnlyActiveWorkDetailList(newWorkDetailList);
   };
 
   const handleDeleteWorkDetailSuccess = (response: DeleteResponse) => {
@@ -52,7 +51,6 @@ export const useWorkDetail = (): UseWorkListResult => {
 
   const handleCreateWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
-    setUpdateActiveWorkDetailList([...updateActiveWorkDetailList, data]);
     setActiveWorkDetailList([...activeWorkDetailList, data]);
   };
 

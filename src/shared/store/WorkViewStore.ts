@@ -11,8 +11,11 @@ interface WorkViewState {
   updateImage: (thumbnailUrl: string, originUrl: string) => void;
 
   activeWorkDetailList: WorkDetailData[];
+  setOnlyActiveWorkDetailList: (activeWorkDetailList: WorkDetailData[]) => void;
   setActiveWorkDetailList: (activeWorkDetailList: WorkDetailData[]) => void;
-  clearActiveWork: () => void;
+  updateActiveWorkDetailList: (id: string, updates: Partial<WorkDetailData>) => void;
+  updateImageActiveWorkDetailList: (id: string, thumbnailUrl: string, originUrl: string) => void;
+  afterDeleteActiveWorkDetailList: (id: string) => void;
 }
 
 export const useWorkViewStore = create<WorkViewState>((set) => ({
@@ -42,7 +45,37 @@ export const useWorkViewStore = create<WorkViewState>((set) => ({
       imageChanged: true,
     })),
 
+
   activeWorkDetailList: [],
-  setActiveWorkDetailList: (activeWorkDetailList) => set({ activeWorkDetailList }),
-  clearActiveWork: () => set({ activeWork: null, activeWorkDetailList: [] })
+  setOnlyActiveWorkDetailList: (activeWorkDetailList) => set({ activeWorkDetailList }),
+  setActiveWorkDetailList: (activeWorkDetailList) =>
+    set(() => ({
+      activeWorkDetailList: activeWorkDetailList.map((awd) => ({ ...awd, hasChanged: false, imageChanged: false })),
+    })),
+  updateActiveWorkDetailList: (id, updates) =>
+    set(({ activeWorkDetailList }) => ({
+      activeWorkDetailList: activeWorkDetailList.map((awd) =>
+        awd.id === id ?
+          { ...awd, ...updates, hasChanged: true }
+          : awd
+      ),
+    })),
+  updateImageActiveWorkDetailList: (id, thumbnailUrl, originUrl) =>
+    set(({ activeWorkDetailList }) => ({
+      activeWorkDetailList: activeWorkDetailList.map((awd) =>
+        awd.id === id ? {
+          ...awd,
+          uploadFile: {
+            ...awd.uploadFile,
+            originUrl,
+            thumbnailUrl
+          },
+          hasChanged: true, imageChanged: true
+        } : awd
+      ),
+    })),
+  afterDeleteActiveWorkDetailList: (id) =>
+    set(({ activeWorkDetailList }) => ({
+      activeWorkDetailList: activeWorkDetailList.filter((awd) => awd.id !== id)
+    })),
 }));

@@ -11,9 +11,8 @@ import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, ServiceType } from '../../shared/enum/EnumRepository';
 import { useAui } from '../../shared/hooks/useAui';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
-import { isModified } from '../../shared/hooks/useIsModified';
 import { ErrorCode } from '../../shared/api/errorCode';
 import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
 import { UpdateWorkDetailReq } from '../../shared/dto/ReqDtoRepository';
@@ -22,7 +21,6 @@ interface WorkDetailProps {
   index: number;
   workId: string;
   data: WorkDetailData;
-  // textAlignment?
 }
 
 const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
@@ -30,26 +28,17 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
   const { isEditMode } = useEditMode();
   const { setStandardAlert } = useStandardAlertStore();
   const { updateWorkDetail, deleteWorkDetail } = useWorkDetail();
-  const { activeWorkDetailList, setActiveWorkDetailList } = useWorkViewStore();
-  const { updatedActiveWork, updateActiveWorkDetailList, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+  const { activeWork,
+    updateActiveWorkDetailList: handleChange,
+    updateImageActiveWorkDetailList: handleImageChange,
+    afterDeleteActiveWorkDetailList } = useWorkViewStore();
 
-
-  const handleChange = (field: keyof WorkDetailData, value: string) => {
-    const afterUpdated = updateActiveWorkDetailList.map((wd) => wd.id === data.id ? { ...wd, [field]: value } : wd);
-    setUpdateActiveWorkDetailList(afterUpdated);
-  }
-
-  const paintOnlyChanged = () => {
-    const target = activeWorkDetailList.find(wd => wd.id === data.id);
-    if (!target) return null;
-    return isModified(data, target);
-  }
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkDetailReq, aui: string): Promise<UpdateWorkDetailReq> => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
     try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [updatedActiveWork!.id, prevData.id]);
+      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [activeWork!.id, prevData.id]);
       return {
         ...prevData,
         updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
@@ -58,13 +47,6 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
       throw new Error(ErrorCode.AWS);
     }
   }
-
-  const imageChecker = (): boolean => {
-    const target = activeWorkDetailList.find(wd => wd.id === data.id);
-    if (!target) return false;
-    return target.uploadFile.originUrl !== data.uploadFile.originUrl;
-  }
-
 
   const handleUpdate = async () => {
     const updateDetail = async () => {
@@ -77,7 +59,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
             uploadFileId: data.uploadFile.id
           },
         }
-        if (imageChecker()) {
+        if (data.imageChanged) {
           updateWorkDetailReq = await uploadFileWithLocalUrl(ServiceType.DETAIL, updateWorkDetailReq, aui);
         }
         await updateWorkDetail(aui, updateWorkDetailReq);
@@ -92,16 +74,8 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     const callback = async () => {
       try {
         await deleteWorkDetail(aui, { workId, workDetailId: data.id });
-        // handleUpdateWorkDetailSuccess에서 하고 싶다...
-        const newUpdateWorkDetailList = updateActiveWorkDetailList.filter((wd) => wd.id !== data.id);
-        const newWorkDetailList = activeWorkDetailList.filter((wd) => wd.id !== data.id);
-
-        setUpdateActiveWorkDetailList(newUpdateWorkDetailList);
-        setActiveWorkDetailList(newWorkDetailList);
-
-      } catch (err) {
-      } finally {
-      }
+        afterDeleteActiveWorkDetailList(data.id)
+      } catch (err) { }
     }
     setStandardAlert({
       type: AlertType.CONFIRM,
@@ -111,19 +85,6 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     });
   };
 
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    const afterUpdated = updateActiveWorkDetailList.map((wd) =>
-      wd.id === data.id ? {
-        ...wd,
-        uploadFile: {
-          ...wd.uploadFile,
-          originUrl,
-          thumbnailUrl
-        }
-      } : wd);
-    setUpdateActiveWorkDetailList(afterUpdated);
-  }
-
   return (
     <WorkDetailWrapper>
       <>
@@ -131,7 +92,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
         <>
           {isEditMode &&
             <BtnContainer>
-              {paintOnlyChanged() &&
+              {data.hasChanged &&
                 <HeadlessBtn
                   value={"Update"}
                   handleClick={handleUpdate}
@@ -153,14 +114,14 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
           srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
           alt={"Work Detail"}
           displaySize={null}
-          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(data.id, thumbnailUrl, originUrl)}
           StyledImg={WorkImage}
         />
       </ImgWrapper>
       <MoleculeInputDiv
         value={data.description}
         placeholder={"detail description"}
-        handleChange={(e) => handleChange('description', e.target.value)}
+        handleChange={(e) => handleChange(data.id, { description: e.target.value })}
         inputStyle={WorkDetailInputDescription}
         StyledDiv={WorkDetailDescription}
       />

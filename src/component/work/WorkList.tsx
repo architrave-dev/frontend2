@@ -12,7 +12,7 @@ import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkListStore } from '../../shared/store/WorkListStore';
 import Space from '../../shared/Space';
-import { AlertPosition, AlertType, WorkType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { workBuilder } from '../../shared/converter/EntityBuilder';
 
@@ -21,7 +21,7 @@ const WorkList: React.FC = () => {
   const { workList, getWorkList, getWork, createWork } = useWorkList();
   const { sortBy } = useWorkListStore();
   const { aui } = useAui();
-  const { activeWork, setActiveWork } = useWorkViewStore();
+  const { activeWork } = useWorkViewStore();
 
   const { setStandardAlert } = useStandardAlertStore();
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
@@ -51,8 +51,7 @@ const WorkList: React.FC = () => {
 
   useEffect(() => {
     if (sortedWorkList.length > 0 && activeWork === null) {
-      const defaultWork: WorkData = sortedWorkList[0];
-      setActiveWork(defaultWork);
+      changeActiveWork(0);
     }
   }, [sortedWorkList.length])
 
@@ -61,7 +60,6 @@ const WorkList: React.FC = () => {
       await createWork(aui, workBuilder());
     } catch (err) { };
   };
-
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!sortedWorkList.length) return;
@@ -96,7 +94,7 @@ const WorkList: React.FC = () => {
       }
       const getWorkWithDetailWithApi = async () => {
         try {
-          console.log("getting work Detail List...")
+          console.log("getting work and Detail List...")
           await getWork(sortedWorkList[newIndex].id);
           setSelectedIndex(newIndex);
         } catch (error) { }

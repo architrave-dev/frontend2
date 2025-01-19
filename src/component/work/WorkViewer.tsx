@@ -27,7 +27,7 @@ const WorkViewer: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { updateWork, deleteWork } = useWorkList();
-  const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange, clearActiveWork } = useWorkViewStore();
+  const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { checkType } = useValidation();
 
@@ -84,7 +84,6 @@ const WorkViewer: React.FC = () => {
         await deleteWork(aui, { workId: activeWork.id });
       } catch (err) {
       } finally {
-        clearActiveWork();
         setEditMode(false);
       }
     }

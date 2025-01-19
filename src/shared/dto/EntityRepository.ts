@@ -99,6 +99,9 @@ export interface WorkDetailData {
   workId: string;
   uploadFile: UploadFileData;
   description: string;
+
+  hasChanged?: boolean;
+  imageChanged?: boolean;
 }
 export interface WorkWithDetailData extends WorkData {
   workDetailList: WorkDetailData[]; // 추가된 필드
