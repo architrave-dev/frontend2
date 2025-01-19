@@ -1,22 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import Work from './Work';
-import TextBox from './TextBox';
-import Divider from '../../shared/Divider';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
+import { useAui } from '../../shared/hooks/useAui';
+import { BtnConfirm, BtnDelete } from '../../shared/component/headless/button/BtnBody';
 import { ProjectElementType } from '../../shared/enum/EnumRepository';
 import { ProjectElementData } from '../../shared/dto/EntityRepository';
-import Document from './Document';
+import { useProjectElementListStore } from '../../shared/store/projectElementStore';
+import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
+import Work from './Work';
 import Detail from './Detail';
+import Document from './Document';
+import TextBox from './TextBox';
+import Divider from '../../shared/Divider';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 
 export interface ProjectElementProps {
   data: ProjectElementData;
 }
 
 const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
+  const { aui } = useAui();
   const { isEditMode } = useEditMode();
+  const { updateProjectElement, deleteProjectElement } = useProjectElement();
+  const { afterDeleteProjectElement } = useProjectElementListStore();
 
   const contentRouter = () => {
     switch (data.projectElementType) {
@@ -35,29 +41,39 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
     }
   }
 
-  const handleDelete = () => {
-    // const targetElement = projectElementList.find(each => each.id === data.id);
-    // if (targetElement) {
-    //   const updatedInfoList = projectElementList.filter((each) => each.id !== data.id)
-    //   setProjectElementList(updatedInfoList);
+  const handleUpdate = async () => {
+    // try {
+    //   await updateProjectElement(aui, data);
+    // } catch (err) {
     // }
+  };
 
-    // const updatedProjectInfoList = projectElementList.filter((each) => each.id !== data.id)
-    // setProjectElementList(updatedProjectInfoList);
-
-    // const newRemovedElement: RemoveProjectElementReq = { projectElementId: data.id };
-    // setRemovedProjectElements([...removedProjectElements, newRemovedElement]);
+  const handleDelete = async () => {
+    try {
+      await deleteProjectElement(aui, { projectElementId: data.id });
+      afterDeleteProjectElement(data.id);
+    } catch (err) {
+    }
   }
 
   return (
     <ProjectElementListWrapper $elementType={data.projectElementType}>
       {contentRouter()}
       {isEditMode &&
-        <HeadlessBtn
-          value={"Delete"}
-          handleClick={handleDelete}
-          StyledBtn={BtnDelete}
-        />
+        <BtnContainer>
+          {data.hasChanged &&
+            <HeadlessBtn
+              value={"Update"}
+              handleClick={handleUpdate}
+              StyledBtn={BtnConfirm}
+            />
+          }
+          <HeadlessBtn
+            value={"Delete"}
+            handleClick={handleDelete}
+            StyledBtn={BtnDelete}
+          />
+        </BtnContainer>
       }
     </ProjectElementListWrapper>
   );
@@ -91,5 +107,18 @@ const ProjectElementListWrapper = styled.div<{ $elementType: ProjectElementType 
     }
   }};
 `;
+
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0px;
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5vw;
+
+  padding: 4px 0px;
+`
+
 
 export default ProjectElement;

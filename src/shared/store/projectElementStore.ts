@@ -14,6 +14,7 @@ interface ProjectElementListState {
   updateTextAlignment: (id: string, textAlignment: TextAlignment) => void;
   updateDisplayAlignment: (id: string, displayAlignment: DisplayAlignment) => void;
   updateDisplaySize: (id: string, displaySize: DisplaySize) => void;
+  afterDeleteProjectElement: (id: string) => void;
 }
 
 export const useProjectElementListStore = create<ProjectElementListState>((set) => ({
@@ -171,4 +172,8 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
         : pe
     ),
   })),
+  afterDeleteProjectElement: (id) =>
+    set(({ projectElementList }) => ({
+      projectElementList: projectElementList.filter((pe) => pe.id !== id)
+    }))
 }));
