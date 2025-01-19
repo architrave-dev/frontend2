@@ -3,12 +3,12 @@ import { useEditMode } from '../../hooks/useEditMode';
 import ReplaceImageButton from '../ReplaceImageButton';
 import { StyledImgProps } from '../../dto/StyleCompRepository';
 import defaultImg from '../../../asset/project/default_1.png'
-import { WorkDisplaySize } from '../../enum/EnumRepository';
+import { DisplaySize } from '../../enum/EnumRepository';
 
 interface MoleculeImgProps {
   srcUrl: string;
   alt: string;
-  displaySize: WorkDisplaySize | null;
+  displaySize: DisplaySize | null;
   handleChange: (thumbnailUrl: string, originUrl: string) => void;
   StyledImg: React.ComponentType<StyledImgProps>;
 }
@@ -26,7 +26,7 @@ const MoleculeImg: React.FC<MoleculeImgProps> = ({
       <StyledImg
         src={srcUrl === '' ? defaultImg : srcUrl}
         alt={alt}
-        $displaySize={displaySize === null ? WorkDisplaySize.BIG : displaySize}
+        $displaySize={displaySize === null ? DisplaySize.BIG : displaySize}
       />
       {isEditMode && <ReplaceImageButton imgSrc={srcUrl} setImageUrl={handleChange} />}
     </>

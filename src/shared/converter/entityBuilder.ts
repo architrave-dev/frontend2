@@ -1,5 +1,5 @@
 import { CreateCareerReq, CreateDocumentReq, CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, CreateProjectInfoReq, CreateProjectReq, CreateTextBoxReq, CreateWorkDetailReq, CreateWorkReq } from '../dto/ReqDtoRepository';
-import { CareerType, DisplayAlignment, DividerType, ProjectElementType, TextAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
+import { CareerType, DisplayAlignment, DividerType, ProjectElementType, TextAlignment, DisplaySize, WorkType } from '../enum/EnumRepository';
 
 
 // project
@@ -28,7 +28,7 @@ export const peWorkImportBuilder = (projectId: string, workId: string): CreatePr
     projectId: projectId,
     workId: workId,
     workAlignment: DisplayAlignment.CENTER,
-    workDisplaySize: WorkDisplaySize.BIG,
+    workDisplaySize: DisplaySize.BIG,
   };
 }
 export const peDetailImportBuilder = (projectId: string, detailId: string): CreateProjectElementWithWorkDetailReq => {
@@ -36,7 +36,7 @@ export const peDetailImportBuilder = (projectId: string, detailId: string): Crea
     projectId: projectId,
     workDetailId: detailId,
     workDetailAlignment: DisplayAlignment.CENTER,
-    workDetailDisplaySize: WorkDisplaySize.BIG,
+    workDetailDisplaySize: DisplaySize.BIG,
   };
 }
 
@@ -48,7 +48,7 @@ export const peWorkBuilder = (projectId: string): CreateProjectElementReq => {
     projectElementType: ProjectElementType.WORK,
     createWorkReq: workBuilder(),
     workAlignment: DisplayAlignment.CENTER,
-    workDisplaySize: WorkDisplaySize.BIG,
+    workDisplaySize: DisplaySize.BIG,
   };
 }
 export const peDetailBuilder = (projectId: string, workId: string): CreateProjectElementReq => {
@@ -64,7 +64,7 @@ export const peDetailBuilder = (projectId: string, workId: string): CreateProjec
       description: "",
     },
     workDetailAlignment: DisplayAlignment.CENTER,
-    workDetailDisplaySize: WorkDisplaySize.BIG,
+    workDetailDisplaySize: DisplaySize.BIG,
   };
 }
 export const peDocBuilder = (projectId: string): CreateProjectElementReq => {

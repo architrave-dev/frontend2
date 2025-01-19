@@ -106,12 +106,11 @@ export enum DisplayAlignment {
   RIGHT = 'RIGHT',
 }
 
-export enum WorkDisplaySize {
+export enum DisplaySize {
   BIG = 'BIG',
   REGULAR = 'REGULAR',
   SMALL = 'SMALL'
 }
-
 
 export enum SortOrder {
   TITLE_ASC = 'TITLE_ASC',

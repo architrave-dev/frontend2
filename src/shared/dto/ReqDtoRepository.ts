@@ -1,4 +1,4 @@
-import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
+import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
 import { IndexData, MenuVisible, SizeData, SocialMedia } from './EntityRepository';
 
 //-------------- Auth
@@ -162,13 +162,13 @@ export interface CreateProjectElementWithWorkReq {
   projectId: string;
   workId: string;
   workAlignment: DisplayAlignment;
-  workDisplaySize: WorkDisplaySize;
+  workDisplaySize: DisplaySize;
 }
 export interface CreateProjectElementWithWorkDetailReq {
   projectId: string;
   workDetailId: string;
   workDetailAlignment: DisplayAlignment;
-  workDetailDisplaySize: WorkDisplaySize;
+  workDetailDisplaySize: DisplaySize;
 }
 
 // This is key to making a union workable
@@ -182,14 +182,14 @@ export interface CreateProjectElementReqWork extends CreateProjectElementReqBase
   projectElementType: ProjectElementType.WORK;
   createWorkReq: CreateWorkReq;            // Not optional
   workAlignment: DisplayAlignment;         // e.g. CENTER, LEFT, ...
-  workDisplaySize: WorkDisplaySize;        // e.g. BIG, SMALL, ...
+  workDisplaySize: DisplaySize;        // e.g. BIG, SMALL, ...
 }
 
 export interface CreateProjectElementReqDetail extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.DETAIL;
   createWorkDetailReq: CreateWorkDetailReq;
   workDetailAlignment: DisplayAlignment;
-  workDetailDisplaySize: WorkDisplaySize,
+  workDetailDisplaySize: DisplaySize,
 }
 
 export interface CreateProjectElementReqDocument extends CreateProjectElementReqBase {
@@ -220,10 +220,10 @@ export interface UpdateProjectElementReq {
   projectElementId: string;
   updateWorkReq: UpdateWorkReq | null;
   workAlignment: DisplayAlignment | null;
-  workDisplaySize: WorkDisplaySize | null;
+  workDisplaySize: DisplaySize | null;
   updateWorkDetailReq: UpdateWorkDetailReq | null;
   workDetailAlignment: DisplayAlignment | null;
-  workDetailDisplaySize: WorkDisplaySize | null;
+  workDetailDisplaySize: DisplaySize | null;
   updateTextBoxReq: UpdateTextBoxReq | null;
   textBoxAlignment: TextAlignment | null;
   updateDocumentReq: UpdateDocumentReq | null;
@@ -239,8 +239,8 @@ export interface UpdateProjectElementListReq {
   projectId: string;
   peIndexList: IndexData[];
   // createProjectElements: CreateProjectElementReq[];
-  updatedProjectElements: UpdateProjectElementReq[];
-  removedProjectElements: RemoveProjectElementReq[];
+  // updatedProjectElements: UpdateProjectElementReq[];
+  // removedProjectElements: RemoveProjectElementReq[];
 }
 
 //-------------- MemberInfo
