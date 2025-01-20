@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { DocumentData, ProjectElementData, TextBoxData, WorkData, WorkDetailData } from '../dto/EntityRepository';
+import { DocumentData, ProjectElementData, ProjectElementDataWithDetail, ProjectElementDataWithDocument, ProjectElementDataWithTextBox, ProjectElementDataWithWork, TextBoxData, WorkData, WorkDetailData } from '../dto/EntityRepository';
 import { DisplayAlignment, DisplaySize, ProjectElementType, TextAlignment } from '../enum/EnumRepository';
 
 interface ProjectElementListState {
@@ -10,7 +10,7 @@ interface ProjectElementListState {
   updateDetail: (id: string, updates: Partial<WorkDetailData>) => void;
   updateDocument: (id: string, updates: Partial<DocumentData>) => void;
   updateTextBox: (id: string, updates: Partial<TextBoxData>) => void;
-  updateImage: (id: string, peType: ProjectElementType, thumbnailUrl: string, originUrl: string) => void;
+  updateImage: (id: string, thumbnailUrl: string, originUrl: string) => void;
   updateTextAlignment: (id: string, textAlignment: TextAlignment) => void;
   updateDisplayAlignment: (id: string, displayAlignment: DisplayAlignment) => void;
   updateDisplaySize: (id: string, displaySize: DisplaySize) => void;
@@ -30,64 +30,74 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
     })),
   updateWork: (id, updates) =>
     set(({ projectElementList }) => ({
-      projectElementList: projectElementList.map((pe) =>
-        pe.id === id ? {
+      projectElementList: projectElementList.map((pe) => {
+        if (pe.id !== id) return pe;
+        if (pe.projectElementType !== ProjectElementType.WORK) return pe;
+
+        return {
           ...pe,
           work: {
-            ...pe.work!,
+            ...pe.work,
             ...updates,
           },
-          hasChanged: true
-        } : pe
-      ),
+          hasChanged: true,
+        } satisfies ProjectElementDataWithWork;
+      }),
     })),
   updateDetail: (id, updates) =>
     set(({ projectElementList }) => ({
-      projectElementList: projectElementList.map((pe) =>
-        pe.id === id ? {
+      projectElementList: projectElementList.map((pe) => {
+        if (pe.id !== id) return pe;
+        if (pe.projectElementType !== ProjectElementType.DETAIL) return pe;
+        return {
           ...pe,
           workDetail: {
-            ...pe.workDetail!,
+            ...pe.workDetail,
             ...updates,
           },
-          hasChanged: true
-        } : pe
-      ),
+          hasChanged: true,
+        } satisfies ProjectElementDataWithDetail;
+      }),
     })),
   updateDocument: (id, updates) =>
     set(({ projectElementList }) => ({
-      projectElementList: projectElementList.map((pe) =>
-        pe.id === id ? {
+      projectElementList: projectElementList.map((pe) => {
+        if (pe.id !== id) return pe;
+        if (pe.projectElementType !== ProjectElementType.DOCUMENT) return pe;
+
+        return {
           ...pe,
           document: {
-            ...pe.document!,
+            ...pe.document,
             ...updates,
           },
-          hasChanged: true
-        } : pe
-      ),
+          hasChanged: true,
+        } satisfies ProjectElementDataWithDocument;
+      }),
     })),
   updateTextBox: (id, updates) =>
     set(({ projectElementList }) => ({
-      projectElementList: projectElementList.map((pe) =>
-        pe.id === id ? {
+      projectElementList: projectElementList.map((pe) => {
+        if (pe.id !== id) return pe;
+        if (pe.projectElementType !== ProjectElementType.TEXTBOX) return pe;
+
+        return {
           ...pe,
           textBox: {
-            ...pe.textBox!,
+            ...pe.textBox,
             ...updates,
           },
-          hasChanged: true
-        } : pe
-      ),
+          hasChanged: true,
+        } satisfies ProjectElementDataWithTextBox;
+      }),
     })),
-  updateImage: (id, peType, thumbnailUrl, originUrl) =>
+  updateImage: (id, thumbnailUrl, originUrl) =>
     set(({ projectElementList }) => ({
       projectElementList: projectElementList.map((pe) => {
         if (pe.id !== id) return pe;
 
-        switch (peType) {
+        switch (pe.projectElementType) {
           case ProjectElementType.WORK:
-            if (!pe.work) return pe;
             return {
               ...pe,
               work: {
@@ -103,7 +113,6 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
             };
 
           case ProjectElementType.DETAIL:
-            if (!pe.workDetail) return pe;
             return {
               ...pe,
               workDetail: {
@@ -119,7 +128,6 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
             };
 
           case ProjectElementType.DOCUMENT:
-            if (!pe.document) return pe;
             return {
               ...pe,
               document: {

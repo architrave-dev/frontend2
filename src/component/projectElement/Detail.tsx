@@ -58,7 +58,6 @@ const Work: React.FC<DetailProps> = ({ peId, alignment, displaySize, data }) => 
             displaySize={displaySize}
             handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(
               peId,
-              ProjectElementType.DETAIL,
               thumbnailUrl,
               originUrl
             )}

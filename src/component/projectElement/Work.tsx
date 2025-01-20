@@ -133,7 +133,6 @@ const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
             displaySize={displaySize}
             handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(
               peId,
-              ProjectElementType.WORK,
               thumbnailUrl,
               originUrl
             )}

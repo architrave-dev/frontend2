@@ -55,7 +55,6 @@ export interface ProjectElementListResponse {
     projectElementList: ProjectElementData[];
   }
 }
-
 export interface ProjectListResponse {
   data: ProjectSimpleData[];
 }

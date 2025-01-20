@@ -238,7 +238,7 @@ export interface UpdateProjectElementReqDetail extends UpdateProjectElementReqBa
 export interface UpdateProjectElementReqDocument extends UpdateProjectElementReqBase {
   projectElementType: ProjectElementType.DOCUMENT;
   updateDocumentReq: UpdateDocumentReq;
-  textAlignment: TextAlignment;
+  displayAlignment: DisplayAlignment;
 }
 
 export interface UpdateProjectElementReqTextBox extends UpdateProjectElementReqBase {

@@ -152,22 +152,53 @@ export interface ProjectSimpleData {
   thumbnailUrl: string;
 }
 
-export interface ProjectElementData {
+interface ProjectElementBase {
   id: string;
   projectElementType: ProjectElementType;
-  work: WorkData | null;
-  workDetail: WorkDetailData | null;
-  document: DocumentData | null;
-  textBox: TextBoxData | null;
-
-  displayAlignment: DisplayAlignment | null;
-  displaySize: DisplaySize | null;
-  textAlignment: TextAlignment | null;
-  dividerType: DividerType | null;
 
   hasChanged?: boolean;
   imageChanged?: boolean;
 }
+
+export interface ProjectElementDataWithWork extends ProjectElementBase {
+  projectElementType: ProjectElementType.WORK;
+  work: WorkData;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
+}
+
+export interface ProjectElementDataWithDetail extends ProjectElementBase {
+  projectElementType: ProjectElementType.DETAIL;
+  workDetail: WorkDetailData;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
+}
+
+export interface ProjectElementDataWithDocument extends ProjectElementBase {
+  projectElementType: ProjectElementType.DOCUMENT;
+  document: DocumentData;
+  displayAlignment: DisplayAlignment;
+}
+
+export interface ProjectElementDataWithTextBox extends ProjectElementBase {
+  projectElementType: ProjectElementType.TEXTBOX;
+  textBox: TextBoxData;
+  textAlignment: TextAlignment;
+}
+
+export interface ProjectElementDataWithDivider extends ProjectElementBase {
+  projectElementType: ProjectElementType.DIVIDER;
+  dividerType: DividerType;
+}
+
+
+export type ProjectElementData =
+  | ProjectElementDataWithWork
+  | ProjectElementDataWithDetail
+  | ProjectElementDataWithTextBox
+  | ProjectElementDataWithDocument
+  | ProjectElementDataWithDivider;
+
 
 export interface MemberInfoData {
   id: string;

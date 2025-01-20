@@ -5,7 +5,7 @@ import { useProjectElementListStore } from '../../shared/store/projectElementSto
 import SelectBox from '../../shared/component/SelectBox';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { DocumentData } from '../../shared/dto/EntityRepository';
-import { ProjectElementType, SelectType, TextAlignment, DisplaySize } from '../../shared/enum/EnumRepository';
+import { ProjectElementType, SelectType, TextAlignment, DisplaySize, DisplayAlignment } from '../../shared/enum/EnumRepository';
 import { SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
@@ -17,14 +17,14 @@ import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 export interface DocumentProps {
   peId: string;
   data: DocumentData;
-  alignment: TextAlignment;
+  alignment: DisplayAlignment;
 }
 
 const Document: React.FC<DocumentProps> = ({ peId, alignment, data }) => {
   const { isEditMode } = useEditMode();
   const { updateDocument: handleChange,
     updateImage: handleImageChange,
-    updateTextAlignment } = useProjectElementListStore();
+    updateDisplayAlignment } = useProjectElementListStore();
 
   return (
     <DocumentWrapper>
@@ -33,8 +33,8 @@ const Document: React.FC<DocumentProps> = ({ peId, alignment, data }) => {
           <SelectBoxWrapper>
             <SelectBox
               value={alignment}
-              selectType={SelectType.TEXT_ALIGNMENT}
-              handleChange={(value) => updateTextAlignment(peId, value)}
+              selectType={SelectType.DISPLAY_ALIGNMENT}
+              handleChange={(value) => updateDisplayAlignment(peId, value)}
               direction={false} />
           </SelectBoxWrapper>
         </SelectBoxContainer>
@@ -48,7 +48,6 @@ const Document: React.FC<DocumentProps> = ({ peId, alignment, data }) => {
           handleChange={(thumbnailUrl: string, originUrl: string) =>
             handleImageChange(
               peId,
-              ProjectElementType.DOCUMENT,
               thumbnailUrl,
               originUrl
             )}
@@ -58,7 +57,6 @@ const Document: React.FC<DocumentProps> = ({ peId, alignment, data }) => {
       <MoleculeTextareaDescription
         value={data.description}
         handleChange={(e) => handleChange(peId, { description: e.target.value })}
-        alignment={alignment}
         StyledTextarea={TextAreaTextBox}
         StyledDescription={DocumentContent}
       />
