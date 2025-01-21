@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import WorkDetail from './WorkDetail';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
-import { WorkType } from '../../shared/enum/EnumRepository';
+import { detailBuilder } from '../../shared/converter/EntityBuilder';
 
 
 
@@ -15,36 +15,26 @@ const WorkDetailList: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode } = useEditMode();
   const { createWorkDetail } = useWorkDetail();
-  const { activeWork } = useWorkViewStore();
-  const { updateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+  const { activeWork, activeWorkDetailList } = useWorkViewStore();
 
   if (activeWork === null) {
     return null;
   }
 
   const handleAddWorkDetail = async () => {
-    const createDetail = async () => {
-      try {
-        await createWorkDetail(aui, {
-          workId: activeWork.id,
-          originUrl: "",
-          thumbnailUrl: "",
-          description: "",
-        });
-      } catch (err) {
-      } finally {
-      }
+    try {
+      await createWorkDetail(aui, detailBuilder(activeWork.id));
+    } catch (err) {
     }
-    createDetail();
   };
 
   return (
     <>
-      {updateActiveWorkDetailList.length > 0 &&
+      {activeWorkDetailList.length > 0 &&
         <>
           <WorkDetailTitle>Details</WorkDetailTitle>
           <WorkDetailContainer>
-            {updateActiveWorkDetailList.map((wd, index) => (
+            {activeWorkDetailList.map((wd, index) => (
               <WorkDetail key={wd.id} index={index + 1} workId={activeWork.id} data={wd} />
             ))}
           </WorkDetailContainer>
@@ -82,8 +72,6 @@ const WorkDetailContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
-
-  // background-color: #eae7dc;
 `;
 
 

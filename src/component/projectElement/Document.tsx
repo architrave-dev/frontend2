@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStore } from '../../shared/store/projectElementStore';
 import SelectBox from '../../shared/component/SelectBox';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
-import { DocumentData, ProjectElementData } from '../../shared/dto/EntityRepository';
-import { SelectType, TextAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
-import { UpdateDocumentReq, UpdateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
+import { DocumentData } from '../../shared/dto/EntityRepository';
+import { SelectType, TextAlignment, DisplaySize, DisplayAlignment } from '../../shared/enum/EnumRepository';
 import { SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
@@ -16,165 +15,16 @@ import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 
 
 export interface DocumentProps {
-  alignment: TextAlignment;
+  peId: string;
   data: DocumentData;
+  alignment: DisplayAlignment;
 }
 
-const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: initialData }) => {
+const Document: React.FC<DocumentProps> = ({ peId, alignment, data }) => {
   const { isEditMode } = useEditMode();
-  const { projectElementList, setProjectElementList } = useProjectElementListStore();
-  const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
-
-  const handleAlignmentChange = (value: TextAlignment) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateDocumentReq?.id === initialData.id);
-    if (targetElement) {
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateDocumentReq?.id === initialData.id ? { ...each, documentAlignment: value } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      const target = projectElementList.find(pe => pe.document?.id === initialData.id);
-      if (!target) return;
-
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: {
-          id: initialData.id,
-          updateUploadFileReq: {
-            uploadFileId: initialData.uploadFile.id,
-            ...initialData.uploadFile
-          },
-          description: initialData.description,
-        },
-        documentAlignment: value,
-        dividerType: null
-      }
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
-    }
-    const updatedProjectElementList = projectElementList.map(each =>
-      each.document?.id === initialData.id ? { ...each, documentAlignment: value } : each
-    );
-    setProjectElementList(updatedProjectElementList);
-  };
-
-
-  const handleChange = (field: keyof DocumentData, value: string) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateDocumentReq?.id === initialData.id);
-    if (targetElement) {
-      //updatedProjectElements에 있다면
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateDocumentReq?.id === initialData.id ? { ...each, updateDocumentReq: { ...each.updateDocumentReq, [field]: value } as UpdateDocumentReq } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      //updatedProjectElements에 없다면
-      const target = projectElementList.find(pe => pe.document?.id === initialData.id);
-
-      if (!target) return;
-      const targetDocument = target.document;
-      if (!targetDocument) return;
-      //target으로 UpdateProjectElementReq 를 생성 후 
-      const convetedToProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: {
-          id: targetDocument.id,
-          updateUploadFileReq: {
-            uploadFileId: targetDocument.id,
-            ...targetDocument.uploadFile
-          },
-          description: targetDocument.description,
-        },
-        documentAlignment: target.documentAlignment,
-        dividerType: null
-      }
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...convetedToProjectElementReq,
-        updateDocumentReq: {
-          ...convetedToProjectElementReq.updateDocumentReq,
-          [field]: value
-        } as UpdateDocumentReq
-      };
-      //projectElementList에서 id로 찾고
-      //updatedProjectElements에 추가한다.
-      setUpdatedProjectElements([...updatedProjectElements, { ...newUpdateProjectElementReq }]);
-    }
-
-    const updatedProjectElementList = projectElementList.map(each =>
-      each.document?.id === initialData.id ? { ...each, document: { ...each.document, [field]: value } as DocumentData } : each
-    );
-    setProjectElementList(updatedProjectElementList);
-  }
-
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateDocumentReq?.id === initialData.id);
-    if (targetElement) {
-      //updatedProjectElements에 있다면
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateDocumentReq?.id === initialData.id ? { ...each, updateDocumentReq: { ...each.updateDocumentReq, thumbnailUrl, originUrl } as UpdateDocumentReq } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      //updatedProjectElements에 없다면
-      const target = projectElementList.find(pe => pe.document?.id === initialData.id);
-
-      if (!target) return;
-      const targetDocument = target.document;
-      if (!targetDocument) return;
-      //target으로 UpdateProjectElementReq 를 생성 후??
-      const convetedToProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateDocumentReq: {
-          id: targetDocument.id,
-          updateUploadFileReq: {
-            uploadFileId: targetDocument.id,
-            originUrl,
-            thumbnailUrl
-          },
-          description: targetDocument.description,
-        } as UpdateDocumentReq,
-        documentAlignment: target.documentAlignment,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        dividerType: null
-      }
-      setUpdatedProjectElements([...updatedProjectElements, convetedToProjectElementReq]);
-    }
-    const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.document?.id === initialData.id ? {
-        ...each,
-        document: {
-          ...each.document,
-          uploadFile: {
-            originUrl,
-            thumbnailUrl
-          }
-        } as DocumentData
-      } : each
-    )
-    setProjectElementList(updatedProjectElementList);
-  }
+  const { updateDocument: handleChange,
+    updateImage: handleImageChange,
+    updateDisplayAlignment } = useProjectElementListStore();
 
   return (
     <DocumentWrapper>
@@ -182,30 +32,36 @@ const Document: React.FC<DocumentProps> = ({ alignment: initialAlignment, data: 
         <SelectBoxContainer>
           <SelectBoxWrapper>
             <SelectBox
-              value={initialAlignment}
-              selectType={SelectType.TEXT_ALIGNMENT}
-              handleChange={handleAlignmentChange}
+              value={alignment}
+              selectType={SelectType.DISPLAY_ALIGNMENT}
+              handleChange={(value) => updateDisplayAlignment(peId, value)}
               direction={false} />
           </SelectBoxWrapper>
         </SelectBoxContainer>
       }
-      <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)} styledBtn={OriginBtnRight} />
-        <MoleculeImg
-          srcUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)}
-          alt={initialData.description}
-          displaySize={WorkDisplaySize.REGULAR}
-          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
-          StyledImg={WorkImage}
+      <DocumentCoreWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+          <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnRight} />
+          <MoleculeImg
+            srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
+            alt={data.description}
+            displaySize={DisplaySize.REGULAR}
+            handleChange={(thumbnailUrl: string, originUrl: string) =>
+              handleImageChange(
+                peId,
+                thumbnailUrl,
+                originUrl
+              )}
+            StyledImg={WorkImage}
+          />
+        </ImgWrapper>
+        <MoleculeTextareaDescription
+          value={data.description}
+          handleChange={(e) => handleChange(peId, { description: e.target.value })}
+          StyledTextarea={TextAreaTextBox}
+          StyledDescription={DocumentContent}
         />
-      </ImgWrapper>
-      <MoleculeTextareaDescription
-        value={initialData.description}
-        handleChange={(e) => handleChange('description', e.target.value)}
-        alignment={initialAlignment}
-        StyledTextarea={TextAreaTextBox}
-        StyledDescription={DocumentContent}
-      />
+      </DocumentCoreWrapper>
     </DocumentWrapper >
   );
 }
@@ -226,23 +82,47 @@ export const SelectBoxContainer = styled.div`
   gap: 20px;
 `
 
-const DocumentContent = styled.div<{ $alignment: TextAlignment }>`
+export const DocumentCoreWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
+  display: flex;
+  flex-direction: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
+      case DisplayAlignment.CENTER:
+        return 'column';
+      case DisplayAlignment.RIGHT:
+        return 'row-reverse';
+      case DisplayAlignment.LEFT:
+      default:
+        return 'row';
+    }
+  }};
+  gap: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
+      case DisplayAlignment.CENTER:
+        return '16px';
+      default:
+        return '10px';
+    }
+  }};
+`;
+
+const DocumentContent = styled.div<{ $textAlignment: TextAlignment }>`
   width: 100%;
   padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  text-align: ${({ $alignment }) => getAlignment($alignment)};
+  text-align: ${({ $textAlignment }) => getAlignment($textAlignment)};
 `;
 
-export const ImgWrapper = styled.div`
+export const ImgWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   position: relative;
-  margin-bottom: 16px;
-`
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
+      case DisplayAlignment.CENTER:
+        return '100%';
+      default:
+        return '80%';
+    }
+  }};
+`;
 
-export const TitleInfoWrpper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
 
 export default Document;

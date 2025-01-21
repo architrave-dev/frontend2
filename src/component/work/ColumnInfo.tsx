@@ -5,21 +5,20 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
 import { WorkPropertyVisibleData } from '../../shared/dto/EntityRepository';
 import BlockWithVisible from './BlockWithVisible';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 
 
-interface ColumnInfoProps {
-}
-
-const ColumnInfo: React.FC<ColumnInfoProps> = () => {
+const ColumnInfo: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode } = useEditMode();
   const { workPropertyVisible, getWorkPropertyVisible, updateWorkPropertyVisible } = useWorkPropertyVisible();
+  const { activeWork } = useWorkViewStore();
 
   useEffect(() => {
     const getWorkPropertyVisibleWithApi = async () => {
       if (!aui) return;
       try {
-        console.log("getting billboard...");
+        console.log("getting workPropertyVisible...");
         await getWorkPropertyVisible(aui);
       } catch (error) { }
     }
@@ -87,9 +86,11 @@ const ColumnInfo: React.FC<ColumnInfoProps> = () => {
           value={"Collection"}
           doubleClickHandler={() => handleDoubleClick('collection')}
         />
-        <SpaceBlock />
+        {activeWork && <SpaceBlock />}
       </InfoContainer>
-      <OverviewBlock>Overview</OverviewBlock>
+      {activeWork &&
+        <OverviewBlock>Overview</OverviewBlock>
+      }
     </ColumnInfoComp>
   )
 }

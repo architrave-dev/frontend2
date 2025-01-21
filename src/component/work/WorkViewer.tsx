@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../shared/store/WorkViewStore';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
-import { BtnWorkViewer, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
+import { BtnWorkViewer, BtnWorkViewerBlack, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
@@ -16,7 +16,6 @@ import MoleculeTextareaDescription from '../../shared/component/molecule/Molecul
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
-import { isModified } from '../../shared/hooks/useIsModified';
 import { useValidation } from '../../shared/hooks/useValidation';
 import SelectBox from '../../shared/component/SelectBox';
 import { ErrorCode } from '../../shared/api/errorCode';
@@ -28,18 +27,17 @@ const WorkViewer: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { updateWork, deleteWork } = useWorkList();
-  const { activeWork, clearActiveWork } = useWorkViewStore();
-  const { updatedActiveWork, setUpdatedActiveWork } = useWorkViewStoreForUpdate();
+  const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { checkType } = useValidation();
 
-  if (!activeWork || !updatedActiveWork) return null;
+  if (!activeWork) return null;
 
-  const handleChange = (field: keyof WorkData, value: string | SizeData) => {
+  const handleChangeWithValidate = (field: keyof WorkData, value: string | SizeData) => {
     if (!checkType(field, value)) {
       return;
     };
-    setUpdatedActiveWork({ ...updatedActiveWork, [field]: value });
+    handleChange({ [field]: value });
   }
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkReq, aui: string): Promise<UpdateWorkReq> => {
@@ -56,24 +54,21 @@ const WorkViewer: React.FC = () => {
     }
   }
 
-  const imageChecker = () => {
-    return activeWork.uploadFile.originUrl !== updatedActiveWork.uploadFile.originUrl;
-  }
 
   const handleConfirm = async () => {
-    if (!isModified(activeWork, updatedActiveWork)) {
+    if (!hasChanged) {
       return;
     }
     let updateWorkdReq: UpdateWorkReq = {
-      ...updatedActiveWork,
+      ...activeWork,
       updateUploadFileReq: {
-        ...updatedActiveWork.uploadFile,
-        uploadFileId: updatedActiveWork.uploadFile.id
+        ...activeWork.uploadFile,
+        uploadFileId: activeWork.uploadFile.id
       }
     }
 
     try {
-      if (imageChecker()) {
+      if (imageChanged) {
         updateWorkdReq = await uploadFileWithLocalUrl(ServiceType.WORK, updateWorkdReq, aui);
       }
       await updateWork(aui, updateWorkdReq);
@@ -86,10 +81,9 @@ const WorkViewer: React.FC = () => {
   const handleDelete = async () => {
     const callback = async () => {
       try {
-        await deleteWork(aui, { workId: updatedActiveWork.id });
+        await deleteWork(aui, { workId: activeWork.id });
       } catch (err) {
       } finally {
-        clearActiveWork();
         setEditMode(false);
       }
     }
@@ -101,67 +95,57 @@ const WorkViewer: React.FC = () => {
     });
   };
 
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    setUpdatedActiveWork({
-      ...updatedActiveWork,
-      uploadFile: {
-        ...updatedActiveWork.uploadFile,
-        originUrl,
-        thumbnailUrl
-      },
-    });
-  }
 
   return (
     <WorkViewComp>
       <WorkInfoContainer>
         <MoleculeInputDiv
-          value={updatedActiveWork.title}
+          value={activeWork.title}
           placeholder={"Title"}
-          handleChange={(e) => handleChange("title", e.target.value)}
+          handleChange={(e) => handleChangeWithValidate("title", e.target.value)}
           inputStyle={WorkViewerTitle}
           StyledDiv={Title}
         />
         <WorkInfo>
           <MoleculeInputDiv
-            value={updatedActiveWork.prodYear}
+            value={activeWork.prodYear}
             placeholder={"ProdYear"}
-            handleChange={(e) => handleChange("prodYear", e.target.value)}
+            handleChange={(e) => handleChangeWithValidate("prodYear", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
-            value={updatedActiveWork.material}
+            value={activeWork.material}
             placeholder={"Material"}
-            handleChange={(e) => handleChange("material", e.target.value)}
+            handleChange={(e) => handleChangeWithValidate("material", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
-            value={convertSizeToString(updatedActiveWork.size)}
+            value={convertSizeToString(activeWork.size)}
             placeholder={"Size"}
-            handleChange={(e) => handleChange("size", convertStringToSize(e.target.value))}
+            handleChange={(e) => handleChangeWithValidate("size", convertStringToSize(e.target.value))}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
         </WorkInfo>
         <WorkInfo>
           <MoleculeInputDiv
-            value={updatedActiveWork.price}
+            value={activeWork.price}
             defaultValue={"Not for Sale"}
             placeholder={"Price ($)"}
-            handleChange={(e) => handleChange("price", e.target.value)}
+            handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
           <DividerSmall>|</DividerSmall>
           <MoleculeInputDiv
-            value={updatedActiveWork.collection}
+            value={activeWork.collection}
             defaultValue={"Artist's Collection"}
             placeholder={"Collection"}
-            handleChange={(e) => handleChange("collection", e.target.value)}
+            handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
@@ -170,36 +154,36 @@ const WorkViewer: React.FC = () => {
           {isEditMode ?
             <SelectBoxWrapper>
               <SelectBox
-                value={updatedActiveWork.workType}
+                value={activeWork.workType}
                 selectType={SelectType.WORK_TYPE}
-                handleChange={(value) => handleChange("workType", value)}
+                handleChange={(value) => handleChangeWithValidate("workType", value)}
                 direction={false} />
             </SelectBoxWrapper>
-            : <Info>{updatedActiveWork.workType}</Info>
+            : <Info>{activeWork.workType}</Info>
           }
         </WorkInfo>
         <MoleculeTextareaDescription
-          value={updatedActiveWork.description}
-          handleChange={(e) => handleChange("description", e.target.value)}
+          value={activeWork.description}
+          handleChange={(e) => handleChangeWithValidate("description", e.target.value)}
           alignment={TextAlignment.LEFT}
           StyledTextarea={TextAreaWorkViewer}
           StyledDescription={Description}
         />
       </WorkInfoContainer>
       <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(updatedActiveWork.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
+        <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(activeWork.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
         <MoleculeImg
-          srcUrl={convertS3UrlToCloudFrontUrl(updatedActiveWork.uploadFile.originUrl)}
-          alt={updatedActiveWork.title}
+          srcUrl={convertS3UrlToCloudFrontUrl(activeWork.uploadFile.originUrl)}
+          alt={activeWork.title}
           displaySize={null}
-          handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+          handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(thumbnailUrl, originUrl)}
           StyledImg={WorkImage}
         />
         {isEditMode &&
           <BtnContainer>
-            {isModified(activeWork, updatedActiveWork) &&
+            {hasChanged &&
               <HeadlessBtn
-                value={"Confirm"}
+                value={"Update"}
                 handleClick={handleConfirm}
                 StyledBtn={BtnWorkViewer}
               />
@@ -207,7 +191,7 @@ const WorkViewer: React.FC = () => {
             <HeadlessBtn
               value={"Delete"}
               handleClick={handleDelete}
-              StyledBtn={BtnWorkViewer}
+              StyledBtn={BtnWorkViewerBlack}
             />
           </BtnContainer>
         }

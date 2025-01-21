@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
 import SimpleWork from './SimpleWork';
 import { useAui } from '../../shared/hooks/useAui';
-import { CreateProjectElementReq } from '../../shared/dto/ReqDtoRepository';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
-import { DisplayAlignment, ProjectElementType, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { peDetailBuilder } from '../../shared/converter/EntityBuilder';
 
 const WorkListForDetail: React.FC = () => {
   const { aui } = useAui();
@@ -21,28 +20,7 @@ const WorkListForDetail: React.FC = () => {
   const createDetailWithWork = async (workId: string) => {
     const createPe = async () => {
       try {
-        const newElement: CreateProjectElementReq = {
-          tempId: Math.floor(Math.random() * 100) + "",
-          projectId: project.id,
-          projectElementType: ProjectElementType.DETAIL,
-          createWorkReq: null,
-          workAlignment: null,
-          workDisplaySize: null,
-          // WorkDetail
-          createWorkDetailReq: {
-            workId: workId,
-            originUrl: '',
-            thumbnailUrl: '',
-            description: "",
-          },
-          workDetailAlignment: DisplayAlignment.CENTER,
-          workDetailDisplaySize: WorkDisplaySize.BIG,
-          createTextBoxReq: null,
-          textBoxAlignment: null,
-          createDocumentReq: null,
-          documentAlignment: null,
-          dividerType: null
-        };
+        const newElement = peDetailBuilder(project.id, workId);
         await createProjectElement(aui, newElement)
       } catch (err) {
       } finally {

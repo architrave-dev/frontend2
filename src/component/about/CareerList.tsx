@@ -3,18 +3,16 @@ import styled from 'styled-components';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useCareerListStoreForUpdate } from '../../shared/store/careerStore';
 import { CareerType } from '../../shared/enum/EnumRepository';
-import { CreateCareerReq } from '../../shared/dto/ReqDtoRepository';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import Space from '../../shared/Space';
 import CareerSection from './CareerSection';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { careerBuilder } from '../../shared/converter/EntityBuilder';
 
 const CareerList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { getCareerList } = useCareer();
-  const { createdCareers, setCreatedCareers } = useCareerListStoreForUpdate();
+  const { getCareerList, createCareer } = useCareer();
   const { aui } = useAui();
 
   useEffect(() => {
@@ -28,15 +26,10 @@ const CareerList: React.FC = () => {
     getCareerListWithApi();
   }, [aui]);
 
-  const handleCreateElement = (careerType: CareerType) => {
-    const newElement: CreateCareerReq = {
-      tempId: Math.floor(Math.random() * 1000) + "",
-      careerType,
-      yearFrom: new Date().getFullYear(),
-      content: ""
-    };
-
-    setCreatedCareers([...createdCareers, newElement]);
+  const handleCreateElement = async (careerType: CareerType) => {
+    try {
+      await createCareer(aui, careerBuilder(careerType));
+    } catch (err) { }
   };
 
   const careerSections = [

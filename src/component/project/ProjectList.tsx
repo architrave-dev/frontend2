@@ -7,13 +7,12 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import Space from '../../shared/Space';
 import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { CreateProjectReq } from '../../shared/dto/ReqDtoRepository';
+import { projectBuilder } from '../../shared/converter/EntityBuilder';
 
 const ProjectList: React.FC = () => {
+  const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { projects, getProjectList, createProject } = useProjectList();
-
-  const { aui } = useAui();
 
   useEffect(() => {
     const getProjectListTemp = async () => {
@@ -26,17 +25,9 @@ const ProjectList: React.FC = () => {
   }, [aui]);
 
   const handleCreate = async () => {
-    const newTitle = 'new_Project_' + (projects.length + 1)
-    const newDummyProject: CreateProjectReq = {
-      originUrl: '',
-      thumbnailUrl: '',
-      title: newTitle,
-      description: 'This is a new project.'
-    };
+    const newTitle = 'Project_' + (projects.length + 1)
     try {
-      await createProject(aui, newDummyProject);
-      // const { data: { id: projectId } } = await createProject(aui, newDummyProject);
-      // navigate(`/${aui}/projects/` + projectId + "isEditMode=true");
+      await createProject(aui, projectBuilder(newTitle));
     } catch (error) {
     } finally {
       setEditMode(false);

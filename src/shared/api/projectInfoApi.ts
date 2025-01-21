@@ -1,34 +1,34 @@
 import axios, { AxiosError } from 'axios';
 import { getConfig } from '../env/envManager';
-import { CareerListResponse, CareerResponse, ErrorResponse } from '../dto/ResDtoRepository';
-import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../dto/ReqDtoRepository';
+import { DeleteResponse, ErrorResponse, ProjectInfoListResponse, ProjectInfoResponse } from '../dto/ResDtoRepository';
+import { CreateProjectInfoReq, UpdateProjectInfoReq, RemoveProjectInfoReq } from '../dto/ReqDtoRepository';
+
 
 const config = getConfig();
 
-const careerApi = axios.create({
-  // baseURL: API_BASE_URL,
+const projectInfoApi = axios.create({
   baseURL: config.apiBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-export const getCareerList = async (aui: string): Promise<CareerListResponse> => {
+export const getProjectInfoList = async (aui: string, projectId: string): Promise<ProjectInfoListResponse> => {
   try {
-    const response = await careerApi.get<CareerListResponse>(`/api/v1/career?aui=${aui}`);
+    const response = await projectInfoApi.get<ProjectInfoListResponse>(`/api/v1/project-info?aui=${aui}&projectId=${projectId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
   }
 };
 
-export const createCareer = async (aui: string, data: CreateCareerReq): Promise<CareerResponse> => {
+export const createProjectInfo = async (aui: string, data: CreateProjectInfoReq): Promise<ProjectInfoResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await careerApi.post<CareerResponse>(`/api/v1/career?aui=${aui}`, data, {
+    const response = await projectInfoApi.post<ProjectInfoResponse>(`/api/v1/project-info?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -37,14 +37,13 @@ export const createCareer = async (aui: string, data: CreateCareerReq): Promise<
   }
 };
 
-
-export const updateCareer = async (aui: string, data: UpdateCareerReq): Promise<CareerResponse> => {
+export const updateProjectInfo = async (aui: string, data: UpdateProjectInfoReq): Promise<ProjectInfoResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await careerApi.put<CareerResponse>(`/api/v1/career?aui=${aui}`, data, {
+    const response = await projectInfoApi.put<ProjectInfoResponse>(`/api/v1/project-info?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -53,13 +52,13 @@ export const updateCareer = async (aui: string, data: UpdateCareerReq): Promise<
   }
 };
 
-export const deleteCareer = async (aui: string, data: RemoveCareerReq): Promise<CareerResponse> => {
+export const deleteProjectInfo = async (aui: string, data: RemoveProjectInfoReq): Promise<DeleteResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await careerApi.delete<CareerResponse>(`/api/v1/career?aui=${aui}&=careerId${data.careerId}`, {
+    const response = await projectInfoApi.delete<DeleteResponse>(`/api/v1/project-info?aui=${aui}&projectInfoId=${data.id}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -67,7 +66,6 @@ export const deleteCareer = async (aui: string, data: RemoveCareerReq): Promise<
     throw handleApiError(error);
   }
 };
-
 
 const handleApiError = (error: unknown): Error => {
   if (axios.isAxiosError(error)) {
@@ -79,4 +77,4 @@ const handleApiError = (error: unknown): Error => {
   return new Error('An unexpected error occurred');
 };
 
-export default careerApi;
+export default projectInfoApi;

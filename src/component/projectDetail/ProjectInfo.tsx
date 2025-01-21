@@ -1,95 +1,72 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useProjectInfoListStore, useProjectInfoListStoreForUpdate } from '../../shared/store/projectInfoListStore';
+import { useProjectInfoListStore } from '../../shared/store/projectInfoStore';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { InputName, InputValue } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { RemoveProjectInfoReq, UpdatedProjectInfoReq } from '../../shared/dto/ReqDtoRepository';
+import { BtnModalMain, BtnModalSub } from '../../shared/component/headless/button/BtnBody';
 import { ProjectInfoData } from '../../shared/dto/EntityRepository';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
+import { useProjectInfo } from '../../shared/hooks/useApi/useProjectInfo';
+import { useAui } from '../../shared/hooks/useAui';
 
 interface ProjectInfoProps {
-  projectInfoId: string;
-  initialCustomName: string;
-  initialCustomValue: string;
+  data: ProjectInfoData;
 }
 
-const ProjectInfo: React.FC<ProjectInfoProps> = ({
-  projectInfoId,
-  initialCustomName,
-  initialCustomValue }) => {
+const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }) => {
+  const { aui } = useAui();
   const { isEditMode } = useEditMode();
-  const { projectInfoList, setProjectInfoList } = useProjectInfoListStore();
-  const { updatePiList, setUpdatePiList, removePiList, setRemovePiList } = useProjectInfoListStoreForUpdate();
+  const { updateProjectInfo: handleChange, afterDeleteProjectInfo } = useProjectInfoListStore();
+  const { updateProjectInfo, deleteProjectInfo } = useProjectInfo();
 
-
-  const handleChange = (field: keyof UpdatedProjectInfoReq, value: string) => {
-
-    const targetElement = updatePiList.find(info => info.id === projectInfoId);
-    if (targetElement) {
-      //updatePiList에 있다면
-      const updatedProjectInfoList = updatePiList.map(each =>
-        each.id === projectInfoId ? { ...each, [field]: value } : each
-      )
-      setUpdatePiList(updatedProjectInfoList);
-    } else {
-      //updatePiList에 없다면
-      const target = projectInfoList.find(info => info.id === projectInfoId);
-      if (!target) return;
-
-      const newUpdatedProjectInfoReq: UpdatedProjectInfoReq = {
-        ...target,
-        [field]: value
-      };
-      setUpdatePiList([...updatePiList, newUpdatedProjectInfoReq]);
+  const handleUpdate = async () => {
+    try {
+      await updateProjectInfo(aui, data);
+    } catch (err) {
     }
-    const updatedProjectInfoList: ProjectInfoData[] = projectInfoList.map(each =>
-      each.id === projectInfoId ? { ...each, [field]: value } : each
-    )
-    setProjectInfoList(updatedProjectInfoList);
-  }
+  };
 
-
-  const handleDelete = () => {
-    //이미 update 된 애들일 수도 있어.
-    //projectInfoList, updatePiList에서 찾아서 없애고, 
-    //removeInfoList에 추가하기.
-    const targetElement = updatePiList.find(each => each.id === projectInfoId);
-    if (targetElement) {
-      const updatedInfoList = updatePiList.filter((each) => each.id !== projectInfoId)
-      setUpdatePiList(updatedInfoList);
+  const handleDelete = async () => {
+    try {
+      await deleteProjectInfo(aui, { id: data.id });
+      afterDeleteProjectInfo(data.id);
+    } catch (err) {
     }
-
-    const updatedProjectInfoList = projectInfoList.filter((each) => each.id !== projectInfoId)
-    setProjectInfoList(updatedProjectInfoList);
-
-    const newRemoveInfo: RemoveProjectInfoReq = { id: projectInfoId };
-    setRemovePiList([...removePiList, newRemoveInfo]);
   }
 
   return (
     <ProjectInfoItem $isEditMode={isEditMode}>
       <MoleculeInputDiv
-        value={initialCustomName}
+        value={data.customName}
         placeholder={"name"}
-        handleChange={(e) => handleChange("customName", e.target.value)}
+        handleChange={(e) => handleChange(data.id, { customName: e.target.value })}
         inputStyle={InputName}
         StyledDiv={NameSection}
       />
       <MoleculeInputDiv
-        value={initialCustomValue}
+        value={data.customValue}
         placeholder={"value"}
-        handleChange={(e) => handleChange("customValue", e.target.value)}
+        handleChange={(e) => handleChange(data.id, { customValue: e.target.value })}
         inputStyle={InputValue}
         StyledDiv={ValueSection}
       />
       {isEditMode &&
-        <HeadlessBtn
-          value={"Delete"}
-          handleClick={handleDelete}
-          StyledBtn={BtnDelete}
-        />}
+        <BtnContainer>
+          {data.hasChanged &&
+            <HeadlessBtn
+              value={"Update"}
+              handleClick={handleUpdate}
+              StyledBtn={BtnModalMain}
+            />
+          }
+          <HeadlessBtn
+            value={"Delete"}
+            handleClick={handleDelete}
+            StyledBtn={BtnModalSub}
+          />
+        </BtnContainer>
+      }
     </ProjectInfoItem>
   );
 }
@@ -120,4 +97,16 @@ const ValueSection = styled.div`
   ${({ theme }) => theme.typography.Body_03_1};
 `;
 
-export default ProjectInfo;
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0px;
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5vw;
+
+  padding: 4px 0px;
+`
+
+export default React.memo(ProjectInfo);

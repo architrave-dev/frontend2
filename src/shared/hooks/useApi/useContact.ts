@@ -4,7 +4,7 @@ import { ContactData } from '../../dto/EntityRepository';
 import { ContactResponse } from '../../dto/ResDtoRepository';
 import { UpdateContactReq } from '../../dto/ReqDtoRepository';
 import { getContact, updateContact } from '../../api/contactApi';
-import { useContactStore, useContactStoreForUpdate } from '../../store/contactStore';
+import { useContactStore } from '../../store/contactStore';
 import { useLoadingStore } from '../../store/loadingStore';
 
 
@@ -18,13 +18,11 @@ export const useContact = (): UseContactResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { contact, setContact } = useContactStore();
-  const { setUpdateContactDto } = useContactStoreForUpdate();
 
 
   const handleContactSuccess = (response: ContactResponse) => {
     const contactData = response.data;
     setContact(contactData);
-    setUpdateContactDto(contactData);
   };
 
   const handleContactRequest = async (

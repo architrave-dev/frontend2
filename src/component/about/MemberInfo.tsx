@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
-import { useMemberInfoStoreForUpdate } from '../../shared/store/memberInfoStore';
 import MemberInfoEach from './MemberInfoEach';
-import { MemberInfoData } from '../../shared/dto/EntityRepository';
 import MemberTitle from './MemberTitle';
 import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
 import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
@@ -14,12 +12,15 @@ import { useValidation } from '../../shared/hooks/useValidation';
 import { CountryType } from '../../shared/enum/EnumRepository';
 import MemberInfoSelect from './MemberInfoSelect';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
+import { useMemberInfoStore } from '../../shared/store/memberInfoStore';
+import { MemberInfoData } from '../../shared/dto/EntityRepository';
 
 
 const MemberInfo: React.FC = () => {
   const { aui } = useAui();
   const { memberInfo, getMemberInfo } = useMemberInfo();
-  const { updateMemberInfoDto, setUpdateMemberInfoDto } = useMemberInfoStoreForUpdate();
+  const { updatMemberInfo: handleChange,
+    updateImage: handleImageChange } = useMemberInfoStore();
   const { checkType } = useValidation();
 
 
@@ -34,52 +35,46 @@ const MemberInfo: React.FC = () => {
     getMemberInfoWithApi();
   }, [aui]);
 
-
-  if (!memberInfo || !updateMemberInfoDto) {
-    return null;
-  }
-
-  const handleChange = (field: keyof MemberInfoData, value: string) => {
-    if (!checkType(field, value)) {
-      return;
-    };
-    setUpdateMemberInfoDto({ ...updateMemberInfoDto, [field]: value });
-  }
-
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    setUpdateMemberInfoDto({
-      ...updateMemberInfoDto,
-      uploadFile: {
-        ...updateMemberInfoDto.uploadFile,
-        originUrl,
-        thumbnailUrl
+  const handleChangeWithValidate = (updates: Partial<MemberInfoData>) => {
+    for (const key in updates) {
+      const field = key as keyof MemberInfoData;
+      const value = updates[field];
+      const isValid = checkType(field, value as string);
+      if (!isValid) {
+        return;
       }
-    });
+    }
+    handleChange(updates);
+  }
+
+
+  if (!memberInfo) {
+    return null;
   }
 
   return (
     <MemberInfoComp>
       <ProfileAndInfo>
         <MoleculeImgDivContainer
-          backgroundImg={convertS3UrlToCloudFrontUrl(updateMemberInfoDto.uploadFile.originUrl)}
-          handleChange={setOriginThumbnailUrl}
+          backgroundImg={convertS3UrlToCloudFrontUrl(memberInfo.uploadFile.originUrl)}
+          handleChange={handleImageChange}
           StyledImgDivContainer={Profile}
         />
         <InfoContainer>
           <MemberTitle
-            value={updateMemberInfoDto.name}
-            handleChange={(e) => handleChange('name', e.target.value)}
+            value={memberInfo.name}
+            handleChange={(e) => handleChange({ name: e.target.value })}
           />
-          <MemberInfoEach name={"Born"} value={updateMemberInfoDto.year} handleChange={(e) => handleChange('year', e.target.value)} />
-          <MemberInfoSelect name={"Country"} value={updateMemberInfoDto.country} handleChange={(value: CountryType) => handleChange('country', value)} />
-          <MemberInfoEach name={"Email"} value={updateMemberInfoDto.email} handleChange={(e) => handleChange('email', e.target.value)} />
-          <MemberInfoEach name={"Contact"} value={updateMemberInfoDto.contact} handleChange={(e) => handleChange('contact', e.target.value)} />
+          <MemberInfoEach name={"Born"} value={memberInfo.year} handleChange={(e) => handleChangeWithValidate({ year: e.target.value })} />
+          <MemberInfoSelect name={"Country"} value={memberInfo.country} handleChange={(value: CountryType) => handleChangeWithValidate({ country: value })} />
+          <MemberInfoEach name={"Email"} value={memberInfo.email} handleChange={(e) => handleChangeWithValidate({ email: e.target.value })} />
+          <MemberInfoEach name={"Contact"} value={memberInfo.contact} handleChange={(e) => handleChange({ contact: e.target.value })} />
         </InfoContainer>
       </ProfileAndInfo>
       <DescriptionWrapper>
         <MoleculeTextareaDescription
-          value={updateMemberInfoDto.description}
-          handleChange={(e) => handleChange('description', e.target.value)}
+          value={memberInfo.description}
+          handleChange={(e) => handleChange({ description: e.target.value })}
           StyledTextarea={TextAreaMemberInfo}
           StyledDescription={Description}
         />

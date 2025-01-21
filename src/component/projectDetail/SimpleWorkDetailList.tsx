@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
-import { DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import defaultImg from '../../asset/project/default_1.png'
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { WorkDetailSimpleData } from '../../shared/dto/EntityRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { peDetailImportBuilder } from '../../shared/converter/EntityBuilder';
 
 interface WorkDetailImportProps {
   simpleWorkDetailList: WorkDetailSimpleData[];
@@ -25,12 +25,7 @@ const WorkDetailImport: React.FC<WorkDetailImportProps> = ({ simpleWorkDetailLis
 
   const onClickHandler = async (workDetailId: string) => {
     try {
-      await createProjectElementWithWorkDetail(aui, {
-        projectId: project.id,
-        workDetailId: workDetailId,
-        workDetailAlignment: DisplayAlignment.CENTER, //default
-        workDetailDisplaySize: WorkDisplaySize.BIG    //default
-      });
+      await createProjectElementWithWorkDetail(aui, peDetailImportBuilder(project.id, workDetailId));
     } catch (err) {
     }
     clearModal();

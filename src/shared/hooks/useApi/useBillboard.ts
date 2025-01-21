@@ -1,4 +1,4 @@
-import { useBillboardStore, useBillboardStoreForUpdate } from '../../store/billboardStore';
+import { useBillboardStore } from '../../store/billboardStore';
 import { getBillboard, updateBillboard } from '../../api/billboardApi';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
@@ -18,18 +18,15 @@ export const useBillboard = (): UseBillboardResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { billboard, setBillboard } = useBillboardStore();
-  const { setUpdateBillboardDto } = useBillboardStoreForUpdate();
 
   const handleGetBillboardSuccess = (response: BillboardResponse) => {
     const billboardData = response.data;
     setBillboard(billboardData);
-    setUpdateBillboardDto(billboardData);
   };
 
   const handleUpdateBillboardSuccess = async (response: BillboardResponse) => {
     const billboardData = response.data;
     setBillboard(billboardData);
-    setUpdateBillboardDto(billboardData);
   };
 
   const handleBillboardRequest = async (

@@ -1,4 +1,4 @@
-import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, WorkDisplaySize, WorkType } from '../enum/EnumRepository';
+import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType } from '../enum/EnumRepository';
 
 /**
  * 전부 ~Data로 통일
@@ -99,6 +99,9 @@ export interface WorkDetailData {
   workId: string;
   uploadFile: UploadFileData;
   description: string;
+
+  hasChanged?: boolean;
+  imageChanged?: boolean;
 }
 export interface WorkWithDetailData extends WorkData {
   workDetailList: WorkDetailData[]; // 추가된 필드
@@ -129,7 +132,6 @@ export interface ProjectData {
   title: string;
   description: string;
   uploadFile: UploadFileData;
-  projectInfoList: ProjectInfoData[];
   piIndex: string;
 }
 
@@ -137,6 +139,8 @@ export interface ProjectInfoData {
   id: string;
   customName: string;
   customValue: string;
+
+  hasChanged?: boolean;
 }
 
 // 뭔가 애매하네
@@ -148,21 +152,53 @@ export interface ProjectSimpleData {
   thumbnailUrl: string;
 }
 
-export interface ProjectElementData {
+interface ProjectElementBase {
   id: string;
   projectElementType: ProjectElementType;
-  work: WorkData | null;
-  workAlignment: DisplayAlignment | null;
-  workDisplaySize: WorkDisplaySize | null;
-  workDetail: WorkDetailData | null;
-  workDetailAlignment: DisplayAlignment | null;
-  workDetailDisplaySize: WorkDisplaySize | null;
-  textBox: TextBoxData | null;
-  textBoxAlignment: TextAlignment | null;
-  document: DocumentData | null;
-  documentAlignment: TextAlignment | null;
-  dividerType: DividerType | null;
+
+  hasChanged?: boolean;
+  imageChanged?: boolean;
 }
+
+export interface ProjectElementDataWithWork extends ProjectElementBase {
+  projectElementType: ProjectElementType.WORK;
+  work: WorkData;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
+}
+
+export interface ProjectElementDataWithDetail extends ProjectElementBase {
+  projectElementType: ProjectElementType.DETAIL;
+  workDetail: WorkDetailData;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
+}
+
+export interface ProjectElementDataWithDocument extends ProjectElementBase {
+  projectElementType: ProjectElementType.DOCUMENT;
+  document: DocumentData;
+  displayAlignment: DisplayAlignment;
+}
+
+export interface ProjectElementDataWithTextBox extends ProjectElementBase {
+  projectElementType: ProjectElementType.TEXTBOX;
+  textBox: TextBoxData;
+  textAlignment: TextAlignment;
+}
+
+export interface ProjectElementDataWithDivider extends ProjectElementBase {
+  projectElementType: ProjectElementType.DIVIDER;
+  dividerType: DividerType;
+}
+
+
+export type ProjectElementData =
+  | ProjectElementDataWithWork
+  | ProjectElementDataWithDetail
+  | ProjectElementDataWithTextBox
+  | ProjectElementDataWithDocument
+  | ProjectElementDataWithDivider;
+
 
 export interface MemberInfoData {
   id: string;
@@ -197,9 +233,11 @@ export interface SocialMedia {
 export interface CareerData {
   id: string;
   careerType: CareerType;
-  yearFrom: number;
+  yearFrom: string;
   content: string;
   index: number;
+
+  hasChanged?: boolean;
 }
 
 export interface SettingData {

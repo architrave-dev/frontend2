@@ -1,46 +1,66 @@
-import { getCareerList, updateCareerList } from '../../api/careerApi';
-import { useCareerListStore, useCareerListStoreForUpdate } from '../../store/careerStore';
+import { createCareer, deleteCareer, getCareerList, updateCareer } from '../../api/careerApi';
+import { useCareerListStore } from '../../store/careerStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { CareerData } from '../../dto/EntityRepository';
-import { UpdatedCareerListReq } from '../../dto/ReqDtoRepository';
-import { CareerListResponse } from '../../dto/ResDtoRepository';
+import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../../dto/ReqDtoRepository';
+import { CareerListResponse, CareerResponse } from '../../dto/ResDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
 
 
 interface UseCareerResult {
   careerList: CareerData[];
   getCareerList: (aui: string) => Promise<void>;
-  updateCareerList: (aui: string, data: UpdatedCareerListReq) => Promise<void>;
+  createCareer: (aui: string, data: CreateCareerReq) => Promise<void>;
+  updateCareer: (aui: string, data: UpdateCareerReq) => Promise<void>;
+  deleteCareer: (aui: string, data: RemoveCareerReq) => Promise<void>;
 }
 
 export const useCareer = (): UseCareerResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
-  const { careers, setCareers } = useCareerListStore();
-  const { clearAll } = useCareerListStoreForUpdate();
+  const { careers, setCareers, setOnlyCareers } = useCareerListStore();
 
 
-  const handleCareerSuccess = (response: CareerListResponse) => {
+  const handleGetCareerListSuccess = (response: CareerListResponse) => {
     const careerListData = response.data;
     setCareers(careerListData);
-    clearAll();
+  };
+  const handleCreateCareerSuccess = (response: CareerResponse) => {
+    const careerData = response.data;
+    setCareers([...careers, careerData]);
+  };
+  const handleUpdateCareerSuccess = (response: CareerResponse) => {
+    const updatedCareerData = response.data;
+    const careerListData = careers.map((c) => c.id === updatedCareerData.id ? updatedCareerData : c);
+    setOnlyCareers(careerListData);
+  };
+  const handleDeleteCareerSuccess = (response: CareerResponse) => {
+    console.log("deleted well");
   };
 
   const handleCareerRequest = async (
     aui: string,
-    action: 'get' | 'update',
-    data?: UpdatedCareerListReq
+    action: 'get' | 'create' | 'update' | 'delete',
+    data?: CreateCareerReq | UpdateCareerReq | RemoveCareerReq
   ) => {
     setIsLoading(true);
     clearErr();
     try {
-      if (data) {
-        const response = await updateCareerList(aui, data);
-        handleCareerSuccess(response);
-      } else {
-        const response = await getCareerList(aui);
-        handleCareerSuccess(response);
+      switch (action) {
+        case 'create':
+          handleCreateCareerSuccess(await createCareer(aui, data as CreateCareerReq));
+          break;
+        case 'update':
+          handleUpdateCareerSuccess(await updateCareer(aui, data as UpdateCareerReq));
+          break;
+        case 'delete':
+          handleDeleteCareerSuccess(await deleteCareer(aui, data as RemoveCareerReq));
+          break;
+        case 'get':
+        default:
+          handleGetCareerListSuccess(await getCareerList(aui));
+          break;
       }
     } catch (err) {
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
@@ -56,12 +76,16 @@ export const useCareer = (): UseCareerResult => {
   };
 
   const getCareerHandler = (aui: string) => handleCareerRequest(aui, 'get');
-  const updateCareerHandler = (aui: string, data: UpdatedCareerListReq) => handleCareerRequest(aui, 'update', data);
+  const createCareerHandler = (aui: string, data: CreateCareerReq) => handleCareerRequest(aui, 'create', data);
+  const updateCareerHandler = (aui: string, data: UpdateCareerReq) => handleCareerRequest(aui, 'update', data);
+  const deleteCareerHandler = (aui: string, data: RemoveCareerReq) => handleCareerRequest(aui, 'delete', data);
 
 
   return {
     careerList: careers,
     getCareerList: getCareerHandler,
-    updateCareerList: updateCareerHandler,
+    createCareer: createCareerHandler,
+    updateCareer: updateCareerHandler,
+    deleteCareer: deleteCareerHandler,
   };
 };

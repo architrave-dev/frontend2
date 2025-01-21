@@ -1,5 +1,5 @@
 import { Alignment } from '../component/headless/textarea/HeadlessTextArea';
-import { WorkDisplaySize } from '../enum/EnumRepository';
+import { DisplaySize } from '../enum/EnumRepository';
 
 export type StyledInputComponent = React.ComponentType<React.InputHTMLAttributes<HTMLInputElement>>;
 
@@ -21,7 +21,7 @@ export type StyledImgDivContainerProps = React.HTMLAttributes<HTMLDivElement> & 
   $backgroundImg?: string;
 };
 export type StyledImgProps = React.ImgHTMLAttributes<HTMLImageElement> & {
-  $displaySize?: WorkDisplaySize;
+  $displaySize?: DisplaySize;
 };
 
 export type StyledBtnComponent = React.ComponentType<React.ButtonHTMLAttributes<HTMLButtonElement>>;

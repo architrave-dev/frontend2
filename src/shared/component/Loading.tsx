@@ -7,7 +7,7 @@ interface LoadingProps {
 
 const Loading: React.FC<LoadingProps> = ({ isLoading }) => {
   return (
-    <LoadingOverlay isVisible={isLoading}>
+    <LoadingOverlay $isVisible={isLoading}>
       <Wave>
         <div></div>
         <div></div>
@@ -18,7 +18,7 @@ const Loading: React.FC<LoadingProps> = ({ isLoading }) => {
   );
 };
 
-const LoadingOverlay = styled.div<{ isVisible: boolean }>`
+const LoadingOverlay = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -32,10 +32,10 @@ const LoadingOverlay = styled.div<{ isVisible: boolean }>`
   z-index: 9999;
 
   // /* 불투명도와 트랜지션 */
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.4s ease-in-out;
 
-  pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
+  pointer-events: ${({ $isVisible }) => ($isVisible ? 'auto' : 'none')};
 `;
 
 const waveAnimation = keyframes`

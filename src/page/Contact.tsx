@@ -4,14 +4,13 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 import { useAui } from '../shared/hooks/useAui';
 import { useEditMode } from '../shared/hooks/useEditMode';
 import { useContact } from '../shared/hooks/useApi/useContact';
-import { useContactStoreForUpdate } from '../shared/store/contactStore';
-import { isModified } from '../shared/hooks/useIsModified';
 import { UpdateContactReq } from '../shared/dto/ReqDtoRepository';
 import ContactComp from '../component/contact/Contact';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
+import { useContactStore } from '../shared/store/contactStore';
 
 
 const Contact: React.FC = () => {
@@ -19,31 +18,17 @@ const Contact: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { contact, updateContact } = useContact();
-  const { updateContactDto } = useContactStoreForUpdate()
+  const { hasChanged } = useContactStore();
   const { isLoading } = useLoadingStore();
-
-  const contactCheck = (): boolean => {
-    if (!contact || !updateContactDto) {
-      return false;
-    }
-    return isModified(contact, updateContactDto);
-  }
 
 
   const handleConfirm = async () => {
     try {
-      if (contactCheck()) {
-        if (!updateContactDto) return;
+      if (hasChanged) {
+        if (!contact) return;
         const haha: UpdateContactReq = {
-          ...updateContactDto,
-          twitter: updateContactDto.sns.twitter,
-          instagram: updateContactDto.sns.instagram,
-          facebook: updateContactDto.sns.facebook,
-          threads: updateContactDto.sns.threads,
-          behance: updateContactDto.sns.behance,
-          youtube: updateContactDto.sns.youtube,
-          vimeo: updateContactDto.sns.vimeo,
-          url1: updateContactDto.sns.url1,
+          ...contact,
+          ...contact.sns
         }
 
         await updateContact(aui, haha);
@@ -58,7 +43,7 @@ const Contact: React.FC = () => {
     <ContactContainer>
       <Loading isLoading={isLoading} />
       <ContactComp />
-      {isEditMode && contactCheck() &&
+      {isEditMode && hasChanged &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}

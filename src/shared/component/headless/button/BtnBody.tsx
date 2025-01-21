@@ -66,6 +66,16 @@ export const BtnWorkDelete = styled.button`
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 
+export const BtnWorkViewerBlack = styled.button`
+  ${commonBtnStyles}
+  background-color: ${({ theme }) => theme.colors.color_Gray_01};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.color_Gray_03};
+  }
+  color: ${({ theme }) => theme.colors.color_White};
+  ${({ theme }) => theme.typography.Body_03_2};
+`;
+
 export const BtnWorkViewer = styled.button`
   ${commonBtnStyles}
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};

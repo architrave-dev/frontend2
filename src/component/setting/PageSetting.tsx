@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSettingStoreForUpdate } from '../../shared/store/settingStore';
 import { SubContainer, SubTitle, SubValue, SubValueBtn, SubValueChange, SubWrapper, Title } from './MemberSetting';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
 import { UpdateSettingReq } from '../../shared/dto/ReqDtoRepository';
@@ -16,9 +15,8 @@ const PageSetting: React.FC = () => {
   const { aui } = useAui();
   const { setting, updateSetting } = useSetting();
   const { setStandardModal } = useModalStore();
-  const { updateSettingDto } = useSettingStoreForUpdate();
 
-  if (!setting || !updateSettingDto) return null;
+  if (!setting) return null;
 
   const handleChangeTitleName = () => {
     setStandardModal({
@@ -32,7 +30,7 @@ const PageSetting: React.FC = () => {
   const handlePageChange = async (field: keyof UpdateSettingReq, value: string | boolean) => {
     try {
       await updateSetting(aui, {
-        ...updateSettingDto,
+        ...setting,
         [field]: value
       });
     } catch (err) {
@@ -43,9 +41,9 @@ const PageSetting: React.FC = () => {
   const handleMenuVisibilityChange = async (field: keyof MenuVisible, value: boolean) => {
     try {
       await updateSetting(aui, {
-        ...updateSettingDto,
+        ...setting,
         menuVisible: {
-          ...updateSettingDto.menuVisible,
+          ...setting.menuVisible,
           [field]: value
         }
       });
@@ -63,7 +61,7 @@ const PageSetting: React.FC = () => {
             <SubExplain>The value displayed in uppercase next to the Menu icon.</SubExplain>
           </SubTitle>
           <MoleculeDivBtn
-            value={updateSettingDto.pageName}
+            value={setting.pageName}
             defaultValue={"Title Name"}
             handleClick={handleChangeTitleName}
             DivChangeStyle={SubValueChange}
@@ -74,37 +72,37 @@ const PageSetting: React.FC = () => {
         <SubWrapper>
           <SubTitle>Page Visibility
             <SubExplain>
-              {updateSettingDto.pageVisible === true ?
+              {setting.pageVisible === true ?
                 "Public means the visitor can access through an AUI search from the home" :
                 "Private means the visitor can't access through an AUI search from the home"
               }
             </SubExplain>
           </SubTitle>
           <MoleculeDivToggle
-            value={updateSettingDto.pageVisible}
-            name={updateSettingDto.pageVisible === true ? "Public" : "Private"}
+            value={setting.pageVisible}
+            name={setting.pageVisible === true ? "Public" : "Private"}
             handleToggle={(e) => handlePageChange("pageVisible", e.target.checked)}
           />
         </SubWrapper>
         <SubWrapper>
           <SubTitle>Menu Visibility</SubTitle>
           <MoleculeDivToggle
-            value={updateSettingDto.menuVisible.projects}
+            value={setting.menuVisible.projects}
             name={"Projects"}
             handleToggle={(e) => handleMenuVisibilityChange("projects", e.target.checked)}
           />
           <MoleculeDivToggle
-            value={updateSettingDto.menuVisible.works}
+            value={setting.menuVisible.works}
             name={"Works"}
             handleToggle={(e) => handleMenuVisibilityChange("works", e.target.checked)}
           />
           <MoleculeDivToggle
-            value={updateSettingDto.menuVisible.about}
+            value={setting.menuVisible.about}
             name={"About"}
             handleToggle={(e) => handleMenuVisibilityChange("about", e.target.checked)}
           />
           <MoleculeDivToggle
-            value={updateSettingDto.menuVisible.contact}
+            value={setting.menuVisible.contact}
             name={"Contact"}
             handleToggle={(e) => handleMenuVisibilityChange("contact", e.target.checked)}
           />

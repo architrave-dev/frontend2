@@ -1,4 +1,4 @@
-import { MemberInfoData, SizeData, WorkData } from '../dto/EntityRepository';
+import { CareerData, MemberInfoData, SizeData, WorkData } from '../dto/EntityRepository';
 import { AlertPosition, AlertType, CountryType, WorkType } from '../enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { CreateWorkReq } from '../dto/ReqDtoRepository';
@@ -98,10 +98,12 @@ export const useValidation = () => {
     field:
       keyof WorkData |
       keyof CreateWorkReq |
+      keyof CareerData |
       keyof MemberInfoData,
     value: string | SizeData): boolean | void => {
     switch (field) {
       case 'prodYear':
+      case 'yearFrom':
       case 'year':
         if (!isValidYear(value as string)) {
           return;

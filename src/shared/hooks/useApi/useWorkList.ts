@@ -1,6 +1,6 @@
 import { getWorkList, updateWork, createWork, deleteWork, getWork, getSimpleWorkList } from '../../api/workListApi';
 import { useWorkListStore } from '../../store/WorkListStore';
-import { useWorkViewStore, useWorkViewStoreForUpdate } from '../../store/WorkViewStore';
+import { useWorkViewStore } from '../../store/WorkViewStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { WorkData } from '../../dto/EntityRepository';
@@ -25,15 +25,12 @@ export const useWorkList = (): UseWorkListResult => {
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
   const { setSimpleWorkList } = useWorkStationStore();
-  const { setActiveWork, setActiveWorkDetailList } = useWorkViewStore();
-  const { setUpdatedActiveWork, setUpdateActiveWorkDetailList } = useWorkViewStoreForUpdate();
+  const { setActiveWork, setActiveWorkDetailList, afterDeleteActiveWork } = useWorkViewStore();
 
   const handleGetWorkSuccess = (response: WorkWithDetailResponse) => {
     const data = response.data;
     setActiveWork(data);
-    setUpdatedActiveWork(data);
     setActiveWorkDetailList(data.workDetailList);
-    setUpdateActiveWorkDetailList(data.workDetailList);
   };
 
   const handleGetSimpleWorkListSuccess = (response: WorkSimpleListResponse) => {
@@ -49,18 +46,20 @@ export const useWorkList = (): UseWorkListResult => {
   const handleUpdateWorkSuccess = (response: WorkResponse) => {
     const data = response.data;
     const newWorkList = workList.map((each) => each.id === data.id ? data : each);
+    setActiveWork(data);
     setWorkList(newWorkList);
   };
 
   const handleDeleteWorkSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
+    afterDeleteActiveWork();
   };
 
   const handleCreatWorkSuccess = (response: WorkResponse) => {
     const data = response.data;
     setWorkList([...workList, data]);
     setActiveWork(data);
-    setUpdatedActiveWork(data);
+    setActiveWorkDetailList([]);
   };
 
   const handleWorkRequest = async (

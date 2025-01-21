@@ -1,110 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStore } from '../../shared/store/projectElementStore';
 import SelectBox from '../../shared/component/SelectBox';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { TextBoxData } from '../../shared/dto/EntityRepository';
 import { SelectType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { UpdateProjectElementReq, UpdateTextBoxReq } from '../../shared/dto/ReqDtoRepository';
 import { SelectBoxWrapper } from './Work';
 
 
 export interface TextBoxProps {
-  alignment: TextAlignment | null;
+  peId: string;
+  alignment: TextAlignment;
   data: TextBoxData;
 }
 
-const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, data: initialData }) => {
+const TextBox: React.FC<TextBoxProps> = ({ peId, alignment, data }) => {
   const { isEditMode } = useEditMode();
-  const { projectElementList, setProjectElementList } = useProjectElementListStore();
-  const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
+  const { updateTextBox: handleChange, updateTextAlignment
+  } = useProjectElementListStore();
 
   const handleAlignmentChange = (value: TextAlignment) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
-    if (targetElement) {
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateTextBoxReq?.id === initialData.id ? { ...each, textBoxAlignment: value } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      const target = projectElementList.find(pe => pe.textBox?.id === initialData.id);
-      if (!target) return;
-
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateTextBoxReq: initialData,
-        textBoxAlignment: value,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
-    }
-    const updatedProjectElementList = projectElementList.map(each =>
-      each.textBox?.id === initialData.id ? { ...each, textBoxAlignment: value } : each
-    );
-    setProjectElementList(updatedProjectElementList);
+    updateTextAlignment(peId, value);
   };
-
-
-  const handlechange = (field: keyof TextBoxData, value: string) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateTextBoxReq?.id === initialData.id);
-    if (targetElement) {
-      //updatedProjectElements에 있다면
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateTextBoxReq?.id === initialData.id ? { ...each, updateTextBoxReq: { ...each.updateTextBoxReq, [field]: value } as UpdateTextBoxReq } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      //updatedProjectElements에 없다면
-      const target = projectElementList.find(pe => pe.textBox?.id === initialData.id);
-
-      if (!target) return;
-      const targetTextBox = target.textBox;
-      if (!targetTextBox) return;
-      //target으로 UpdateProjectElementReq 를 생성 후 
-      const convetedToProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: null,
-        workDetailAlignment: null,
-        workDetailDisplaySize: null,
-        updateTextBoxReq: {
-          id: targetTextBox.id,
-          content: targetTextBox.content
-        },
-        textBoxAlignment: target.textBoxAlignment,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...convetedToProjectElementReq,
-        updateTextBoxReq: {
-          ...convetedToProjectElementReq.updateTextBoxReq,
-          [field]: value
-        } as UpdateTextBoxReq
-      };
-      //projectElementList에서 id로 찾고
-      //updatedProjectElements에 추가한다.
-      setUpdatedProjectElements([...updatedProjectElements, { ...newUpdateProjectElementReq }]);
-    }
-
-    const updatedProjectElementList = projectElementList.map(each =>
-      each.textBox?.id === initialData.id ? { ...each, textBox: { ...each.textBox, [field]: value } as TextBoxData } : each
-    );
-    setProjectElementList(updatedProjectElementList);
-  }
 
   return (
     <TextBoxWrapper>
@@ -113,23 +32,23 @@ const TextBox: React.FC<TextBoxProps> = ({ alignment: initialTexBoxAlignment, da
           <SelectBoxContainer>
             <SelectBoxWrapper>
               <SelectBox
-                value={initialTexBoxAlignment || TextAlignment.CENTER}
+                value={alignment || TextAlignment.CENTER}
                 selectType={SelectType.TEXT_ALIGNMENT}
                 handleChange={handleAlignmentChange}
                 direction={false} />
             </SelectBoxWrapper>
           </SelectBoxContainer>
           <HeadlessTextArea
-            alignment={initialTexBoxAlignment || TextAlignment.CENTER}
-            content={initialData.content}
+            alignment={alignment || TextAlignment.CENTER}
+            content={data.content}
             placeholder={"text"}
-            handleChange={(e) => handlechange("content", e.target.value)}
+            handleChange={(e) => handleChange(peId, { content: e.target.value })}
             StyledTextArea={TextAreaTextBox}
           />
         </>
       ) : (
-        <TextBoxContent $textBoxAlignment={initialTexBoxAlignment || TextAlignment.CENTER}>
-          {initialData.content.split('\n').map((line, index) => (
+        <TextBoxContent $textBoxAlignment={alignment || TextAlignment.CENTER}>
+          {data.content.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}<br />
             </React.Fragment>

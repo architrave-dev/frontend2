@@ -3,20 +3,37 @@ import { BillboardData } from '../dto/EntityRepository';
 
 interface BillboardState {
   billboard: BillboardData | null;
+  hasChanged: boolean;
+  imageChanged: boolean;
   setBillboard: (value: BillboardData) => void;
+  updateBillboard: (updates: Partial<BillboardData>) => void;
+  updateImage: (thumbnailUrl: string, originUrl: string) => void;
 }
 
 export const useBillboardStore = create<BillboardState>((set) => ({
   billboard: null,
-  setBillboard: (value) => set({ billboard: value }),
-}));
+  hasChanged: false,
+  imageChanged: false,
+  setBillboard: (value) => set({ billboard: { ...value } }),
+  updateBillboard: (updates) =>
+    set(({ billboard }) => ({
+      billboard: billboard ?
+        { ...billboard, ...updates }
+        : null,
+      hasChanged: true
+    })),
 
-interface BillboardStateForUpdate {
-  updateBillboardDto: BillboardData | null;
-  setUpdateBillboardDto: (updateBillboardDto: BillboardData) => void;
-}
-
-export const useBillboardStoreForUpdate = create<BillboardStateForUpdate>((set) => ({
-  updateBillboardDto: null,
-  setUpdateBillboardDto: (updateBillboardDto) => set({ updateBillboardDto })
+  updateImage: (thumbnailUrl: string, originUrl: string) =>
+    set(({ billboard }) => ({
+      billboard: billboard ? {
+        ...billboard,
+        uploadFile: {
+          ...billboard.uploadFile,
+          originUrl,
+          thumbnailUrl
+        }
+      } : null,
+      hasChanged: true,
+      imageChanged: true,
+    })),
 }));

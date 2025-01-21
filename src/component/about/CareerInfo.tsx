@@ -2,66 +2,73 @@ import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { MemberInfoValue } from '../../shared/component/headless/input/InputBody';
-import { RemoveCareerReq } from '../../shared/dto/ReqDtoRepository';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnDelete } from '../../shared/component/headless/button/BtnBody';
-import { useCareerListStore, useCareerListStoreForUpdate } from '../../shared/store/careerStore';
+import { BtnDelete, BtnModalMain, BtnModalSub, BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
+import { useCareerListStore } from '../../shared/store/careerStore';
 import MoleculeValue from './molecules/MoleculeValue';
+import { useCareer } from '../../shared/hooks/useApi/useCareer';
+import { useAui } from '../../shared/hooks/useAui';
+import { CareerData } from '../../shared/dto/EntityRepository';
 
 interface CareerInfoProps {
-  careerId: string;
-  initialContent: string;
-  initialYearFrom: number;
+  data: CareerData;
 }
 
-const CareerInfo: React.FC<CareerInfoProps> = ({
-  careerId,
-  initialContent,
-  initialYearFrom
-}) => {
+const CareerInfo: React.FC<CareerInfoProps> = ({ data }) => {
+  const { aui } = useAui();
   const { isEditMode } = useEditMode();
-  const { careers, setCareers } = useCareerListStore();
-  const { updatedCareers, setUpdatedCareers, removedCareers, setRemovedCareers } = useCareerListStoreForUpdate();
+  const { updateCareer, deleteCareer } = useCareer();
+  const { afterDeleteCareer } = useCareerListStore();
 
-
-  const handleDelete = () => {
-    const targetCareer = updatedCareers.find(each => each.careerId === careerId);
-    if (targetCareer) {
-      const updatedCareerList = updatedCareers.filter((each) => each.careerId !== careerId);
-      setUpdatedCareers(updatedCareerList);
+  const handleUpdate = async () => {
+    try {
+      await updateCareer(aui, { careerId: data.id, ...data });
+    } catch (err) {
     }
+  }
 
-    const filteredCareerList = careers.filter((each) => each.id !== careerId)
-    setCareers(filteredCareerList);
-
-    const newRemovedCareer: RemoveCareerReq = { careerId };
-    setRemovedCareers([...removedCareers, newRemovedCareer]);
+  const handleDelete = async () => {
+    try {
+      await deleteCareer(aui, { careerId: data.id });
+      afterDeleteCareer(data.id);
+    } catch (err) {
+    }
   }
 
   return (
     <CareerInfoComp>
       <YearSection>
         <MoleculeValue
-          careerId={careerId}
-          value={initialYearFrom}
+          careerId={data.id}
+          value={data.yearFrom}
           targetField={"yearFrom"}
           inputStyle={MemberInfoValue}
           StyledDiv={Year}
         />
       </YearSection>
       <MoleculeValue
-        careerId={careerId}
-        value={initialContent}
+        careerId={data.id}
+        value={data.content}
         targetField={"content"}
         inputStyle={MemberInfoValue}
         StyledDiv={Content}
       />
       {isEditMode &&
-        <HeadlessBtn
-          value={"Delete"}
-          handleClick={handleDelete}
-          StyledBtn={BtnDelete}
-        />
+        <BtnContainer>
+          {data.hasChanged &&
+            <HeadlessBtn
+              value={"Update"}
+              handleClick={handleUpdate}
+              StyledBtn={BtnModalMain}
+            />
+          }
+          <HeadlessBtn
+            value={"Delete"}
+            handleClick={handleDelete}
+            StyledBtn={BtnModalSub}
+          />
+        </BtnContainer>
+
       }
     </CareerInfoComp>
   );
@@ -95,5 +102,16 @@ export const Content = styled.div`
   ${({ theme }) => theme.typography.Body_02_1};
 `;
 
+const BtnContainer = styled.div`
+  position: absolute;
+  right: 0px;
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5vw;
+
+  padding: 4px 0px;
+`
 
 export default CareerInfo;

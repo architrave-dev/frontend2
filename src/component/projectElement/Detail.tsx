@@ -1,184 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectElementListStore, useProjectElementListStoreForUpdate } from '../../shared/store/projectElementStore';
+import { useProjectElementListStore } from '../../shared/store/projectElementStore';
 import { InputWorkTitle } from '../../shared/component/headless/input/InputBody';
-import { SelectType, DisplayAlignment, WorkDisplaySize } from '../../shared/enum/EnumRepository';
-import { ProjectElementData, WorkDetailData } from '../../shared/dto/EntityRepository';
-import { UpdateProjectElementReq, UpdateWorkDetailReq } from '../../shared/dto/ReqDtoRepository';
+import { SelectType, DisplayAlignment, DisplaySize, ProjectElementType } from '../../shared/enum/EnumRepository';
+import { WorkDetailData } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
-import { useValidation } from '../../shared/hooks/useValidation';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 
 export interface DetailProps {
-  alignment: DisplayAlignment | null;
-  displaySize: WorkDisplaySize | null;
+  peId: string;
+  alignment: DisplayAlignment;
+  displaySize: DisplaySize;
   data: WorkDetailData;
 }
 
-const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displaySize: initialDetailDisplaySize, data: initialData }) => {
+const Work: React.FC<DetailProps> = ({ peId, alignment, displaySize, data }) => {
   const { isEditMode } = useEditMode();
-  const { projectElementList, setProjectElementList } = useProjectElementListStore();
-  const { updatedProjectElements, setUpdatedProjectElements } = useProjectElementListStoreForUpdate();
-  const { checkType } = useValidation();
-
-  const handleChange = (field: keyof WorkDetailData, value: string) => {
-    if (field == 'workId') return null;
-    if (!checkType(field, value)) {
-      return;
-    };
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.id === initialData.id);
-    if (targetElement) {
-      //updatedProjectElements에 있다면
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkDetailReq?.id === initialData.id ? { ...each, updateWorkDetailReq: { ...each.updateWorkDetailReq, [field]: value } as UpdateWorkDetailReq } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      //updatedProjectElements에 없다면
-      const target = projectElementList.find(pe => pe.workDetail?.id === initialData.id);
-
-      if (!target) return;
-      const targetDetail = target.workDetail;
-      if (!targetDetail) return;
-      //target으로 UpdateProjectElementReq 를 생성 후 
-      const convetedToProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: {
-          ...targetDetail,
-          updateUploadFileReq: {
-            uploadFileId: targetDetail.uploadFile.id,
-            ...targetDetail.uploadFile
-          },
-        },
-        workDetailAlignment: target.workDetailAlignment,
-        workDetailDisplaySize: target.workDetailDisplaySize,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      //projectElementList에서 id로 찾고
-      //updatedProjectElements에 추가한다.
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        ...convetedToProjectElementReq,
-        updateWorkDetailReq: {
-          ...convetedToProjectElementReq.updateWorkDetailReq,
-          [field]: value
-        } as UpdateWorkDetailReq
-      };
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
-    }
-    const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.workDetail?.id === initialData.id ? { ...each, workDetail: { ...each.workDetail, [field]: value } as WorkDetailData } : each
-    )
-    setProjectElementList(updatedProjectElementList);
-  }
-
-  const setOriginThumbnailUrl = (thumbnailUrl: string, originUrl: string) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.id === initialData.id);
-    if (targetElement) {
-      //updatedProjectElements에 있다면
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkDetailReq?.id === initialData.id ? { ...each, updateWorkDetailReq: { ...each.updateWorkDetailReq, thumbnailUrl, originUrl } as UpdateWorkDetailReq } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      //updatedProjectElements에 없다면
-      const target = projectElementList.find(pe => pe.workDetail?.id === initialData.id);
-
-      if (!target) return;
-      const targetDetail = target.workDetail;
-      if (!targetDetail) return;
-      //target으로 UpdateProjectElementReq 를 생성 후??
-      const convetedToProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: {
-          ...targetDetail,
-          updateUploadFileReq: {
-            uploadFileId: targetDetail.uploadFile.id,
-            originUrl: originUrl,
-            thumbnailUrl: thumbnailUrl,
-          },
-        },
-        workDetailAlignment: target.workDetailAlignment,
-        workDetailDisplaySize: target.workDetailDisplaySize,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      setUpdatedProjectElements([...updatedProjectElements, convetedToProjectElementReq]);
-    }
-    const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-      each.workDetail?.id === initialData.id ? {
-        ...each,
-        workDetail: {
-          ...each.workDetail,
-          uploadFile: {
-            ...each.workDetail.uploadFile,
-            originUrl,
-            thumbnailUrl
-          }
-        } as WorkDetailData
-      } : each
-    )
-    setProjectElementList(updatedProjectElementList);
-  }
-
-  const handleSubChange = (
-    key: 'workDetailDisplaySize' | 'workDetailAlignment',
-    value: WorkDisplaySize | DisplayAlignment
-  ) => {
-    const targetElement = updatedProjectElements.find(pe => pe.updateWorkDetailReq?.id === initialData.id);
-    if (targetElement) {
-      const updatedProjectElementList = updatedProjectElements.map(each =>
-        each.updateWorkDetailReq?.id === initialData.id ? { ...each, [key]: value } : each
-      )
-      setUpdatedProjectElements(updatedProjectElementList);
-    } else {
-      const target = projectElementList.find(pe => pe.workDetail?.id === initialData.id);
-      if (!target || !target.workDetail) return;
-      const newUpdateProjectElementReq: UpdateProjectElementReq = {
-        projectElementId: target.id,
-        updateWorkReq: null,
-        workAlignment: null,
-        workDisplaySize: null,
-        updateWorkDetailReq: {
-          ...target.workDetail,
-          updateUploadFileReq: {
-            uploadFileId: target.workDetail.uploadFile.id,
-            ...target.workDetail.uploadFile
-          },
-        },
-        workDetailAlignment: key === 'workDetailAlignment' ? (value as DisplayAlignment) : target.workDetailAlignment,
-        workDetailDisplaySize: key === 'workDetailDisplaySize' ? (value as WorkDisplaySize) : target.workDetailDisplaySize,
-        updateTextBoxReq: null,
-        textBoxAlignment: null,
-        updateDocumentReq: null,
-        documentAlignment: null,
-        dividerType: null
-      }
-      setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
-    }
-    const updatedProjectElementList = projectElementList.map(each =>
-      each.workDetail?.id === initialData.id ? { ...each, [key]: value } : each
-    );
-    setProjectElementList(updatedProjectElementList);
-  };
+  const {
+    updateDetail: handleChange,
+    updateImage: handleImageChange,
+    updateDisplayAlignment: handleDisplayAlignmentChange,
+    updateDisplaySize: handleDisplaySizeChange
+  } = useProjectElementListStore();
 
   return (
     <WorkWrapper>
@@ -186,36 +35,40 @@ const Work: React.FC<DetailProps> = ({ alignment: initialDetailAlignment, displa
         <SelectBoxContainer>
           <SelectBoxWrapper>
             <SelectBox
-              value={initialDetailDisplaySize || WorkDisplaySize.BIG}
+              value={displaySize || DisplaySize.BIG}
               selectType={SelectType.WORK_SIZE}
-              handleChange={value => handleSubChange('workDetailDisplaySize', value)}
+              handleChange={(value) => handleDisplaySizeChange(peId, value)}
               direction={false} />
           </SelectBoxWrapper>
           <SelectBoxWrapper>
             <SelectBox
-              value={initialDetailAlignment || DisplayAlignment.CENTER}
+              value={alignment || DisplayAlignment.CENTER}
               selectType={SelectType.DISPLAY_ALIGNMENT}
-              handleChange={value => handleSubChange('workDetailAlignment', value)}
+              handleChange={value => handleDisplayAlignmentChange(peId, value)}
               direction={false} />
           </SelectBoxWrapper>
         </SelectBoxContainer>
       }
-      <WorkCoreWrapper $workAlignment={initialDetailAlignment || DisplayAlignment.CENTER}>
-        <ImgWrapper $workAlignment={initialDetailAlignment || DisplayAlignment.CENTER}>
-          <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
+      <WorkCoreWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+          <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
           <MoleculeImg
-            srcUrl={convertS3UrlToCloudFrontUrl(initialData.uploadFile.originUrl)}
-            alt={initialData.description}
-            displaySize={initialDetailDisplaySize}
-            handleChange={(thumbnailUrl: string, originUrl: string) => setOriginThumbnailUrl(thumbnailUrl, originUrl)}
+            srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
+            alt={data.description}
+            displaySize={displaySize}
+            handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(
+              peId,
+              thumbnailUrl,
+              originUrl
+            )}
             StyledImg={WorkImage}
           />
         </ImgWrapper>
-        <TitleInfoWrpper $workAlignment={initialDetailAlignment || DisplayAlignment.CENTER}>
+        <TitleInfoWrpper $displayAlignment={alignment || DisplayAlignment.CENTER}>
           <MoleculeInputDiv
-            value={initialData.description}
+            value={data.description}
             placeholder={"description"}
-            handleChange={(e) => handleChange('description', e.target.value)}
+            handleChange={(e) => handleChange(peId, { description: e.target.value })}
             inputStyle={InputWorkTitle}
             StyledDiv={Title}
           />
@@ -241,15 +94,15 @@ export const SelectBoxContainer = styled.div`
   gap: 20px;
 `
 
-export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
+export const WorkImage = styled.img<{ $displaySize: DisplaySize }>`
   max-width: 100%;
   max-height: ${({ $displaySize }) => {
     switch ($displaySize) {
-      case WorkDisplaySize.SMALL:
+      case DisplaySize.SMALL:
         return '35vh';
-      case WorkDisplaySize.REGULAR:
+      case DisplaySize.REGULAR:
         return '55vh';
-      case WorkDisplaySize.BIG:
+      case DisplaySize.BIG:
       default:
         return '90vh';
     }
@@ -257,10 +110,10 @@ export const WorkImage = styled.img<{ $displaySize: WorkDisplaySize }>`
   object-fit: contain;
 `;
 
-export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+export const WorkCoreWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   display: flex;
-  flex-direction: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  flex-direction: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return 'column';
       case DisplayAlignment.RIGHT:
@@ -270,8 +123,8 @@ export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
         return 'row';
     }
   }};
-  gap: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  gap: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '10px';
       default:
@@ -280,10 +133,10 @@ export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
   }};
 `;
 
-export const ImgWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+export const ImgWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   position: relative;
-  width: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '100%';
       default:
@@ -292,9 +145,9 @@ export const ImgWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
   }};
 `
 
-export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
-  width: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+export const TitleInfoWrpper = styled.div<{ $displayAlignment: DisplayAlignment }>`
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '100%';
       default:
@@ -304,8 +157,8 @@ export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
 
   display: flex;
   flex-direction: column;
-  justify-content: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  justify-content: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return 'flex-start';
       default:

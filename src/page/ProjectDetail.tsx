@@ -9,17 +9,14 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import { useEditMode } from '../shared/hooks/useEditMode';
-import { useProjectStoreForUpdate } from '../shared/store/projectStore';
-import { useProjectInfoListStoreForUpdate } from '../shared/store/projectInfoListStore';
-import { useProjectElementListStoreForUpdate } from '../shared/store/projectElementStore';
-import { UpdateDocumentReq, UpdateProjectElementListReq, UpdateProjectElementReq, UpdateProjectReq, UpdateUploadFileReq, UpdateWorkDetailReq, UpdateWorkReq } from '../shared/dto/ReqDtoRepository';
-import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
+import { UpdateProjectReq, UpdateUploadFileReq } from '../shared/dto/ReqDtoRepository';
 import { IndexData } from '../shared/dto/EntityRepository';
 import { ServiceType } from '../shared/enum/EnumRepository';
 import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 import { ErrorCode } from '../shared/api/errorCode';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
+import { useProjectStore } from '../shared/store/projectStore';
 
 
 const ProjectDetail: React.FC = () => {
@@ -29,13 +26,7 @@ const ProjectDetail: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
-  const { updatedProjectDto } = useProjectStoreForUpdate();
-  const { createPiList, updatePiList, removePiList } = useProjectInfoListStoreForUpdate();
-  const { updateProjectElementList } = useProjectElement();
-  const {
-    updatedProjectElements,
-    removedProjectElements
-  } = useProjectElementListStoreForUpdate();
+  const { hasChanged, imageChanged } = useProjectStore();
 
   useEffect(() => {
     const getProjectWithApi = async () => {
@@ -48,31 +39,8 @@ const ProjectDetail: React.FC = () => {
     getProjectWithApi();
   }, [aui, projectId]);
 
-  if (!project || !updatedProjectDto) return null;
-  const projectDetailCheck = (): boolean => {
-    return (
-      project.uploadFile !== updatedProjectDto.uploadFile ||
-      project.title !== updatedProjectDto.title ||
-      project.description !== updatedProjectDto.description ||
-      (createPiList.length ?? 0) > 0 ||
-      (updatePiList.length ?? 0) > 0 ||
-      (removePiList.length ?? 0) > 0
-    );
-  }
+  if (!project) return null;
 
-  const peListCheck = (): boolean => {
-    if (!project) {
-      return false;
-    }
-    return (
-      // createdProjectElements.length > 0 ||
-      updatedProjectElements.length > 0 ||
-      removedProjectElements.length > 0
-    );
-  }
-  const isUnitedChanged = (): boolean => {
-    return projectDetailCheck() || peListCheck();
-  }
   const convertToPiIndexList = (): IndexData[] => {
     return [];
   }
@@ -91,125 +59,42 @@ const ProjectDetail: React.FC = () => {
     }
   }
 
-  const imageChecker = () => {
-    return project.uploadFile.originUrl !== updatedProjectDto.uploadFile.originUrl;
-  }
-
-  const uploadFileWithLocalUrlUpdates = async <T extends { id: string, updateUploadFileReq: UpdateUploadFileReq, workId?: string }>(
-    serviceType: ServiceType,
-    prevData: T,
-    aui: string
-  ): Promise<T> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      let originUrl, thumbnailUrl;
-
-      if (serviceType === ServiceType.WORK) {
-        ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]));
-      } else if (serviceType === ServiceType.DETAIL) {
-        ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.workId!, prevData.id]));
-      } else if (serviceType === ServiceType.DOCUMENT) {
-        ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [project.id, prevData.id]));
-      } else {
-        throw new Error("Unsupported service type");
-      }
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  };
-
-  const isBase64Image = (input: string): boolean => {
-    const base64Pattern = /^data:image\/[a-zA-Z]+;base64,[A-Za-z0-9+/]+={0,2}$/;
-    return base64Pattern.test(input);
-  }
-
   const handleConfirm = async () => {
-    if (updatedProjectDto == null) return null;
+    if (project == null) return null;
     try {
-      if (projectDetailCheck()) {
+      if (hasChanged) {
         let newUpdateProjectReq: UpdateProjectReq = {
-          ...updatedProjectDto,  //projectDetailCheck에서 확인 함
+          ...project,  //projectDetailCheck에서 확인 함
           updateUploadFileReq: {
-            uploadFileId: updatedProjectDto.uploadFile.id,
-            ...updatedProjectDto.uploadFile
+            uploadFileId: project.uploadFile.id,
+            ...project.uploadFile
           },
           piIndexList: convertToPiIndexList(),
-          createdProjectInfoList: createPiList,
-          updatedProjectInfoList: updatePiList,
-          removedProjectInfoList: removePiList
         }
-        if (imageChecker()) {
+        if (imageChanged) {
           newUpdateProjectReq = await uploadFileWithLocalUrl(ServiceType.PROJECT, newUpdateProjectReq, aui);
         }
         await updateProject(aui, newUpdateProjectReq);
       }
 
-      if (peListCheck()) {
-        const updatespromises = updatedProjectElements.map(async (pe) => {
-          if (pe.updateWorkReq != null) {
-            if (isBase64Image(pe.updateWorkReq.updateUploadFileReq.originUrl)) {
-              const convertedUpdateWorkReq = await uploadFileWithLocalUrlUpdates<UpdateWorkReq>(ServiceType.WORK, pe.updateWorkReq, aui);
-              return {
-                ...pe,
-                updateWorkReq: convertedUpdateWorkReq,
-              };
-            }
-            return pe;
-          } else if (pe.updateWorkDetailReq != null) {
-            if (isBase64Image(pe.updateWorkDetailReq.updateUploadFileReq.originUrl)) {
-              const convertedUpdateWorkDetailReq = await uploadFileWithLocalUrlUpdates<UpdateWorkDetailReq>(ServiceType.DETAIL, pe.updateWorkDetailReq, aui);
-              return {
-                ...pe,
-                updateWorkDetailReq: convertedUpdateWorkDetailReq,
-              };
-            }
-            return pe;
-          } else if (pe.updateDocumentReq != null) {
-            if (isBase64Image(pe.updateDocumentReq.updateUploadFileReq.originUrl)) {
-              const convertedUpdateDocumentReq = await uploadFileWithLocalUrlUpdates<UpdateDocumentReq>(ServiceType.DOCUMENT, pe.updateDocumentReq, aui);
-              return { ...pe, updateDocumentReq: convertedUpdateDocumentReq };
-            }
-            return pe;
-          } else {
-            return pe;
-          }
-        });
-        const afterUploadUpdates: UpdateProjectElementReq[] = await Promise.all(updatespromises);
-
-        const updatedData: UpdateProjectElementListReq = {
-          projectId: project.id, //peListCheck 확인 함
-          peIndexList: [],
-          updatedProjectElements: afterUploadUpdates,
-          removedProjectElements: removedProjectElements
-        }
-        await updateProjectElementList(aui, updatedData);
-      }
     } catch (err) {
     } finally {
       setEditMode(false);
     }
   };
 
-
   return (
     <ProjectDetailPage>
       <Loading isLoading={isLoading} />
       <ProjectDetailContainer />
       <ProjectElementList />
-      {isEditMode && isUnitedChanged() &&
+      {isEditMode && hasChanged &&
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
           StyledBtn={BtnConfirm}
         />
       }
-
-      {/* <Loading isVisible={(isLoading1 || isLoading2)} /> */}
     </ProjectDetailPage>
   );
 }
