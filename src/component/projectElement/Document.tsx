@@ -5,7 +5,7 @@ import { useProjectElementListStore } from '../../shared/store/projectElementSto
 import SelectBox from '../../shared/component/SelectBox';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
 import { DocumentData } from '../../shared/dto/EntityRepository';
-import { ProjectElementType, SelectType, TextAlignment, DisplaySize, DisplayAlignment } from '../../shared/enum/EnumRepository';
+import { SelectType, TextAlignment, DisplaySize, DisplayAlignment } from '../../shared/enum/EnumRepository';
 import { SelectBoxWrapper, WorkImage } from './Work';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
@@ -39,27 +39,29 @@ const Document: React.FC<DocumentProps> = ({ peId, alignment, data }) => {
           </SelectBoxWrapper>
         </SelectBoxContainer>
       }
-      <ImgWrapper>
-        <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnRight} />
-        <MoleculeImg
-          srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
-          alt={data.description}
-          displaySize={DisplaySize.REGULAR}
-          handleChange={(thumbnailUrl: string, originUrl: string) =>
-            handleImageChange(
-              peId,
-              thumbnailUrl,
-              originUrl
-            )}
-          StyledImg={WorkImage}
+      <DocumentCoreWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+          <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnRight} />
+          <MoleculeImg
+            srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
+            alt={data.description}
+            displaySize={DisplaySize.REGULAR}
+            handleChange={(thumbnailUrl: string, originUrl: string) =>
+              handleImageChange(
+                peId,
+                thumbnailUrl,
+                originUrl
+              )}
+            StyledImg={WorkImage}
+          />
+        </ImgWrapper>
+        <MoleculeTextareaDescription
+          value={data.description}
+          handleChange={(e) => handleChange(peId, { description: e.target.value })}
+          StyledTextarea={TextAreaTextBox}
+          StyledDescription={DocumentContent}
         />
-      </ImgWrapper>
-      <MoleculeTextareaDescription
-        value={data.description}
-        handleChange={(e) => handleChange(peId, { description: e.target.value })}
-        StyledTextarea={TextAreaTextBox}
-        StyledDescription={DocumentContent}
-      />
+      </DocumentCoreWrapper>
     </DocumentWrapper >
   );
 }
@@ -80,23 +82,47 @@ export const SelectBoxContainer = styled.div`
   gap: 20px;
 `
 
-const DocumentContent = styled.div<{ $alignment: TextAlignment }>`
+export const DocumentCoreWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
+  display: flex;
+  flex-direction: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
+      case DisplayAlignment.CENTER:
+        return 'column';
+      case DisplayAlignment.RIGHT:
+        return 'row-reverse';
+      case DisplayAlignment.LEFT:
+      default:
+        return 'row';
+    }
+  }};
+  gap: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
+      case DisplayAlignment.CENTER:
+        return '16px';
+      default:
+        return '10px';
+    }
+  }};
+`;
+
+const DocumentContent = styled.div<{ $textAlignment: TextAlignment }>`
   width: 100%;
   padding: 8px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
-  text-align: ${({ $alignment }) => getAlignment($alignment)};
+  text-align: ${({ $textAlignment }) => getAlignment($textAlignment)};
 `;
 
-export const ImgWrapper = styled.div`
+export const ImgWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   position: relative;
-  margin-bottom: 16px;
-`
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
+      case DisplayAlignment.CENTER:
+        return '100%';
+      default:
+        return '80%';
+    }
+  }};
+`;
 
-export const TitleInfoWrpper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
 
 export default Document;

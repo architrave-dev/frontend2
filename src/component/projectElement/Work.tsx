@@ -6,7 +6,7 @@ import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputWork, InputWorkTitle } from '../../shared/component/headless/input/InputBody';
 import HeadlessTextArea from '../../shared/component/headless/textarea/HeadlessTextArea';
 import { TextAreaWork } from '../../shared/component/headless/textarea/TextAreaBody';
-import { SelectType, DisplayAlignment, DisplaySize, TextAlignment, ProjectElementType } from '../../shared/enum/EnumRepository';
+import { SelectType, DisplayAlignment, DisplaySize, TextAlignment } from '../../shared/enum/EnumRepository';
 import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import SelectBox from '../../shared/component/SelectBox';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
@@ -39,71 +39,6 @@ const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
     handleChange(peId, { [field]: value });
   }
 
-  // const handleChange = (field: keyof WorkData, value: string | SizeData) => {
-  // if (!checkType(field, value)) {
-  //   return;
-  // };
-  // const targetElement = updatedProjectElements.find(pe => pe.updateWorkReq?.id === data.id);
-  // if (targetElement) {
-  //   //updatedProjectElements에 있다면
-  //   const updatedProjectElementList = updatedProjectElements.map(each =>
-  //     each.updateWorkReq?.id === data.id ? { ...each, updateWorkReq: { ...each.updateWorkReq, [field]: value } as UpdateWorkReq } : each
-  //   )
-  //   setUpdatedProjectElements(updatedProjectElementList);
-  // } else {
-  //   //updatedProjectElements에 없다면
-  //   const target = projectElementList.find(pe => pe.work?.id === data.id);
-
-  //   if (!target) return;
-  //   const targetWork = target.work;
-  //   if (!targetWork) return;
-  //   //target으로 UpdateProjectElementReq 를 생성 후 
-  //   const convetedToProjectElementReq: UpdateProjectElementReq = {
-  //     projectElementId: target.id,
-  //     updateWorkReq: {
-  //       id: targetWork.id,
-  //       workType: targetWork.workType,
-  //       updateUploadFileReq: {
-  //         uploadFileId: targetWork.uploadFile.id,
-  //         originUrl: targetWork.uploadFile.originUrl,
-  //         thumbnailUrl: targetWork.uploadFile.thumbnailUrl,
-  //       },
-  //       title: targetWork.title,
-  //       description: targetWork.description,
-  //       size: targetWork.size,
-  //       material: targetWork.material,
-  //       prodYear: targetWork.prodYear,
-  //       price: targetWork.price,
-  //       collection: targetWork.collection
-  //     },
-  //     workAlignment: target.workAlignment,
-  //     DisplaySize: target.DisplaySize,
-  //     updateWorkDetailReq: null,
-  //     workDetailAlignment: null,
-  //     workDetailDisplaySize: null,
-  //     updateTextBoxReq: null,
-  //     textBoxAlignment: null,
-  //     updateDocumentReq: null,
-  //     documentAlignment: null,
-  //     dividerType: null
-  //   }
-  //   //projectElementList에서 id로 찾고
-  //   //updatedProjectElements에 추가한다.
-  //   const newUpdateProjectElementReq: UpdateProjectElementReq = {
-  //     ...convetedToProjectElementReq,
-  //     updateWorkReq: {
-  //       ...convetedToProjectElementReq.updateWorkReq,
-  //       [field]: value
-  //     } as UpdateWorkReq
-  //   };
-  //   setUpdatedProjectElements([...updatedProjectElements, newUpdateProjectElementReq]);
-  // }
-  // const updatedProjectElementList: ProjectElementData[] = projectElementList.map(each =>
-  //   each.work?.id === data.id ? { ...each, work: { ...each.work, [field]: value } as WorkData } : each
-  // )
-  // setProjectElementList(updatedProjectElementList);
-  // }
-
   return (
     <WorkWrapper>
       {isEditMode &&
@@ -124,8 +59,8 @@ const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
           </SelectBoxWrapper>
         </SelectBoxContainer>
       }
-      <WorkCoreWrapper $workAlignment={alignment || DisplayAlignment.CENTER}>
-        <ImgWrapper $workAlignment={alignment || DisplayAlignment.CENTER}>
+      <WorkCoreWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
           <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
           <MoleculeImg
             srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
@@ -141,7 +76,7 @@ const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
         </ImgWrapper>
         {isEditMode ? (
           <>
-            <TitleInfoWrpper $workAlignment={alignment || DisplayAlignment.CENTER}>
+            <TitleInfoWrpper $displayAlignment={alignment || DisplayAlignment.CENTER}>
               <HeadlessInput
                 value={data.title}
                 handleChange={(e) => handleChangeWithValidate("title", e.target.value)}
@@ -179,7 +114,7 @@ const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
           </>
         ) : (
           <>
-            <TitleInfoWrpper $workAlignment={alignment || DisplayAlignment.CENTER}>
+            <TitleInfoWrpper $displayAlignment={alignment || DisplayAlignment.CENTER}>
               <Title>[ {data.title} ]</Title>
               <Description>
                 {data.description.split('\n').map((line, index) => (
@@ -234,10 +169,10 @@ export const WorkImage = styled.img<{ $displaySize: DisplaySize }>`
   object-fit: contain;
 `;
 
-export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+export const WorkCoreWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   display: flex;
-  flex-direction: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  flex-direction: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return 'column';
       case DisplayAlignment.RIGHT:
@@ -247,8 +182,8 @@ export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
         return 'row';
     }
   }};
-  gap: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  gap: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '16px';
       default:
@@ -257,10 +192,10 @@ export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
   }};
 `;
 
-export const ImgWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+export const ImgWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   position: relative;
-  width: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '100%';
       default:
@@ -269,9 +204,9 @@ export const ImgWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
   }};
 `
 
-export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
-  width: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+export const TitleInfoWrpper = styled.div<{ $displayAlignment: DisplayAlignment }>`
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '100%';
       default:
@@ -281,8 +216,8 @@ export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
 
   display: flex;
   flex-direction: column;
-  justify-content: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  justify-content: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return 'flex-start';
       default:
@@ -290,7 +225,6 @@ export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
     }
   }};
   align-items: center;
-
 `
 
 export const WorkInfo = styled.div`

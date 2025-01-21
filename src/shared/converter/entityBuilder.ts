@@ -27,16 +27,16 @@ export const peWorkImportBuilder = (projectId: string, workId: string): CreatePr
   return {
     projectId: projectId,
     workId: workId,
-    workAlignment: DisplayAlignment.CENTER,
-    workDisplaySize: DisplaySize.BIG,
+    displayAlignment: DisplayAlignment.CENTER,
+    displaySize: DisplaySize.BIG,
   };
 }
 export const peDetailImportBuilder = (projectId: string, detailId: string): CreateProjectElementWithWorkDetailReq => {
   return {
     projectId: projectId,
     workDetailId: detailId,
-    workDetailAlignment: DisplayAlignment.CENTER,
-    workDetailDisplaySize: DisplaySize.BIG,
+    displayAlignment: DisplayAlignment.CENTER,
+    displaySize: DisplaySize.BIG,
   };
 }
 
@@ -73,7 +73,7 @@ export const peDocBuilder = (projectId: string): CreateProjectElementReq => {
     projectId: projectId,
     projectElementType: ProjectElementType.DOCUMENT,
     createDocumentReq: documentBuilder(),
-    textAlignment: TextAlignment.CENTER,
+    displayAlignment: DisplayAlignment.CENTER,
   };
 }
 export const peTextBoxBuilder = (projectId: string): CreateProjectElementReq => {

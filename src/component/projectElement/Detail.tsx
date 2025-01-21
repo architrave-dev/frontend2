@@ -49,8 +49,8 @@ const Work: React.FC<DetailProps> = ({ peId, alignment, displaySize, data }) => 
           </SelectBoxWrapper>
         </SelectBoxContainer>
       }
-      <WorkCoreWrapper $workAlignment={alignment || DisplayAlignment.CENTER}>
-        <ImgWrapper $workAlignment={alignment || DisplayAlignment.CENTER}>
+      <WorkCoreWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
+        <ImgWrapper $displayAlignment={alignment || DisplayAlignment.CENTER}>
           <MoleculeShowOriginBtn originUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)} styledBtn={OriginBtnBottom} />
           <MoleculeImg
             srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
@@ -64,7 +64,7 @@ const Work: React.FC<DetailProps> = ({ peId, alignment, displaySize, data }) => 
             StyledImg={WorkImage}
           />
         </ImgWrapper>
-        <TitleInfoWrpper $workAlignment={alignment || DisplayAlignment.CENTER}>
+        <TitleInfoWrpper $displayAlignment={alignment || DisplayAlignment.CENTER}>
           <MoleculeInputDiv
             value={data.description}
             placeholder={"description"}
@@ -110,10 +110,10 @@ export const WorkImage = styled.img<{ $displaySize: DisplaySize }>`
   object-fit: contain;
 `;
 
-export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+export const WorkCoreWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   display: flex;
-  flex-direction: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  flex-direction: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return 'column';
       case DisplayAlignment.RIGHT:
@@ -123,8 +123,8 @@ export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
         return 'row';
     }
   }};
-  gap: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  gap: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '10px';
       default:
@@ -133,10 +133,10 @@ export const WorkCoreWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
   }};
 `;
 
-export const ImgWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
+export const ImgWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   position: relative;
-  width: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '100%';
       default:
@@ -145,9 +145,9 @@ export const ImgWrapper = styled.div<{ $workAlignment: DisplayAlignment }>`
   }};
 `
 
-export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
-  width: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+export const TitleInfoWrpper = styled.div<{ $displayAlignment: DisplayAlignment }>`
+  width: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return '100%';
       default:
@@ -157,8 +157,8 @@ export const TitleInfoWrpper = styled.div<{ $workAlignment: DisplayAlignment }>`
 
   display: flex;
   flex-direction: column;
-  justify-content: ${({ $workAlignment }) => {
-    switch ($workAlignment) {
+  justify-content: ${({ $displayAlignment }) => {
+    switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
         return 'flex-start';
       default:

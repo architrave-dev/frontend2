@@ -84,6 +84,15 @@ export const useGlobalError = () => {
       callBack: clearErr
     });
   }
+  const handleRVN = async () => {
+    console.log("handleRVN: Required value is empty.");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Required value is empty.",
+      callBack: clearErr
+    });
+  }
 
   const handleGlobalErr = async () => {
     if (managedErr === null) {
@@ -108,6 +117,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.DUK:
         await handleDUK();
+        break;
+      case ErrorCode.RVN:
+        await handleRVN();
         break;
       case ErrorCode.WEF:
       default:

@@ -161,14 +161,14 @@ export interface RemoveProjectInfoReq {
 export interface CreateProjectElementWithWorkReq {
   projectId: string;
   workId: string;
-  workAlignment: DisplayAlignment;
-  workDisplaySize: DisplaySize;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
 }
 export interface CreateProjectElementWithWorkDetailReq {
   projectId: string;
   workDetailId: string;
-  workDetailAlignment: DisplayAlignment;
-  workDetailDisplaySize: DisplaySize;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize;
 }
 
 // This is key to making a union workable
@@ -195,7 +195,7 @@ export interface CreateProjectElementReqDetail extends CreateProjectElementReqBa
 export interface CreateProjectElementReqDocument extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.DOCUMENT;
   createDocumentReq: CreateDocumentReq;
-  textAlignment: TextAlignment;
+  displayAlignment: DisplayAlignment;
 }
 
 export interface CreateProjectElementReqTextBox extends CreateProjectElementReqBase {
