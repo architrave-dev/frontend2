@@ -10,7 +10,7 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { SmallestBtn } from '../../shared/component/headless/button/BtnBody';
 import SimpleWork from './SimpleWork';
 import { useModalStore } from '../../shared/store/portal/modalStore';
-import { peWorkImportBuilder } from '../../shared/converter/EntityBuilder';
+import { peWorkImportBuilder } from '../../shared/converter/entityBuilder';
 
 
 const WorkImport: React.FC = () => {

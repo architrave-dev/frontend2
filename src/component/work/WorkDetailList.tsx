@@ -7,7 +7,7 @@ import WorkDetail from './WorkDetail';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
-import { detailBuilder } from '../../shared/converter/EntityBuilder';
+import { detailBuilder } from '../../shared/converter/entityBuilder';
 
 
 

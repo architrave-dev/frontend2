@@ -6,7 +6,7 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useModalStore } from '../../shared/store/portal/modalStore';
-import { peDetailBuilder } from '../../shared/converter/EntityBuilder';
+import { peDetailBuilder } from '../../shared/converter/entityBuilder';
 
 const WorkListForDetail: React.FC = () => {
   const { aui } = useAui();

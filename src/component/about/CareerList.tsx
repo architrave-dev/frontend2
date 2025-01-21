@@ -8,7 +8,7 @@ import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import Space from '../../shared/Space';
 import CareerSection from './CareerSection';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { careerBuilder } from '../../shared/converter/EntityBuilder';
+import { careerBuilder } from '../../shared/converter/entityBuilder';
 
 const CareerList: React.FC = () => {
   const { isEditMode } = useEditMode();

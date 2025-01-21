@@ -14,7 +14,7 @@ import { useWorkListStore } from '../../shared/store/WorkListStore';
 import Space from '../../shared/Space';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { workBuilder } from '../../shared/converter/EntityBuilder';
+import { workBuilder } from '../../shared/converter/entityBuilder';
 import EmptyWorkList from './EmptyWorkList';
 
 const WorkList: React.FC = () => {

@@ -13,7 +13,7 @@ import ProjectElement from '../../component/projectElement/ProjectElement';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
 import { useModalStore } from '../../shared/store/portal/modalStore';
-import { peDividerBuilder, peDocBuilder, peTextBoxBuilder, peWorkBuilder } from '../../shared/converter/EntityBuilder';
+import { peDividerBuilder, peDocBuilder, peTextBoxBuilder, peWorkBuilder } from '../../shared/converter/entityBuilder';
 
 
 const ProjectElementList: React.FC = () => {
