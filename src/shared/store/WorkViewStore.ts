@@ -6,9 +6,10 @@ interface WorkViewState {
   activeWork: WorkData | null;
   hasChanged: boolean;
   imageChanged: boolean;
-  setActiveWork: (work: WorkData) => void;
+  setActiveWork: (activeWork: WorkData) => void;
   updateActiveWork: (updates: Partial<WorkData>) => void;
   updateImage: (thumbnailUrl: string, originUrl: string) => void;
+  afterDeleteActiveWork: () => void;
 
   activeWorkDetailList: WorkDetailData[];
   setOnlyActiveWorkDetailList: (activeWorkDetailList: WorkDetailData[]) => void;
@@ -44,7 +45,7 @@ export const useWorkViewStore = create<WorkViewState>((set) => ({
       hasChanged: true,
       imageChanged: true,
     })),
-
+  afterDeleteActiveWork: () => set({ activeWork: null, hasChanged: false, imageChanged: false, activeWorkDetailList: [] }),
 
   activeWorkDetailList: [],
   setOnlyActiveWorkDetailList: (activeWorkDetailList) => set({ activeWorkDetailList }),

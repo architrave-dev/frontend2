@@ -25,7 +25,7 @@ export const useWorkList = (): UseWorkListResult => {
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
   const { setSimpleWorkList } = useWorkStationStore();
-  const { setActiveWork, setActiveWorkDetailList } = useWorkViewStore();
+  const { setActiveWork, setActiveWorkDetailList, afterDeleteActiveWork } = useWorkViewStore();
 
   const handleGetWorkSuccess = (response: WorkWithDetailResponse) => {
     const data = response.data;
@@ -52,6 +52,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   const handleDeleteWorkSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
+    afterDeleteActiveWork();
   };
 
   const handleCreatWorkSuccess = (response: WorkResponse) => {

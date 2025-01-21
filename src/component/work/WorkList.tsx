@@ -24,7 +24,7 @@ const WorkList: React.FC = () => {
   const { activeWork } = useWorkViewStore();
 
   const { setStandardAlert } = useStandardAlertStore();
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const workListRef = useRef<HTMLDivElement>(null);
 
 
@@ -49,16 +49,11 @@ const WorkList: React.FC = () => {
 
   const sortedWorkList = Array.isArray(workList) ? sortWorkList(workList, sortBy) : [];
 
-  useEffect(() => {
-    if (sortedWorkList.length > 0 && activeWork === null) {
-      changeActiveWork(0);
-    }
-  }, [sortedWorkList.length])
-
   const handleCreateWork = async () => {
     try {
       await createWork(aui, workBuilder());
-    } catch (err) { };
+      setSelectedIndex(workList.length);
+    } catch (err) { }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -83,24 +78,27 @@ const WorkList: React.FC = () => {
   };
 
   const changeActiveWork = (newIndex: number) => {
-    if (newIndex !== selectedIndex) {
-      if (isEditMode) {
-        setStandardAlert({
-          type: AlertType.ALERT,
-          position: AlertPosition.TOP,
-          content: "Exit edit mode."
-        })
-        return;
-      }
-      const getWorkWithDetailWithApi = async () => {
-        try {
-          console.log("getting work and Detail List...")
-          await getWork(sortedWorkList[newIndex].id);
-          setSelectedIndex(newIndex);
-        } catch (error) { }
-      }
-
+    if (isEditMode) {
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "Exit edit mode."
+      })
+      return;
+    }
+    if (sortedWorkList.length <= 0) {
+      return;
+    }
+    const getWorkWithDetailWithApi = async () => {
+      try {
+        console.log("getting work and Detail List...")
+        await getWork(sortedWorkList[newIndex].id);
+        setSelectedIndex(newIndex);
+      } catch (error) { }
+    }
+    if (activeWork == null || newIndex !== selectedIndex) {
       getWorkWithDetailWithApi();
+      return;
     }
   }
 

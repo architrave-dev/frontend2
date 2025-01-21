@@ -48,7 +48,7 @@ export const useGlobalError = () => {
     setStandardAlert({
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
-      content: "No Data Like that.",
+      content: "No matching data found",
       callBack: () => {
         clearErr();
       }
