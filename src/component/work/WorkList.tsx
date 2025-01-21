@@ -15,6 +15,7 @@ import Space from '../../shared/Space';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { workBuilder } from '../../shared/converter/EntityBuilder';
+import EmptyWorkList from './EmptyWorkList';
 
 const WorkList: React.FC = () => {
   const { isEditMode } = useEditMode();
@@ -116,6 +117,7 @@ const WorkList: React.FC = () => {
             handleClick={() => handleClick(i)}
           />
         )}
+        {sortedWorkList.length === 0 && <EmptyWorkList />}
         {isEditMode &&
           <Space $height='80px'>
             <HeadlessBtn
@@ -134,7 +136,7 @@ const WorkListContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  padding-bottom: calc(9vh);
+  padding-bottom: calc(7vh);
   outline: none;
 `;
 
@@ -144,6 +146,7 @@ const WorkListComp = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
 `;
 
 export default WorkList;
