@@ -6,6 +6,7 @@ import { ProjectData } from '../../dto/EntityRepository';
 import { UpdateProjectReq } from '../../dto/ReqDtoRepository';
 import { ProjectResponse } from '../../dto/ResDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseProjectResult {
@@ -18,10 +19,17 @@ export const useProjectDetail = (): UseProjectResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { project, setProject } = useProjectStore();
+  const { setUpdatedTempAlert } = useTempAlertStore();
 
   const handleProjectSuccess = (response: ProjectResponse) => {
     const projectData = response.data;
     setProject(projectData);
+  };
+
+  const handleUpdateProjectSuccess = (response: ProjectResponse) => {
+    const projectData = response.data;
+    setProject(projectData);
+    setUpdatedTempAlert();
   };
 
   const handleProjectRequest = async (
@@ -35,7 +43,7 @@ export const useProjectDetail = (): UseProjectResult => {
     try {
       if (data) {
         const response = await updateProject(aui, data);
-        handleProjectSuccess(response);
+        handleUpdateProjectSuccess(response);
       } else if (projectId) {
         const response = await getProjectDetail(aui, projectId);
         handleProjectSuccess(response);

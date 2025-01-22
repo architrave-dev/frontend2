@@ -20,6 +20,7 @@ const UserComp: React.FC = () => {
 
 
   const toggleEditMode = () => {
+    // "There are unsaved hanges. Do you want to leave edit mode? Any unsaved changes will be discarded."
     setEditMode(!isEditMode);
   };
 

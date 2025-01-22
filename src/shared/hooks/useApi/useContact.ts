@@ -6,6 +6,7 @@ import { UpdateContactReq } from '../../dto/ReqDtoRepository';
 import { getContact, updateContact } from '../../api/contactApi';
 import { useContactStore } from '../../store/contactStore';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseContactResult {
@@ -18,7 +19,13 @@ export const useContact = (): UseContactResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { contact, setContact } = useContactStore();
+  const { setUpdatedTempAlert } = useTempAlertStore();
 
+  const handleUpdateContactSuccess = (response: ContactResponse) => {
+    const contactData = response.data;
+    setContact(contactData);
+    setUpdatedTempAlert();
+  };
 
   const handleContactSuccess = (response: ContactResponse) => {
     const contactData = response.data;
@@ -38,7 +45,7 @@ export const useContact = (): UseContactResult => {
         handleContactSuccess(response);
       } else {
         const response = await updateContact(aui, data as UpdateContactReq);
-        handleContactSuccess(response);
+        handleUpdateContactSuccess(response);
       }
     } catch (err) {
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';

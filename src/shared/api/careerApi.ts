@@ -59,7 +59,7 @@ export const deleteCareer = async (aui: string, data: RemoveCareerReq): Promise<
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await careerApi.delete<CareerResponse>(`/api/v1/career?aui=${aui}&=careerId${data.careerId}`, {
+    const response = await careerApi.delete<CareerResponse>(`/api/v1/career?aui=${aui}&careerId=${data.careerId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

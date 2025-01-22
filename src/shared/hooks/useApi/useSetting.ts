@@ -6,6 +6,7 @@ import { SettingData } from '../../dto/EntityRepository';
 import { SettingResponse } from '../../dto/ResDtoRepository';
 import { UpdateSettingReq } from '../../dto/ReqDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseSettingResult {
@@ -18,6 +19,7 @@ export const useSetting = (): UseSettingResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { setting, setSetting } = useSettingStore();
+  const { setUpdatedTempAlert } = useTempAlertStore();
 
   const handleGetSettingSuccess = (response: SettingResponse) => {
     const settingData = response.data;
@@ -27,6 +29,7 @@ export const useSetting = (): UseSettingResult => {
   const handleUpdateSettingSuccess = async (response: SettingResponse) => {
     const settingData = response.data;
     setSetting(settingData);
+    setUpdatedTempAlert();
   };
 
   const handleSettingRequest = async (

@@ -31,7 +31,7 @@ const SignIn: React.FC = () => {
 
   return (
     <SignUpComp>
-      <Title>Sigin Up</Title>
+      <Title>Register</Title>
       <form onSubmit={handleSubmit}>
         <InputField
           type="email"

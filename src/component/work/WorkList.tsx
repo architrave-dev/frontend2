@@ -79,14 +79,6 @@ const WorkList: React.FC = () => {
   };
 
   const changeActiveWork = (newIndex: number) => {
-    if (isEditMode) {
-      setStandardAlert({
-        type: AlertType.ALERT,
-        position: AlertPosition.TOP,
-        content: "Exit edit mode."
-      })
-      return;
-    }
     if (sortedWorkList.length <= 0) {
       return;
     }
@@ -98,6 +90,14 @@ const WorkList: React.FC = () => {
       } catch (error) { }
     }
     if (activeWork == null || newIndex !== selectedIndex) {
+      if (isEditMode) {
+        setStandardAlert({
+          type: AlertType.ALERT,
+          position: AlertPosition.TOP,
+          content: "Exit edit mode."
+        })
+        return;
+      }
       getWorkWithDetailWithApi();
       return;
     }

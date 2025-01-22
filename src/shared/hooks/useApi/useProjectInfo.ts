@@ -6,6 +6,7 @@ import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse } from '..
 import { useLoadingStore } from '../../store/loadingStore';
 import { createProjectInfo, deleteProjectInfo, getProjectInfoList, updateProjectInfo } from '../../api/projectInfoApi';
 import { useProjectInfoListStore } from '../../store/projectInfoStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseProjectInfoResult {
@@ -20,6 +21,7 @@ export const useProjectInfo = (): UseProjectInfoResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projectInfoList, setProjectInfoList, setOnlyProjectInfoList } = useProjectInfoListStore();
+  const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
 
   const handleProjectInfoListSuccess = (response: ProjectInfoListResponse) => {
     const projectInfoListData = response.data;
@@ -35,10 +37,12 @@ export const useProjectInfo = (): UseProjectInfoResult => {
     const updatedProjectInfo = response.data;
     const newPiList = projectInfoList.map((pi) => pi.id === updatedProjectInfo.id ? updatedProjectInfo : pi);
     setOnlyProjectInfoList(newPiList);
+    setUpdatedTempAlert();
   };
 
   const handleDeleteProjectInfoSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
+    setDeletedTempAlert();
   };
 
   const handleProjectElementRequest = async (
