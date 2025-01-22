@@ -6,6 +6,7 @@ import theme from './shared/theme';
 import { GlobalStyle } from './shared/GlobalStyle';
 import ModalTemplate from './shared/ModalTemplate';
 import AlertTemplate from './shared/AlertTemplate';
+import TempAlertTemplate from './shared/TempAlertTemplate';
 
 
 const root = ReactDOM.createRoot(
@@ -18,6 +19,7 @@ root.render(
     <App />
     <ModalTemplate />
     <AlertTemplate />
+    <TempAlertTemplate />
   </ThemeProvider>
   // </React.StrictMode>
 );

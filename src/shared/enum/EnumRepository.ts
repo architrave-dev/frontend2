@@ -18,6 +18,21 @@ export enum AlertPosition {
   BOTTOM = 'BOTTOM'
 }
 
+export enum TempAlertType {
+  WELCOME = 'WELCOME',
+  UPDATED = 'UPDATED',
+  DELETED = 'DELETED',
+}
+
+export enum TempAlertPosition {
+  LT = 'LT',
+  LC = 'LC',
+  LB = 'LB',
+  RT = 'RT',
+  RC = 'RC',
+  RB = 'RB'
+}
+
 export enum ProjectElementType {
   WORK = 'WORK',
   DETAIL = 'DETAIL',
