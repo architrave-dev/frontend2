@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import MemberInfo from '../component/about/MemberInfo';
 import CareerList from '../component/about/CareerList';
@@ -15,6 +15,9 @@ import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
 import { useMemberInfoStore } from '../shared/store/memberInfoStore';
+import { pdf } from '@react-pdf/renderer';
+import DocumentCV from '../component/about/DocumentCV';
+import { useCareer } from '../shared/hooks/useApi/useCareer';
 
 
 const About: React.FC = () => {
@@ -22,9 +25,9 @@ const About: React.FC = () => {
   const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
   const { memberInfo, updateMemberInfo } = useMemberInfo();
+  const { careerList } = useCareer();
   const { hasChanged: memberInfoChanged, imageChanged } = useMemberInfoStore();
   const { isLoading } = useLoadingStore();
-
 
   const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateMemberInfoReq, aui: string): Promise<UpdateMemberInfoReq> => {
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
@@ -63,25 +66,43 @@ const About: React.FC = () => {
     }
   };
 
+  const handleDownloadPDF = async () => {
+    if (!memberInfo) return;
+
+    const blob = await pdf(
+      <DocumentCV memberInfo={memberInfo} careerList={careerList} />
+    ).toBlob();
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `CV_${memberInfo.name}.pdf`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <AboutContainer>
       <Loading isLoading={isLoading} />
       <MemberInfo />
       <CareerList />
-      {isEditMode && memberInfoChanged &&
+      {isEditMode && memberInfoChanged && (
         <HeadlessBtn
           value={"Confirm"}
           handleClick={handleConfirm}
           StyledBtn={BtnConfirm}
         />
-      }
+      )}
+      <HeadlessBtn
+        value={"⬇️"}
+        handleClick={handleDownloadPDF}
+        StyledBtn={BtnConfirm}
+      />
     </AboutContainer>
   );
 }
 
 export default About;
-
 
 const AboutContainer = styled.div`
   width: 100%;
