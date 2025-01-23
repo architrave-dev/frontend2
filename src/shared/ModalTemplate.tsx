@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Portal from '../Portal';
+import Portal from '../portal/Modal';
 import Login from '../component/auth/Login';
 import Signin from '../component/auth/SignIn';
 import { useModalStore } from './store/portal/modalStore';

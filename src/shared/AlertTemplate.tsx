@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useStandardAlertStore } from './store/portal/alertStore';
-import Alert from '../Alert';
+import Alert from '../portal/Alert';
 import AlertComp from '../component/alert/AlertComp';
 import ConfirmComp from '../component/alert/ConfirmComp';
 import { AlertType } from './enum/EnumRepository';
@@ -39,7 +39,7 @@ const AlertOverlay = styled.div`
   width: 100%;
   height: 100%;
 
-  z-index: 2;
+  z-index: 3;
 `;
 
 

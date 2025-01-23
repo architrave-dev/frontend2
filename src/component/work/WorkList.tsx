@@ -14,7 +14,7 @@ import { useWorkListStore } from '../../shared/store/WorkListStore';
 import Space from '../../shared/Space';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { workBuilder } from '../../shared/converter/EntityBuilder';
+import { workBuilder } from '../../shared/converter/entityBuilder';
 import EmptyWorkList from './EmptyWorkList';
 
 const WorkList: React.FC = () => {
@@ -79,14 +79,6 @@ const WorkList: React.FC = () => {
   };
 
   const changeActiveWork = (newIndex: number) => {
-    if (isEditMode) {
-      setStandardAlert({
-        type: AlertType.ALERT,
-        position: AlertPosition.TOP,
-        content: "Exit edit mode."
-      })
-      return;
-    }
     if (sortedWorkList.length <= 0) {
       return;
     }
@@ -98,6 +90,14 @@ const WorkList: React.FC = () => {
       } catch (error) { }
     }
     if (activeWork == null || newIndex !== selectedIndex) {
+      if (isEditMode) {
+        setStandardAlert({
+          type: AlertType.ALERT,
+          position: AlertPosition.TOP,
+          content: "Exit edit mode."
+        })
+        return;
+      }
       getWorkWithDetailWithApi();
       return;
     }

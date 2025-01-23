@@ -6,6 +6,7 @@ import { BillboardData } from '../../dto/EntityRepository';
 import { BillboardResponse } from '../../dto/ResDtoRepository';
 import { UpdateBillboardReq } from '../../dto/ReqDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseBillboardResult {
@@ -18,6 +19,7 @@ export const useBillboard = (): UseBillboardResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { billboard, setBillboard } = useBillboardStore();
+  const { setUpdatedTempAlert } = useTempAlertStore();
 
   const handleGetBillboardSuccess = (response: BillboardResponse) => {
     const billboardData = response.data;
@@ -27,6 +29,7 @@ export const useBillboard = (): UseBillboardResult => {
   const handleUpdateBillboardSuccess = async (response: BillboardResponse) => {
     const billboardData = response.data;
     setBillboard(billboardData);
+    setUpdatedTempAlert();
   };
 
   const handleBillboardRequest = async (

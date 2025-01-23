@@ -6,6 +6,7 @@ import { ProjectSimpleData } from '../../dto/EntityRepository';
 import { CreateProjectReq, RemoveProjectReq } from '../../dto/ReqDtoRepository';
 import { CreatedProjectResponse, DeleteResponse, ProjectListResponse } from '../../dto/ResDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseProjectListResult {
@@ -19,6 +20,7 @@ export const useProjectList = (): UseProjectListResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projects, setProjects } = useProjectListStore();
+  const { setDeletedTempAlert } = useTempAlertStore();
 
   const handleProjectListSuccess = (response: ProjectListResponse) => {
     const projectListData = response.data;
@@ -27,6 +29,7 @@ export const useProjectList = (): UseProjectListResult => {
 
   const handleDeleteProjectSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
+    setDeletedTempAlert();
   };
 
   const handleCreateProjectSuccess = (response: CreatedProjectResponse) => {

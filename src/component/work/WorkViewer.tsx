@@ -24,8 +24,8 @@ import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 
 
 const WorkViewer: React.FC = () => {
-  const { aui } = useAui();
   const { isEditMode, setEditMode } = useEditMode();
+  const { aui } = useAui();
   const { updateWork, deleteWork } = useWorkList();
   const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();

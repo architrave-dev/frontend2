@@ -7,7 +7,7 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import Space from '../../shared/Space';
 import { BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { projectBuilder } from '../../shared/converter/EntityBuilder';
+import { projectBuilder } from '../../shared/converter/entityBuilder';
 
 const ProjectList: React.FC = () => {
   const { aui } = useAui();

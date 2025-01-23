@@ -6,6 +6,7 @@ import { ProjectElementData } from '../../dto/EntityRepository';
 import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, DeleteProjectElementReq, UpdateProjectElementListReq, UpdateProjectElementReq } from '../../dto/ReqDtoRepository';
 import { ProjectElementListResponse, ProjectElementResponse } from '../../dto/ResDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseProjectElementResult {
@@ -22,6 +23,7 @@ export const useProjectElement = (): UseProjectElementResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
+  const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
 
 
   const handleProjectElementSuccess = (response: ProjectElementListResponse) => {
@@ -40,10 +42,12 @@ export const useProjectElement = (): UseProjectElementResult => {
     const updated = response.data;
     const peListData = projectElementList.map((pe) => pe.id === updated.id ? updated : pe);
     setProjectElementList(peListData);
+    setUpdatedTempAlert();
   };
 
   const handleDeleteProjectElementSuccess = (response: ProjectElementResponse) => {
     console.log("deleted well");
+    setDeletedTempAlert();
   };
 
 

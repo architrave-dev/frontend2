@@ -6,6 +6,7 @@ import { createWorkDetail, deleteWorkDetail, getSimpleWorkDetailList, getWorkDet
 import { useWorkViewStore } from '../../store/WorkViewStore';
 import { useWorkStationStore } from '../../store/workStationStore';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseWorkListResult {
@@ -22,6 +23,7 @@ export const useWorkDetail = (): UseWorkListResult => {
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { activeWorkDetailList, setActiveWorkDetailList, setOnlyActiveWorkDetailList } = useWorkViewStore();
   const { setSimpleWorkDetailList } = useWorkStationStore();
+  const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
 
   const handleGetWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
@@ -43,10 +45,12 @@ export const useWorkDetail = (): UseWorkListResult => {
     const data = response.data;
     const newWorkDetailList = activeWorkDetailList.map((wd) => wd.id === data.id ? data : wd);
     setOnlyActiveWorkDetailList(newWorkDetailList);
+    setUpdatedTempAlert();
   };
 
   const handleDeleteWorkDetailSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
+    setDeletedTempAlert();
   };
 
   const handleCreateWorkDetailSuccess = (response: WorkDetailResponse) => {

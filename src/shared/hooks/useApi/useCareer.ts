@@ -6,6 +6,7 @@ import { CareerData } from '../../dto/EntityRepository';
 import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../../dto/ReqDtoRepository';
 import { CareerListResponse, CareerResponse } from '../../dto/ResDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseCareerResult {
@@ -20,7 +21,7 @@ export const useCareer = (): UseCareerResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { careers, setCareers, setOnlyCareers } = useCareerListStore();
-
+  const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
 
   const handleGetCareerListSuccess = (response: CareerListResponse) => {
     const careerListData = response.data;
@@ -34,9 +35,11 @@ export const useCareer = (): UseCareerResult => {
     const updatedCareerData = response.data;
     const careerListData = careers.map((c) => c.id === updatedCareerData.id ? updatedCareerData : c);
     setOnlyCareers(careerListData);
+    setUpdatedTempAlert();
   };
   const handleDeleteCareerSuccess = (response: CareerResponse) => {
     console.log("deleted well");
+    setDeletedTempAlert();
   };
 
   const handleCareerRequest = async (

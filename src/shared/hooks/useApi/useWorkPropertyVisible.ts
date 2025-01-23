@@ -6,6 +6,7 @@ import { WorkPropertyVisibleData } from '../../dto/EntityRepository';
 import { WorkPropertyVisibleResponse } from '../../dto/ResDtoRepository';
 import { UpdateWorkPropertyVisibleReq } from '../../dto/ReqDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseWorkPropertyVisibleResult {
@@ -18,10 +19,16 @@ export const useWorkPropertyVisible = (): UseWorkPropertyVisibleResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workPropertyVisible, setWorkPropertyVisible } = useWorkPropertyVisibleStore();
+  const { setUpdatedTempAlert } = useTempAlertStore();
 
   const handleSuccess = (response: WorkPropertyVisibleResponse) => {
     const workPropertyVisible = response.data;
     setWorkPropertyVisible(workPropertyVisible);
+  };
+  const handleUpdateSuccess = (response: WorkPropertyVisibleResponse) => {
+    const workPropertyVisible = response.data;
+    setWorkPropertyVisible(workPropertyVisible);
+    setUpdatedTempAlert();
   };
 
   const handleWorkPropertyVisibleRequest = async (
@@ -37,7 +44,7 @@ export const useWorkPropertyVisible = (): UseWorkPropertyVisibleResult => {
         handleSuccess(response);
       } else {
         const response = await updateWorkPropertyVisible(aui, data);
-        handleSuccess(response);
+        handleUpdateSuccess(response);
       }
     } catch (err) {
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';

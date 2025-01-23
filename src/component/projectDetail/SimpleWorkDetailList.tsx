@@ -7,7 +7,7 @@ import defaultImg from '../../asset/project/default_1.png'
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { WorkDetailSimpleData } from '../../shared/dto/EntityRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
-import { peDetailImportBuilder } from '../../shared/converter/EntityBuilder';
+import { peDetailImportBuilder } from '../../shared/converter/entityBuilder';
 
 interface WorkDetailImportProps {
   simpleWorkDetailList: WorkDetailSimpleData[];

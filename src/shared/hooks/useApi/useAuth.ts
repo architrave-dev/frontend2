@@ -6,6 +6,9 @@ import { UserData } from '../../dto/EntityRepository';
 import { LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
 import { AuthResponse } from '../../dto/ResDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
+import { TempAlertPosition } from '../../enum/EnumRepository';
+import { TempAlertType } from '../../enum/EnumRepository';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseAuthResult {
@@ -21,6 +24,7 @@ export const useAuth = (): UseAuthResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { user, setUser, clearAuth } = useAuthStore();
+  const { setTempAlert } = useTempAlertStore();
 
   const handleLoginSuccess = (response: AuthResponse) => {
     const { data, authToken } = response;
@@ -32,6 +36,12 @@ export const useAuth = (): UseAuthResult => {
       role: data.role
     };
     setUser(onlyUserData);
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Welcome .",
+      duration: 2000
+    });
     localStorage.setItem('userData', JSON.stringify(onlyUserData));
     localStorage.setItem('authToken', authToken);
     localStorage.setItem('refreshToken', data.refreshToken);
@@ -88,6 +98,12 @@ export const useAuth = (): UseAuthResult => {
     localStorage.removeItem('userData');
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Goodbye.",
+      duration: 3000
+    });
   };
 
   return {

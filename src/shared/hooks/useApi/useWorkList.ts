@@ -8,6 +8,7 @@ import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../../dto/ReqDtoRep
 import { DeleteResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../../dto/ResDtoRepository';
 import { useWorkStationStore } from '../../store/workStationStore';
 import { useLoadingStore } from '../../store/loadingStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 
 interface UseWorkListResult {
@@ -26,6 +27,7 @@ export const useWorkList = (): UseWorkListResult => {
   const { workList, setWorkList } = useWorkListStore();
   const { setSimpleWorkList } = useWorkStationStore();
   const { setActiveWork, setActiveWorkDetailList, afterDeleteActiveWork } = useWorkViewStore();
+  const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
 
   const handleGetWorkSuccess = (response: WorkWithDetailResponse) => {
     const data = response.data;
@@ -46,6 +48,7 @@ export const useWorkList = (): UseWorkListResult => {
   const handleUpdateWorkSuccess = (response: WorkResponse) => {
     const data = response.data;
     const newWorkList = workList.map((each) => each.id === data.id ? data : each);
+    setUpdatedTempAlert();
     setActiveWork(data);
     setWorkList(newWorkList);
   };
@@ -53,6 +56,7 @@ export const useWorkList = (): UseWorkListResult => {
   const handleDeleteWorkSuccess = (response: DeleteResponse) => {
     console.log("deleted well");
     afterDeleteActiveWork();
+    setDeletedTempAlert();
   };
 
   const handleCreatWorkSuccess = (response: WorkResponse) => {

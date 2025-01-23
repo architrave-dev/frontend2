@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useProjectInfoListStore } from '../../shared/store/projectInfoStore';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
-import { piBuilder } from '../../shared/converter/EntityBuilder';
+import { piBuilder } from '../../shared/converter/entityBuilder';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectInfo } from '../../shared/hooks/useApi/useProjectInfo';
 import { useAui } from '../../shared/hooks/useAui';
