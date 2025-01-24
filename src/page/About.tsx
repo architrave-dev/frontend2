@@ -6,7 +6,7 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 import { useEditMode } from '../shared/hooks/useEditMode';
 import { useMemberInfo } from '../shared/hooks/useApi/useMemberInfo';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
-import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
+import { BtnFloat, BtnModalSub } from '../shared/component/headless/button/BtnBody';
 import { UpdateMemberInfoReq } from '../shared/dto/ReqDtoRepository';
 import { useAui } from '../shared/hooks/useAui';
 import { ServiceType } from '../shared/enum/EnumRepository';
@@ -18,7 +18,8 @@ import { useMemberInfoStore } from '../shared/store/memberInfoStore';
 import { pdf, PDFViewer } from '@react-pdf/renderer';
 import DocumentCV from '../component/about/DocumentCV';
 import { useCareer } from '../shared/hooks/useApi/useCareer';
-
+import downloadIcon from '../asset/icon/download.png';
+import HeadlessIconBtn from '../shared/component/headless/button/HeadlessIconBtn';
 
 const About: React.FC = () => {
   useInitPage();
@@ -93,18 +94,22 @@ const About: React.FC = () => {
       } */}
       <MemberInfo />
       <CareerList />
-      {isEditMode && memberInfoChanged && (
-        <HeadlessBtn
-          value={"Confirm"}
-          handleClick={handleConfirm}
-          StyledBtn={BtnConfirm}
-        />
-      )}
-      <HeadlessBtn
-        value={"⬇️"}
-        handleClick={handleDownloadPDF}
-        StyledBtn={BtnConfirm}
-      />
+      {isEditMode &&
+        <BtnContainer>
+          {memberInfoChanged &&
+            <HeadlessBtn
+              value={"Confirm"}
+              handleClick={handleConfirm}
+              StyledBtn={BtnFloat}
+            />
+          }
+          <HeadlessIconBtn
+            icon={downloadIcon}
+            handleClick={handleDownloadPDF}
+            StyledBtn={BtnFloat}
+          />
+        </BtnContainer>
+      }
     </AboutContainer>
   );
 }
@@ -132,3 +137,16 @@ const Viewer = styled.div`
   flex-direction: column;
   }
 `;
+
+const BtnContainer = styled.div`
+  position: absolute;
+  right: calc(6vw);
+  bottom: calc(8vh);
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5vw;
+
+  padding: 4px 0px;
+`
