@@ -68,7 +68,6 @@ const CareerInfo: React.FC<CareerInfoProps> = ({ data }) => {
             StyledBtn={BtnModalSub}
           />
         </BtnContainer>
-
       }
     </CareerInfoComp>
   );

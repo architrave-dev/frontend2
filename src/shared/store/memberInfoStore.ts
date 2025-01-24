@@ -15,7 +15,7 @@ export const useMemberInfoStore = create<MemberInfoState>((set) => ({
   memberInfo: null,
   hasChanged: false,
   imageChanged: false,
-  setMemberInfo: (memberInfo) => set({ memberInfo }),
+  setMemberInfo: (memberInfo) => set({ memberInfo, hasChanged: false, imageChanged: false }),
   updatMemberInfo: (updates) =>
     set(({ memberInfo }) => ({
       memberInfo: memberInfo ?
