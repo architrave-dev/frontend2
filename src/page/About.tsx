@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import MemberInfo from '../component/about/MemberInfo';
 import CareerList from '../component/about/CareerList';
@@ -15,7 +15,7 @@ import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
 import { useMemberInfoStore } from '../shared/store/memberInfoStore';
-import { pdf } from '@react-pdf/renderer';
+import { pdf, PDFViewer } from '@react-pdf/renderer';
 import DocumentCV from '../component/about/DocumentCV';
 import { useCareer } from '../shared/hooks/useApi/useCareer';
 
@@ -84,6 +84,13 @@ const About: React.FC = () => {
   return (
     <AboutContainer>
       <Loading isLoading={isLoading} />
+      {/* {memberInfo &&
+        <Viewer>
+          <PDFViewer style={{ height: '100vh' }}>
+            <DocumentCV memberInfo={memberInfo} careerList={careerList} />
+          </PDFViewer>
+        </Viewer>
+      } */}
       <MemberInfo />
       <CareerList />
       {isEditMode && memberInfoChanged && (
@@ -115,5 +122,13 @@ const AboutContainer = styled.div`
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
+  }
+`;
+
+const Viewer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   }
 `;

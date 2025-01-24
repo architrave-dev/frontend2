@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Document, Page, Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image, Font, PDFDownloadLink } from '@react-pdf/renderer';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { CareerType } from '../../shared/enum/EnumRepository';
 import { CareerData, MemberInfoData } from '../../shared/dto/EntityRepository';
@@ -27,6 +26,7 @@ interface DocumentCVProps {
 }
 
 const DocumentCV: React.FC<DocumentCVProps> = ({ memberInfo, careerList }) => {
+
   const getCareerTitle = (type: CareerType): string => {
     const titles: Record<CareerType, string> = {
       [CareerType.EDU]: 'Education',
@@ -49,7 +49,7 @@ const DocumentCV: React.FC<DocumentCVProps> = ({ memberInfo, careerList }) => {
         <View style={PDFStyles.Section.root}>
           <View style={PDFStyles.Section.profileAndInfo}>
             <Image
-              source={convertS3UrlToCloudFrontUrl(memberInfo.uploadFile.originUrl)}
+              source={convertS3UrlToCloudFrontUrl(memberInfo.uploadFile?.originUrl)}
               style={PDFStyles.Image.profile}
               cache={true}
             />
@@ -83,7 +83,6 @@ const DocumentCV: React.FC<DocumentCVProps> = ({ memberInfo, careerList }) => {
               {Object.values(CareerType).map((type) => {
                 const careers = careerList.filter(career => career.careerType === type);
                 if (careers.length === 0) return null;
-
                 return (
                   <View key={type} style={PDFStyles.Section.careerSection}>
                     <Text style={PDFStyles.Text.careerTitle}>
@@ -100,6 +99,12 @@ const DocumentCV: React.FC<DocumentCVProps> = ({ memberInfo, careerList }) => {
               })}
             </View>
           )}
+        </View>
+        <View style={PDFStyles.Section.informationConfirm}>
+          <Text style={PDFStyles.Text.informationConfirm} render={() => "I confirm that all the information provided above is accurate to the best of my knowledge."} />
+        </View>
+        <View style={PDFStyles.Section.pageNumber}>
+          <Text style={PDFStyles.Text.pageNumber} render={() => '- 1 -'} />
         </View>
       </Page>
     </Document>
@@ -127,6 +132,15 @@ const PDFTypography = {
   CareerBody: {
     fontSize: 9,
     fontFamily: 'Pretendard',
+  },
+  PageNumber: {
+    fontSize: 7,
+    fontFamily: 'Pretendard',
+  },
+  InformationConfirm: {
+    fontSize: 7,
+    fontFamily: 'Pretendard',
+    color: 'lightgray',
   }
 };
 
@@ -166,20 +180,35 @@ const PDFStyles = {
       marginTop: 24,
     },
     careerSection: {
-      marginBottom: 22,
+      marginBottom: 20,
     },
     careerItem: {
       flexDirection: 'row',
       marginBottom: 4,
     },
+    informationConfirm: {
+      position: 'absolute',
+      bottom: 50,
+      right: 30,
+      textAlign: 'right',
+    },
+    pageNumber: {
+      position: 'absolute',
+      bottom: 30,
+      left: 0,
+      right: 1,
+      textAlign: 'center',
+    },
   }),
 
   Image: StyleSheet.create({
     profile: {
-      width: '75px',
-      height: '100px',
+      width: 75,
+      height: 100,
       objectFit: 'cover',
-      border: '0.5px solid #000000',
+      borderWidth: 0.5,
+      borderColor: '#000',
+      borderStyle: 'solid',
     }
   }),
 
@@ -201,7 +230,11 @@ const PDFStyles = {
     },
     careerTitle: {
       ...PDFTypography.CareerTitle,
+      width: 80,
       marginBottom: 7,
+      borderBottomWidth: 0.5,
+      borderBottomColor: '#000',
+      borderBottomStyle: 'solid',
     },
     careerYear: {
       ...PDFTypography.CareerBody,
@@ -210,6 +243,12 @@ const PDFStyles = {
     careerContent: {
       ...PDFTypography.CareerBody,
       flex: 1,
+    },
+    pageNumber: {
+      ...PDFTypography.PageNumber,
+    },
+    informationConfirm: {
+      ...PDFTypography.InformationConfirm,
     },
   }),
 };
