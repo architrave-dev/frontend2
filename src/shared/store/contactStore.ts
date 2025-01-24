@@ -13,7 +13,7 @@ interface ContactState {
 export const useContactStore = create<ContactState>((set) => ({
   contact: null,
   hasChanged: false,
-  setContact: (contact) => set({ contact }),
+  setContact: (contact) => set({ contact, hasChanged: false }),
   updateContact: (updates) =>
     set(({ contact }) => ({
       contact: contact ?

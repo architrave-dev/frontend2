@@ -14,7 +14,7 @@ export const useBillboardStore = create<BillboardState>((set) => ({
   billboard: null,
   hasChanged: false,
   imageChanged: false,
-  setBillboard: (value) => set({ billboard: { ...value } }),
+  setBillboard: (billboard) => set({ billboard, hasChanged: false, imageChanged: false }),
   updateBillboard: (updates) =>
     set(({ billboard }) => ({
       billboard: billboard ?
