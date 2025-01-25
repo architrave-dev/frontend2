@@ -6,12 +6,10 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 import { useEditMode } from '../shared/hooks/useEditMode';
 import { useMemberInfo } from '../shared/hooks/useApi/useMemberInfo';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
-import { BtnFloat, BtnModalSub } from '../shared/component/headless/button/BtnBody';
+import { BtnFloat } from '../shared/component/headless/button/BtnBody';
 import { UpdateMemberInfoReq } from '../shared/dto/ReqDtoRepository';
 import { useAui } from '../shared/hooks/useAui';
 import { ServiceType } from '../shared/enum/EnumRepository';
-import { ErrorCode } from '../shared/api/errorCode';
-import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
 import { useMemberInfoStore } from '../shared/store/memberInfoStore';
@@ -20,6 +18,7 @@ import DocumentCV from '../component/about/DocumentCV';
 import { useCareer } from '../shared/hooks/useApi/useCareer';
 import downloadIcon from '../asset/icon/download.png';
 import HeadlessIconBtn from '../shared/component/headless/button/HeadlessIconBtn';
+import { useImage } from '../shared/hooks/useApi/useImage';
 
 const About: React.FC = () => {
   useInitPage();
@@ -29,41 +28,26 @@ const About: React.FC = () => {
   const { careerList } = useCareer();
   const { hasChanged: memberInfoChanged, imageChanged } = useMemberInfoStore();
   const { isLoading } = useLoadingStore();
-
-  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateMemberInfoReq, aui: string): Promise<UpdateMemberInfoReq> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, []);
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  }
+  const { uploadImage } = useImage();
 
   const handleConfirm = async () => {
+    if (!memberInfo || !aui) return;
     try {
-      if (memberInfoChanged) {
-        if (!memberInfo) return;
+      const baseRequest: UpdateMemberInfoReq = {
+        ...memberInfo,
+        updateUploadFileReq: {
+          ...memberInfo.uploadFile,
+          uploadFileId: memberInfo.uploadFile.id
+        }
+      };
 
-        let updateMemberInfoReq: UpdateMemberInfoReq = {
-          ...memberInfo,
-          updateUploadFileReq: {
-            ...memberInfo.uploadFile,
-            uploadFileId: memberInfo.uploadFile.id
-          }
-        }
-        if (imageChanged) {
-          updateMemberInfoReq = await uploadFileWithLocalUrl(ServiceType.MEMBER_INFO, updateMemberInfoReq, aui);
-        }
-        await updateMemberInfo(aui, updateMemberInfoReq);
-      }
-    } catch (err) {
-    } finally {
+      const finalRequest = imageChanged
+        ? await uploadImage(aui, ServiceType.MEMBER_INFO, baseRequest)
+        : baseRequest;
+
+      await updateMemberInfo(aui, finalRequest as UpdateMemberInfoReq);
       setEditMode(false);
+    } catch (err) {
     }
   };
 

@@ -13,9 +13,9 @@ import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { UpdateBillboardReq } from '../../shared/dto/ReqDtoRepository';
-import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { useBillboardStore } from '../../shared/store/billboardStore';
+import { useImage } from '../../shared/hooks/useApi/useImage';
 
 
 const Billboard: React.FC = () => {
@@ -26,6 +26,7 @@ const Billboard: React.FC = () => {
     updateImage: handleImageChange
   } = useBillboardStore();
   const { aui } = useAui();
+  const { uploadImage } = useImage();
 
   useEffect(() => {
     const getBillboardWithApi = async () => {
@@ -40,38 +41,25 @@ const Billboard: React.FC = () => {
 
   if (!billboard) { return null; }
 
-  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateBillboardReq, aui: string): Promise<UpdateBillboardReq> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, []);
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  }
-
   const handleConfirm = async () => {
-    if (!billboard) return;
+    if (!billboard || !aui) return;
 
-    let updateBillboardReq: UpdateBillboardReq = {
-      ...billboard,
-      updateUploadFileReq: {
-        ...billboard.uploadFile,
-        uploadFileId: billboard.uploadFile.id
-      }
-    }
     try {
-      if (imageChanged) {
-        updateBillboardReq = await uploadFileWithLocalUrl(ServiceType.BILLBOARD, updateBillboardReq, aui);
-      }
-      await updateBillboard(aui, updateBillboardReq);
-    } catch (err) {
-    } finally {
+      const baseRequest: UpdateBillboardReq = {
+        ...billboard,
+        updateUploadFileReq: {
+          ...billboard.uploadFile,
+          uploadFileId: billboard.uploadFile.id
+        }
+      };
+
+      const finalRequest = imageChanged
+        ? await uploadImage(aui, ServiceType.BILLBOARD, baseRequest)
+        : baseRequest;
+
+      await updateBillboard(aui, finalRequest as UpdateBillboardReq);
       setEditMode(false);
+    } catch (err) {
     }
   };
 
