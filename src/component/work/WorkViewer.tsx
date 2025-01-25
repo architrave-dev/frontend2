@@ -18,9 +18,9 @@ import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { useValidation } from '../../shared/hooks/useValidation';
 import SelectBox from '../../shared/component/SelectBox';
-import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
+import { useImage } from '../../shared/hooks/useApi/useImage';
 
 
 const WorkViewer: React.FC = () => {
@@ -30,6 +30,7 @@ const WorkViewer: React.FC = () => {
   const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { checkType } = useValidation();
+  const { uploadImage } = useImage();
 
   if (!activeWork) return null;
 
@@ -40,41 +41,24 @@ const WorkViewer: React.FC = () => {
     handleChange({ [field]: value });
   }
 
-  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkReq, aui: string): Promise<UpdateWorkReq> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]);
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  }
-
-
   const handleConfirm = async () => {
-    if (!hasChanged) {
-      return;
-    }
-    let updateWorkdReq: UpdateWorkReq = {
-      ...activeWork,
-      updateUploadFileReq: {
-        ...activeWork.uploadFile,
-        uploadFileId: activeWork.uploadFile.id
-      }
-    }
-
+    if (!activeWork || !aui) return;
     try {
-      if (imageChanged) {
-        updateWorkdReq = await uploadFileWithLocalUrl(ServiceType.WORK, updateWorkdReq, aui);
+      const baseRequest: UpdateWorkReq = {
+        ...activeWork,
+        updateUploadFileReq: {
+          ...activeWork.uploadFile,
+          uploadFileId: activeWork.uploadFile.id
+        }
       }
-      await updateWork(aui, updateWorkdReq);
-    } catch (err) {
-    } finally {
+
+      const finalRequest = imageChanged
+        ? await uploadImage(aui, ServiceType.WORK, baseRequest)
+        : baseRequest;
+
+      await updateWork(aui, finalRequest as UpdateWorkReq);
       setEditMode(false);
+    } catch (err) {
     }
   };
 
