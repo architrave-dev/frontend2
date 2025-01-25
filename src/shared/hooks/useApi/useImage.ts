@@ -31,6 +31,8 @@ export const useImage = (): UseImageResult => {
     aui: string,
     projectId?: string
   ): Promise<T> => {
+    setIsLoading(true);
+    clearErr();
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
     try {
@@ -56,10 +58,16 @@ export const useImage = (): UseImageResult => {
           thumbnailUrl
         }
       };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
+    } catch (err) {
+      setManagedErr({
+        errCode: ErrorCode.AWS,
+        // retryFunction: () => handleCareerRequest(aui, action, data)
+      });
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }
 
 
   //Billboard, Work, Detail(workId 필요), Project, MemberInfo 사용
