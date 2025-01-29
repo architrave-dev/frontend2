@@ -20,7 +20,6 @@ export interface RefreshReq {
 export interface UpdateUploadFileReq {
   uploadFileId: string;
   originUrl: string;
-  thumbnailUrl: string;
 }
 
 //-------------- Billboard
@@ -36,7 +35,6 @@ export interface UpdateBillboardReq {
 export interface CreateWorkReq {
   workType: WorkType;
   originUrl: string;
-  thumbnailUrl: string;
   title: string;
   description: string;
   size: SizeData;
@@ -77,7 +75,6 @@ export interface UpdateWorkPropertyVisibleReq {
 export interface CreateWorkDetailReq {
   workId: string;
   originUrl: string;
-  thumbnailUrl: string;
   description: string;
 }
 
@@ -107,7 +104,6 @@ export interface UpdateTextBoxReq {
 //-------------- Document
 export interface CreateDocumentReq {
   originUrl: string;
-  thumbnailUrl: string;
   description: string;
 }
 
@@ -120,7 +116,6 @@ export interface UpdateDocumentReq {
 //-------------- Project
 export interface CreateProjectReq {
   originUrl: string;
-  thumbnailUrl: string;
   title: string;
   description: string;
 }
