@@ -46,10 +46,9 @@ const Document: React.FC<DocumentProps> = ({ peId, alignment, data }) => {
             srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
             alt={data.description}
             displaySize={DisplaySize.REGULAR}
-            handleChange={(thumbnailUrl: string, originUrl: string) =>
+            handleChange={(originUrl: string) =>
               handleImageChange(
                 peId,
-                thumbnailUrl,
                 originUrl
               )}
             StyledImg={WorkImage}

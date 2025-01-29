@@ -6,7 +6,7 @@ import defaultImg from '../../../asset/project/default_1.png'
 
 interface MoleculeImgDivContainerProps {
   backgroundImg: string;
-  handleChange: (thumbnailUrl: string, originUrl: string) => void;
+  handleChange: (originUrl: string) => void;
   StyledImgDivContainer: React.ComponentType<StyledImgDivContainerProps>;
   children?: React.ReactNode;
 }

@@ -6,7 +6,7 @@ import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, BtnWorkViewerBlack, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, DisplaySize, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
@@ -159,8 +159,8 @@ const WorkViewer: React.FC = () => {
         <MoleculeImg
           srcUrl={convertS3UrlToCloudFrontUrl(activeWork.uploadFile.originUrl)}
           alt={activeWork.title}
-          displaySize={null}
-          handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(thumbnailUrl, originUrl)}
+          displaySize={DisplaySize.REGULAR}
+          handleChange={(originUrl: string) => handleImageChange(originUrl)}
           StyledImg={WorkImage}
         />
         {isEditMode &&

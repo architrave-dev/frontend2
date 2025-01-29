@@ -86,9 +86,11 @@ export interface WorkData {
 export interface WorkSimpleData {
   id: string;
   title: string;
+  originUrl: string;
 }
 export interface WorkDetailSimpleData {
   id: string;
+  originUrl: string;
 }
 
 export interface WorkDetailData {

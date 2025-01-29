@@ -4,7 +4,7 @@ import { useEditMode } from '../hooks/useEditMode';
 
 export interface ReplaceImageButtonProps {
   imgSrc: string;
-  setImageUrl: (thumbnailUrl: string, originUrl: string) => void;
+  setImageUrl: (originUrl: string) => void;
 }
 
 const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ imgSrc, setImageUrl }) => {
@@ -19,7 +19,7 @@ const ReplaceImageButton: React.FC<ReplaceImageButtonProps> = ({ imgSrc, setImag
       const reader = new FileReader();
       reader.onload = () => {
         const localImageUrl = reader.result as string; // FileReader의 결과는 string 타입
-        setImageUrl(localImageUrl, localImageUrl); // 로컬 URL을 thumbnailUrl, originUrl로 전달
+        setImageUrl(localImageUrl); // 로컬 URL을 originUrl로 전달 
       };
       reader.readAsDataURL(file); // 파일을 Data URL로 읽기
     }

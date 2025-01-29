@@ -8,8 +8,8 @@ import { DisplaySize } from '../../enum/EnumRepository';
 interface MoleculeImgProps {
   srcUrl: string;
   alt: string;
-  displaySize: DisplaySize | null;
-  handleChange: (thumbnailUrl: string, originUrl: string) => void;
+  displaySize: DisplaySize;
+  handleChange: (originUrl: string) => void;
   StyledImg: React.ComponentType<StyledImgProps>;
 }
 
@@ -26,7 +26,7 @@ const MoleculeImg: React.FC<MoleculeImgProps> = ({
       <StyledImg
         src={srcUrl === '' ? defaultImg : srcUrl}
         alt={alt}
-        $displaySize={displaySize === null ? DisplaySize.BIG : displaySize}
+        $displaySize={displaySize}
       />
       {isEditMode && <ReplaceImageButton imgSrc={srcUrl} setImageUrl={handleChange} />}
     </>

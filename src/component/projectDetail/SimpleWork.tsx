@@ -15,7 +15,7 @@ const SimpleWork: React.FC<SimpleWorkProps> = ({ data, onClickHandler }) => {
   return (
     <SimpleWorkComp key={data.id} onClick={() => onClickHandler(data.id)}>
       <ImgWrapper>
-        <WorkImage src={data.thumbnailUrl === '' ? defaultImg : convertS3UrlToCloudFrontUrl(data.thumbnailUrl)} alt={data.title} />
+        <WorkImage src={data.originUrl === '' ? defaultImg : convertS3UrlToCloudFrontUrl(data.originUrl)} alt={data.title} />
       </ImgWrapper>
       <SimpleDiv>{data.title}</SimpleDiv>
     </SimpleWorkComp>

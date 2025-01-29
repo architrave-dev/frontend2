@@ -8,7 +8,7 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { BtnWorkViewer, OriginBtnRight } from '../../shared/component/headless/button/BtnBody';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { AlertPosition, AlertType, ServiceType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, DisplaySize, ServiceType } from '../../shared/enum/EnumRepository';
 import { useAui } from '../../shared/hooks/useAui';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
 import { useWorkViewStore } from '../../shared/store/WorkViewStore';
@@ -97,8 +97,8 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
         <MoleculeImg
           srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
           alt={"Work Detail"}
-          displaySize={null}
-          handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(data.id, thumbnailUrl, originUrl)}
+          displaySize={DisplaySize.REGULAR}
+          handleChange={(originUrl: string) => handleImageChange(data.id, originUrl)}
           StyledImg={WorkImage}
         />
       </ImgWrapper>
