@@ -8,7 +8,7 @@ interface ProjectState {
   imageChanged: boolean;
   setProject: (project: ProjectData) => void;
   updateProject: (updates: Partial<ProjectData>) => void;
-  updateImage: (thumbnailUrl: string, originUrl: string) => void;
+  updateImage: (originUrl: string) => void;
 }
 
 export const useProjectStore = create<ProjectState>((set) => ({
@@ -24,14 +24,13 @@ export const useProjectStore = create<ProjectState>((set) => ({
       hasChanged: true
     })),
 
-  updateImage: (thumbnailUrl: string, originUrl: string) =>
+  updateImage: (originUrl: string) =>
     set(({ project }) => ({
       project: project ? {
         ...project,
         uploadFile: {
           ...project.uploadFile,
           originUrl,
-          thumbnailUrl
         }
       } : null,
       hasChanged: true,

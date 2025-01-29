@@ -8,14 +8,14 @@ interface WorkViewState {
   imageChanged: boolean;
   setActiveWork: (activeWork: WorkData) => void;
   updateActiveWork: (updates: Partial<WorkData>) => void;
-  updateImage: (thumbnailUrl: string, originUrl: string) => void;
+  updateImage: (originUrl: string) => void;
   afterDeleteActiveWork: () => void;
 
   activeWorkDetailList: WorkDetailData[];
   setOnlyActiveWorkDetailList: (activeWorkDetailList: WorkDetailData[]) => void;
   setActiveWorkDetailList: (activeWorkDetailList: WorkDetailData[]) => void;
   updateActiveWorkDetailList: (id: string, updates: Partial<WorkDetailData>) => void;
-  updateImageActiveWorkDetailList: (id: string, thumbnailUrl: string, originUrl: string) => void;
+  updateImageActiveWorkDetailList: (id: string, originUrl: string) => void;
   afterDeleteActiveWorkDetail: (id: string) => void;
 }
 
@@ -32,14 +32,13 @@ export const useWorkViewStore = create<WorkViewState>((set) => ({
       hasChanged: true
     })),
 
-  updateImage: (thumbnailUrl: string, originUrl: string) =>
+  updateImage: (originUrl: string) =>
     set(({ activeWork }) => ({
       activeWork: activeWork ? {
         ...activeWork,
         uploadFile: {
           ...activeWork.uploadFile,
           originUrl,
-          thumbnailUrl
         }
       } : null,
       hasChanged: true,
@@ -61,7 +60,7 @@ export const useWorkViewStore = create<WorkViewState>((set) => ({
           : awd
       ),
     })),
-  updateImageActiveWorkDetailList: (id, thumbnailUrl, originUrl) =>
+  updateImageActiveWorkDetailList: (id, originUrl) =>
     set(({ activeWorkDetailList }) => ({
       activeWorkDetailList: activeWorkDetailList.map((awd) =>
         awd.id === id ? {
@@ -69,7 +68,6 @@ export const useWorkViewStore = create<WorkViewState>((set) => ({
           uploadFile: {
             ...awd.uploadFile,
             originUrl,
-            thumbnailUrl
           },
           hasChanged: true, imageChanged: true
         } : awd

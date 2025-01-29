@@ -6,7 +6,6 @@ import { CareerType, DisplayAlignment, DividerType, ProjectElementType, TextAlig
 export const projectBuilder = (newTitle: string): CreateProjectReq => {
   return {
     originUrl: '',
-    thumbnailUrl: '',
     title: newTitle,
     description: ''
   };
@@ -60,7 +59,6 @@ export const peDetailBuilder = (projectId: string, workId: string): CreateProjec
     createWorkDetailReq: {
       workId: workId,
       originUrl: '',
-      thumbnailUrl: '',
       description: "",
     },
     displayAlignment: DisplayAlignment.CENTER,
@@ -100,7 +98,6 @@ export const workBuilder = (): CreateWorkReq => {
   return {
     workType: WorkType.NONE,
     originUrl: '',
-    thumbnailUrl: '',
     title: "New Work",
     description: "This is New Work",
     size: {
@@ -119,7 +116,6 @@ export const detailBuilder = (parentId: string): CreateWorkDetailReq => {
   return {
     workId: parentId,
     originUrl: "",
-    thumbnailUrl: "",
     description: "",
   };
 }
@@ -144,7 +140,6 @@ export const textBoxBuilder = (): CreateTextBoxReq => {
 export const documentBuilder = (): CreateDocumentReq => {
   return {
     originUrl: '',
-    thumbnailUrl: '',
     description: "",
   };
 }
