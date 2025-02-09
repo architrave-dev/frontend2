@@ -15,14 +15,32 @@ interface UseImageResult {
   uploadPEImage: (aui: string, serviceType: ServiceType, data: UpdatePEType, projectId?: string) => Promise<UpdatePEType>;
 }
 
+const MIN_SIZE = 1024 * 50;
+const MAX_SIZE = 1024 * 1024 * 10;
+
 
 export const useImage = (): UseImageResult => {
   const { setIsLoading } = useLoadingStore();
   const { setManagedErr, clearErr } = useGlobalErrStore();
 
-
-  //screen width 확인해서 
-  //어떤 크기의 이미지가 필요한지 확인
+  //이미지 크기 확인
+  const sizeCheck = (file: File): boolean => {
+    if (file.size < MIN_SIZE) {
+      console.log("file.size 가 너무 작아. 최소 50KB 이상!!")
+      setManagedErr({
+        errCode: ErrorCode.SFE,
+      });
+      return false;
+    }
+    if (file.size > MAX_SIZE) {
+      console.log("file.size 가 너무 크다. 최대 10MB 이하!!")
+      setManagedErr({
+        errCode: ErrorCode.BFE,
+      });
+      return false;
+    }
+    return true;
+  }
 
   //ProjectElement (Work, Detail, Document) 사용
   const uploadFileWithLocalUrlPE = async <T extends UpdatePEType>(
@@ -35,17 +53,20 @@ export const useImage = (): UseImageResult => {
     clearErr();
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
+    if (!sizeCheck(file)) {
+      return prevData;
+    }
     try {
-      let originUrl, thumbnailUrl: string;
+      let originUrl: string;
       switch (serviceType) {
         case ServiceType.WORK:
-          ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]));
+          ({ originUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]));
           break;
         case ServiceType.DETAIL:
-          ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.workId!, prevData.id]));
+          ({ originUrl } = await uploadToS3(file, aui, serviceType, [prevData.workId!, prevData.id]));
           break;
         case ServiceType.DOCUMENT:
-          ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [projectId!, prevData.id]));
+          ({ originUrl } = await uploadToS3(file, aui, serviceType, [projectId!, prevData.id]));
           break;
         default:
           throw new Error('Unsupported service type');
@@ -54,14 +75,12 @@ export const useImage = (): UseImageResult => {
         ...prevData,
         updateUploadFileReq: {
           ...prevData.updateUploadFileReq,
-          originUrl,
-          thumbnailUrl
+          originUrl
         }
       };
     } catch (err) {
       setManagedErr({
         errCode: ErrorCode.AWS,
-        // retryFunction: () => handleCareerRequest(aui, action, data)
       });
       throw err;
     } finally {
@@ -80,6 +99,9 @@ export const useImage = (): UseImageResult => {
     clearErr();
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
+    if (!sizeCheck(file)) {
+      return prevData;
+    }
     try {
       let extraData: string[] = [];
       switch (serviceType) {
@@ -102,14 +124,13 @@ export const useImage = (): UseImageResult => {
           throw new Error('Unsupported service type');
       }
 
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, extraData);
+      const { originUrl } = await uploadToS3(file, aui, serviceType, extraData);
 
       return {
         ...prevData,
         updateUploadFileReq: {
           ...prevData.updateUploadFileReq,
-          originUrl,
-          thumbnailUrl
+          originUrl
         }
       };
     } catch (err) {

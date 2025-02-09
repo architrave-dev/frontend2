@@ -1,13 +1,8 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { resizeImage } from './resizeImage';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { ServiceType } from '../enum/EnumRepository';
-
-const MIN_SIZE = 1024 * 50;
-const TARGET_SIZE = 50; //50KB
 
 interface AwsS3UploadResult {
   originUrl: string;
-  thumbnailUrl: string;
 }
 
 const s3Client = new S3Client({
@@ -18,80 +13,30 @@ const s3Client = new S3Client({
   },
 });
 
-export async function uploadToS3(file: File, aui: string, serviceType: ServiceType, identifier: string[],): Promise<AwsS3UploadResult> {
-  if (file.size < MIN_SIZE) {
-    console.log("file.size 가 너무 작아. 최소 50KB 이상!!")
-  }
+export async function uploadToS3(file: File, aui: string, serviceType: ServiceType, identifier: string[]): Promise<AwsS3UploadResult> {
   const prefix = makePrefix(serviceType, identifier);
-
   const bucketName = process.env.REACT_APP_S3_BUCKET_NAME!;
-  const originalFileKey = `uploads/${aui}/${prefix}/origin-${file.name}`;
-  const thumbnailFileKey = `uploads/${aui}/${prefix}/thumbnails-${file.name}`;
-  const originParams = {
-    Bucket: bucketName,
-    Key: originalFileKey,
-    Body: file,
-    ContentType: file.type,
-  };
 
-  const thumbnailBlob = await resizeImage(file, TARGET_SIZE);
-
-  const thumbnailParams = {
-    Bucket: bucketName,
-    Key: thumbnailFileKey,
-    Body: thumbnailBlob,
-    ContentType: file.type,
-  };
+  // Create base file key without size suffix
+  const baseFileKey = `${file.name}`;
 
   try {
-    await s3Client.send(new PutObjectCommand(originParams));
-    await s3Client.send(new PutObjectCommand(thumbnailParams));
-
-    // MVP-1에서 사용
-    // S3의 Image url에 직접적으로 접근하는 방법
+    // Upload original file
+    const originalFileKey = `uploads/${aui}/${prefix}/${baseFileKey}`;
+    await s3Client.send(new PutObjectCommand({
+      Bucket: bucketName,
+      Key: originalFileKey,
+      Body: file,
+      ContentType: file.type,
+    }));
     const originUrl = `https://${bucketName}.s3.amazonaws.com/${originalFileKey}`;
-    const thumbnailUrl = `https://${bucketName}.s3.amazonaws.com/${thumbnailFileKey}`;
 
-    return { originUrl, thumbnailUrl };
+    return { originUrl };
   } catch (error) {
     console.error("Error uploading file to S3:", error);
     throw error;
   }
 }
-
-async function deleteFromS3(fileKey: string): Promise<void> {
-  const deleteParams = {
-    Bucket: process.env.REACT_APP_S3_BUCKET_NAME!,
-    Key: fileKey,
-  };
-
-  try {
-    await s3Client.send(new DeleteObjectCommand(deleteParams));
-    console.log(`Successfully deleted file from S3: ${fileKey}`);
-  } catch (error) {
-    console.error(`Error deleting file from S3 (${fileKey}):`, error);
-    throw error;
-  }
-}
-
-export async function deleteFileAndThumbnail(prevImgUrl: string, aui: string): Promise<void> {
-  //여기서 순수 image filename 추출한 후
-  const fileName = extractFileName(prevImgUrl);
-  try {
-    const originalFileKey = `uploads/${aui}/${fileName}`;
-    const thumbnailFileKey = `uploads/${aui}/thumbnails/${fileName}`;
-
-    await deleteFromS3(originalFileKey);
-    await deleteFromS3(thumbnailFileKey);
-  } catch (error) {
-    throw error;
-  }
-}
-
-const extractFileName = (url: string): string | null => {
-  const match = url.match(/([^/]+\.(?:jpe?g|png|gif|webp|svg))$/i);
-  return match ? match[1] : null;
-};
 
 const getMimeTypeFromBase64 = (base64: string): string => {
   // Base64의 헤더 부분에서 MIME 타입 추출
@@ -105,23 +50,23 @@ const getMimeTypeFromBase64 = (base64: string): string => {
 const makePrefix = (serviceType: ServiceType, identifier: string[]): string => {
   switch (serviceType) {
     case ServiceType.WORK:
-      return `work/${identifier[0]}`;
+      return `work/${identifier[0]}/${Date.now()}`;
     case ServiceType.PROJECT:
-      return `project/${identifier[0]}`;
+      return `project/${identifier[0]}/${Date.now()}`;
     case ServiceType.DETAIL:
-      return `work/${identifier[0]}/detail/${identifier[1]}`;
+      return `work/${identifier[0]}/detail/${identifier[1]}/${Date.now()}`;
     case ServiceType.DOCUMENT:
-      return `project/${identifier[0]}/document/${identifier[1]}`;
+      return `project/${identifier[0]}/document/${identifier[1]}/${Date.now()}`;
     case ServiceType.MEMBER_INFO:
-      return `memberInfo`;
+      return `memberInfo/${Date.now()}`;
     case ServiceType.BILLBOARD:
     default:
-      return `billboard`;
+      return `billboard/${Date.now()}`;
   }
 }
 const makeFilename = (mimeType: string): string => {
   const fileExtension = mimeType.split("/")[1];
-  return `${Date.now()}.${fileExtension}`;
+  return `origin.${fileExtension}`;
 }
 
 export const base64ToFileWithMime = (base64: string): File => {

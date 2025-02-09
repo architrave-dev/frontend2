@@ -94,6 +94,36 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleSFE = async () => {
+    console.log("handleSFE: File size is too small!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "File size is too small.",
+      callBack: clearErr
+    });
+  }
+
+  const handleBFE = async () => {
+    console.log("handleBFE: File size is too big!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "File size is too big.",
+      callBack: clearErr
+    });
+  }
+
+  const handleNCE = async () => {
+    console.log("handleNCE: Network connection error!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Network connection error.",
+      callBack: clearErr
+    });
+  }
+
   const handleGlobalErr = async () => {
     if (managedErr === null) {
       return;
@@ -120,6 +150,15 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.RVN:
         await handleRVN();
+        break;
+      case ErrorCode.SFE:
+        await handleSFE();
+        break;
+      case ErrorCode.BFE:
+        await handleBFE();
+        break;
+      case ErrorCode.NCE:
+        await handleNCE();
         break;
       case ErrorCode.WEF:
       default:
