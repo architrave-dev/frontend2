@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { StyledImgProps } from '../dto/StyleCompRepository';
 
 interface ImageMetadata {
   MOBILE: boolean;
@@ -55,9 +56,11 @@ const getFallbackDeviceType = (metadata: ImageMetadata, initialDeviceType: strin
 
 interface OptimizedImgProps {
   imageUrl: string;
+  alt: string;
+  StyledImg: React.ComponentType<StyledImgProps>;
 }
 
-const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl }) => {
+const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg }) => {
   const [browserType, setBrowserType] = useState(getDeviceType(window.innerWidth));
   const [metadata, setMetadata] = useState<ImageMetadata | null>(null);
   const [adjustedUrl, setAdjustedUrl] = useState(imageUrl);
@@ -112,15 +115,8 @@ const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl }) => {
   }, [browserType, imageUrl, metadata]);
 
   return (
-    <OptImg src={adjustedUrl} alt="Optimized Image" />
+    <StyledImg src={adjustedUrl} alt={alt} />
   );
 };
 
 export default OptimizedImg;
-
-
-const OptImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
