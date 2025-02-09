@@ -1,13 +1,10 @@
 import { useBillboardStore } from '../../store/billboardStore';
 import { getBillboard, updateBillboard } from '../../api/billboardApi';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
 import { BillboardData } from '../../dto/EntityRepository';
 import { BillboardResponse } from '../../dto/ResDtoRepository';
 import { UpdateBillboardReq } from '../../dto/ReqDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
-
+import { useApiWrapper } from './apiWrapper';
 
 interface UseBillboardResult {
   billboard: BillboardData | null;
@@ -16,10 +13,9 @@ interface UseBillboardResult {
 }
 
 export const useBillboard = (): UseBillboardResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { billboard, setBillboard } = useBillboardStore();
   const { setUpdatedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
   const handleGetBillboardSuccess = (response: BillboardResponse) => {
     const billboardData = response.data;
@@ -37,29 +33,17 @@ export const useBillboard = (): UseBillboardResult => {
     action: 'get' | 'update',
     data?: UpdateBillboardReq
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'update':
-          await handleUpdateBillboardSuccess(await updateBillboard(aui, data as UpdateBillboardReq));
-          break;
+          return handleUpdateBillboardSuccess(await updateBillboard(aui, data as UpdateBillboardReq));
         case 'get':
         default:
-          handleGetBillboardSuccess(await getBillboard(aui));
-          break;
+          return handleGetBillboardSuccess(await getBillboard(aui));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleBillboardRequest(aui, action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, data]);
   };
 
   const getBillboardHandler = (aui: string) => handleBillboardRequest(aui, 'get');

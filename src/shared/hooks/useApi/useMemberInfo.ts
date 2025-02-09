@@ -1,12 +1,10 @@
 import { getMemberInfo, updateMemberInfo } from '../../api/memberInfoApi';
 import { useMemberInfoStore } from '../../store/memberInfoStore';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
 import { MemberInfoData } from '../../dto/EntityRepository';
 import { MemberInfoResponse } from '../../dto/ResDtoRepository';
 import { UpdateMemberInfoReq } from '../../dto/ReqDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseMemberInfoResult {
@@ -16,10 +14,9 @@ interface UseMemberInfoResult {
 }
 
 export const useMemberInfo = (): UseMemberInfoResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { memberInfo, setMemberInfo } = useMemberInfoStore();
   const { setUpdatedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
 
   const handleMemberInfoSuccess = (response: MemberInfoResponse) => {
@@ -38,28 +35,18 @@ export const useMemberInfo = (): UseMemberInfoResult => {
     action: 'get' | 'update',
     data?: UpdateMemberInfoReq
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
-      if (!data) {
-        const response = await getMemberInfo(aui);
-        handleMemberInfoSuccess(response);
-      } else {
-        const response = await updateMemberInfo(aui, data as UpdateMemberInfoReq);
-        handleUpdateMemberInfoSuccess(response);
+    const apiFunction = async () => {
+      switch (action) {
+        case 'update':
+          return handleUpdateMemberInfoSuccess(await updateMemberInfo(aui, data as UpdateMemberInfoReq));
+        case 'get':
+          return handleMemberInfoSuccess(await getMemberInfo(aui));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleMemberInfoRequest(aui, action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, data]);
   };
+
 
   const getMemberInfoHandler = (aui: string) => handleMemberInfoRequest(aui, 'get');
   const updateMemberInfoHandler = (aui: string, data: UpdateMemberInfoReq) => handleMemberInfoRequest(aui, 'update', data);

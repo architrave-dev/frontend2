@@ -1,12 +1,10 @@
 import { useProjectStore } from '../../store/projectStore';
 import { getProjectDetail, updateProject } from '../../api/projectApi';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectData } from '../../dto/EntityRepository';
 import { UpdateProjectReq } from '../../dto/ReqDtoRepository';
 import { ProjectResponse } from '../../dto/ResDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseProjectResult {
@@ -16,10 +14,9 @@ interface UseProjectResult {
 }
 
 export const useProjectDetail = (): UseProjectResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { project, setProject } = useProjectStore();
   const { setUpdatedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
   const handleProjectSuccess = (response: ProjectResponse) => {
     const projectData = response.data;
@@ -35,34 +32,23 @@ export const useProjectDetail = (): UseProjectResult => {
   const handleProjectRequest = async (
     aui: string,
     action: 'get' | 'update',
-    projectId: string | null,
-    data?: UpdateProjectReq
+    data?: UpdateProjectReq | string
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
-      if (data) {
-        const response = await updateProject(aui, data);
-        handleUpdateProjectSuccess(response);
-      } else if (projectId) {
-        const response = await getProjectDetail(aui, projectId);
-        handleProjectSuccess(response);
+    const apiFunction = async () => {
+      switch (action) {
+        case 'update':
+          return handleUpdateProjectSuccess(await updateProject(aui, data as UpdateProjectReq));
+        case 'get':
+        default:
+          return handleProjectSuccess(await getProjectDetail(aui, data as string));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleProjectRequest(aui, action, projectId, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, data]);
   };
 
   const getProjectHandler = (aui: string, projectId: string) => handleProjectRequest(aui, 'get', projectId);
-  const updateProjectHandler = (aui: string, data: UpdateProjectReq) => handleProjectRequest(aui, 'update', null, data);
+  const updateProjectHandler = (aui: string, data: UpdateProjectReq) => handleProjectRequest(aui, 'update', data);
 
 
   return {

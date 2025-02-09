@@ -1,12 +1,10 @@
 import { createCareer, deleteCareer, getCareerList, updateCareer } from '../../api/careerApi';
 import { useCareerListStore } from '../../store/careerStore';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
 import { CareerData } from '../../dto/EntityRepository';
 import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../../dto/ReqDtoRepository';
 import { CareerListResponse, CareerResponse } from '../../dto/ResDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseCareerResult {
@@ -18,10 +16,9 @@ interface UseCareerResult {
 }
 
 export const useCareer = (): UseCareerResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { careers, setCareers, setOnlyCareers } = useCareerListStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
   const handleGetCareerListSuccess = (response: CareerListResponse) => {
     const careerListData = response.data;
@@ -47,35 +44,21 @@ export const useCareer = (): UseCareerResult => {
     action: 'get' | 'create' | 'update' | 'delete',
     data?: CreateCareerReq | UpdateCareerReq | RemoveCareerReq
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'create':
-          handleCreateCareerSuccess(await createCareer(aui, data as CreateCareerReq));
-          break;
+          return handleCreateCareerSuccess(await createCareer(aui, data as CreateCareerReq));
         case 'update':
-          handleUpdateCareerSuccess(await updateCareer(aui, data as UpdateCareerReq));
-          break;
+          return handleUpdateCareerSuccess(await updateCareer(aui, data as UpdateCareerReq));
         case 'delete':
-          handleDeleteCareerSuccess(await deleteCareer(aui, data as RemoveCareerReq));
-          break;
+          return handleDeleteCareerSuccess(await deleteCareer(aui, data as RemoveCareerReq));
         case 'get':
         default:
-          handleGetCareerListSuccess(await getCareerList(aui));
-          break;
+          return handleGetCareerListSuccess(await getCareerList(aui));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleCareerRequest(aui, action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, data]);
   };
 
   const getCareerHandler = (aui: string) => handleCareerRequest(aui, 'get');

@@ -1,14 +1,12 @@
 import { getWorkList, updateWork, createWork, deleteWork, getWork, getSimpleWorkList } from '../../api/workListApi';
 import { useWorkListStore } from '../../store/WorkListStore';
 import { useWorkViewStore } from '../../store/WorkViewStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
-import { useGlobalErrStore } from '../../store/errorStore';
 import { WorkData } from '../../dto/EntityRepository';
 import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../../dto/ReqDtoRepository';
 import { DeleteResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../../dto/ResDtoRepository';
 import { useWorkStationStore } from '../../store/workStationStore';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseWorkListResult {
@@ -22,12 +20,11 @@ interface UseWorkListResult {
 }
 
 export const useWorkList = (): UseWorkListResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workList, setWorkList } = useWorkListStore();
   const { setSimpleWorkList } = useWorkStationStore();
   const { setActiveWork, setActiveWorkDetailList, afterDeleteActiveWork } = useWorkViewStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
   const handleGetWorkSuccess = (response: WorkWithDetailResponse) => {
     const data = response.data;
@@ -71,9 +68,7 @@ export const useWorkList = (): UseWorkListResult => {
     action: 'get' | 'get list' | 'get simple list' | 'update' | 'create' | 'delete',
     data?: UpdateWorkReq | CreateWorkReq | DeleteWorkReq
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'delete':
           handleDeleteWorkSuccess(await deleteWork(aui, data as DeleteWorkReq));
@@ -96,18 +91,11 @@ export const useWorkList = (): UseWorkListResult => {
           handleGetWorkSuccess(await getWork(aui));
           break;
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleWorkRequest(aui, action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, data]);
   };
+
 
   const getWorkHandler = (workId: string) => handleWorkRequest(workId, 'get');
   const getWorkListHandler = (aui: string) => handleWorkRequest(aui, 'get list');

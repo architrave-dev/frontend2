@@ -1,12 +1,10 @@
-import { convertStringToErrorCode } from '../../api/errorCode';
-import { useGlobalErrStore } from '../../store/errorStore';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../../dto/ReqDtoRepository';
 import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailSimpleListResponse } from '../../dto/ResDtoRepository';
 import { createWorkDetail, deleteWorkDetail, getSimpleWorkDetailList, getWorkDetail, getWorkDetailList, updateWorkDetail } from '../../api/workDetailApi';
 import { useWorkViewStore } from '../../store/WorkViewStore';
 import { useWorkStationStore } from '../../store/workStationStore';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseWorkListResult {
@@ -19,11 +17,11 @@ interface UseWorkListResult {
 }
 
 export const useWorkDetail = (): UseWorkListResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { activeWorkDetailList, setActiveWorkDetailList, setOnlyActiveWorkDetailList } = useWorkViewStore();
   const { setSimpleWorkDetailList } = useWorkStationStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
+
 
   const handleGetWorkDetailSuccess = (response: WorkDetailResponse) => {
     const data = response.data;
@@ -63,9 +61,7 @@ export const useWorkDetail = (): UseWorkListResult => {
     action: 'get' | 'get list' | 'get simple list' | 'update' | 'create' | 'delete',
     data: UpdateWorkDetailReq | CreateWorkDetailReq | DeleteWorkDetailReq | string
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'delete':
           handleDeleteWorkDetailSuccess(await deleteWorkDetail(aui, data as DeleteWorkDetailReq));
@@ -87,17 +83,9 @@ export const useWorkDetail = (): UseWorkListResult => {
           handleGetWorkDetailSuccess(await getWorkDetail(aui, data as string));
           break;
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleWorkDetailRequest(aui, action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, data]);
   };
 
   const getWorkDetailHandler = (aui: string, data: string) => handleWorkDetailRequest(aui, 'get', data);

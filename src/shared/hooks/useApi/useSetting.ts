@@ -7,7 +7,7 @@ import { SettingResponse } from '../../dto/ResDtoRepository';
 import { UpdateSettingReq } from '../../dto/ReqDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
-
+import { useApiWrapper } from './apiWrapper';
 
 interface UseSettingResult {
   setting: SettingData | null;
@@ -20,6 +20,7 @@ export const useSetting = (): UseSettingResult => {
   const { setManagedErr, clearErr } = useGlobalErrStore();
   const { setting, setSetting } = useSettingStore();
   const { setUpdatedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
   const handleGetSettingSuccess = (response: SettingResponse) => {
     const settingData = response.data;
@@ -40,15 +41,17 @@ export const useSetting = (): UseSettingResult => {
     setIsLoading(true);
     clearErr();
     try {
-      switch (action) {
-        case 'update':
-          await handleUpdateSettingSuccess(await updateSetting(aui, data as UpdateSettingReq));
-          break;
-        case 'get':
-        default:
-          handleGetSettingSuccess(await getSetting(aui));
-          break;
-      }
+      const apiFunction = async () => {
+        switch (action) {
+          case 'update':
+            return handleUpdateSettingSuccess(await updateSetting(aui, data as UpdateSettingReq));
+          case 'get':
+          default:
+            return handleGetSettingSuccess(await getSetting(aui));
+        }
+      };
+
+      await withApiHandler(apiFunction, [aui, action, data]);
     } catch (err) {
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
       const convertedErrCode = convertStringToErrorCode(errCode);

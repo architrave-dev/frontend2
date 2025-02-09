@@ -1,13 +1,10 @@
 import { useWorkPropertyVisibleStore } from '../../store/workPropertyVisibleStore';
 import { getWorkPropertyVisible, updateWorkPropertyVisible } from '../../api/workPropertyVisibleApi';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
 import { WorkPropertyVisibleData } from '../../dto/EntityRepository';
 import { WorkPropertyVisibleResponse } from '../../dto/ResDtoRepository';
 import { UpdateWorkPropertyVisibleReq } from '../../dto/ReqDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
-
+import { useApiWrapper } from './apiWrapper';
 
 interface UseWorkPropertyVisibleResult {
   workPropertyVisible: WorkPropertyVisibleData | null;
@@ -16,10 +13,9 @@ interface UseWorkPropertyVisibleResult {
 }
 
 export const useWorkPropertyVisible = (): UseWorkPropertyVisibleResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { workPropertyVisible, setWorkPropertyVisible } = useWorkPropertyVisibleStore();
   const { setUpdatedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
   const handleSuccess = (response: WorkPropertyVisibleResponse) => {
     const workPropertyVisible = response.data;
@@ -34,30 +30,21 @@ export const useWorkPropertyVisible = (): UseWorkPropertyVisibleResult => {
   const handleWorkPropertyVisibleRequest = async (
     aui: string,
     action: 'get' | 'update',
-    data?: UpdateWorkPropertyVisibleReq
+    data?: UpdateWorkPropertyVisibleReq | string
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
-      if (!data) {
-        const response = await getWorkPropertyVisible(aui);
-        handleSuccess(response);
-      } else {
-        const response = await updateWorkPropertyVisible(aui, data);
-        handleUpdateSuccess(response);
+    const apiFunction = async () => {
+      switch (action) {
+        case 'update':
+          return handleUpdateSuccess(await updateWorkPropertyVisible(aui, data as UpdateWorkPropertyVisibleReq));
+        case 'get':
+        default:
+          return handleSuccess(await getWorkPropertyVisible(aui));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleWorkPropertyVisibleRequest(aui, action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, data]);
   };
+
 
   const getWorkPropertyVisibleHandler = (aui: string) => handleWorkPropertyVisibleRequest(aui, 'get');
   const updateWorkPropertyVisibleHandler = (aui: string, data: UpdateWorkPropertyVisibleReq) => handleWorkPropertyVisibleRequest(aui, 'update', data);
