@@ -8,7 +8,6 @@ import { InputBillboard } from '../../shared/component/headless/input/InputBody'
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import { ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
-import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
@@ -16,6 +15,7 @@ import { UpdateBillboardReq } from '../../shared/dto/ReqDtoRepository';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { useBillboardStore } from '../../shared/store/billboardStore';
 import { useImage } from '../../shared/hooks/useApi/useImage';
+import OptimizedMoleculeImgDivContainer from '../../shared/component/molecule/OptimizedMoleculeImgDivContainer';
 
 
 const Billboard: React.FC = () => {
@@ -64,7 +64,7 @@ const Billboard: React.FC = () => {
   };
 
   return (
-    <MoleculeImgDivContainer
+    <OptimizedMoleculeImgDivContainer
       backgroundImg={convertS3UrlToCloudFrontUrl(billboard.uploadFile.originUrl)}
       handleChange={handleImageChange}
       StyledImgDivContainer={Container}
@@ -90,7 +90,7 @@ const Billboard: React.FC = () => {
           StyledBtn={BtnConfirm}
         />
       }
-    </MoleculeImgDivContainer>
+    </OptimizedMoleculeImgDivContainer>
   );
 };
 
