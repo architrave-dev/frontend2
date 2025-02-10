@@ -144,3 +144,10 @@ export enum ServiceType {
   PROJECT = 'PROJECT',
   MEMBER_INFO = 'MEMBER_INFO'
 }
+
+export const BREAKPOINTS = {
+  MOBILE: 768,    // 0 - 768px
+  TABLET: 1024,   // 769px - 1024px
+  LAPTOP: 1440,   // 1025px - 1440px
+  DESKTOP: 3840,  // 1440px - 3840px
+};

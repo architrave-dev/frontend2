@@ -256,3 +256,11 @@ export interface IndexData {
   id: string;
   tempId: string;
 }
+
+export interface ImageMetadata {
+  MOBILE: boolean;
+  TABLET: boolean;
+  LAPTOP: boolean;
+  DESKTOP: boolean;
+  origin: boolean;
+}
