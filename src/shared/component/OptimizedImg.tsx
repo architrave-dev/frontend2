@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
 import { StyledImgProps } from '../dto/StyleCompRepository';
+import { DisplaySize } from '../enum/EnumRepository';
 
 interface ImageMetadata {
   MOBILE: boolean;
@@ -57,9 +57,10 @@ interface OptimizedImgProps {
   imageUrl: string;
   alt: string;
   StyledImg: React.ComponentType<StyledImgProps>;
+  displaySize: DisplaySize;
 }
 
-const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg }) => {
+const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg, displaySize }) => {
   const [metadata, setMetadata] = useState<ImageMetadata | null>(null);
   const [browserType, setBrowserType] = useState<string | null>(null);
   const [adjustedUrl, setAdjustedUrl] = useState(imageUrl);
@@ -137,7 +138,7 @@ const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg })
   }, [browserType, imageUrl]);
 
   return (
-    <StyledImg src={adjustedUrl} alt={alt} />
+    <StyledImg src={adjustedUrl} alt={alt} $displaySize={displaySize} />
   );
 };
 

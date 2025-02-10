@@ -27,7 +27,7 @@ const MoleculeImg: React.FC<MoleculeImgProps> = ({
       {srcUrl === '' ?
         <StyledImg src={defaultImg} alt={alt} $displaySize={displaySize} />
         :
-        <OptimizedImg imageUrl={srcUrl} alt={alt} StyledImg={StyledImg} />
+        <OptimizedImg imageUrl={srcUrl} alt={alt} StyledImg={StyledImg} displaySize={displaySize} />
       }
       {isEditMode && <ReplaceImageButton imgSrc={srcUrl} setImageUrl={handleChange} />}
     </>
