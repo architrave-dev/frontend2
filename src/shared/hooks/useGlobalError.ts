@@ -66,6 +66,19 @@ export const useGlobalError = () => {
       }
     });
   }
+
+  const handleDBE = async () => {
+    console.log("handleDBE: Database error!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Database Connection Error.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
   const handleAWS = async () => {
     console.log("handleAWS: Something wrong about AWS!!");
     setStandardAlert({
@@ -141,6 +154,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.NAU:
         await handleNAU();
+        break;
+      case ErrorCode.DBE:
+        await handleDBE();
         break;
       case ErrorCode.AWS:
         await handleAWS();
