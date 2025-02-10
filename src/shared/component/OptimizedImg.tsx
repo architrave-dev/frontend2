@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { StyledImgProps } from '../dto/StyleCompRepository';
 
@@ -7,6 +7,7 @@ interface ImageMetadata {
   TABLET: boolean;
   LAPTOP: boolean;
   DESKTOP: boolean;
+  origin: boolean;
 }
 
 const BREAKPOINTS = {
@@ -24,34 +25,32 @@ const getDeviceType = (width: number): string => {
   return 'origin';
 };
 
-const getNextDeviceType = (currentType: string): string => {
-  switch (currentType) {
-    case 'MOBILE': return 'TABLET';
-    case 'TABLET': return 'LAPTOP';
-    case 'LAPTOP': return 'DESKTOP';
-    case 'DESKTOP': return 'origin';
-    default: return 'origin';
-  }
-};
+const getNextDeviceType = (currentType: string, metadata: ImageMetadata): string => {
+  const deviceOrder = ['MOBILE', 'TABLET', 'LAPTOP', 'DESKTOP', 'origin'];
+  const currentIndex = deviceOrder.indexOf(currentType);
 
-const getFallbackDeviceType = (metadata: ImageMetadata, initialDeviceType: string): string => {
-  let currentType = initialDeviceType;
-
-  while (!metadata[currentType as keyof ImageMetadata] && currentType !== 'DESKTOP') {
-    currentType = getNextDeviceType(currentType);
-  }
-
-  if (metadata[currentType as keyof ImageMetadata]) {
-    return currentType;
-  }
-
-  currentType = initialDeviceType;
-  while (!metadata[currentType as keyof ImageMetadata] && currentType !== 'MOBILE') {
-    currentType = currentType === 'DESKTOP' ? 'LAPTOP' :
-      currentType === 'LAPTOP' ? 'TABLET' : 'MOBILE';
+  for (let i = currentIndex + 1; i < deviceOrder.length; i++) {
+    const nextType = deviceOrder[i];
+    if (metadata[nextType as keyof ImageMetadata]) {
+      return nextType;
+    }
   }
 
   return currentType;
+};
+
+const getFallbackDeviceType = (metadata: ImageMetadata, width: number): string => {
+  const deviceType = getDeviceType(width);
+  if (metadata[deviceType as keyof ImageMetadata]) {
+    return deviceType;
+  } else {
+    return getNextDeviceType(deviceType, metadata);
+  }
+};
+
+const isBase64 = (url: string): boolean => {
+  const base64Pattern = /^data:image\/(jpeg|jpg|png|gif);base64,/;
+  return base64Pattern.test(url);
 };
 
 interface OptimizedImgProps {
@@ -61,21 +60,10 @@ interface OptimizedImgProps {
 }
 
 const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg }) => {
-  const [browserType, setBrowserType] = useState(getDeviceType(window.innerWidth));
   const [metadata, setMetadata] = useState<ImageMetadata | null>(null);
+  const [browserType, setBrowserType] = useState<string | null>(null);
   const [adjustedUrl, setAdjustedUrl] = useState(imageUrl);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const newDeviceType = getDeviceType(window.innerWidth);
-      if (newDeviceType !== browserType) {
-        setBrowserType(newDeviceType);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [browserType]);
+  const currentDeviceTypeRef = useRef<string | null>(null);
 
   useEffect(() => {
     const fetchMetadata = async () => {
@@ -85,34 +73,68 @@ const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg })
         if (!response.ok) {
           throw new Error('Failed to fetch metadata');
         }
-        const data = await response.json();
-        setMetadata(data);
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+
+          const booleanMetadata: ImageMetadata = {
+            MOBILE: data.MOBILE === 'true',
+            TABLET: data.TABLET === 'true',
+            LAPTOP: data.LAPTOP === 'true',
+            DESKTOP: data.DESKTOP === 'true',
+            origin: true,
+          };
+
+          setMetadata(booleanMetadata);
+        } else {
+          throw new Error('Response is not JSON');
+        }
       } catch (error) {
-        console.error('Error fetching metadata:', error);
       }
     };
 
-    if (imageUrl) {
+    if (imageUrl && !isBase64(imageUrl)) {
       fetchMetadata();
     }
   }, [imageUrl]);
 
   useEffect(() => {
     if (imageUrl && metadata) {
-      const finalDeviceType = getFallbackDeviceType(metadata, browserType);
+      const handleResize = () => {
+        if (isBase64(imageUrl)) {
+          return;
+        }
+        const newDeviceType = getFallbackDeviceType(metadata, window.innerWidth);
+        if (currentDeviceTypeRef.current !== newDeviceType) {
+          console.log("Crossed breakpoint, setting browserType to ", newDeviceType);
+          setBrowserType(newDeviceType);
+          currentDeviceTypeRef.current = newDeviceType;
+        }
 
+      };
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, [metadata, imageUrl]);
+
+  useEffect(() => {
+    if (isBase64(imageUrl)) {
+      setAdjustedUrl(imageUrl);
+      return;
+    }
+    if (imageUrl && metadata) {
       // Only adjust URL if we found a valid device type
-      if (metadata[finalDeviceType as keyof ImageMetadata]) {
+      if (metadata[browserType as keyof ImageMetadata]) {
         const newUrl = imageUrl.replace(
           /\/([^/]+)\.(jpeg|jpg|png|gif)$/,
-          `/${finalDeviceType}.$2`
+          `/${browserType}.$2`
         );
         setAdjustedUrl(newUrl);
       } else {
         setAdjustedUrl(imageUrl);
       }
     }
-  }, [browserType, imageUrl, metadata]);
+  }, [browserType, imageUrl]);
 
   return (
     <StyledImg src={adjustedUrl} alt={alt} />
