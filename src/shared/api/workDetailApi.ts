@@ -1,21 +1,11 @@
-import axios, { AxiosError } from 'axios';
-import { getConfig } from '../env/envManager';
-import { DeleteResponse, ErrorResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailSimpleListResponse, WorkWithDetailResponse } from '../dto/ResDtoRepository';
+import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailSimpleListResponse } from '../dto/ResDtoRepository';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../dto/ReqDtoRepository';
+import { baseApi, handleApiError } from './apiConfig';
 
-
-const config = getConfig();
-
-const workDetailApi = axios.create({
-  baseURL: config.apiBaseUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 export const getWorkDetail = async (aui: string, workDetailId: string): Promise<WorkDetailResponse> => {
   try {
-    const response = await workDetailApi.get<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}&workDetailId=${workDetailId}`);
+    const response = await baseApi.get<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}&workDetailId=${workDetailId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -24,7 +14,7 @@ export const getWorkDetail = async (aui: string, workDetailId: string): Promise<
 
 export const getSimpleWorkDetailList = async (aui: string, workId: string): Promise<WorkDetailSimpleListResponse> => {
   try {
-    const response = await workDetailApi.get<WorkDetailSimpleListResponse>(`/api/v1/work-detail/list/simple?aui=${aui}&workId=${workId}`);
+    const response = await baseApi.get<WorkDetailSimpleListResponse>(`/api/v1/work-detail/list/simple?aui=${aui}&workId=${workId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -33,7 +23,7 @@ export const getSimpleWorkDetailList = async (aui: string, workId: string): Prom
 
 export const getWorkDetailList = async (aui: string, workId: string): Promise<WorkDetailListResponse> => {
   try {
-    const response = await workDetailApi.get<WorkDetailListResponse>(`/api/v1/work-detail/list?aui=${aui}&workId=${workId}`);
+    const response = await baseApi.get<WorkDetailListResponse>(`/api/v1/work-detail/list?aui=${aui}&workId=${workId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -46,7 +36,7 @@ export const updateWorkDetail = async (aui: string, data: UpdateWorkDetailReq): 
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workDetailApi.put<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}`, data, {
+    const response = await baseApi.put<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -61,7 +51,7 @@ export const createWorkDetail = async (aui: string, data: CreateWorkDetailReq): 
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workDetailApi.post<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}`, data, {
+    const response = await baseApi.post<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -76,7 +66,7 @@ export const deleteWorkDetail = async (aui: string, data: DeleteWorkDetailReq): 
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workDetailApi.delete<DeleteResponse>(`/api/v1/work-detail?aui=${aui}&workDetailId=${data.workDetailId}`, {
+    const response = await baseApi.delete<DeleteResponse>(`/api/v1/work-detail?aui=${aui}&workDetailId=${data.workDetailId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -85,14 +75,4 @@ export const deleteWorkDetail = async (aui: string, data: DeleteWorkDetailReq): 
   }
 };
 
-const handleApiError = (error: unknown): Error => {
-  if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError<ErrorResponse>;
-    if (axiosError.response?.data) {
-      return new Error(axiosError.response.data.errorCode);
-    }
-  }
-  return new Error('An unexpected error occurred');
-};
 
-export default workDetailApi;

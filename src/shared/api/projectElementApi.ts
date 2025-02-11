@@ -1,21 +1,11 @@
-import axios, { AxiosError } from 'axios';
-import { getConfig } from '../env/envManager';
-import { ErrorResponse, ProjectElementListResponse, ProjectElementResponse } from '../dto/ResDtoRepository';
+import { ProjectElementListResponse, ProjectElementResponse } from '../dto/ResDtoRepository';
 import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, DeleteProjectElementReq, UpdateProjectElementReq } from '../dto/ReqDtoRepository';
+import { baseApi, handleApiError } from './apiConfig';
 
-const config = getConfig();
-
-const projectElementApi = axios.create({
-  // baseURL: API_BASE_URL,
-  baseURL: config.apiBaseUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 export const getProjectElementList = async (aui: string, projectId: string): Promise<ProjectElementListResponse> => {
   try {
-    const response = await projectElementApi.get<ProjectElementListResponse>(`/api/v1/project-element?aui=${aui}&projectId=${projectId}`);
+    const response = await baseApi.get<ProjectElementListResponse>(`/api/v1/project-element?aui=${aui}&projectId=${projectId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -28,7 +18,7 @@ export const createProjectElement = async (aui: string, data: CreateProjectEleme
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await projectElementApi.post<ProjectElementResponse>(`/api/v1/project-element?aui=${aui}`, data, {
+    const response = await baseApi.post<ProjectElementResponse>(`/api/v1/project-element?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -42,7 +32,7 @@ export const updateProjectElement = async (aui: string, data: UpdateProjectEleme
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await projectElementApi.put<ProjectElementResponse>(`/api/v1/project-element?aui=${aui}`, data, {
+    const response = await baseApi.put<ProjectElementResponse>(`/api/v1/project-element?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -56,7 +46,7 @@ export const deleteProjectElement = async (aui: string, data: DeleteProjectEleme
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await projectElementApi.delete<ProjectElementResponse>(`/api/v1/project-element?aui=${aui}&peId=${data.projectElementId}`, {
+    const response = await baseApi.delete<ProjectElementResponse>(`/api/v1/project-element?aui=${aui}&peId=${data.projectElementId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -71,7 +61,7 @@ export const createProjectElementWithWork = async (aui: string, data: CreateProj
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await projectElementApi.post<ProjectElementResponse>(`/api/v1/project-element/import?aui=${aui}`, data, {
+    const response = await baseApi.post<ProjectElementResponse>(`/api/v1/project-element/import?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -86,7 +76,7 @@ export const createProjectElementWithWorkDetail = async (aui: string, data: Crea
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await projectElementApi.post<ProjectElementResponse>(`/api/v1/project-element/import/detail?aui=${aui}`, data, {
+    const response = await baseApi.post<ProjectElementResponse>(`/api/v1/project-element/import/detail?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -101,7 +91,7 @@ export const createProjectElementWithWorkDetail = async (aui: string, data: Crea
 //     if (!authToken) {
 //       throw new Error('Authentication required');
 //     }
-//     const response = await projectElementApi.put<ProjectElementListResponse>(`/api/v1/project-element?aui=${aui}`, data, {
+//     const response = await baseApi.put<ProjectElementListResponse>(`/api/v1/project-element?aui=${aui}`, data, {
 //       headers: { Authorization: `${authToken}` }
 //     });
 //     return response.data;
@@ -109,15 +99,3 @@ export const createProjectElementWithWorkDetail = async (aui: string, data: Crea
 //     throw handleApiError(error);
 //   }
 // };
-
-const handleApiError = (error: unknown): Error => {
-  if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError<ErrorResponse>;
-    if (axiosError.response?.data) {
-      return new Error(axiosError.response.data.errorCode);
-    }
-  }
-  return new Error('An unexpected error occurred');
-};
-
-export default projectElementApi;

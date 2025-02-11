@@ -1,21 +1,11 @@
-import axios, { AxiosError } from 'axios';
-import { getConfig } from '../env/envManager';
-import { DeleteResponse, ErrorResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../dto/ResDtoRepository';
+import { DeleteResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../dto/ResDtoRepository';
 import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../dto/ReqDtoRepository';
+import { baseApi, handleApiError } from './apiConfig';
 
-const config = getConfig();
-
-const workListApi = axios.create({
-  // baseURL: API_BASE_URL,
-  baseURL: config.apiBaseUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 export const getWork = async (workId: string): Promise<WorkWithDetailResponse> => {
   try {
-    const response = await workListApi.get<WorkWithDetailResponse>(`/api/v1/work?workId=${workId}`);
+    const response = await baseApi.get<WorkWithDetailResponse>(`/api/v1/work?workId=${workId}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -24,7 +14,7 @@ export const getWork = async (workId: string): Promise<WorkWithDetailResponse> =
 
 export const getWorkList = async (aui: string): Promise<WorkListResponse> => {
   try {
-    const response = await workListApi.get<WorkListResponse>(`/api/v1/work/list?aui=${aui}`);
+    const response = await baseApi.get<WorkListResponse>(`/api/v1/work/list?aui=${aui}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -33,7 +23,7 @@ export const getWorkList = async (aui: string): Promise<WorkListResponse> => {
 
 export const getSimpleWorkList = async (aui: string): Promise<WorkSimpleListResponse> => {
   try {
-    const response = await workListApi.get<WorkSimpleListResponse>(`/api/v1/work/list/simple?aui=${aui}`);
+    const response = await baseApi.get<WorkSimpleListResponse>(`/api/v1/work/list/simple?aui=${aui}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -46,7 +36,7 @@ export const updateWork = async (aui: string, data: UpdateWorkReq): Promise<Work
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workListApi.put<WorkResponse>(`/api/v1/work?aui=${aui}`, data, {
+    const response = await baseApi.put<WorkResponse>(`/api/v1/work?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -60,7 +50,7 @@ export const createWork = async (aui: string, data: CreateWorkReq): Promise<Work
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workListApi.post<WorkResponse>(`/api/v1/work?aui=${aui}`, data, {
+    const response = await baseApi.post<WorkResponse>(`/api/v1/work?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -74,7 +64,7 @@ export const deleteWork = async (aui: string, data: DeleteWorkReq): Promise<Dele
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await workListApi.delete<DeleteResponse>(`/api/v1/work?aui=${aui}&workId=${data.workId}`, {
+    const response = await baseApi.delete<DeleteResponse>(`/api/v1/work?aui=${aui}&workId=${data.workId}`, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
@@ -82,15 +72,3 @@ export const deleteWork = async (aui: string, data: DeleteWorkReq): Promise<Dele
     throw handleApiError(error);
   }
 };
-
-const handleApiError = (error: unknown): Error => {
-  if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError<ErrorResponse>;
-    if (axiosError.response?.data) {
-      return new Error(axiosError.response.data.errorCode);
-    }
-  }
-  return new Error('An unexpected error occurred');
-};
-
-export default workListApi;
