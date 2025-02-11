@@ -31,10 +31,8 @@ const ProjectDetail: React.FC = () => {
   useEffect(() => {
     const getProjectWithApi = async () => {
       if (!(aui && projectId)) return;
-      try {
-        console.log("getting ProjectDetail...")
-        await getProject(aui, projectId);
-      } catch (error) { }
+      console.log("getting ProjectDetail...")
+      await getProject(aui, projectId);
     }
     getProjectWithApi();
   }, [aui, projectId]);
@@ -47,24 +45,21 @@ const ProjectDetail: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!project || !aui) return;
-    try {
-      const baseRequest: UpdateProjectReq = {
-        ...project,  //projectDetailCheck에서 확인 함
-        updateUploadFileReq: {
-          uploadFileId: project.uploadFile.id,
-          ...project.uploadFile
-        },
-        piIndexList: convertToPiIndexList(),
-      }
-
-      const finalRequest = imageChanged
-        ? await uploadImage(aui, ServiceType.PROJECT, baseRequest)
-        : baseRequest;
-
-      await updateProject(aui, finalRequest as UpdateProjectReq);
-      setEditMode(false);
-    } catch (err) {
+    const baseRequest: UpdateProjectReq = {
+      ...project,  //projectDetailCheck에서 확인 함
+      updateUploadFileReq: {
+        uploadFileId: project.uploadFile.id,
+        ...project.uploadFile
+      },
+      piIndexList: convertToPiIndexList(),
     }
+
+    const finalRequest = imageChanged
+      ? await uploadImage(aui, ServiceType.PROJECT, baseRequest)
+      : baseRequest;
+
+    await updateProject(aui, finalRequest as UpdateProjectReq);
+    setEditMode(false);
   };
 
   return (

@@ -31,10 +31,8 @@ const Billboard: React.FC = () => {
   useEffect(() => {
     const getBillboardWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting billboard...")
-        await getBillboard(aui);
-      } catch (error) { }
+      console.log("getting billboard...")
+      await getBillboard(aui);
     }
     getBillboardWithApi();
   }, [aui]);
@@ -44,23 +42,20 @@ const Billboard: React.FC = () => {
   const handleConfirm = async () => {
     if (!billboard || !aui) return;
 
-    try {
-      const baseRequest: UpdateBillboardReq = {
-        ...billboard,
-        updateUploadFileReq: {
-          ...billboard.uploadFile,
-          uploadFileId: billboard.uploadFile.id
-        }
-      };
+    const baseRequest: UpdateBillboardReq = {
+      ...billboard,
+      updateUploadFileReq: {
+        ...billboard.uploadFile,
+        uploadFileId: billboard.uploadFile.id
+      }
+    };
 
-      const finalRequest = imageChanged
-        ? await uploadImage(aui, ServiceType.BILLBOARD, baseRequest)
-        : baseRequest;
+    const finalRequest = imageChanged
+      ? await uploadImage(aui, ServiceType.BILLBOARD, baseRequest)
+      : baseRequest;
 
-      await updateBillboard(aui, finalRequest as UpdateBillboardReq);
-      setEditMode(false);
-    } catch (err) {
-    }
+    await updateBillboard(aui, finalRequest as UpdateBillboardReq);
+    setEditMode(false);
   };
 
   return (

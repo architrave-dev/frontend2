@@ -36,22 +36,19 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
 
 
   const handleUpdate = async () => {
-    try {
-      const baseRequest: UpdateWorkDetailReq = {
-        ...data,
-        workId,
-        updateUploadFileReq: {
-          ...data.uploadFile,
-          uploadFileId: data.uploadFile.id
-        },
-      }
-      const finalRequest = data.imageChanged
-        ? await uploadImage(aui, ServiceType.DETAIL, baseRequest)
-        : baseRequest;
-
-      await updateWorkDetail(aui, finalRequest as UpdateWorkDetailReq);
-    } catch (err) {
+    const baseRequest: UpdateWorkDetailReq = {
+      ...data,
+      workId,
+      updateUploadFileReq: {
+        ...data.uploadFile,
+        uploadFileId: data.uploadFile.id
+      },
     }
+    const finalRequest = data.imageChanged
+      ? await uploadImage(aui, ServiceType.DETAIL, baseRequest)
+      : baseRequest;
+
+    await updateWorkDetail(aui, finalRequest as UpdateWorkDetailReq);
   };
 
   const handleDelete = async () => {

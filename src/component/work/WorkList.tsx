@@ -39,10 +39,8 @@ const WorkList: React.FC = () => {
   useEffect(() => {
     const getWorkListWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting work List...")
-        await getWorkList(aui);
-      } catch (error) { }
+      console.log("getting work List...")
+      await getWorkList(aui);
     }
     getWorkListWithApi();
   }, [aui]);
@@ -51,10 +49,8 @@ const WorkList: React.FC = () => {
   const sortedWorkList = Array.isArray(workList) ? sortWorkList(workList, sortBy) : [];
 
   const handleCreateWork = async () => {
-    try {
-      await createWork(aui, workBuilder());
-      setSelectedIndex(workList.length);
-    } catch (err) { }
+    await createWork(aui, workBuilder());
+    setSelectedIndex(workList.length);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -83,11 +79,9 @@ const WorkList: React.FC = () => {
       return;
     }
     const getWorkWithDetailWithApi = async () => {
-      try {
-        console.log("getting work and Detail List...")
-        await getWork(sortedWorkList[newIndex].id);
-        setSelectedIndex(newIndex);
-      } catch (error) { }
+      console.log("getting work and Detail List...")
+      await getWork(sortedWorkList[newIndex].id);
+      setSelectedIndex(newIndex);
     }
     if (activeWork == null || newIndex !== selectedIndex) {
       if (isEditMode) {

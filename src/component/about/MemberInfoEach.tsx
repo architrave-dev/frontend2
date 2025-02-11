@@ -4,7 +4,6 @@ import { MemberInfoValue } from '../../shared/component/headless/input/InputBody
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 
-
 export interface MemberInfoEachProps {
   name: string;
   value: string | number;

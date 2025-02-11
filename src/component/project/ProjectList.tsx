@@ -17,9 +17,7 @@ const ProjectList: React.FC = () => {
   useEffect(() => {
     const getProjectListTemp = async () => {
       if (!aui) return;
-      try {
-        await getProjectList(aui);
-      } catch (error) { }
+      await getProjectList(aui);
     }
     getProjectListTemp();
   }, [aui]);

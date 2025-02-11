@@ -17,19 +17,15 @@ const ContactComp: React.FC = () => {
   useEffect(() => {
     const getContactWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting work List...")
-        await getContact(aui);
-      } catch (error) { }
+      console.log("getting work List...")
+      await getContact(aui);
     }
     getContactWithApi();
   }, [aui]);
 
-
   if (!contact) {
     return null;
   }
-
 
 
   return (

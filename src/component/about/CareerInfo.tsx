@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { MemberInfoValue } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
-import { BtnDelete, BtnModalMain, BtnModalSub, BtnWorkViewer } from '../../shared/component/headless/button/BtnBody';
+import { BtnModalMain, BtnModalSub } from '../../shared/component/headless/button/BtnBody';
 import { useCareerListStore } from '../../shared/store/careerStore';
 import MoleculeValue from './molecules/MoleculeValue';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
@@ -21,10 +21,7 @@ const CareerInfo: React.FC<CareerInfoProps> = ({ data }) => {
   const { afterDeleteCareer } = useCareerListStore();
 
   const handleUpdate = async () => {
-    try {
-      await updateCareer(aui, { careerId: data.id, ...data });
-    } catch (err) {
-    }
+    await updateCareer(aui, { careerId: data.id, ...data });
   }
 
   const handleDelete = async () => {

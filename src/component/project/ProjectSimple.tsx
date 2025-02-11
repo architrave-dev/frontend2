@@ -39,11 +39,7 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
 
   const handleDelete = async () => {
     const callback = async () => {
-      try {
-        await deleteProject(aui, { projectId });
-      } catch (err) {
-      } finally {
-      }
+      await deleteProject(aui, { projectId });
     }
     setStandardAlert({
       type: AlertType.CONFIRM,

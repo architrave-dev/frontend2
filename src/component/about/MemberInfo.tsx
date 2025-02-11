@@ -27,10 +27,8 @@ const MemberInfo: React.FC = () => {
   useEffect(() => {
     const getMemberInfoWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting work List...")
-        await getMemberInfo(aui);
-      } catch (error) { }
+      console.log("getting work List...")
+      await getMemberInfo(aui);
     }
     getMemberInfoWithApi();
   }, [aui]);

@@ -43,33 +43,26 @@ const WorkViewer: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!activeWork || !aui) return;
-    try {
-      const baseRequest: UpdateWorkReq = {
-        ...activeWork,
-        updateUploadFileReq: {
-          ...activeWork.uploadFile,
-          uploadFileId: activeWork.uploadFile.id
-        }
+    const baseRequest: UpdateWorkReq = {
+      ...activeWork,
+      updateUploadFileReq: {
+        ...activeWork.uploadFile,
+        uploadFileId: activeWork.uploadFile.id
       }
-
-      const finalRequest = imageChanged
-        ? await uploadImage(aui, ServiceType.WORK, baseRequest)
-        : baseRequest;
-
-      await updateWork(aui, finalRequest as UpdateWorkReq);
-      setEditMode(false);
-    } catch (err) {
     }
+
+    const finalRequest = imageChanged
+      ? await uploadImage(aui, ServiceType.WORK, baseRequest)
+      : baseRequest;
+
+    await updateWork(aui, finalRequest as UpdateWorkReq);
+    setEditMode(false);
   };
 
   const handleDelete = async () => {
     const callback = async () => {
-      try {
-        await deleteWork(aui, { workId: activeWork.id });
-      } catch (err) {
-      } finally {
-        setEditMode(false);
-      }
+      await deleteWork(aui, { workId: activeWork.id });
+      setEditMode(false);
     }
     setStandardAlert({
       type: AlertType.CONFIRM,

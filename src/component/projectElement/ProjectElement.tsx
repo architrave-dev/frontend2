@@ -86,10 +86,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
       }
     }
 
-    try {
-      await updateProjectElement(aui, updateDto);
-    } catch (err) {
-    }
+    await updateProjectElement(aui, updateDto);
   };
 
   const handleDelete = async () => {

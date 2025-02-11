@@ -21,10 +21,8 @@ const ProjectInfoList: React.FC = () => {
   useEffect(() => {
     const getProjectInfoListWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting projectInfoList...")
-        await getProjectInfoList(aui, project!.id);
-      } catch (error) { }
+      console.log("getting projectInfoList...")
+      await getProjectInfoList(aui, project!.id);
     }
     getProjectInfoListWithApi();
   }, [aui]);
@@ -32,10 +30,7 @@ const ProjectInfoList: React.FC = () => {
   if (project == null) return null;
 
   const handleCreateInfo = async () => {
-    try {
-      await createProjectInfo(aui, piBuilder(project.id));
-    } catch (err) {
-    }
+    await createProjectInfo(aui, piBuilder(project.id));
   };
 
   return (

@@ -5,7 +5,6 @@ import SelectBox from '../../shared/component/SelectBox';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 
 
-
 export interface MemberInfoSelectProps {
   name: string;
   value: CountryType;

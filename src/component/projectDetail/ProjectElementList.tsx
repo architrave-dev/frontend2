@@ -28,9 +28,7 @@ const ProjectElementList: React.FC = () => {
   useEffect(() => {
     const getProjectElementListWithApi = async () => {
       if (aui && projectId) {
-        try {
-          await getProjectElementList(aui, projectId);
-        } catch (error) { }
+        await getProjectElementList(aui, projectId);
       }
     }
     getProjectElementListWithApi();
@@ -39,56 +37,44 @@ const ProjectElementList: React.FC = () => {
   if (!project) return null;
 
   const handleCreateElement = async (elementType: ProjectElementType) => {
-    try {
-      let newElement: CreateProjectElementReq;
-      switch (elementType) {
-        case ProjectElementType.WORK:
-          newElement = peWorkBuilder(project.id);
-          break;
-        case ProjectElementType.DOCUMENT:
-          newElement = peDocBuilder(project.id);
-          break;
-        case ProjectElementType.TEXTBOX:
-          newElement = peTextBoxBuilder(project.id);
-          break;
-        case ProjectElementType.DIVIDER:
-          newElement = peDividerBuilder(project.id);
-          break;
-        default:
-          throw new Error(`Unsupported ProjectElementType: ${elementType}`);
-      }
-      await createProjectElement(aui, newElement)
-    } catch (err) {
-    } finally {
+    let newElement: CreateProjectElementReq;
+    switch (elementType) {
+      case ProjectElementType.WORK:
+        newElement = peWorkBuilder(project.id);
+        break;
+      case ProjectElementType.DOCUMENT:
+        newElement = peDocBuilder(project.id);
+        break;
+      case ProjectElementType.TEXTBOX:
+        newElement = peTextBoxBuilder(project.id);
+        break;
+      case ProjectElementType.DIVIDER:
+        newElement = peDividerBuilder(project.id);
+        break;
+      default:
+        throw new Error(`Unsupported ProjectElementType: ${elementType}`);
     }
+    await createProjectElement(aui, newElement)
   };
 
   const handleImportElement = async () => {
-    try {
-      await getSimpleWorkList(aui);
-      setStandardModal({
-        modalType: ModalType.WORK_STATION,
-        title: null,
-        value: null,
-        handleChange: () => { }
-      });
-    } catch (err) {
-    } finally {
-    }
+    await getSimpleWorkList(aui);
+    setStandardModal({
+      modalType: ModalType.WORK_STATION,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
   }
 
   const openSimpleWorkForCreateDetail = async () => {
-    try {
-      await getSimpleWorkList(aui);
-      setStandardModal({
-        modalType: ModalType.TEMP_WORK,
-        title: null,
-        value: null,
-        handleChange: () => { }
-      });
-    } catch (err) {
-    } finally {
-    }
+    await getSimpleWorkList(aui);
+    setStandardModal({
+      modalType: ModalType.TEMP_WORK,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
   }
 
   return (

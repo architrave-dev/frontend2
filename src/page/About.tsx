@@ -32,23 +32,20 @@ const About: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!memberInfo || !aui) return;
-    try {
-      const baseRequest: UpdateMemberInfoReq = {
-        ...memberInfo,
-        updateUploadFileReq: {
-          ...memberInfo.uploadFile,
-          uploadFileId: memberInfo.uploadFile.id
-        }
-      };
+    const baseRequest: UpdateMemberInfoReq = {
+      ...memberInfo,
+      updateUploadFileReq: {
+        ...memberInfo.uploadFile,
+        uploadFileId: memberInfo.uploadFile.id
+      }
+    };
 
-      const finalRequest = imageChanged
-        ? await uploadImage(aui, ServiceType.MEMBER_INFO, baseRequest)
-        : baseRequest;
+    const finalRequest = imageChanged
+      ? await uploadImage(aui, ServiceType.MEMBER_INFO, baseRequest)
+      : baseRequest;
 
-      await updateMemberInfo(aui, finalRequest as UpdateMemberInfoReq);
-      setEditMode(false);
-    } catch (err) {
-    }
+    await updateMemberInfo(aui, finalRequest as UpdateMemberInfoReq);
+    setEditMode(false);
   };
 
   const handleDownloadPDF = async () => {
