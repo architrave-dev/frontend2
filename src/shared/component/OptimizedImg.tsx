@@ -21,7 +21,8 @@ const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg, d
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
-        const jsonUrl = imageUrl.replace(/\/[^/]+\.(?:jpeg|jpg|png|gif)$/, '/meta.json');
+        const timestamp = Date.now();
+        const jsonUrl = imageUrl.replace(/\/[^/]+\.(?:jpeg|jpg|png|gif)$/, `/meta.json?ts=${timestamp}`);
         const response = await fetch(jsonUrl);
         if (!response.ok) {
           throw new Error('Failed to fetch metadata');
@@ -52,7 +53,7 @@ const OptimizedImg: React.FC<OptimizedImgProps> = ({ imageUrl, alt, StyledImg, d
         }
         const newDeviceType = getFallbackDeviceType(metadata, window.innerWidth);
         if (currentDeviceTypeRef.current !== newDeviceType) {
-          console.log("Crossed breakpoint, setting browserType to ", newDeviceType);
+          console.log("Crossed breakpoint, =>", newDeviceType);
           setBrowserType(newDeviceType);
           currentDeviceTypeRef.current = newDeviceType;
         }

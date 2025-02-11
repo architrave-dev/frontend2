@@ -8,7 +8,7 @@ import { isBase64, getFallbackDeviceType, convertToJsonMetadata } from '../../ut
 
 interface OptimizedMoleculeImgDivContainerProps {
   backgroundImg: string;
-  handleChange: (originUrl: string) => void;
+  handleChange?: (originUrl: string) => void;
   StyledImgDivContainer: React.ComponentType<StyledImgDivContainerProps>;
   children?: React.ReactNode;
 }
@@ -29,7 +29,8 @@ const OptimizedMoleculeImgDivContainer: React.FC<OptimizedMoleculeImgDivContaine
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
-        const jsonUrl = backgroundImg.replace(/\/[^/]+\.(?:jpeg|jpg|png|gif)$/, '/meta.json');
+        const timestamp = Date.now();
+        const jsonUrl = backgroundImg.replace(/\/[^/]+\.(?:jpeg|jpg|png|gif)$/, `/meta.json?ts=${timestamp}`);
         const response = await fetch(jsonUrl);
         if (!response.ok) {
           throw new Error('Failed to fetch metadata');
@@ -60,7 +61,7 @@ const OptimizedMoleculeImgDivContainer: React.FC<OptimizedMoleculeImgDivContaine
         }
         const newDeviceType = getFallbackDeviceType(metadata, window.innerWidth);
         if (currentDeviceTypeRef.current !== newDeviceType) {
-          console.log("Crossed breakpoint, setting browserType to ", newDeviceType);
+          console.log("Crossed breakpoint, =>", newDeviceType);
           setBrowserType(newDeviceType);
           currentDeviceTypeRef.current = newDeviceType;
         }
@@ -93,7 +94,7 @@ const OptimizedMoleculeImgDivContainer: React.FC<OptimizedMoleculeImgDivContaine
 
   return (
     <StyledImgDivContainer $backgroundImg={backgroundImg === '' ? defaultImg : adjustedUrl}>
-      {isEditMode && (
+      {handleChange && isEditMode && (
         <ReplaceImageButton imgSrc={backgroundImg} setImageUrl={handleChange} />
       )}
       {children}

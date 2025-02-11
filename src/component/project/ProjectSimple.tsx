@@ -9,8 +9,8 @@ import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
-import defaultImg from '../../asset/project/default_1.png'
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
+import OptimizedMoleculeImgDivContainer from '../../shared/component/molecule/OptimizedMoleculeImgDivContainer';
 
 
 interface ProjectSimpleProps {
@@ -25,7 +25,6 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
   initialTitle,
   initialDescription,
   initialImage
-  // onSave 
 }) => {
   const { aui } = useAui();
   const { isEditMode } = useEditMode();
@@ -60,7 +59,10 @@ const ProjectSimple: React.FC<ProjectSimpleProps> = ({
         <ProjectSimpleTitle>{initialTitle}</ProjectSimpleTitle>
         <ProjectSimpleDescription>{initialDescription}</ProjectSimpleDescription>
       </ProjectSimpleInfo>
-      <ProjectRepresent $backgroundImg={initialImage !== '' ? convertS3UrlToCloudFrontUrl(initialImage) : defaultImg} />
+      <OptimizedMoleculeImgDivContainer
+        backgroundImg={convertS3UrlToCloudFrontUrl(initialImage)}
+        StyledImgDivContainer={ProjectRepresent}
+      />
       {isEditMode &&
         <HeadlessBtn
           value={"Delete"}
