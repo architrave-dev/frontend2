@@ -28,28 +28,20 @@ const PageSetting: React.FC = () => {
   }
 
   const handlePageChange = async (field: keyof UpdateSettingReq, value: string | boolean) => {
-    try {
-      await updateSetting(aui, {
-        ...setting,
-        [field]: value
-      });
-    } catch (err) {
-    } finally {
-    }
+    await updateSetting(aui, {
+      ...setting,
+      [field]: value
+    });
   }
 
   const handleMenuVisibilityChange = async (field: keyof MenuVisible, value: boolean) => {
-    try {
-      await updateSetting(aui, {
-        ...setting,
-        menuVisible: {
-          ...setting.menuVisible,
-          [field]: value
-        }
-      });
-    } catch (err) {
-    } finally {
-    }
+    await updateSetting(aui, {
+      ...setting,
+      menuVisible: {
+        ...setting.menuVisible,
+        [field]: value
+      }
+    });
   };
 
   return (

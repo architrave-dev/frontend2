@@ -9,14 +9,13 @@ import { useInitPage } from '../shared/hooks/useInitPage';
 import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import { useEditMode } from '../shared/hooks/useEditMode';
-import { UpdateProjectReq, UpdateUploadFileReq } from '../shared/dto/ReqDtoRepository';
+import { UpdateProjectReq } from '../shared/dto/ReqDtoRepository';
 import { IndexData } from '../shared/dto/EntityRepository';
 import { ServiceType } from '../shared/enum/EnumRepository';
-import { base64ToFileWithMime, uploadToS3 } from '../shared/aws/s3Upload';
-import { ErrorCode } from '../shared/api/errorCode';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
 import { useProjectStore } from '../shared/store/projectStore';
+import { useImage } from '../shared/hooks/useApi/useImage';
 
 
 const ProjectDetail: React.FC = () => {
@@ -27,14 +26,13 @@ const ProjectDetail: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
   const { hasChanged, imageChanged } = useProjectStore();
+  const { uploadImage } = useImage();
 
   useEffect(() => {
     const getProjectWithApi = async () => {
       if (!(aui && projectId)) return;
-      try {
-        console.log("getting ProjectDetail...")
-        await getProject(aui, projectId);
-      } catch (error) { }
+      console.log("getting ProjectDetail...")
+      await getProject(aui, projectId);
     }
     getProjectWithApi();
   }, [aui, projectId]);
@@ -45,42 +43,23 @@ const ProjectDetail: React.FC = () => {
     return [];
   }
 
-  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateProjectReq, aui: string): Promise<UpdateProjectReq> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]);
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  }
-
   const handleConfirm = async () => {
-    if (project == null) return null;
-    try {
-      if (hasChanged) {
-        let newUpdateProjectReq: UpdateProjectReq = {
-          ...project,  //projectDetailCheck에서 확인 함
-          updateUploadFileReq: {
-            uploadFileId: project.uploadFile.id,
-            ...project.uploadFile
-          },
-          piIndexList: convertToPiIndexList(),
-        }
-        if (imageChanged) {
-          newUpdateProjectReq = await uploadFileWithLocalUrl(ServiceType.PROJECT, newUpdateProjectReq, aui);
-        }
-        await updateProject(aui, newUpdateProjectReq);
-      }
-
-    } catch (err) {
-    } finally {
-      setEditMode(false);
+    if (!project || !aui) return;
+    const baseRequest: UpdateProjectReq = {
+      ...project,  //projectDetailCheck에서 확인 함
+      updateUploadFileReq: {
+        uploadFileId: project.uploadFile.id,
+        ...project.uploadFile
+      },
+      piIndexList: convertToPiIndexList(),
     }
+
+    const finalRequest = imageChanged
+      ? await uploadImage(aui, ServiceType.PROJECT, baseRequest)
+      : baseRequest;
+
+    await updateProject(aui, finalRequest as UpdateProjectReq);
+    setEditMode(false);
   };
 
   return (

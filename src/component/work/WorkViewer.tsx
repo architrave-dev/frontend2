@@ -6,7 +6,7 @@ import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, BtnWorkViewerBlack, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
-import { AlertPosition, AlertType, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, DisplaySize, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
@@ -18,9 +18,9 @@ import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { useValidation } from '../../shared/hooks/useValidation';
 import SelectBox from '../../shared/component/SelectBox';
-import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
+import { useImage } from '../../shared/hooks/useApi/useImage';
 
 
 const WorkViewer: React.FC = () => {
@@ -30,6 +30,7 @@ const WorkViewer: React.FC = () => {
   const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange } = useWorkViewStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { checkType } = useValidation();
+  const { uploadImage } = useImage();
 
   if (!activeWork) return null;
 
@@ -40,26 +41,9 @@ const WorkViewer: React.FC = () => {
     handleChange({ [field]: value });
   }
 
-  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkReq, aui: string): Promise<UpdateWorkReq> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]);
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  }
-
-
   const handleConfirm = async () => {
-    if (!hasChanged) {
-      return;
-    }
-    let updateWorkdReq: UpdateWorkReq = {
+    if (!activeWork || !aui) return;
+    const baseRequest: UpdateWorkReq = {
       ...activeWork,
       updateUploadFileReq: {
         ...activeWork.uploadFile,
@@ -67,25 +51,18 @@ const WorkViewer: React.FC = () => {
       }
     }
 
-    try {
-      if (imageChanged) {
-        updateWorkdReq = await uploadFileWithLocalUrl(ServiceType.WORK, updateWorkdReq, aui);
-      }
-      await updateWork(aui, updateWorkdReq);
-    } catch (err) {
-    } finally {
-      setEditMode(false);
-    }
+    const finalRequest = imageChanged
+      ? await uploadImage(aui, ServiceType.WORK, baseRequest)
+      : baseRequest;
+
+    await updateWork(aui, finalRequest as UpdateWorkReq);
+    setEditMode(false);
   };
 
   const handleDelete = async () => {
     const callback = async () => {
-      try {
-        await deleteWork(aui, { workId: activeWork.id });
-      } catch (err) {
-      } finally {
-        setEditMode(false);
-      }
+      await deleteWork(aui, { workId: activeWork.id });
+      setEditMode(false);
     }
     setStandardAlert({
       type: AlertType.CONFIRM,
@@ -175,8 +152,8 @@ const WorkViewer: React.FC = () => {
         <MoleculeImg
           srcUrl={convertS3UrlToCloudFrontUrl(activeWork.uploadFile.originUrl)}
           alt={activeWork.title}
-          displaySize={null}
-          handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(thumbnailUrl, originUrl)}
+          displaySize={DisplaySize.REGULAR}
+          handleChange={(originUrl: string) => handleImageChange(originUrl)}
           StyledImg={WorkImage}
         />
         {isEditMode &&

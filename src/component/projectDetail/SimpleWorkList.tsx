@@ -37,11 +37,7 @@ const WorkImport: React.FC = () => {
   };
 
   const onClickDetailHandler = async (workId: string) => {
-    try {
-      await getSimpleWorkDetailList(aui, workId);
-    } catch (err) {
-    } finally {
-    }
+    await getSimpleWorkDetailList(aui, workId);
   };
 
 

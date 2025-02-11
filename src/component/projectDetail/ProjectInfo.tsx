@@ -21,10 +21,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }) => {
   const { updateProjectInfo, deleteProjectInfo } = useProjectInfo();
 
   const handleUpdate = async () => {
-    try {
-      await updateProjectInfo(aui, data);
-    } catch (err) {
-    }
+    await updateProjectInfo(aui, data);
   };
 
   const handleDelete = async () => {

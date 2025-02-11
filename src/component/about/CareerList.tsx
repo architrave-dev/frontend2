@@ -18,18 +18,15 @@ const CareerList: React.FC = () => {
   useEffect(() => {
     const getCareerListWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting career List...")
-        await getCareerList(aui);
-      } catch (error) { }
+      console.log("getting career List...")
+      await getCareerList(aui);
     }
     getCareerListWithApi();
   }, [aui]);
 
+
   const handleCreateElement = async (careerType: CareerType) => {
-    try {
-      await createCareer(aui, careerBuilder(careerType));
-    } catch (err) { }
+    await createCareer(aui, careerBuilder(careerType));
   };
 
   const careerSections = [

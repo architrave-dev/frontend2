@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { checkAui } from '../../api/memberApi';
 import { MemberResponse } from '../../dto/ResDtoRepository';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
-import { useLoadingStore } from '../../store/loadingStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseMemberResult {
@@ -12,8 +10,7 @@ interface UseMemberResult {
 }
 
 export const useMember = (): UseMemberResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
+  const withApiHandler = useApiWrapper();
   const [result, setResult] = useState(false);
 
   const handleMemberSuccess = (response: MemberResponse) => {
@@ -25,29 +22,18 @@ export const useMember = (): UseMemberResult => {
     action: 'get',
     data?: string
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'get':
         default:
-          handleMemberSuccess(await checkAui(data as string));
-          break;
+          return handleMemberSuccess(await checkAui(data as string));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleMemberRequest(action, data)
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [action, data]);
   };
 
   const checkAuiHandler = (aui: string) => handleMemberRequest('get', aui);
-
 
   return {
     checkAui: checkAuiHandler,

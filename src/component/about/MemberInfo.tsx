@@ -5,7 +5,6 @@ import { useMemberInfo } from '../../shared/hooks/useApi/useMemberInfo';
 import MemberInfoEach from './MemberInfoEach';
 import MemberTitle from './MemberTitle';
 import { TextAreaMemberInfo } from '../../shared/component/headless/textarea/TextAreaBody';
-import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import { useValidation } from '../../shared/hooks/useValidation';
@@ -14,6 +13,7 @@ import MemberInfoSelect from './MemberInfoSelect';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { useMemberInfoStore } from '../../shared/store/memberInfoStore';
 import { MemberInfoData } from '../../shared/dto/EntityRepository';
+import OptimizedMoleculeImgDivContainer from '../../shared/component/molecule/OptimizedMoleculeImgDivContainer';
 
 
 const MemberInfo: React.FC = () => {
@@ -27,10 +27,8 @@ const MemberInfo: React.FC = () => {
   useEffect(() => {
     const getMemberInfoWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting work List...")
-        await getMemberInfo(aui);
-      } catch (error) { }
+      console.log("getting work List...")
+      await getMemberInfo(aui);
     }
     getMemberInfoWithApi();
   }, [aui]);
@@ -55,7 +53,7 @@ const MemberInfo: React.FC = () => {
   return (
     <MemberInfoComp>
       <ProfileAndInfo>
-        <MoleculeImgDivContainer
+        <OptimizedMoleculeImgDivContainer
           backgroundImg={convertS3UrlToCloudFrontUrl(memberInfo.uploadFile.originUrl)}
           handleChange={handleImageChange}
           StyledImgDivContainer={Profile}

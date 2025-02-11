@@ -66,6 +66,19 @@ export const useGlobalError = () => {
       }
     });
   }
+
+  const handleDBE = async () => {
+    console.log("handleDBE: Database error!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Database Connection Error.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
   const handleAWS = async () => {
     console.log("handleAWS: Something wrong about AWS!!");
     setStandardAlert({
@@ -94,6 +107,46 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleSFE = async () => {
+    console.log("handleSFE: File is too small!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "File is too small.",
+      callBack: clearErr
+    });
+  }
+
+  const handleBFE = async () => {
+    console.log("handleBFE: File is too big!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "File is too big.",
+      callBack: clearErr
+    });
+  }
+
+  const handleNCE = async () => {
+    console.log("handleNCE: Network connection error!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Network error. Please check your internet and try again.",
+      callBack: clearErr
+    });
+  }
+
+  const handleSDN = async () => {
+    console.log("handleSDN: Server Down!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Server is not available. Try again later.",
+      callBack: clearErr
+    });
+  }
+
   const handleGlobalErr = async () => {
     if (managedErr === null) {
       return;
@@ -112,6 +165,9 @@ export const useGlobalError = () => {
       case ErrorCode.NAU:
         await handleNAU();
         break;
+      case ErrorCode.DBE:
+        await handleDBE();
+        break;
       case ErrorCode.AWS:
         await handleAWS();
         break;
@@ -120,6 +176,18 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.RVN:
         await handleRVN();
+        break;
+      case ErrorCode.SFE:
+        await handleSFE();
+        break;
+      case ErrorCode.BFE:
+        await handleBFE();
+        break;
+      case ErrorCode.NCE:
+        await handleNCE();
+        break;
+      case ErrorCode.SDN:
+        await handleSDN();
         break;
       case ErrorCode.WEF:
       default:

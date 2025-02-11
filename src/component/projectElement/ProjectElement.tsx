@@ -7,9 +7,7 @@ import { ProjectElementType, ServiceType } from '../../shared/enum/EnumRepositor
 import { useProjectElementListStore } from '../../shared/store/projectElementStore';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { convertPeToUpdateReq } from '../../shared/converter/converter';
-import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, uploadToS3 } from '../../shared/aws/s3Upload';
-import { UpdateProjectElementReq, UpdateUploadFileReq } from '../../shared/dto/ReqDtoRepository';
+import { UpdateDocumentReq, UpdateProjectElementReq, UpdateWorkDetailReq, UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { ProjectElementData } from '../../shared/dto/EntityRepository';
 import Work from './Work';
@@ -18,6 +16,7 @@ import Document from './Document';
 import TextBox from './TextBox';
 import Divider from '../../shared/Divider';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import { useImage } from '../../shared/hooks/useApi/useImage';
 export interface ProjectElementProps {
   data: ProjectElementData;
 }
@@ -28,6 +27,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
   const { project } = useProjectDetail();
   const { updateProjectElement, deleteProjectElement } = useProjectElement();
   const { afterDeleteProjectElement } = useProjectElementListStore();
+  const { uploadPEImage } = useImage();
 
   if (!project) return null;
 
@@ -48,40 +48,6 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
     }
   }
 
-  const uploadFileWithLocalUrlUpdates = async <T extends { id: string, updateUploadFileReq: UpdateUploadFileReq, workId?: string }>(
-    serviceType: ServiceType,
-    prevData: T,
-  ): Promise<T> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      let originUrl, thumbnailUrl: string;
-      switch (serviceType) {
-        case ServiceType.WORK:
-          ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.id]));
-          break;
-        case ServiceType.DETAIL:
-          ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [prevData.workId!, prevData.id]));
-          break;
-        case ServiceType.DOCUMENT:
-          ({ originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [project.id, prevData.id]));
-          break;
-        default:
-          throw new Error('Unsupported service type');
-      }
-      return {
-        ...prevData,
-        updateUploadFileReq: {
-          ...prevData.updateUploadFileReq,
-          originUrl,
-          thumbnailUrl
-        }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  };
-
   //이걸 개별 hook으로 빼지 않는 이유:
   // S3에 이미지 업로드 시 필요한 개별적인 정보들이 너무 많다.
   const handleUpdate = async () => {
@@ -89,34 +55,38 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
     if (data.imageChanged) {
       switch (updateDto.projectElementType) {
         case ProjectElementType.WORK:
-          updateDto.updateWorkReq = await uploadFileWithLocalUrlUpdates(
+          const afterUploadImage = await uploadPEImage(
+            aui,
             ServiceType.WORK,
             updateDto.updateWorkReq
           );
+          updateDto.updateWorkReq = afterUploadImage as UpdateWorkReq;
           break;
 
         case ProjectElementType.DETAIL:
-          updateDto.updateWorkDetailReq = await uploadFileWithLocalUrlUpdates(
+          const afterUploadDetailImage = await uploadPEImage(
+            aui,
             ServiceType.DETAIL,
-            updateDto.updateWorkDetailReq,
+            updateDto.updateWorkDetailReq
           );
+          updateDto.updateWorkDetailReq = afterUploadDetailImage as UpdateWorkDetailReq;
           break;
 
         case ProjectElementType.DOCUMENT:
-          updateDto.updateDocumentReq = await uploadFileWithLocalUrlUpdates(
+          const afterUploadDocImage = await uploadPEImage(
+            aui,
             ServiceType.DOCUMENT,
             updateDto.updateDocumentReq,
+            project.id
           );
+          updateDto.updateDocumentReq = afterUploadDocImage as UpdateDocumentReq;
           break;
         default:
           break;
       }
     }
 
-    try {
-      await updateProjectElement(aui, updateDto);
-    } catch (err) {
-    }
+    await updateProjectElement(aui, updateDto);
   };
 
   const handleDelete = async () => {

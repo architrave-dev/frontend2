@@ -1,12 +1,10 @@
 import { createProjectElement, createProjectElementWithWork, createProjectElementWithWorkDetail, deleteProjectElement, getProjectElementList, updateProjectElement } from '../../api/projectElementApi';
 import { useProjectElementListStore } from '../../store/projectElementStore';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { convertStringToErrorCode } from '../../api/errorCode';
 import { ProjectElementData } from '../../dto/EntityRepository';
-import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, DeleteProjectElementReq, UpdateProjectElementListReq, UpdateProjectElementReq } from '../../dto/ReqDtoRepository';
+import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, DeleteProjectElementReq, UpdateProjectElementReq } from '../../dto/ReqDtoRepository';
 import { ProjectElementListResponse, ProjectElementResponse } from '../../dto/ResDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseProjectElementResult {
@@ -20,10 +18,9 @@ interface UseProjectElementResult {
 }
 
 export const useProjectElement = (): UseProjectElementResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { projectElementList, setProjectElementList } = useProjectElementListStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
 
   const handleProjectElementSuccess = (response: ProjectElementListResponse) => {
@@ -59,9 +56,7 @@ export const useProjectElement = (): UseProjectElementResult => {
     data?: CreateProjectElementReq | UpdateProjectElementReq | DeleteProjectElementReq |
       CreateProjectElementWithWorkReq | CreateProjectElementWithWorkDetailReq
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'create':
           handleCreateProjectElementSuccess(await createProjectElement(aui, data as CreateProjectElementReq));
@@ -83,17 +78,9 @@ export const useProjectElement = (): UseProjectElementResult => {
           handleProjectElementSuccess(await getProjectElementList(aui, projectId as string));
           break;
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleProjectElementRequest(aui, action, projectId, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [aui, action, projectId, data]);
   };
 
   const getProjectElementHandler = (aui: string, projectId: string) => handleProjectElementRequest(aui, 'get', projectId);

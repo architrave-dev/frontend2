@@ -8,14 +8,14 @@ import { InputBillboard } from '../../shared/component/headless/input/InputBody'
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../../shared/component/headless/button/BtnBody';
 import { ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
-import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
 import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { UpdateBillboardReq } from '../../shared/dto/ReqDtoRepository';
-import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { useBillboardStore } from '../../shared/store/billboardStore';
+import { useImage } from '../../shared/hooks/useApi/useImage';
+import OptimizedMoleculeImgDivContainer from '../../shared/component/molecule/OptimizedMoleculeImgDivContainer';
 
 
 const Billboard: React.FC = () => {
@@ -26,57 +26,40 @@ const Billboard: React.FC = () => {
     updateImage: handleImageChange
   } = useBillboardStore();
   const { aui } = useAui();
+  const { uploadImage } = useImage();
 
   useEffect(() => {
     const getBillboardWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting billboard...")
-        await getBillboard(aui);
-      } catch (error) { }
+      console.log("getting billboard...")
+      await getBillboard(aui);
     }
     getBillboardWithApi();
   }, [aui]);
 
   if (!billboard) { return null; }
 
-  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateBillboardReq, aui: string): Promise<UpdateBillboardReq> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, []);
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  }
-
   const handleConfirm = async () => {
-    if (!billboard) return;
+    if (!billboard || !aui) return;
 
-    let updateBillboardReq: UpdateBillboardReq = {
+    const baseRequest: UpdateBillboardReq = {
       ...billboard,
       updateUploadFileReq: {
         ...billboard.uploadFile,
         uploadFileId: billboard.uploadFile.id
       }
-    }
-    try {
-      if (imageChanged) {
-        updateBillboardReq = await uploadFileWithLocalUrl(ServiceType.BILLBOARD, updateBillboardReq, aui);
-      }
-      await updateBillboard(aui, updateBillboardReq);
-    } catch (err) {
-    } finally {
-      setEditMode(false);
-    }
+    };
+
+    const finalRequest = imageChanged
+      ? await uploadImage(aui, ServiceType.BILLBOARD, baseRequest)
+      : baseRequest;
+
+    await updateBillboard(aui, finalRequest as UpdateBillboardReq);
+    setEditMode(false);
   };
 
   return (
-    <MoleculeImgDivContainer
+    <OptimizedMoleculeImgDivContainer
       backgroundImg={convertS3UrlToCloudFrontUrl(billboard.uploadFile.originUrl)}
       handleChange={handleImageChange}
       StyledImgDivContainer={Container}
@@ -102,7 +85,7 @@ const Billboard: React.FC = () => {
           StyledBtn={BtnConfirm}
         />
       }
-    </MoleculeImgDivContainer>
+    </OptimizedMoleculeImgDivContainer>
   );
 };
 

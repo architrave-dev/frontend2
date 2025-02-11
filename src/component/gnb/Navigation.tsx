@@ -17,10 +17,8 @@ const Navigation: React.FC = () => {
   useEffect(() => {
     const getSettingWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting setting...")
-        await getSetting(aui);
-      } catch (error) { }
+      console.log("getting setting...")
+      await getSetting(aui);
     }
     getSettingWithApi();
   }, [aui]);

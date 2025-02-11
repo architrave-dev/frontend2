@@ -19,7 +19,6 @@ export interface UserDataWithRefreshToken extends UserData {
 export interface UploadFileData {
   id: string;
   originUrl: string;
-  thumbnailUrl: string;
 }
 
 export interface BillboardData {
@@ -86,12 +85,12 @@ export interface WorkData {
 
 export interface WorkSimpleData {
   id: string;
-  thumbnailUrl: string;
   title: string;
+  originUrl: string;
 }
 export interface WorkDetailSimpleData {
   id: string;
-  thumbnailUrl: string;
+  originUrl: string;
 }
 
 export interface WorkDetailData {
@@ -149,7 +148,6 @@ export interface ProjectSimpleData {
   title: string;
   description: string;
   originUrl: string;
-  thumbnailUrl: string;
 }
 
 interface ProjectElementBase {
@@ -257,4 +255,12 @@ export interface MenuVisible {
 export interface IndexData {
   id: string;
   tempId: string;
+}
+
+export interface ImageMetadata {
+  MOBILE: boolean;
+  TABLET: boolean;
+  LAPTOP: boolean;
+  DESKTOP: boolean;
+  origin: boolean;
 }

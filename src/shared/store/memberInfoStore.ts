@@ -8,7 +8,7 @@ interface MemberInfoState {
   imageChanged: boolean;
   setMemberInfo: (memberInfo: MemberInfoData) => void;
   updatMemberInfo: (updates: Partial<MemberInfoData>) => void;
-  updateImage: (thumbnailUrl: string, originUrl: string) => void;
+  updateImage: (originUrl: string) => void;
 }
 
 export const useMemberInfoStore = create<MemberInfoState>((set) => ({
@@ -24,14 +24,13 @@ export const useMemberInfoStore = create<MemberInfoState>((set) => ({
       hasChanged: true
     })),
 
-  updateImage: (thumbnailUrl: string, originUrl: string) =>
+  updateImage: (originUrl: string) =>
     set(({ memberInfo }) => ({
       memberInfo: memberInfo ? {
         ...memberInfo,
         uploadFile: {
           ...memberInfo.uploadFile,
           originUrl,
-          thumbnailUrl
         }
       } : null,
       hasChanged: true,

@@ -8,14 +8,14 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { BtnWorkViewer, OriginBtnRight } from '../../shared/component/headless/button/BtnBody';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import { AlertPosition, AlertType, ServiceType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, DisplaySize, ServiceType } from '../../shared/enum/EnumRepository';
 import { useAui } from '../../shared/hooks/useAui';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
 import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
-import { ErrorCode } from '../../shared/api/errorCode';
-import { base64ToFileWithMime, convertS3UrlToCloudFrontUrl, uploadToS3 } from '../../shared/aws/s3Upload';
+import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkDetailReq } from '../../shared/dto/ReqDtoRepository';
+import { useImage } from '../../shared/hooks/useApi/useImage';
 
 interface WorkDetailProps {
   index: number;
@@ -28,46 +28,27 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
   const { isEditMode } = useEditMode();
   const { setStandardAlert } = useStandardAlertStore();
   const { updateWorkDetail, deleteWorkDetail } = useWorkDetail();
-  const { activeWork,
+  const {
     updateActiveWorkDetailList: handleChange,
     updateImageActiveWorkDetailList: handleImageChange,
     afterDeleteActiveWorkDetail } = useWorkViewStore();
+  const { uploadImage } = useImage();
 
-
-  const uploadFileWithLocalUrl = async (serviceType: ServiceType, prevData: UpdateWorkDetailReq, aui: string): Promise<UpdateWorkDetailReq> => {
-    const localImageUrl = prevData.updateUploadFileReq.originUrl;
-    const file = base64ToFileWithMime(localImageUrl);
-    try {
-      const { originUrl, thumbnailUrl } = await uploadToS3(file, aui, serviceType, [activeWork!.id, prevData.id]);
-      return {
-        ...prevData,
-        updateUploadFileReq: { ...prevData.updateUploadFileReq, originUrl, thumbnailUrl }
-      };
-    } catch (error) {
-      throw new Error(ErrorCode.AWS);
-    }
-  }
 
   const handleUpdate = async () => {
-    const updateDetail = async () => {
-      try {
-        let updateWorkDetailReq: UpdateWorkDetailReq = {
-          ...data,
-          workId,
-          updateUploadFileReq: {
-            ...data.uploadFile,
-            uploadFileId: data.uploadFile.id
-          },
-        }
-        if (data.imageChanged) {
-          updateWorkDetailReq = await uploadFileWithLocalUrl(ServiceType.DETAIL, updateWorkDetailReq, aui);
-        }
-        await updateWorkDetail(aui, updateWorkDetailReq);
-      } catch (err) {
-      } finally {
-      }
+    const baseRequest: UpdateWorkDetailReq = {
+      ...data,
+      workId,
+      updateUploadFileReq: {
+        ...data.uploadFile,
+        uploadFileId: data.uploadFile.id
+      },
     }
-    updateDetail();
+    const finalRequest = data.imageChanged
+      ? await uploadImage(aui, ServiceType.DETAIL, baseRequest)
+      : baseRequest;
+
+    await updateWorkDetail(aui, finalRequest as UpdateWorkDetailReq);
   };
 
   const handleDelete = async () => {
@@ -113,8 +94,8 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
         <MoleculeImg
           srcUrl={convertS3UrlToCloudFrontUrl(data.uploadFile.originUrl)}
           alt={"Work Detail"}
-          displaySize={null}
-          handleChange={(thumbnailUrl: string, originUrl: string) => handleImageChange(data.id, thumbnailUrl, originUrl)}
+          displaySize={DisplaySize.REGULAR}
+          handleChange={(originUrl: string) => handleImageChange(data.id, originUrl)}
           StyledImg={WorkImage}
         />
       </ImgWrapper>

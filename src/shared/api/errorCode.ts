@@ -15,6 +15,11 @@ export enum ErrorCode {
   DBE = 'DBE',   // Database Error
 
   WEF = 'WEF',  // Wrong Error Format
+
+  SFE = 'SFE', // Small File Error
+  BFE = 'BFE', // Big File Error
+  NCE = 'NCE', // Network Connection Error
+  SDN = 'SDN' // Server Down
 }
 
 export const convertStringToErrorCode = (code: string): ErrorCode => {

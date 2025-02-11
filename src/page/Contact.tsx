@@ -23,18 +23,14 @@ const Contact: React.FC = () => {
 
 
   const handleConfirm = async () => {
-    try {
-      if (hasChanged) {
-        if (!contact) return;
-        const haha: UpdateContactReq = {
-          ...contact,
-          ...contact.sns
-        }
-
-        await updateContact(aui, haha);
+    if (hasChanged) {
+      if (!contact) return;
+      const haha: UpdateContactReq = {
+        ...contact,
+        ...contact.sns
       }
-    } catch (err) {
-    } finally {
+
+      await updateContact(aui, haha);
       setEditMode(false);
     }
   };

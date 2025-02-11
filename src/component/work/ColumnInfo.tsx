@@ -17,10 +17,8 @@ const ColumnInfo: React.FC = () => {
   useEffect(() => {
     const getWorkPropertyVisibleWithApi = async () => {
       if (!aui) return;
-      try {
-        console.log("getting workPropertyVisible...");
-        await getWorkPropertyVisible(aui);
-      } catch (error) { }
+      console.log("getting workPropertyVisible...");
+      await getWorkPropertyVisible(aui);
     }
     getWorkPropertyVisibleWithApi();
   }, [aui]);
@@ -29,14 +27,10 @@ const ColumnInfo: React.FC = () => {
 
   const handleDoubleClick = async (field: keyof WorkPropertyVisibleData) => {
     if (!isEditMode) return null;
-    try {
-      await updateWorkPropertyVisible(aui, {
-        ...workPropertyVisible,
-        [field]: !workPropertyVisible[field]
-      });
-    } catch (err) {
-    } finally {
-    }
+    await updateWorkPropertyVisible(aui, {
+      ...workPropertyVisible,
+      [field]: !workPropertyVisible[field]
+    });
   };
 
   return (

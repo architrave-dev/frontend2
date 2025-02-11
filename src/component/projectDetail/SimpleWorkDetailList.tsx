@@ -36,7 +36,7 @@ const WorkDetailImport: React.FC<WorkDetailImportProps> = ({ simpleWorkDetailLis
       {simpleWorkDetailList.map((sw) =>
         <SimpleWork key={sw.id} onClick={() => onClickHandler(sw.id)}>
           <ImgWrapper>
-            <WorkImage src={sw.thumbnailUrl === '' ? defaultImg : convertS3UrlToCloudFrontUrl(sw.thumbnailUrl)} alt="work detail" />
+            <WorkImage src={sw.originUrl === '' ? defaultImg : convertS3UrlToCloudFrontUrl(sw.originUrl)} alt="work detail" />
           </ImgWrapper>
         </SimpleWork>
       )}

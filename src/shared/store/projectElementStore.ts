@@ -10,7 +10,7 @@ interface ProjectElementListState {
   updateDetail: (id: string, updates: Partial<WorkDetailData>) => void;
   updateDocument: (id: string, updates: Partial<DocumentData>) => void;
   updateTextBox: (id: string, updates: Partial<TextBoxData>) => void;
-  updateImage: (id: string, thumbnailUrl: string, originUrl: string) => void;
+  updateImage: (id: string, originUrl: string) => void;
   updateTextAlignment: (id: string, textAlignment: TextAlignment) => void;
   updateDisplayAlignment: (id: string, displayAlignment: DisplayAlignment) => void;
   updateDisplaySize: (id: string, displaySize: DisplaySize) => void;
@@ -91,7 +91,7 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
         } satisfies ProjectElementDataWithTextBox;
       }),
     })),
-  updateImage: (id, thumbnailUrl, originUrl) =>
+  updateImage: (id, originUrl) =>
     set(({ projectElementList }) => ({
       projectElementList: projectElementList.map((pe) => {
         if (pe.id !== id) return pe;
@@ -105,7 +105,6 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
                 uploadFile: {
                   ...pe.work.uploadFile,
                   originUrl,
-                  thumbnailUrl,
                 },
               },
               hasChanged: true,
@@ -120,7 +119,6 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
                 uploadFile: {
                   ...pe.workDetail.uploadFile,
                   originUrl,
-                  thumbnailUrl,
                 },
               },
               hasChanged: true,
@@ -135,7 +133,6 @@ export const useProjectElementListStore = create<ProjectElementListState>((set) 
                 uploadFile: {
                   ...pe.document.uploadFile,
                   originUrl,
-                  thumbnailUrl,
                 },
               },
               hasChanged: true,

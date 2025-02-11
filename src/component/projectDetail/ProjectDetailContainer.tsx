@@ -5,13 +5,13 @@ import ProjectInfoList from '../../component/projectDetail/ProjectInfoList';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { DividerType, TextAlignment } from '../../shared/enum/EnumRepository';
 import { TextAreaTextBox, getAlignment } from '../../shared/component/headless/textarea/TextAreaBody';
-import MoleculeImgDivContainer from '../../shared/component/molecule/MoleculeImgDivContainer';
-import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { InputTitle } from '../../shared/component/headless/input/InputBody';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { useProjectStore } from '../../shared/store/projectStore';
+import OptimizedMoleculeImgDivContainer from '../../shared/component/molecule/OptimizedMoleculeImgDivContainer';
+import { StyledImgDivContainerProps } from '../../shared/dto/StyleCompRepository';
 
 
 const ProjectDetailContainer: React.FC = () => {
@@ -23,7 +23,7 @@ const ProjectDetailContainer: React.FC = () => {
 
   return (
     <ProjectDetailContainerComp>
-      <MoleculeImgDivContainer
+      <OptimizedMoleculeImgDivContainer
         backgroundImg={convertS3UrlToCloudFrontUrl(project.uploadFile.originUrl)}
         handleChange={handleImageChange}
         StyledImgDivContainer={RepresentImgContainer}

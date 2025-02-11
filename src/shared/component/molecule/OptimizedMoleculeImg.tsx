@@ -2,6 +2,7 @@ import React from 'react';
 import { useEditMode } from '../../hooks/useEditMode';
 import ReplaceImageButton from '../ReplaceImageButton';
 import { StyledImgProps } from '../../dto/StyleCompRepository';
+import defaultImg from '../../../asset/project/default_1.png'
 import { DisplaySize } from '../../enum/EnumRepository';
 import OptimizedImg from '../OptimizedImg';
 
@@ -23,7 +24,11 @@ const MoleculeImg: React.FC<MoleculeImgProps> = ({
   const { isEditMode } = useEditMode();
   return (
     <>
-      <OptimizedImg imageUrl={srcUrl} alt={alt} StyledImg={StyledImg} displaySize={displaySize} />
+      {srcUrl === '' ?
+        <StyledImg src={defaultImg} alt={alt} $displaySize={displaySize} />
+        :
+        <OptimizedImg imageUrl={srcUrl} alt={alt} StyledImg={StyledImg} displaySize={displaySize} />
+      }
       {isEditMode && <ReplaceImageButton imgSrc={srcUrl} setImageUrl={handleChange} />}
     </>
   );

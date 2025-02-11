@@ -9,7 +9,6 @@ const convertWorkToUpdatePeReq = (
   const updateUploadFileReq: UpdateUploadFileReq = {
     uploadFileId: target.work.uploadFile.id,
     originUrl: target.work.uploadFile.originUrl,
-    thumbnailUrl: target.work.uploadFile.thumbnailUrl,
   };
 
   const updateWorkReq: UpdateWorkReq = {
@@ -40,7 +39,6 @@ const convertDetailToUpdatePeReq = (
   const updateUploadFileReq: UpdateUploadFileReq = {
     uploadFileId: target.workDetail.uploadFile.id,
     originUrl: target.workDetail.uploadFile.originUrl,
-    thumbnailUrl: target.workDetail.uploadFile.thumbnailUrl,
   };
 
   const updateWorkDetailReq: UpdateWorkDetailReq = {
@@ -66,7 +64,6 @@ const convertDocumentPeToUpdatePeReq = (
   const updateUploadFileReq: UpdateUploadFileReq = {
     uploadFileId: target.document.uploadFile.id,
     originUrl: target.document.uploadFile.originUrl,
-    thumbnailUrl: target.document.uploadFile.thumbnailUrl,
   };
 
   const updateDocumentReq: UpdateDocumentReq = {
