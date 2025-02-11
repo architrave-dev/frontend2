@@ -12,16 +12,13 @@ export const useApiWrapper = () => {
   return async function withApiHandler<T>(
     apiFunction: ApiFunction<T>,
     retryParams: any[]
-  ): Promise<T> {
+  ) {
     setIsLoading(true);
     clearErr();
 
     try {
       return await apiFunction(...retryParams);
     } catch (err) {
-      if (isNetworkError(err)) {
-        throw err;
-      }
       const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
       const convertedErrCode = convertStringToErrorCode(errCode);
       setManagedErr({
@@ -30,7 +27,6 @@ export const useApiWrapper = () => {
           await withApiHandler(apiFunction, retryParams);
         }
       });
-      throw err;
     } finally {
       setIsLoading(false);
     }

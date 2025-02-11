@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { ErrorCode } from './errorCode';
 import { ErrorResponse } from '../dto/ResDtoRepository';
 import { getConfig } from '../env/envManager';
+import { isNetworkError } from '../util/isNetworkError';
 
 
 const config = getConfig();
@@ -14,9 +15,12 @@ export const baseApi = axios.create({
 });
 
 export const handleApiError = (error: unknown): Error => {
+  if (isNetworkError(error)) {
+    return new Error(ErrorCode.NCE)
+  }
   if (axios.isAxiosError(error)) {
     if (error.code === 'ERR_NETWORK') {
-      return new Error(ErrorCode.NCE);
+      return new Error(ErrorCode.SDN);
     }
     const axiosError = error as AxiosError<ErrorResponse>;
     if (axiosError.response?.data) {
