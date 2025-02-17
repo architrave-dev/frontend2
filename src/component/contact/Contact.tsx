@@ -146,6 +146,7 @@ const ContactAnchor = styled.a`
   gap: 10px;
 
   width: 20%;
+  min-width: 100px;
   height: 20px;
 
   padding: 2px 0px;
