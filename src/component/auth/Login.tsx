@@ -8,6 +8,7 @@ import { BtnCancel } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useLoadingStore } from '../../shared/store/loadingStore';
+import { useValidation } from '../../shared/hooks/useValidation';
 
 
 const Login: React.FC = () => {
@@ -15,6 +16,7 @@ const Login: React.FC = () => {
   const { isLoading } = useLoadingStore();
   const { clearModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
+  const { isEmail, isValidPassword } = useValidation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,8 +35,7 @@ const Login: React.FC = () => {
   }
 
   const validateEmail = () => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!re.test(email)) {
+    if (!isEmail(email)) {
       setEmailError('Invalid email format');
       return false;
     }
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
   };
 
   const validatePassword = () => {
-    if (password.length < 4) {
+    if (!isValidPassword(password)) {
       setPasswordError('Invalid password, min-length: 4');
       return false;
     }

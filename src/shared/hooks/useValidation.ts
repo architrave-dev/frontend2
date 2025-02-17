@@ -135,8 +135,25 @@ export const useValidation = () => {
     return true;
   }
 
+  const isEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(email)) {
+      return false;
+    }
+    return true;
+  };
+
+  const isValidPassword = (password: string) => {
+    if (password.length < 4) {
+      return false;
+    }
+    return true;
+  };
+
   return {
     checkType,
+    isEmail,
+    isValidPassword,
   };
 };
 
