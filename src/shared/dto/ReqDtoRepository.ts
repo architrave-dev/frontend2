@@ -326,3 +326,11 @@ export interface UpdateSettingReq {
   pageVisible: boolean;
   menuVisible: MenuVisible;
 }
+
+//-------------- Email
+export interface EmailRequest {
+  from: string;
+  to: string;
+  subject: string;
+  body: string;
+}

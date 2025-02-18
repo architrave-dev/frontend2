@@ -6,11 +6,20 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { ContactInput } from '../../shared/component/headless/input/InputBody';
 import MoleculeInputAnchor from '../../shared/component/molecule/MoleculeInputAnchor';
 import { useContactStore } from '../../shared/store/contactStore';
+import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
+import { useMenu } from '../../shared/hooks/useMenu';
+import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { useEditMode } from '../../shared/hooks/useEditMode';
 
 
 const ContactComp: React.FC = () => {
   const { aui } = useAui();
+  const { isEditMode } = useEditMode();
   const { contact, getContact } = useContact();
+  const { closeMenu } = useMenu();
+  const { setStandardModal } = useModalStore();
+  const { setStandardAlert } = useStandardAlertStore();
   const { updateContact: handleChange, updateSns: handleSnsChange } = useContactStore();
 
 
@@ -25,6 +34,24 @@ const ContactComp: React.FC = () => {
 
   if (!contact) {
     return null;
+  }
+
+  const handleSendEmail = () => {
+    if (!contact || contact.email === '') {
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "There is no email address.",
+      });
+      return;
+    }
+    setStandardModal({
+      modalType: ModalType.EMAIL_SEND,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
+    closeMenu();
   }
 
 
@@ -49,6 +76,10 @@ const ContactComp: React.FC = () => {
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
           />
+          {/* {contact.email !== '' &&
+            !isEditMode &&
+            <SendEmailButton onClick={handleSendEmail}>Send Email</SendEmailButton>
+          } */}
           <MoleculeInputDiv
             value={contact.contact}
             placeholder={"contact"}
@@ -59,7 +90,7 @@ const ContactComp: React.FC = () => {
         </Contact_1>
         <Contact_1>
           <MoleculeInputAnchor
-            value={contact.sns.instagram}
+            value={contact.sns?.instagram}
             defaultValue={"Instagram"}
             placeholder={"Instagram"}
             handleChange={(e) => handleSnsChange({ instagram: e.target.value })}
@@ -67,7 +98,7 @@ const ContactComp: React.FC = () => {
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={contact.sns.twitter}
+            value={contact.sns?.twitter}
             defaultValue={"X"}
             placeholder={"X"}
             handleChange={(e) => handleSnsChange({ twitter: e.target.value })}
@@ -75,7 +106,7 @@ const ContactComp: React.FC = () => {
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={contact.sns.facebook}
+            value={contact.sns?.facebook}
             defaultValue={"Facebook"}
             placeholder={"Facebook"}
             handleChange={(e) => handleSnsChange({ facebook: e.target.value })}
@@ -83,7 +114,7 @@ const ContactComp: React.FC = () => {
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={contact.sns.url1}
+            value={contact.sns?.url1}
             defaultValue={"Website"}
             placeholder={"URL"}
             handleChange={(e) => handleSnsChange({ url1: e.target.value })}
@@ -92,7 +123,7 @@ const ContactComp: React.FC = () => {
           />
         </Contact_1>
       </Contact1Container>
-    </ContactContainer>
+    </ContactContainer >
   );
 };
 
@@ -157,6 +188,12 @@ const ContactAnchor = styled.a`
   cursor: pointer;
 `
 
+const SendEmailButton = styled.button`
+  width: 100%;
+  height: 20px;
+  background-color: ${({ theme }) => theme.colors.color_Gray_02};
+  color: ${({ theme }) => theme.colors.color_White};
+`;
 
 
 export default ContactComp;
