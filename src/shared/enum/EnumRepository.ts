@@ -1,6 +1,6 @@
 export enum ModalType {
   NONE = 'NONE',
-  SIGNIN = 'SIGNIN',
+  REGISTER = 'REGISTER',
   LOGIN = 'LOGIN',
   WORK_STATION = 'WORK_STATION',
   TEMP_WORK = 'TEMP_WORK',

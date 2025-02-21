@@ -6,7 +6,7 @@ import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useLoadingStore } from '../../shared/store/loadingStore';
 
 
-const SignIn: React.FC = () => {
+const Register: React.FC = () => {
   const { signUp } = useAuth();
   const { isLoading } = useLoadingStore();
   const { setStandardModal } = useModalStore();
@@ -85,4 +85,4 @@ const ToggleText = styled.p`
   /* Add your styles here */
 `;
 
-export default SignIn;
+export default Register;

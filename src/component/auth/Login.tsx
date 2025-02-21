@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
@@ -9,12 +11,13 @@ import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useLoadingStore } from '../../shared/store/loadingStore';
 import { useValidation } from '../../shared/hooks/useValidation';
+import { ModalType } from '../../shared/enum/EnumRepository';
 
 
 const Login: React.FC = () => {
   const { login } = useAuth();
   const { isLoading } = useLoadingStore();
-  const { clearModal } = useModalStore();
+  const { clearModal, setStandardModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { isEmail, isValidPassword } = useValidation();
 
@@ -85,6 +88,15 @@ const Login: React.FC = () => {
     }
   };
 
+  const openRegisterModal = () => {
+    setStandardModal({
+      modalType: ModalType.REGISTER,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
+  };
+
   return (
     <LoginComp ref={modalRef} onKeyDown={handleKeyDown} tabIndex={-1}>
       <Title>Login</Title>
@@ -114,6 +126,10 @@ const Login: React.FC = () => {
           StyledBtn={BtnCancel}
         />
       </ButtonContainer>
+      <ToggleText>
+        <span>Don't have an account?</span>
+        <RegisterText onClick={openRegisterModal}>Register</RegisterText>
+      </ToggleText>
     </LoginComp>
   );
 };
@@ -152,6 +168,24 @@ const SubmitButton = styled.button`
     color: ${({ theme }) => theme.colors.color_White};
     background-color: ${({ theme }) => theme.colors.color_Gray_03};
   }
+`;
+
+const ToggleText = styled.p`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 30px 0px 20px 0px;
+  color: ${({ theme }) => theme.colors.color_Gray_03};
+  &:hover {
+    color: ${({ theme }) => theme.colors.color_Gray_02};
+  }
+  ${({ theme }) => theme.typography.Body_03_2};
+`;
+
+const RegisterText = styled.span`
+  font-style: italic;
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 export default Login;
