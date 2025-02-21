@@ -10,22 +10,27 @@ import { useAui } from '../../shared/hooks/useAui';
 import ProjectInfo from './ProjectInfo';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
+import { useParams } from 'react-router-dom';
 
 const ProjectInfoList: React.FC = () => {
   const { aui } = useAui();
+  const { projectId } = useParams<{ projectId: string }>();
   const { isEditMode } = useEditMode();
   const { project } = useProjectDetail();
   const { projectInfoList } = useProjectInfoListStore();
   const { getProjectInfoList, createProjectInfo } = useProjectInfo();
 
   useEffect(() => {
-    const getProjectInfoListWithApi = async () => {
-      if (!aui) return;
-      console.log("getting projectInfoList...")
-      await getProjectInfoList(aui, project!.id);
-    }
-    getProjectInfoListWithApi();
-  }, [aui]);
+    if (!aui || !project || !projectId) return;
+    if (projectId !== project.id.toString()) return;
+
+    const fetchProjectInfo = async () => {
+      console.log("getting projectInfoList...", project.id);
+      await getProjectInfoList(aui, project.id);
+    };
+
+    fetchProjectInfo();
+  }, [aui, project, projectId]);
 
   if (project == null) return null;
 

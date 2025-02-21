@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const ArrowIcon = styled.svg`
   width: fit-content;
   height: 100%; // 부모 크기에 맞게 조절
+  padding-top: 2px;
 
   line {
     stroke: black;

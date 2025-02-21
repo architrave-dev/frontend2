@@ -9,4 +9,3 @@ export const healthCheck = async (): Promise<void> => {
     throw handleApiError(error);
   }
 };
-

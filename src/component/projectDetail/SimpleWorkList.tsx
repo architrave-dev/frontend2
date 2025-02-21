@@ -44,9 +44,8 @@ const WorkImport: React.FC = () => {
   return (
     <SimpleWorkContainer>
       {simpleList.map((sw, i) =>
-        <>
+        <React.Fragment key={sw.simpleWork.id}>
           <SimpleWork
-            key={sw.simpleWork.title + i}
             data={sw.simpleWork}
             onClickHandler={onClickHandler} />
           {sw.simpleWorkDetail.length > 0 ?
@@ -58,7 +57,7 @@ const WorkImport: React.FC = () => {
               StyledBtn={SmallestBtn}
             />
           }
-        </>
+        </React.Fragment>
       )}
     </SimpleWorkContainer>
   );

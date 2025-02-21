@@ -11,6 +11,10 @@ import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
 import { useContactStore } from '../shared/store/contactStore';
+import { useValidation } from '../shared/hooks/useValidation';
+import { AlertType } from '../shared/enum/EnumRepository';
+import { AlertPosition } from '../shared/enum/EnumRepository';
+import { useStandardAlertStore } from '../shared/store/portal/alertStore';
 
 
 const Contact: React.FC = () => {
@@ -20,11 +24,23 @@ const Contact: React.FC = () => {
   const { contact, updateContact } = useContact();
   const { hasChanged } = useContactStore();
   const { isLoading } = useLoadingStore();
+  const { isEmail } = useValidation();
+  const { setStandardAlert } = useStandardAlertStore();
 
 
   const handleConfirm = async () => {
     if (hasChanged) {
       if (!contact) return;
+
+      if (contact.email && !isEmail(contact.email)) {
+        setStandardAlert({
+          type: AlertType.ALERT,
+          position: AlertPosition.TOP,
+          content: "Invalid email format.",
+        });
+        return;
+      }
+
       const haha: UpdateContactReq = {
         ...contact,
         ...contact.sns

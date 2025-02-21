@@ -9,7 +9,7 @@ interface MoleculeInputProps {
   validate: () => void;
   value: string;
   handleChange: (value: string) => void;
-  err: string;
+  err: string | null;
   placeholder: string;
 }
 
@@ -34,7 +34,7 @@ const MoleculeInput: React.FC<MoleculeInputProps> = ({
           StyledInput={InputAuth}
         />
       </InputWrapper>
-      <ErrorText>{err}</ErrorText>
+      {err !== null && <ErrorText>{err}</ErrorText>}
     </>
   );
 };

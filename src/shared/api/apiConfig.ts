@@ -27,5 +27,6 @@ export const handleApiError = (error: unknown): Error => {
       return new Error(axiosError.response.data.errorCode);
     }
   }
+  // console.log("WEF!!!", error);
   return new Error(ErrorCode.WEF);
 };

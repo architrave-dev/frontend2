@@ -6,13 +6,22 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { ContactInput } from '../../shared/component/headless/input/InputBody';
 import MoleculeInputAnchor from '../../shared/component/molecule/MoleculeInputAnchor';
 import { useContactStore } from '../../shared/store/contactStore';
+import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
+import { useMenu } from '../../shared/hooks/useMenu';
+import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import MoleculeInputDivWithAction from '../../shared/component/molecule/MoleculeInputDivWithAction';
+import { useAuth } from '../../shared/hooks/useApi/useAuth';
 
 
 const ContactComp: React.FC = () => {
   const { aui } = useAui();
+  const { user } = useAuth();
   const { contact, getContact } = useContact();
+  const { closeMenu } = useMenu();
+  const { setStandardModal } = useModalStore();
+  const { setStandardAlert } = useStandardAlertStore();
   const { updateContact: handleChange, updateSns: handleSnsChange } = useContactStore();
-
 
   useEffect(() => {
     const getContactWithApi = async () => {
@@ -25,6 +34,33 @@ const ContactComp: React.FC = () => {
 
   if (!contact) {
     return null;
+  }
+
+  const handleSendEmail = () => {
+    if (!user) {
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "Please login to send an email.",
+      });
+      return;
+    }
+
+    if (!contact || contact.email === '') {
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "There is no email address.",
+      });
+      return;
+    }
+    setStandardModal({
+      modalType: ModalType.EMAIL_SEND,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
+    closeMenu();
   }
 
 
@@ -42,10 +78,11 @@ const ContactComp: React.FC = () => {
           />
         </Contact_1>
         <Contact_1>
-          <MoleculeInputDiv
+          <MoleculeInputDivWithAction
             value={contact.email}
             placeholder={"email"}
             handleChange={(e) => handleChange({ email: e.target.value })}
+            onClick={handleSendEmail}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
           />
@@ -59,7 +96,7 @@ const ContactComp: React.FC = () => {
         </Contact_1>
         <Contact_1>
           <MoleculeInputAnchor
-            value={contact.sns.instagram}
+            value={contact.sns?.instagram}
             defaultValue={"Instagram"}
             placeholder={"Instagram"}
             handleChange={(e) => handleSnsChange({ instagram: e.target.value })}
@@ -67,7 +104,7 @@ const ContactComp: React.FC = () => {
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={contact.sns.twitter}
+            value={contact.sns?.twitter}
             defaultValue={"X"}
             placeholder={"X"}
             handleChange={(e) => handleSnsChange({ twitter: e.target.value })}
@@ -75,7 +112,7 @@ const ContactComp: React.FC = () => {
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={contact.sns.facebook}
+            value={contact.sns?.facebook}
             defaultValue={"Facebook"}
             placeholder={"Facebook"}
             handleChange={(e) => handleSnsChange({ facebook: e.target.value })}
@@ -83,7 +120,7 @@ const ContactComp: React.FC = () => {
             StyledAnchor={ContactAnchor}
           />
           <MoleculeInputAnchor
-            value={contact.sns.url1}
+            value={contact.sns?.url1}
             defaultValue={"Website"}
             placeholder={"URL"}
             handleChange={(e) => handleSnsChange({ url1: e.target.value })}
@@ -92,7 +129,7 @@ const ContactComp: React.FC = () => {
           />
         </Contact_1>
       </Contact1Container>
-    </ContactContainer>
+    </ContactContainer >
   );
 };
 
@@ -131,31 +168,30 @@ const ContactTitle = styled.div`
 
 const ContactDiv = styled.div`
   width: 100%;
-  height: fit-content;
+  height: 20px;
 
-  padding: 2px 0px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
   color: ${({ theme }) => theme.colors.color_Gray_02};
   ${({ theme }) => theme.typography.Body_02_2};
 `
 
 const ContactAnchor = styled.a`
+  width: 20%;
+  min-width: 100px;
+  height: 20px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-
-  width: 20%;
-  height: 20px;
-
-  padding: 2px 0px;
   text-decoration: underline;
 
   color: ${({ theme }) => theme.colors.color_Gray_02};
   ${({ theme }) => theme.typography.Body_02_2};
   cursor: pointer;
 `
-
-
 
 export default ContactComp;

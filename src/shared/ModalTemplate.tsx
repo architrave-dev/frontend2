@@ -9,6 +9,7 @@ import WorkImport from '../component/projectDetail/WorkImport';
 import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetail';
 import ChangeModal from '../component/setting/ChangeModal';
 import FullImageViewer from './component/FullImageViewer';
+import EmailSend from '../component/contact/EmailSend';
 
 const ModalTemplate: React.FC = () => {
   const { standardModal, clearModal } = useModalStore();
@@ -58,6 +59,14 @@ const ModalTemplate: React.FC = () => {
           <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Login />
+            </ModalContent>
+          </ModalOverlay>
+        )
+      case ModalType.EMAIL_SEND:
+        return (
+          <ModalOverlay onClick={clearModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <EmailSend />
             </ModalContent>
           </ModalOverlay>
         )
