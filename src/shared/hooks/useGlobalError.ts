@@ -112,7 +112,7 @@ export const useGlobalError = () => {
     setStandardAlert({
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
-      content: "File is too small.",
+      content: "File is too small. MIN is 50KB",
       callBack: clearErr
     });
   }
@@ -122,7 +122,7 @@ export const useGlobalError = () => {
     setStandardAlert({
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
-      content: "File is too big.",
+      content: "File is too big. MAX is 10MB",
       callBack: clearErr
     });
   }
@@ -143,6 +143,26 @@ export const useGlobalError = () => {
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
       content: "Server is not available. Try again later.",
+      callBack: clearErr
+    });
+  }
+
+  const handleEME = async () => {
+    console.log("handleEME: Email send error!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Email send error.",
+      callBack: clearErr
+    });
+  }
+
+  const handleEVF = async () => {
+    console.log("handleEVF: Email verification failed!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Email address is not valid.",
       callBack: clearErr
     });
   }
@@ -188,6 +208,12 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.SDN:
         await handleSDN();
+        break;
+      case ErrorCode.EME:
+        await handleEME();
+        break;
+      case ErrorCode.EVF:
+        await handleEVF();
         break;
       case ErrorCode.WEF:
       default:

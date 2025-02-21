@@ -19,7 +19,9 @@ export enum ErrorCode {
   SFE = 'SFE', // Small File Error
   BFE = 'BFE', // Big File Error
   NCE = 'NCE', // Network Connection Error
-  SDN = 'SDN' // Server Down
+  SDN = 'SDN', // Server Down
+  EME = 'EME', // EMail send Error
+  EVF = 'EVF', // Email verification Failed
 }
 
 export const convertStringToErrorCode = (code: string): ErrorCode => {
