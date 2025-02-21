@@ -9,7 +9,6 @@ interface UseEmailResult {
 }
 
 export const useEmail = (): UseEmailResult => {
-  const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
   const withApiHandler = useApiWrapper();
 
 
