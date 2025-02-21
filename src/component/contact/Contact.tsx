@@ -11,16 +11,17 @@ import { useMenu } from '../../shared/hooks/useMenu';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import MoleculeInputDivWithAction from '../../shared/component/molecule/MoleculeInputDivWithAction';
+import { useAuth } from '../../shared/hooks/useApi/useAuth';
 
 
 const ContactComp: React.FC = () => {
   const { aui } = useAui();
+  const { user } = useAuth();
   const { contact, getContact } = useContact();
   const { closeMenu } = useMenu();
   const { setStandardModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { updateContact: handleChange, updateSns: handleSnsChange } = useContactStore();
-
 
   useEffect(() => {
     const getContactWithApi = async () => {
@@ -36,6 +37,15 @@ const ContactComp: React.FC = () => {
   }
 
   const handleSendEmail = () => {
+    if (!user) {
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "Please login to send an email.",
+      });
+      return;
+    }
+
     if (!contact || contact.email === '') {
       setStandardAlert({
         type: AlertType.ALERT,

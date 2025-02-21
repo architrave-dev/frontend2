@@ -32,7 +32,7 @@ const MoleculeInputAnchor: React.FC<MoleculeInputAnchorProps> = ({
       {isEditMode ? (
         <HeadlessInput
           type={'text'}
-          value={value}
+          value={value || ''}
           handleChange={handleChange}
           placeholder={"Enter " + placeholder}
           StyledInput={inputStyle}
