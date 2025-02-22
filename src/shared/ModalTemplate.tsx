@@ -10,6 +10,7 @@ import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetai
 import ChangeModal from '../component/setting/ChangeModal';
 import FullImageViewer from './component/FullImageViewer';
 import EmailSend from '../component/contact/EmailSend';
+import EmailVerification from '../component/auth/EmailVerification';
 
 
 const ModalTemplate: React.FC = () => {
@@ -52,6 +53,14 @@ const ModalTemplate: React.FC = () => {
           <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <Register />
+            </ModalContent>
+          </ModalOverlay>
+        )
+      case ModalType.VERIFICATION:
+        return (
+          <ModalOverlay onClick={clearModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <EmailVerification />
             </ModalContent>
           </ModalOverlay>
         )

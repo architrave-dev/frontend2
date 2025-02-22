@@ -3,11 +3,13 @@ import { useGlobalErrStore } from '../store/errorStore';
 import { ErrorCode } from '../api/errorCode';
 import { useAuth } from './useApi/useAuth';
 import { useStandardAlertStore } from '../store/portal/alertStore';
-import { AlertPosition, AlertType } from '../enum/EnumRepository';
+import { AlertPosition, AlertType, ModalType } from '../enum/EnumRepository';
+import { useModalStore } from '../store/portal/modalStore';
 
 export const useGlobalError = () => {
   const { managedErr, clearErr } = useGlobalErrStore();
   const { setStandardAlert } = useStandardAlertStore();
+  const { setStandardModal } = useModalStore();
   const { refresh, logout } = useAuth();
 
 
@@ -167,6 +169,17 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleMPA = async () => {
+    console.log("handleMPA: ");
+    setStandardModal({
+      modalType: ModalType.VERIFICATION,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
+  }
+
+
   const handleGlobalErr = async () => {
     if (managedErr === null) {
       return;
@@ -214,6 +227,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.EVF:
         await handleEVF();
+        break;
+      case ErrorCode.MPA:
+        await handleMPA();
         break;
       case ErrorCode.WEF:
       default:
