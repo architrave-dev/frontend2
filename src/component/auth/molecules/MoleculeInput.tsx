@@ -27,7 +27,7 @@ const MoleculeInput: React.FC<MoleculeInputProps> = ({
       <InputName>{name}</InputName>
       <InputWrapper onBlur={validate}>
         <HeadlessInput
-          type={name === 'Password' ? 'password' : 'text'}
+          type={name === 'Password' || name === 'Confirm Password' ? 'password' : 'text'}
           value={value}
           handleChange={(e) => handleChange(e.target.value)}
           placeholder={placeholder}

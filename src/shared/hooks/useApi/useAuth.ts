@@ -9,6 +9,7 @@ import { useLoadingStore } from '../../store/loadingStore';
 import { TempAlertPosition } from '../../enum/EnumRepository';
 import { TempAlertType } from '../../enum/EnumRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { useApiWrapper } from './apiWrapper';
 
 
 interface UseAuthResult {
@@ -21,10 +22,9 @@ interface UseAuthResult {
 }
 
 export const useAuth = (): UseAuthResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { user, setUser, clearAuth } = useAuthStore();
   const { setTempAlert } = useTempAlertStore();
+  const withApiHandler = useApiWrapper();
 
   const handleLoginSuccess = (response: AuthResponse) => {
     const { data, authToken } = response;
@@ -61,32 +61,19 @@ export const useAuth = (): UseAuthResult => {
     action: 'signup' | 'login' | 'refresh',
     data: T
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'signup':
-          handleSignupSuccess(await signUp(data as SignUpReq));
-          break;
+          return handleSignupSuccess(await signUp(data as SignUpReq));
         case 'refresh':
-          handleRefreshSuccess(await refresh(data as RefreshReq));
-          break;
+          return handleRefreshSuccess(await refresh(data as RefreshReq));
         case 'login':
         default:
-          handleLoginSuccess(await login(data as LoginReq));
-          break;
+          return handleLoginSuccess(await login(data as LoginReq));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleAuthRequest(action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [action, data]);
   };
 
   const signUpHandler = (data: SignUpReq) => handleAuthRequest('signup', data);
