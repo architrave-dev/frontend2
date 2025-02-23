@@ -1,4 +1,4 @@
-import { LoginReq, RefreshReq, SignUpReq } from '../dto/ReqDtoRepository';
+import { ActivateReq, LoginReq, RefreshReq, SignUpReq } from '../dto/ReqDtoRepository';
 import { AuthResponse } from '../dto/ResDtoRepository';
 import { baseApi, handleApiError } from './apiConfig';
 
@@ -33,6 +33,15 @@ export const refresh = async (data: RefreshReq): Promise<AuthResponse> => {
       ...response.data,
       authToken
     };
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+export const activate = async (data: ActivateReq): Promise<AuthResponse> => {
+  try {
+    const response = await baseApi.post<AuthResponse>('/api/v1/auth/activate', data);
+    return response.data;
   } catch (error) {
     throw handleApiError(error);
   }

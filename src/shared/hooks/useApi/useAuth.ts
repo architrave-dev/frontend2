@@ -1,9 +1,9 @@
 import { useAuthStore } from '../../store/authStore';
-import { signUp, login, refresh } from '../../api/authAPI';
+import { signUp, login, refresh, activate } from '../../api/authAPI';
 import { convertStringToErrorCode } from '../../api/errorCode';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { UserData } from '../../dto/EntityRepository';
-import { LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
+import { ActivateReq, LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
 import { AuthResponse } from '../../dto/ResDtoRepository';
 import { useLoadingStore } from '../../store/loadingStore';
 import { TempAlertPosition } from '../../enum/EnumRepository';
@@ -18,6 +18,7 @@ interface UseAuthResult {
   signUp: (data: SignUpReq) => Promise<void>;
   login: (data: LoginReq) => Promise<void>;
   refresh: (data: RefreshReq) => Promise<void>;
+  activate: (data: ActivateReq) => Promise<void>;
   logout: () => void;
 }
 
@@ -57,8 +58,8 @@ export const useAuth = (): UseAuthResult => {
   };
 
 
-  const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq>(
-    action: 'signup' | 'login' | 'refresh',
+  const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq | ActivateReq>(
+    action: 'signup' | 'login' | 'refresh' | 'activate',
     data: T
   ) => {
     const apiFunction = async () => {
@@ -67,6 +68,8 @@ export const useAuth = (): UseAuthResult => {
           return handleSignupSuccess(await signUp(data as SignUpReq));
         case 'refresh':
           return handleRefreshSuccess(await refresh(data as RefreshReq));
+        case 'activate':
+          return handleActivateSuccess(await activate(data as ActivateReq));
         case 'login':
         default:
           return handleLoginSuccess(await login(data as LoginReq));
@@ -79,7 +82,7 @@ export const useAuth = (): UseAuthResult => {
   const signUpHandler = (data: SignUpReq) => handleAuthRequest('signup', data);
   const loginHandler = (data: LoginReq) => handleAuthRequest('login', data);
   const refreshHandler = (data: RefreshReq) => handleAuthRequest('refresh', data);
-
+  const activateHandler = (data: ActivateReq) => handleAuthRequest('activate', data);
   const logout = () => {
     clearAuth();
     localStorage.removeItem('userData');
@@ -99,6 +102,7 @@ export const useAuth = (): UseAuthResult => {
     signUp: signUpHandler,
     login: loginHandler,
     refresh: refreshHandler,
+    activate: activateHandler,
     logout,
   };
 }

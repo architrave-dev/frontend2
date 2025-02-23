@@ -17,6 +17,11 @@ export interface RefreshReq {
   refreshToken: string;
 }
 
+export interface ActivateReq {
+  key: string;
+  verificationCode: string;
+}
+
 export interface UpdateUploadFileReq {
   uploadFileId: string;
   originUrl: string;

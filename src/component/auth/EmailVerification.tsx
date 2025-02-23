@@ -5,7 +5,7 @@ import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useLoadingStore } from '../../shared/store/loadingStore';
 
 const EmailVerification: React.FC = () => {
-  // const { verifyEmail } = useAuth();
+  const { activate } = useAuth();
   const { isLoading } = useLoadingStore();
   const { clearModal } = useModalStore();
 

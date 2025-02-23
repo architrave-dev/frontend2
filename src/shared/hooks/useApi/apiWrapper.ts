@@ -1,7 +1,6 @@
 import { useLoadingStore } from '../../store/loadingStore';
 import { useGlobalErrStore } from '../../store/errorStore';
 import { convertStringToErrorCode } from '../../api/errorCode';
-import { isNetworkError } from '../../util/isNetworkError';
 
 type ApiFunction<T> = (...args: any[]) => Promise<T>;
 
