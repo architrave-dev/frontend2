@@ -18,10 +18,20 @@ export const useApiWrapper = () => {
     try {
       return await apiFunction(...retryParams);
     } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
+      const rawErrorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+
+      let errorCode = 'WEF';
+      let errorMessage = rawErrorMessage;
+
+      if (rawErrorMessage.includes('::')) {
+        [errorCode, errorMessage] = rawErrorMessage.split('::').map(str => str.trim());
+      }
+
+      const convertedErrCode = convertStringToErrorCode(errorCode);
+
       setManagedErr({
         errCode: convertedErrCode,
+        value: errorMessage,
         retryFunction: async () => {
           await withApiHandler(apiFunction, retryParams);
         }
