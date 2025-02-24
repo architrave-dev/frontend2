@@ -170,7 +170,7 @@ export const useGlobalError = () => {
   }
 
   const handleMPA = async () => {
-    console.log("handleMPA: ");
+    console.log("handleMPA: Email Verification");
     setStandardModal({
       modalType: ModalType.VERIFICATION,
       title: null,
@@ -246,5 +246,4 @@ export const useGlobalError = () => {
   useEffect(() => {
     handleGlobalErr();
   }, [managedErr]);
-
 }

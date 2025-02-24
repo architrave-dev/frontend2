@@ -1,15 +1,12 @@
 import { useAuthStore } from '../../store/authStore';
 import { signUp, login, refresh, activate } from '../../api/authAPI';
-import { convertStringToErrorCode } from '../../api/errorCode';
-import { useGlobalErrStore } from '../../store/errorStore';
 import { UserData } from '../../dto/EntityRepository';
 import { ActivateReq, LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
 import { AuthResponse } from '../../dto/ResDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
-import { TempAlertPosition } from '../../enum/EnumRepository';
-import { TempAlertType } from '../../enum/EnumRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { TempAlertPosition, TempAlertType } from '../../enum/EnumRepository';
 import { useApiWrapper } from './apiWrapper';
+import { useModalStore } from '../../store/portal/modalStore';
 
 
 interface UseAuthResult {
@@ -25,10 +22,12 @@ interface UseAuthResult {
 export const useAuth = (): UseAuthResult => {
   const { user, setUser, clearAuth } = useAuthStore();
   const { setTempAlert } = useTempAlertStore();
+  const { clearModal } = useModalStore();
   const withApiHandler = useApiWrapper();
 
   const handleLoginSuccess = (response: AuthResponse) => {
     const { data, authToken } = response;
+    clearModal();
     const onlyUserData: UserData = {
       id: data.id,
       email: data.email,
@@ -49,7 +48,7 @@ export const useAuth = (): UseAuthResult => {
   };
 
   const handleRefreshSuccess = (response: AuthResponse) => {
-    const { data, authToken } = response;
+    const { authToken } = response;
     localStorage.setItem('authToken', authToken);
   };
 
@@ -57,6 +56,10 @@ export const useAuth = (): UseAuthResult => {
     const { data } = response;
   };
 
+  const handleActivateSuccess = (response: AuthResponse) => {
+    const { data } = response;
+    console.log("handleActivateSuccess: ", data);
+  };
 
   const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq | ActivateReq>(
     action: 'signup' | 'login' | 'refresh' | 'activate',

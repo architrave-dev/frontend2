@@ -62,12 +62,7 @@ const Login: React.FC = () => {
       })
       return;
     }
-    try {
-      await login({ email, password });
-      clearModal();
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
+    await login({ email, password });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
