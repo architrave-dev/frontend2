@@ -9,7 +9,7 @@ import { useModalStore } from '../store/portal/modalStore';
 export const useGlobalError = () => {
   const { managedErr, clearErr } = useGlobalErrStore();
   const { setStandardAlert } = useStandardAlertStore();
-  const { setStandardModal } = useModalStore();
+  const { setStandardModal, clearModal } = useModalStore();
   const { refresh, logout } = useAuth();
 
 
@@ -180,6 +180,18 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleMVE = async () => {
+    console.log("handleMVE: Email Verification Error!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Email Verification Error.",
+      callBack: () => {
+        clearErr();
+        clearModal();
+      }
+    });
+  }
 
   const handleGlobalErr = async () => {
     if (managedErr === null) {
@@ -231,6 +243,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.MPA:
         await handleMPA();
+        break;
+      case ErrorCode.MVE:
+        await handleMVE();
         break;
       case ErrorCode.WEF:
       default:

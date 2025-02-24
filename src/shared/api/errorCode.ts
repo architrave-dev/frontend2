@@ -24,6 +24,7 @@ export enum ErrorCode {
   EVF = 'EVF', // Email verification Failed
   MIA = 'MIA', // Member Inactive
   MPA = 'MPA', // Member Pending Approval
+  MVE = 'MVE', // Member Verification Error
 }
 
 export const convertStringToErrorCode = (code: string): ErrorCode => {
