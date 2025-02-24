@@ -4,10 +4,11 @@ import { useAuth } from '../../shared/hooks/useApi/useAuth';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useLoadingStore } from '../../shared/store/loadingStore';
 
+
 const EmailVerification: React.FC = () => {
   const { activate } = useAuth();
   const { isLoading } = useLoadingStore();
-  const { clearModal } = useModalStore();
+  const { standardModal, clearModal } = useModalStore();
 
   const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', '']);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -20,6 +21,13 @@ const EmailVerification: React.FC = () => {
     // Initialize inputRefs array
     inputRefs.current = inputRefs.current.slice(0, 6);
   }, []);
+
+  if (standardModal == null) return null;
+
+  const maskEmail = (email: string | null) => {
+    if (!email) return '';
+    return email.replace(/(?<=^.)[^@]+(?=@)/g, match => '*'.repeat(match.length));
+  };
 
   const handleInputChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
@@ -61,7 +69,11 @@ const EmailVerification: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("handleSubmit");
+    if (standardModal.value == null) return;
+    await activate({
+      key: standardModal.value,
+      verificationCode: verificationCode.join('')
+    });
   };
 
   const digitsFilled = verificationCode.filter(d => d !== '').length;
@@ -70,7 +82,12 @@ const EmailVerification: React.FC = () => {
     <Container ref={modalRef} tabIndex={-1}>
       <Title>Email Verification</Title>
 
-      <InstructionText>Enter 6-digit code sent to your email address.</InstructionText>
+      <InstructionText>
+        Enter 6-digit code sent to your email address.<br />
+        <PrivacyText>
+          ({maskEmail(standardModal.value)})
+        </PrivacyText>
+      </InstructionText>
 
       <VerificationContainer>
         {verificationCode.map((digit, index) => (
@@ -114,6 +131,10 @@ const Title = styled.h2`
 const InstructionText = styled.p`
   margin-bottom: 24px;
   ${({ theme }) => theme.typography.Body_03_1};
+`;
+
+const PrivacyText = styled.span`
+  ${({ theme }) => theme.typography.Body_04};
 `;
 
 const VerificationContainer = styled.div`
@@ -160,5 +181,6 @@ const SubmitButton = styled.button`
     background-color: ${({ theme }) => theme.colors.color_Gray_03};
   }
 `;
+
 
 export default EmailVerification;

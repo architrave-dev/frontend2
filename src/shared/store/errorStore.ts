@@ -4,6 +4,7 @@ import { ErrorCode } from '../api/errorCode';
 
 export interface ManagedErr {
   errCode: ErrorCode | null;
+  value?: string;
   retryFunction?: () => Promise<void>;
 }
 

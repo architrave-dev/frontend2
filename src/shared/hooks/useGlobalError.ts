@@ -171,10 +171,11 @@ export const useGlobalError = () => {
 
   const handleMPA = async () => {
     console.log("handleMPA: Email Verification");
+    const email = managedErr?.value?.split(":")[1].trim();
     setStandardModal({
       modalType: ModalType.VERIFICATION,
       title: null,
-      value: null,
+      value: email || null,
       handleChange: () => { }
     });
   }

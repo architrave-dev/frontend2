@@ -96,6 +96,7 @@ export interface DeleteResponse {
 
 export interface ErrorResponse {
   errorCode: string;
+  message: string;
   timestamp: string;
 }
 //-------------- Contact

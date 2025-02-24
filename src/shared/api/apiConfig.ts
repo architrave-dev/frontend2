@@ -16,17 +16,16 @@ export const baseApi = axios.create({
 
 export const handleApiError = (error: unknown): Error => {
   if (isNetworkError(error)) {
-    return new Error(ErrorCode.NCE)
+    return new Error(`${ErrorCode.NCE}:: Network Error`)
   }
   if (axios.isAxiosError(error)) {
     if (error.code === 'ERR_NETWORK') {
-      return new Error(ErrorCode.SDN);
+      return new Error(`${ErrorCode.SDN}:: Something wrong in Server`);
     }
     const axiosError = error as AxiosError<ErrorResponse>;
     if (axiosError.response?.data) {
-      return new Error(axiosError.response.data.errorCode);
+      return new Error(`${axiosError.response.data.errorCode}:: ${axiosError.response.data.message}`);
     }
   }
-  // console.log("WEF!!!", error);
-  return new Error(ErrorCode.WEF);
+  return new Error(`${ErrorCode.WEF}:: Unexpected Error`);
 };
