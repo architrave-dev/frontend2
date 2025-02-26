@@ -6,6 +6,13 @@ export interface AuthResponse {
   authToken: string;
 }
 
+export interface SimpleStringResponse {
+  data: {
+    message: string;
+    value?: string;
+  }
+}
+
 //-------------- LandingBox
 export interface BillboardResponse {
   data: BillboardData;

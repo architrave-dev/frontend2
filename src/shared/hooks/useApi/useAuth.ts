@@ -1,10 +1,10 @@
 import { useAuthStore } from '../../store/authStore';
 import { signUp, login, refresh, activate } from '../../api/authAPI';
-import { UserData } from '../../dto/EntityRepository';
+import { UserData, UserDataWithRefreshToken } from '../../dto/EntityRepository';
 import { ActivateReq, LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
-import { AuthResponse } from '../../dto/ResDtoRepository';
+import { AuthResponse, SimpleStringResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
-import { TempAlertPosition, TempAlertType } from '../../enum/EnumRepository';
+import { ModalType, TempAlertPosition, TempAlertType } from '../../enum/EnumRepository';
 import { useApiWrapper } from './apiWrapper';
 import { useModalStore } from '../../store/portal/modalStore';
 
@@ -22,11 +22,10 @@ interface UseAuthResult {
 export const useAuth = (): UseAuthResult => {
   const { user, setUser, clearAuth } = useAuthStore();
   const { setTempAlert } = useTempAlertStore();
-  const { clearModal } = useModalStore();
+  const { setStandardModal, clearModal } = useModalStore();
   const withApiHandler = useApiWrapper();
 
-  const handleLoginSuccess = (response: AuthResponse) => {
-    const { data, authToken } = response;
+  const settingLoginUser = (data: UserDataWithRefreshToken, authToken: string) => {
     clearModal();
     const onlyUserData: UserData = {
       id: data.id,
@@ -45,6 +44,11 @@ export const useAuth = (): UseAuthResult => {
     localStorage.setItem('userData', JSON.stringify(onlyUserData));
     localStorage.setItem('authToken', authToken);
     localStorage.setItem('refreshToken', data.refreshToken);
+  }
+
+  const handleLoginSuccess = (response: AuthResponse) => {
+    const { data, authToken } = response;
+    settingLoginUser(data, authToken);
   };
 
   const handleRefreshSuccess = (response: AuthResponse) => {
@@ -52,13 +56,36 @@ export const useAuth = (): UseAuthResult => {
     localStorage.setItem('authToken', authToken);
   };
 
-  const handleSignupSuccess = (response: AuthResponse) => {
+  const handleSignupSuccess = (response: SimpleStringResponse) => {
     const { data } = response;
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Please verify your email.",
+      duration: 2000
+    });
+    setStandardModal({
+      modalType: ModalType.VERIFICATION,
+      title: null,
+      value: data.value || null,
+      handleChange: () => { }
+    });
   };
 
   const handleActivateSuccess = (response: AuthResponse) => {
     const { data } = response;
-    console.log("handleActivateSuccess: ", data);
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Email verification is complete. Please log in.",
+      duration: 2000
+    });
+    setStandardModal({
+      modalType: ModalType.LOGIN,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
   };
 
   const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq | ActivateReq>(

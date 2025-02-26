@@ -69,6 +69,18 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleAEV = async () => {
+    console.log("handleAEV: Already existed value!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Already existed email.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
   const handleDBE = async () => {
     console.log("handleDBE: Database error!!");
     setStandardAlert({
@@ -210,6 +222,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.NAU:
         await handleNAU();
+        break;
+      case ErrorCode.AEV:
+        await handleAEV();
         break;
       case ErrorCode.DBE:
         await handleDBE();

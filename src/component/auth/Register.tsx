@@ -93,12 +93,7 @@ const Register: React.FC = () => {
       })
       return;
     }
-    try {
-      await signUp({ email, password, username });
-      clearModal();
-    } catch (error) {
-      console.error('Registration failed:', error);
-    }
+    await signUp({ email, password, username });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

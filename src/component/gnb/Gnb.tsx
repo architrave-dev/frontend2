@@ -8,9 +8,11 @@ import { useMenu } from '../../shared/hooks/useMenu';
 import { useTitle } from '../../shared/hooks/useTitle';
 import { ModalType } from '../../shared/enum/EnumRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useAuth } from '../../shared/hooks/useApi/useAuth';
 
 const Gnb: React.FC = () => {
   const location = useLocation();
+  const { user } = useAuth();
   const { isMenuOpen, closeMenu } = useMenu();
   const { setStandardModal } = useModalStore();
   useTitle();
@@ -35,7 +37,9 @@ const Gnb: React.FC = () => {
           }
         </LeftSection>
         {location.pathname === '/' ? (
-          <RegisterButton onClick={openRegisterModal}>Register</RegisterButton>
+          user === null && (
+            <RegisterButton onClick={openRegisterModal}>Register</RegisterButton>
+          )
         ) : (
           <User />
         )}

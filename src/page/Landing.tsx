@@ -4,10 +4,12 @@ import SearchBar from '../component/landing/SearchBar';
 import Welcome from '../component/landing/Welcome';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
+import { useInitPage } from '../shared/hooks/useInitPage';
 // import { useHealthCheck } from '../shared/hooks/useHealthCheck';
 
 const Landing: React.FC = () => {
   // useHealthCheck();
+  useInitPage();
   const { isLoading } = useLoadingStore();
 
   return (
