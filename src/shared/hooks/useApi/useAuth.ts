@@ -1,14 +1,12 @@
 import { useAuthStore } from '../../store/authStore';
-import { signUp, login, refresh } from '../../api/authAPI';
-import { convertStringToErrorCode } from '../../api/errorCode';
-import { useGlobalErrStore } from '../../store/errorStore';
-import { UserData } from '../../dto/EntityRepository';
-import { LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
-import { AuthResponse } from '../../dto/ResDtoRepository';
-import { useLoadingStore } from '../../store/loadingStore';
-import { TempAlertPosition } from '../../enum/EnumRepository';
-import { TempAlertType } from '../../enum/EnumRepository';
+import { signUp, login, refresh, activate } from '../../api/authAPI';
+import { UserData, UserDataWithRefreshToken } from '../../dto/EntityRepository';
+import { ActivateReq, LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
+import { AuthResponse, SimpleStringResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
+import { ModalType, TempAlertPosition, TempAlertType } from '../../enum/EnumRepository';
+import { useApiWrapper } from './apiWrapper';
+import { useModalStore } from '../../store/portal/modalStore';
 
 
 interface UseAuthResult {
@@ -17,17 +15,18 @@ interface UseAuthResult {
   signUp: (data: SignUpReq) => Promise<void>;
   login: (data: LoginReq) => Promise<void>;
   refresh: (data: RefreshReq) => Promise<void>;
+  activate: (data: ActivateReq) => Promise<void>;
   logout: () => void;
 }
 
 export const useAuth = (): UseAuthResult => {
-  const { setIsLoading } = useLoadingStore();
-  const { setManagedErr, clearErr } = useGlobalErrStore();
   const { user, setUser, clearAuth } = useAuthStore();
   const { setTempAlert } = useTempAlertStore();
+  const { setStandardModal, clearModal } = useModalStore();
+  const withApiHandler = useApiWrapper();
 
-  const handleLoginSuccess = (response: AuthResponse) => {
-    const { data, authToken } = response;
+  const settingLoginUser = (data: UserDataWithRefreshToken, authToken: string) => {
+    clearModal();
     const onlyUserData: UserData = {
       id: data.id,
       email: data.email,
@@ -45,54 +44,75 @@ export const useAuth = (): UseAuthResult => {
     localStorage.setItem('userData', JSON.stringify(onlyUserData));
     localStorage.setItem('authToken', authToken);
     localStorage.setItem('refreshToken', data.refreshToken);
+  }
+
+  const handleLoginSuccess = (response: AuthResponse) => {
+    const { data, authToken } = response;
+    settingLoginUser(data, authToken);
   };
 
   const handleRefreshSuccess = (response: AuthResponse) => {
-    const { data, authToken } = response;
+    const { authToken } = response;
     localStorage.setItem('authToken', authToken);
   };
 
-  const handleSignupSuccess = (response: AuthResponse) => {
+  const handleSignupSuccess = (response: SimpleStringResponse) => {
     const { data } = response;
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Please verify your email.",
+      duration: 2000
+    });
+    setStandardModal({
+      modalType: ModalType.VERIFICATION,
+      title: null,
+      value: data.value || null,
+      handleChange: () => { }
+    });
   };
 
+  const handleActivateSuccess = (response: AuthResponse) => {
+    const { data } = response;
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Email verification is complete. Please log in.",
+      duration: 2000
+    });
+    setStandardModal({
+      modalType: ModalType.LOGIN,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
+  };
 
-  const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq>(
-    action: 'signup' | 'login' | 'refresh',
+  const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq | ActivateReq>(
+    action: 'signup' | 'login' | 'refresh' | 'activate',
     data: T
   ) => {
-    setIsLoading(true);
-    clearErr();
-    try {
+    const apiFunction = async () => {
       switch (action) {
         case 'signup':
-          handleSignupSuccess(await signUp(data as SignUpReq));
-          break;
+          return handleSignupSuccess(await signUp(data as SignUpReq));
         case 'refresh':
-          handleRefreshSuccess(await refresh(data as RefreshReq));
-          break;
+          return handleRefreshSuccess(await refresh(data as RefreshReq));
+        case 'activate':
+          return handleActivateSuccess(await activate(data as ActivateReq));
         case 'login':
         default:
-          handleLoginSuccess(await login(data as LoginReq));
-          break;
+          return handleLoginSuccess(await login(data as LoginReq));
       }
-    } catch (err) {
-      const errCode = err instanceof Error ? err.message : 'An unexpected error occurred';
-      const convertedErrCode = convertStringToErrorCode(errCode);
-      setManagedErr({
-        errCode: convertedErrCode,
-        retryFunction: () => handleAuthRequest(action, data)
-      });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    await withApiHandler(apiFunction, [action, data]);
   };
 
   const signUpHandler = (data: SignUpReq) => handleAuthRequest('signup', data);
   const loginHandler = (data: LoginReq) => handleAuthRequest('login', data);
   const refreshHandler = (data: RefreshReq) => handleAuthRequest('refresh', data);
-
+  const activateHandler = (data: ActivateReq) => handleAuthRequest('activate', data);
   const logout = () => {
     clearAuth();
     localStorage.removeItem('userData');
@@ -112,6 +132,7 @@ export const useAuth = (): UseAuthResult => {
     signUp: signUpHandler,
     login: loginHandler,
     refresh: refreshHandler,
+    activate: activateHandler,
     logout,
   };
 }

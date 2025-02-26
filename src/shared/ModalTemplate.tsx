@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Portal from '../portal/Modal';
 import Login from '../component/auth/Login';
-import Signin from '../component/auth/SignIn';
+import Register from '../component/auth/Register';
 import { useModalStore } from './store/portal/modalStore';
 import { ModalType } from './enum/EnumRepository';
 import WorkImport from '../component/projectDetail/WorkImport';
@@ -10,6 +10,8 @@ import WorkListForDetail from '../component/projectDetail/WorkListForCreateDetai
 import ChangeModal from '../component/setting/ChangeModal';
 import FullImageViewer from './component/FullImageViewer';
 import EmailSend from '../component/contact/EmailSend';
+import EmailVerification from '../component/auth/EmailVerification';
+
 
 const ModalTemplate: React.FC = () => {
   const { standardModal, clearModal } = useModalStore();
@@ -46,11 +48,19 @@ const ModalTemplate: React.FC = () => {
             </ModalContentBlur>
           </ModalOverlayBrighter>
         )
-      case ModalType.SIGNIN:
+      case ModalType.REGISTER:
         return (
           <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
-              <Signin />
+              <Register />
+            </ModalContent>
+          </ModalOverlay>
+        )
+      case ModalType.VERIFICATION:
+        return (
+          <ModalOverlay onClick={clearModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <EmailVerification />
             </ModalContent>
           </ModalOverlay>
         )

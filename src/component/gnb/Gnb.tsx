@@ -6,12 +6,25 @@ import Hamburger from './Hamburger';
 import User from './UserComp';
 import { useMenu } from '../../shared/hooks/useMenu';
 import { useTitle } from '../../shared/hooks/useTitle';
+import { ModalType } from '../../shared/enum/EnumRepository';
+import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useAuth } from '../../shared/hooks/useApi/useAuth';
 
 const Gnb: React.FC = () => {
   const location = useLocation();
+  const { user } = useAuth();
   const { isMenuOpen, closeMenu } = useMenu();
+  const { setStandardModal } = useModalStore();
   useTitle();
 
+  const openRegisterModal = () => {
+    setStandardModal({
+      modalType: ModalType.REGISTER,
+      title: null,
+      value: null,
+      handleChange: () => { }
+    });
+  };
   return (
     <>
       <GnbSection>
@@ -23,7 +36,13 @@ const Gnb: React.FC = () => {
             </SlidingNavigation>
           }
         </LeftSection>
-        {location.pathname !== '/' && <User />}
+        {location.pathname === '/' ? (
+          user === null && (
+            <RegisterButton onClick={openRegisterModal}>Register</RegisterButton>
+          )
+        ) : (
+          <User />
+        )}
       </GnbSection>
       {isMenuOpen && <TransparentLayer onClick={closeMenu} />}
     </>
@@ -69,6 +88,16 @@ const TransparentLayer = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0);
   z-index: 2;
+`;
+
+const RegisterButton = styled.div`
+  text-decoration: underline;
+  cursor: pointer;
+  ${({ theme }) => theme.typography.Body_02_2};
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 export default Gnb;

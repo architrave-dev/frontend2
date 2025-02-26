@@ -22,6 +22,9 @@ export enum ErrorCode {
   SDN = 'SDN', // Server Down
   EME = 'EME', // EMail send Error
   EVF = 'EVF', // Email verification Failed
+  MIA = 'MIA', // Member Inactive
+  MPA = 'MPA', // Member Pending Approval
+  MVE = 'MVE', // Member Verification Error
 }
 
 export const convertStringToErrorCode = (code: string): ErrorCode => {

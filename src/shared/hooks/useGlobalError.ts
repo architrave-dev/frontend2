@@ -3,11 +3,13 @@ import { useGlobalErrStore } from '../store/errorStore';
 import { ErrorCode } from '../api/errorCode';
 import { useAuth } from './useApi/useAuth';
 import { useStandardAlertStore } from '../store/portal/alertStore';
-import { AlertPosition, AlertType } from '../enum/EnumRepository';
+import { AlertPosition, AlertType, ModalType } from '../enum/EnumRepository';
+import { useModalStore } from '../store/portal/modalStore';
 
 export const useGlobalError = () => {
   const { managedErr, clearErr } = useGlobalErrStore();
   const { setStandardAlert } = useStandardAlertStore();
+  const { setStandardModal, clearModal } = useModalStore();
   const { refresh, logout } = useAuth();
 
 
@@ -61,6 +63,18 @@ export const useGlobalError = () => {
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
       content: "Authentication failed.",
+      callBack: () => {
+        clearErr();
+      }
+    });
+  }
+
+  const handleAEV = async () => {
+    console.log("handleAEV: Already existed value!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Already existed email.",
       callBack: () => {
         clearErr();
       }
@@ -167,6 +181,30 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleMPA = async () => {
+    console.log("handleMPA: Email Verification");
+    const email = managedErr?.value?.split(":")[1].trim();
+    setStandardModal({
+      modalType: ModalType.VERIFICATION,
+      title: null,
+      value: email || null,
+      handleChange: () => { }
+    });
+  }
+
+  const handleMVE = async () => {
+    console.log("handleMVE: Email Verification Error!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Email Verification Error.",
+      callBack: () => {
+        clearErr();
+        clearModal();
+      }
+    });
+  }
+
   const handleGlobalErr = async () => {
     if (managedErr === null) {
       return;
@@ -184,6 +222,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.NAU:
         await handleNAU();
+        break;
+      case ErrorCode.AEV:
+        await handleAEV();
         break;
       case ErrorCode.DBE:
         await handleDBE();
@@ -215,6 +256,12 @@ export const useGlobalError = () => {
       case ErrorCode.EVF:
         await handleEVF();
         break;
+      case ErrorCode.MPA:
+        await handleMPA();
+        break;
+      case ErrorCode.MVE:
+        await handleMVE();
+        break;
       case ErrorCode.WEF:
       default:
         setStandardAlert({
@@ -230,5 +277,4 @@ export const useGlobalError = () => {
   useEffect(() => {
     handleGlobalErr();
   }, [managedErr]);
-
 }

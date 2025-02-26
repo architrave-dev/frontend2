@@ -11,9 +11,8 @@ import { useLoadingStore } from '../../shared/store/loadingStore';
 import { useValidation } from '../../shared/hooks/useValidation';
 import { ModalType } from '../../shared/enum/EnumRepository';
 
-
-const Login: React.FC = () => {
-  const { login } = useAuth();
+const Register: React.FC = () => {
+  const { signUp } = useAuth();
   const { isLoading } = useLoadingStore();
   const { clearModal, setStandardModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
@@ -21,8 +20,12 @@ const Login: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,7 +35,16 @@ const Login: React.FC = () => {
   }, []);
 
   const isValid = () => {
-    return (email !== '' && password !== '' && !emailError && !passwordError)
+    return (
+      email !== '' &&
+      password !== '' &&
+      confirmPassword !== '' &&
+      username !== '' &&
+      !emailError &&
+      !passwordError &&
+      !confirmPasswordError &&
+      !usernameError
+    );
   }
 
   const validateEmail = () => {
@@ -50,6 +62,25 @@ const Login: React.FC = () => {
       return false;
     }
     setPasswordError('');
+    validateConfirmPassword();
+    return true;
+  };
+
+  const validateConfirmPassword = () => {
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Passwords do not match');
+      return false;
+    }
+    setConfirmPasswordError('');
+    return true;
+  };
+
+  const validateUsername = () => {
+    if (username.length < 2) {
+      setUsernameError('Username must be at least 2 characters');
+      return false;
+    }
+    setUsernameError('');
     return true;
   };
 
@@ -62,7 +93,7 @@ const Login: React.FC = () => {
       })
       return;
     }
-    await login({ email, password });
+    await signUp({ email, password, username });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -81,9 +112,9 @@ const Login: React.FC = () => {
     }
   };
 
-  const openRegisterModal = () => {
+  const openLoginModal = () => {
     setStandardModal({
-      modalType: ModalType.REGISTER,
+      modalType: ModalType.LOGIN,
       title: null,
       value: null,
       handleChange: () => { }
@@ -91,8 +122,8 @@ const Login: React.FC = () => {
   };
 
   return (
-    <LoginComp ref={modalRef} onKeyDown={handleKeyDown} tabIndex={-1}>
-      <Title>Login</Title>
+    <RegisterComp ref={modalRef} onKeyDown={handleKeyDown} tabIndex={-1}>
+      <Title>Register</Title>
       <MoleculeInput
         name={"Email"}
         validate={validateEmail}
@@ -102,6 +133,14 @@ const Login: React.FC = () => {
         placeholder={"username@email.com"}
       />
       <MoleculeInput
+        name={"Username"}
+        validate={validateUsername}
+        value={username}
+        handleChange={setUsername}
+        err={usernameError}
+        placeholder={"Username"}
+      />
+      <MoleculeInput
         name={"Password"}
         validate={validatePassword}
         value={password}
@@ -109,9 +148,17 @@ const Login: React.FC = () => {
         err={passwordError}
         placeholder={"Password"}
       />
+      <MoleculeInput
+        name={"Confirm Password"}
+        validate={validateConfirmPassword}
+        value={confirmPassword}
+        handleChange={setConfirmPassword}
+        err={confirmPasswordError}
+        placeholder={"Confirm Password"}
+      />
       <ButtonContainer>
         <SubmitButton onClick={handleSubmit} disabled={isLoading}>
-          Login
+          Register
         </SubmitButton>
         <HeadlessBtn
           value={"Cancel"}
@@ -120,20 +167,20 @@ const Login: React.FC = () => {
         />
       </ButtonContainer>
       <ToggleText>
-        <span>Don't have an account?</span>
-        <RegisterText onClick={openRegisterModal}>Register</RegisterText>
+        <span>Already have an account?</span>
+        <LoginText onClick={openLoginModal}>Login</LoginText>
       </ToggleText>
-    </LoginComp>
+    </RegisterComp>
   );
 };
 
-const LoginComp = styled.div`
+const RegisterComp = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: 17px 14px;
   outline: none;
-`
+`;
 
 const Title = styled.h2`
   margin-bottom: 44px;
@@ -174,10 +221,10 @@ const ToggleText = styled.p`
   ${({ theme }) => theme.typography.Body_03_2};
 `;
 
-const RegisterText = styled.span`
+const LoginText = styled.span`
   font-style: italic;
   text-decoration: underline;
   cursor: pointer;
 `;
 
-export default Login;
+export default Register;
