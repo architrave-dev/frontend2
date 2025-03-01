@@ -6,29 +6,63 @@ import HeadlessInput from '../../shared/component/headless/input/HeadlessInput';
 import { InputBox } from '../../shared/component/headless/input/InputBody';
 import { useLoadingStore } from '../../shared/store/loadingStore';
 
-
 const SearchBar: React.FC = () => {
   const [searchString, setSearchString] = useState('');
-  const { checkAui, result } = useMember();
+  const { checkAui, result, search, searchList } = useMember();
   const { isLoading } = useLoadingStore();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
+  const [showCandidates, setShowCandidates] = useState(false);
 
   useEffect(() => {
     if (searchRef.current) {
       searchRef.current.focus();
     }
+
+    // Add event listener for clicks outside the component
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        handleBlankClick();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Clean up the event listener
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
+  useEffect(() => {
+    if (result) navigate(`/${searchString}`)
+  }, [result])
+
+  const handleChange = async (username: string) => {
+    setShowCandidates(true);
+    await search(username);
+    setSearchString(username);
+  }
+
+  const handleCandidateClick = (aui: string) => {
+    setSearchString(aui);
+    navigate(`/${aui}`)
+  };
+
+  const handleBlankClick = () => {
+    setShowCandidates(false);
+  }
+
+  const handleInputClick = () => {
+    if (searchString && searchList.length > 0) {
+      setShowCandidates(true);
+    }
+  };
 
   const handleSearch = () => {
     if (!searchString.trim()) return;
     checkAui(searchString);
   };
-
-  useEffect(() => {
-    if (result) navigate(`/${searchString}`)
-  }, [result])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (isLoading) {
@@ -39,17 +73,34 @@ const SearchBar: React.FC = () => {
     }
   };
 
+
+
   return (
     <SearchWrapper ref={searchRef} onKeyDown={handleKeyDown} tabIndex={-1}>
       <InputWrapper>
-        <HeadlessInput
-          type="text"
-          value={searchString}
-          handleChange={(e) => setSearchString(e.target.value)}
-          handleKeyBoard={handleKeyDown}
-          placeholder={"Enter Artist ID"}
-          StyledInput={InputBox}
-        />
+        <SearchInputContainer onClick={handleInputClick}>
+          <HeadlessInput
+            type="text"
+            value={searchString}
+            handleChange={(e) => handleChange(e.target.value)}
+            handleKeyBoard={handleKeyDown}
+            placeholder={"Enter username"}
+            StyledInput={InputBox}
+          />
+          {showCandidates && searchList.length > 0 && (
+            <CandidatesList>
+              {searchList.map((candidate, index) => (
+                <CandidateItem
+                  key={index}
+                  onClick={() => handleCandidateClick(candidate.aui)}
+                >
+                  <CandidateName>{candidate.username}</CandidateName>
+                  <CandidateAui>{candidate.aui}</CandidateAui>
+                </CandidateItem>
+              ))}
+            </CandidatesList>
+          )}
+        </SearchInputContainer>
         <Button onClick={handleSearch}>
           Search
         </Button>
@@ -84,5 +135,50 @@ const Button = styled.button`
   ${({ theme }) => theme.typography.Body_02_2};
 `;
 
+const SearchInputContainer = styled.div`
+  position: relative;
+  flex: 1;
+`;
+
+const CandidatesList = styled.ul`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  z-index: 10;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+`;
+
+const CandidateItem = styled.li`
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid ${({ theme }) => theme.colors.color_Gray_06};
+  align-items: center;
+  cursor: pointer;
+  
+  color: ${({ theme }) => theme.colors.color_Gray_04};
+  
+  &:hover {
+    color: ${({ theme }) => theme.colors.color_Gray_02};
+    background-color: ${({ theme }) => theme.colors.color_Gray_06};
+  }
+`;
+
+const CandidateName = styled.span`
+  ${({ theme }) => theme.typography.Body_02_1};
+`;
+
+const CandidateAui = styled.span`
+  ${({ theme }) => theme.typography.Body_04};
+  color: ${({ theme }) => theme.colors.color_Gray_05};
+`;
 
 export default SearchBar;

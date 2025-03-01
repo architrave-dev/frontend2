@@ -1,4 +1,4 @@
-import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData, ContactData, SettingData, ProjectInfoData } from './EntityRepository';
+import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData, ContactData, SettingData, ProjectInfoData, MemberSearchData } from './EntityRepository';
 
 
 export interface AuthResponse {
@@ -82,6 +82,11 @@ export interface ProjectInfoListResponse {
 //-------------- Member
 export interface MemberResponse {
   data: string;
+}
+export interface SearchResponse {
+  data: {
+    memberSearchList: MemberSearchData[];
+  }
 }
 
 //-------------- MemberInfo
