@@ -21,6 +21,11 @@ export interface UploadFileData {
   originUrl: string;
 }
 
+export interface MemberSearchData {
+  username: string;
+  aui: string;
+}
+
 export interface BillboardData {
   id: string;
   uploadFile: UploadFileData;
