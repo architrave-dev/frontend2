@@ -11,6 +11,7 @@ import ChangeModal from '../component/setting/ChangeModal';
 import FullImageViewer from './component/FullImageViewer';
 import EmailSend from '../component/contact/EmailSend';
 import EmailVerification from '../component/auth/EmailVerification';
+import Indexing from '../component/index/Indexing';
 
 
 const ModalTemplate: React.FC = () => {
@@ -77,6 +78,14 @@ const ModalTemplate: React.FC = () => {
           <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <EmailSend />
+            </ModalContent>
+          </ModalOverlay>
+        )
+      case ModalType.INDEXING:
+        return (
+          <ModalOverlay onClick={clearModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <Indexing />
             </ModalContent>
           </ModalOverlay>
         )
