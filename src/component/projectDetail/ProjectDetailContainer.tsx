@@ -65,11 +65,12 @@ const RepresentImgContainer = styled.div<StyledImgDivContainerProps>`
   background-image: url(${props => props.$backgroundImg});
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  height: calc(240vw / 4);
+  max-height: 98vh;
 `;
 
 const ProjectDetailWrapper = styled.article`
-  padding: calc(8vh) calc(10vw) calc(4vh) calc(10vw);
+  padding: calc(6vh) calc(10vw) calc(4vh) calc(10vw);
 `;
 
 const Description = styled.div<{ $textAlignment: TextAlignment }>`

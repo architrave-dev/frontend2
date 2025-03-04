@@ -17,12 +17,10 @@ const Space: React.FC<SpaceProps> = ({ children, $align, $height }) => {
 
 const SpaceComp = styled.div<{ $align?: string, $height?: string }>`
   width: 100%;
-  height: ${({ $height }) => $height !== undefined ? $height : '50px'};
+  height: ${({ $height }) => $height !== undefined ? $height : '5vh'};
   display: flex;
   justify-content: ${({ $align }) => $align !== undefined ? $align : 'center'};
   align-items: center;
-
-  padding: 20px 0px;
 `
 
 export default Space;

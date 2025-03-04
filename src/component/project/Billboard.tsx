@@ -97,7 +97,8 @@ const Container = styled.div<StyledImgDivContainerProps>`
   background-position: center;
 
   width: 100%;
-  height: 100vh;
+  height: calc(240vw / 4);
+  max-height: 95vh;
 
   display: flex;
   flex-direction: column;
