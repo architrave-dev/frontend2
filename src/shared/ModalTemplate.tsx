@@ -25,6 +25,12 @@ const ModalTemplate: React.FC = () => {
         return (
           <FullImageViewer />
         )
+      case ModalType.INDEXING:
+        return (
+          <WorkStationOverlay onClick={clearModal}>
+            <Indexing />
+          </WorkStationOverlay>
+        )
       case ModalType.WORK_STATION:
         return (
           <WorkStationOverlay onClick={clearModal}>
@@ -49,6 +55,14 @@ const ModalTemplate: React.FC = () => {
             </ModalContentBlur>
           </ModalOverlayBrighter>
         )
+      case ModalType.LOGIN:
+        return (
+          <ModalOverlay onClick={clearModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <Login />
+            </ModalContent>
+          </ModalOverlay>
+        )
       case ModalType.REGISTER:
         return (
           <ModalOverlay onClick={clearModal}>
@@ -65,27 +79,11 @@ const ModalTemplate: React.FC = () => {
             </ModalContent>
           </ModalOverlay>
         )
-      case ModalType.LOGIN:
-        return (
-          <ModalOverlay onClick={clearModal}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>
-              <Login />
-            </ModalContent>
-          </ModalOverlay>
-        )
       case ModalType.EMAIL_SEND:
         return (
           <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <EmailSend />
-            </ModalContent>
-          </ModalOverlay>
-        )
-      case ModalType.INDEXING:
-        return (
-          <ModalOverlay onClick={clearModal}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>
-              <Indexing />
             </ModalContent>
           </ModalOverlay>
         )
