@@ -269,3 +269,10 @@ export interface ImageMetadata {
   DESKTOP: boolean;
   origin: boolean;
 }
+
+export interface IndexOrderData {
+  index: number;
+  id: string;
+  mainText: string;
+  subText: string;
+}
