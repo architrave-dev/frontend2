@@ -77,6 +77,15 @@ const ProjectElementList: React.FC = () => {
     });
   }
 
+  const handleReOrder = () => {
+    setStandardModal({
+      modalType: ModalType.INDEXING,
+      title: "Element",
+      value: null,
+      handleChange: () => { },
+    });
+  }
+
   return (
     <ProjectElementListComp>
       {projectElementList.map((each, index) => (
@@ -119,6 +128,13 @@ const ProjectElementList: React.FC = () => {
               StyledBtn={BtnCreate}
             />
           </CreateButtonGroup>
+          <BtnContainer>
+            <HeadlessBtn
+              value={"Reorder"}
+              handleClick={handleReOrder}
+              StyledBtn={BtnCreate}
+            />
+          </BtnContainer>
         </Space>
       )}
     </ProjectElementListComp>
@@ -141,8 +157,16 @@ const ProjectElementListComp = styled.article`
 const CreateButtonGroup = styled.div`
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 0.7vw;
 `;
+
+const BtnContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+`
 
 
 export default ProjectElementList;

@@ -11,6 +11,8 @@ import ProjectInfo from './ProjectInfo';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
 import { useParams } from 'react-router-dom';
+import { ModalType } from '../../shared/enum/EnumRepository';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 const ProjectInfoList: React.FC = () => {
   const { aui } = useAui();
@@ -19,6 +21,7 @@ const ProjectInfoList: React.FC = () => {
   const { project } = useProjectDetail();
   const { projectInfoList } = useProjectInfoListStore();
   const { getProjectInfoList, createProjectInfo } = useProjectInfo();
+  const { setStandardModal } = useModalStore();
 
   useEffect(() => {
     if (!aui || !project || !projectId) return;
@@ -38,6 +41,15 @@ const ProjectInfoList: React.FC = () => {
     await createProjectInfo(aui, piBuilder(project.id));
   };
 
+  const handleReOrder = () => {
+    setStandardModal({
+      modalType: ModalType.INDEXING,
+      title: "Info",
+      value: null,
+      handleChange: () => { },
+    });
+  }
+
   return (
     <ProjectInfoListComp>
       {projectInfoList && projectInfoList.map((each, index) =>
@@ -45,11 +57,18 @@ const ProjectInfoList: React.FC = () => {
       )}
       <Space $align={"center"} $height={"calc(6vw)"}>
         {isEditMode &&
-          <HeadlessBtn
-            value={"Info"}
-            handleClick={handleCreateInfo}
-            StyledBtn={BtnCreate}
-          />
+          <BtnContainer>
+            <HeadlessBtn
+              value={"Info"}
+              handleClick={handleCreateInfo}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Reorder"}
+              handleClick={handleReOrder}
+              StyledBtn={BtnCreate}
+            />
+          </BtnContainer>
         }
       </Space>
     </ProjectInfoListComp>
@@ -59,5 +78,13 @@ const ProjectInfoList: React.FC = () => {
 const ProjectInfoListComp = styled.article`
   position: relative;
 `;
+
+const BtnContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+`
 
 export default ProjectInfoList;

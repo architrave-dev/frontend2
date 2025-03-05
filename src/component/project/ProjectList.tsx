@@ -59,7 +59,6 @@ const ProjectList: React.FC = () => {
               StyledBtn={BtnCreate}
             />
           </BtnContainer>
-
         }
       </Space>
       {projects.map((each, idx) => (

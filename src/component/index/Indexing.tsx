@@ -7,10 +7,15 @@ import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { IndexOrderData } from '../../shared/dto/EntityRepository';
 import { ModalType } from '../../shared/enum/EnumRepository';
 import IndexCard from './IndexCard';
+import { useProjectInfo } from '../../shared/hooks/useApi/useProjectInfo';
+import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
+import { ProjectElementType } from '../../shared/enum/EnumRepository';
 
 const Indexing: React.FC = () => {
   const { standardModal, isClosing, clearModal } = useModalStore();
   const { projects } = useProjectList();
+  const { projectInfoList } = useProjectInfo();
+  const { projectElementList } = useProjectElement();
   const [orderedDataList, setOrderedDataList] = useState<IndexOrderData[]>([]);
   const [grabbedData, setGrabbedData] = useState<IndexOrderData | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -34,8 +39,64 @@ const Indexing: React.FC = () => {
         ));
         setOrderedDataList(orderedProjects);
         break;
+      case "Info":
+        const orderedInfos = projectInfoList.map((info, index) => (
+          {
+            index,
+            id: info.id,
+            mainText: info.customName,
+            subText: info.customValue
+          }
+        ));
+        setOrderedDataList(orderedInfos);
+        break;
+      case "Element":
+        const orderedElements = projectElementList.map((element, index) => {
+          switch (element.projectElementType) {
+            case ProjectElementType.WORK:
+              return {
+                index,
+                id: element.id,
+                mainText: element.work.title,
+                subText: "Work"
+              };
+            case ProjectElementType.DETAIL:
+              return {
+                index,
+                id: element.id,
+                mainText: element.workDetail.description,
+                subText: "Detail"
+              };
+            case ProjectElementType.TEXTBOX:
+              return {
+                index,
+                id: element.id,
+                mainText: element.textBox.content,
+                subText: "Text Box"
+              };
+            case ProjectElementType.DOCUMENT:
+              return {
+                index,
+                id: element.id,
+                mainText: element.document.description,
+                subText: "Document"
+              };
+            case ProjectElementType.DIVIDER:
+              return {
+                index,
+                id: element.id,
+                mainText: "Divider",
+                subText: ""
+              };
+            default:
+              return null;
+          }
+        }).filter(item => item !== null) as IndexOrderData[];
+
+        setOrderedDataList(orderedElements);
+        break;
     }
-  }
+  };
 
   const handleDragStart = (data: IndexOrderData) => {
     setGrabbedData(data);
@@ -187,7 +248,8 @@ const ContentContainer = styled.div`
 
 const NoContentContainer = styled.div`
   width: 100%;
-  min-height: 600px;
+  height: 100%;
+  min-height: 500px;
   
   display: flex;
   justify-content: center;
