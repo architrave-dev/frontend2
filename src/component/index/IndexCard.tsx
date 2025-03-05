@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IndexOrderData } from '../../shared/dto/EntityRepository';
+import { shrinkString } from '../../shared/util/shrinkString';
 
 interface IndexCardProps {
   data: IndexOrderData;
   onDragStart: (data: IndexOrderData) => void;
 }
+const MAX_MAIN_TEXT_LENGTH = 15;
 
 const IndexCard: React.FC<IndexCardProps> = ({
   data,
@@ -20,7 +22,7 @@ const IndexCard: React.FC<IndexCardProps> = ({
       <HandleIcon>::</HandleIcon>
 
       <TextContainer>
-        <MainText>{data.mainText}</MainText>
+        <MainText>{shrinkString(data.mainText, MAX_MAIN_TEXT_LENGTH)}</MainText>
         <SubText>{data.subText}</SubText>
       </TextContainer>
     </IndexCardComp>
