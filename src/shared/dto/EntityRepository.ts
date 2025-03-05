@@ -238,7 +238,6 @@ export interface CareerData {
   careerType: CareerType;
   yearFrom: string;
   content: string;
-  index: number;
 
   hasChanged?: boolean;
 }

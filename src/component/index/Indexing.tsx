@@ -10,12 +10,14 @@ import IndexCard from './IndexCard';
 import { useProjectInfo } from '../../shared/hooks/useApi/useProjectInfo';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { ProjectElementType } from '../../shared/enum/EnumRepository';
+import { useCareer } from '../../shared/hooks/useApi/useCareer';
 
 const Indexing: React.FC = () => {
   const { standardModal, isClosing, clearModal } = useModalStore();
   const { projects } = useProjectList();
   const { projectInfoList } = useProjectInfo();
   const { projectElementList } = useProjectElement();
+  const { careerList } = useCareer();
   const [orderedDataList, setOrderedDataList] = useState<IndexOrderData[]>([]);
   const [grabbedData, setGrabbedData] = useState<IndexOrderData | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -95,6 +97,18 @@ const Indexing: React.FC = () => {
 
         setOrderedDataList(orderedElements);
         break;
+      case "Career":
+        const filteredCareers = careerList.filter((each) => each.careerType === standardModal.value);
+        const orderedCareers = filteredCareers.map((career, index) => (
+          {
+            index,
+            id: career.id,
+            mainText: career.content,
+            subText: career.yearFrom
+          }
+        ));
+        setOrderedDataList(orderedCareers);
+        break;
     }
   };
 
@@ -142,7 +156,12 @@ const Indexing: React.FC = () => {
       $isClosing={isClosing}
     >
       <IndexingComp>
-        <Title>{"Reorder " + standardModal?.title}</Title>
+        <TitleContainer>
+          <Title>{"Reorder " + standardModal?.title}</Title>
+          {standardModal?.title === "Career" &&
+            <SubTitle>{standardModal?.value}</SubTitle>
+          }
+        </TitleContainer>
         {orderedDataList.length > 0 ? (
           <ContentContainer>
             {orderedDataList.map((each, index) => (
@@ -256,10 +275,20 @@ const NoContentContainer = styled.div`
   align-items: center;
 `
 
-const Title = styled.h2`
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
   margin-bottom: 24px;
   color: ${({ theme }) => theme.colors.color_Gray_01};
+`;
+
+const Title = styled.h2`
   ${({ theme }) => theme.typography.Body_01_1};
+`;
+const SubTitle = styled.h2`
+  ${({ theme }) => theme.typography.Body_02_1};
 `;
 
 const ButtonContainer = styled.div`
