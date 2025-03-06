@@ -119,3 +119,8 @@ export interface ContactResponse {
 export interface SettingResponse {
   data: SettingData;
 }
+
+//-------------- Reorder
+export interface ReorderResponse {
+  data: string;
+}

@@ -330,3 +330,14 @@ export interface EmailRequest {
   subject: string;
   body: string;
 }
+
+//-------------- Reorder
+export interface ReorderReq {
+  index: number;
+  id: string;
+}
+
+export interface UpdateReorderListReq {
+  id: string;
+  reorderReqList: ReorderReq[];
+}

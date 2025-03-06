@@ -11,10 +11,13 @@ import { useProjectInfo } from '../../shared/hooks/useApi/useProjectInfo';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { ProjectElementType } from '../../shared/enum/EnumRepository';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
+import { useAui } from '../../shared/hooks/useAui';
+import { ReorderReq, UpdateReorderListReq } from '../../shared/dto/ReqDtoRepository';
 
 const Indexing: React.FC = () => {
+  const { aui } = useAui();
   const { standardModal, isClosing, clearModal } = useModalStore();
-  const { projects } = useProjectList();
+  const { projects, reorderProject } = useProjectList();
   const { projectInfoList } = useProjectInfo();
   const { projectElementList } = useProjectElement();
   const { careerList } = useCareer();
@@ -147,6 +150,29 @@ const Indexing: React.FC = () => {
   };
 
   const handleSubmit = () => {
+    const reorderReqList: ReorderReq[] = orderedDataList.map((each) => ({
+      index: each.index,
+      id: each.id
+    }));
+
+    switch (standardModal?.title) {
+      case "Project":
+        const updateReorderListReq: UpdateReorderListReq = {
+          id: "",
+          reorderReqList: reorderReqList
+        };
+        reorderProject(aui, updateReorderListReq);
+        break;
+      case "Info":
+        console.log("Info submit");
+        break;
+      case "Element":
+        console.log("Element submit");
+        break;
+      case "Career":
+        console.log("Career submit");
+        break;
+    }
     clearModal();
   };
 

@@ -1,8 +1,8 @@
 import { useProjectListStore } from '../../store/projectListStore';
-import { createProject, deleteProject, getProjectList } from '../../api/projectApi';
+import { createProject, deleteProject, getProjectList, reorderProject } from '../../api/projectApi';
 import { ProjectSimpleData } from '../../dto/EntityRepository';
-import { CreateProjectReq, RemoveProjectReq } from '../../dto/ReqDtoRepository';
-import { CreatedProjectResponse, DeleteResponse, ProjectListResponse } from '../../dto/ResDtoRepository';
+import { CreateProjectReq, RemoveProjectReq, UpdateReorderListReq } from '../../dto/ReqDtoRepository';
+import { CreatedProjectResponse, DeleteResponse, ProjectListResponse, ReorderResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 import { useApiWrapper } from './apiWrapper';
 
@@ -12,6 +12,7 @@ interface UseProjectListResult {
   getProjectList: (aui: string) => Promise<void>;
   createProject: (aui: string, data: CreateProjectReq) => Promise<void>;
   deleteProject: (aui: string, data: RemoveProjectReq) => Promise<void>;
+  reorderProject: (aui: string, data: UpdateReorderListReq) => Promise<void>;
 }
 
 export const useProjectList = (): UseProjectListResult => {
@@ -34,10 +35,14 @@ export const useProjectList = (): UseProjectListResult => {
     setProjects([...projects, createdProjectData]);
   };
 
+  const handleReorderProjectSuccess = (response: ReorderResponse) => {
+    console.log("reordered well");
+  };
+
   const handleProjectRequest = async (
     aui: string,
-    action: 'get' | 'create' | 'delete',
-    data?: CreateProjectReq | RemoveProjectReq
+    action: 'get' | 'create' | 'delete' | 'reorder',
+    data?: CreateProjectReq | RemoveProjectReq | UpdateReorderListReq
   ) => {
     const apiFunction = async () => {
       switch (action) {
@@ -46,6 +51,8 @@ export const useProjectList = (): UseProjectListResult => {
           return getProjectListHandler(aui);
         case 'create':
           return handleCreateProjectSuccess(await createProject(aui, data as CreateProjectReq));
+        case 'reorder':
+          return handleReorderProjectSuccess(await reorderProject(aui, data as UpdateReorderListReq));
         case 'get':
         default:
           return handleProjectListSuccess(await getProjectList(aui));
@@ -58,11 +65,13 @@ export const useProjectList = (): UseProjectListResult => {
   const getProjectListHandler = (aui: string) => handleProjectRequest(aui, 'get');
   const createProjectHandler = (aui: string, data: CreateProjectReq) => handleProjectRequest(aui, 'create', data);
   const removeProjectHandler = (aui: string, data: RemoveProjectReq) => handleProjectRequest(aui, 'delete', data);
+  const reorderProjectHandler = (aui: string, data: UpdateReorderListReq) => handleProjectRequest(aui, 'reorder', data);
 
   return {
     projects,
     getProjectList: getProjectListHandler,
     createProject: createProjectHandler,
-    deleteProject: removeProjectHandler
+    deleteProject: removeProjectHandler,
+    reorderProject: reorderProjectHandler
   };
 };
