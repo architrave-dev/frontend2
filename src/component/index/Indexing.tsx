@@ -13,13 +13,15 @@ import { ProjectElementType } from '../../shared/enum/EnumRepository';
 import { useCareer } from '../../shared/hooks/useApi/useCareer';
 import { useAui } from '../../shared/hooks/useAui';
 import { ReorderReq, UpdateReorderListReq } from '../../shared/dto/ReqDtoRepository';
+import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 
 const Indexing: React.FC = () => {
   const { aui } = useAui();
   const { standardModal, isClosing, clearModal } = useModalStore();
   const { projects, reorderProject } = useProjectList();
-  const { projectInfoList } = useProjectInfo();
-  const { projectElementList } = useProjectElement();
+  const { project } = useProjectDetail();
+  const { projectInfoList, reorderProjectInfo } = useProjectInfo();
+  const { projectElementList, reorderProjectElement } = useProjectElement();
   const { careerList } = useCareer();
   const [orderedDataList, setOrderedDataList] = useState<IndexOrderData[]>([]);
   const [grabbedData, setGrabbedData] = useState<IndexOrderData | null>(null);
@@ -157,17 +159,27 @@ const Indexing: React.FC = () => {
 
     switch (standardModal?.title) {
       case "Project":
-        const updateReorderListReq: UpdateReorderListReq = {
+        const updateProjectReorderListReq: UpdateReorderListReq = {
           id: "",
           reorderReqList: reorderReqList
         };
-        reorderProject(aui, updateReorderListReq);
+        reorderProject(aui, updateProjectReorderListReq);
         break;
       case "Info":
-        console.log("Info submit");
+        if (!project) return;
+        const updateProjectInfoReorderListReq: UpdateReorderListReq = {
+          id: project.id,
+          reorderReqList: reorderReqList
+        };
+        reorderProjectInfo(aui, updateProjectInfoReorderListReq);
         break;
       case "Element":
-        console.log("Element submit");
+        if (!project) return;
+        const updateProjectElementReorderListReq: UpdateReorderListReq = {
+          id: project.id,
+          reorderReqList: reorderReqList
+        };
+        reorderProjectElement(aui, updateProjectElementReorderListReq);
         break;
       case "Career":
         console.log("Career submit");

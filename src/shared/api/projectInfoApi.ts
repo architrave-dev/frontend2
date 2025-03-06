@@ -1,5 +1,5 @@
-import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse } from '../dto/ResDtoRepository';
-import { CreateProjectInfoReq, UpdateProjectInfoReq, RemoveProjectInfoReq } from '../dto/ReqDtoRepository';
+import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse, ReorderResponse } from '../dto/ResDtoRepository';
+import { CreateProjectInfoReq, UpdateProjectInfoReq, RemoveProjectInfoReq, UpdateReorderListReq } from '../dto/ReqDtoRepository';
 import { baseApi, handleApiError } from './apiConfig';
 
 
@@ -49,6 +49,21 @@ export const deleteProjectInfo = async (aui: string, data: RemoveProjectInfoReq)
       throw new Error('Authentication required');
     }
     const response = await baseApi.delete<DeleteResponse>(`/api/v1/project-info?aui=${aui}&projectInfoId=${data.id}`, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+export const reorderProjectInfo = async (aui: string, data: UpdateReorderListReq): Promise<ReorderResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await baseApi.put<ReorderResponse>(`/api/v1/project-info/reorder?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

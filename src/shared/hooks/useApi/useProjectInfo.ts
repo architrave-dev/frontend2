@@ -1,7 +1,7 @@
 import { ProjectInfoData } from '../../dto/EntityRepository';
-import { CreateProjectInfoReq, RemoveProjectInfoReq, UpdateProjectInfoReq } from '../../dto/ReqDtoRepository';
-import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse } from '../../dto/ResDtoRepository';
-import { createProjectInfo, deleteProjectInfo, getProjectInfoList, updateProjectInfo } from '../../api/projectInfoApi';
+import { CreateProjectInfoReq, RemoveProjectInfoReq, UpdateProjectInfoReq, UpdateReorderListReq } from '../../dto/ReqDtoRepository';
+import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse, ReorderResponse } from '../../dto/ResDtoRepository';
+import { createProjectInfo, deleteProjectInfo, getProjectInfoList, reorderProjectInfo, updateProjectInfo } from '../../api/projectInfoApi';
 import { useProjectInfoListStore } from '../../store/projectInfoStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 import { useApiWrapper } from './apiWrapper';
@@ -12,6 +12,7 @@ interface UseProjectInfoResult {
   createProjectInfo: (aui: string, data: CreateProjectInfoReq) => Promise<void>;
   updateProjectInfo: (aui: string, data: UpdateProjectInfoReq) => Promise<void>;
   deleteProjectInfo: (aui: string, data: RemoveProjectInfoReq) => Promise<void>;
+  reorderProjectInfo: (aui: string, data: UpdateReorderListReq) => Promise<void>;
 }
 
 export const useProjectInfo = (): UseProjectInfoResult => {
@@ -41,11 +42,15 @@ export const useProjectInfo = (): UseProjectInfoResult => {
     setDeletedTempAlert();
   };
 
+  const handleReorderProjectInfoSuccess = (response: ReorderResponse) => {
+    console.log("reordered well");
+  };
+
   const handleProjectElementRequest = async (
     aui: string,
-    action: 'get' | 'create' | 'update' | 'delete',
+    action: 'get' | 'create' | 'update' | 'delete' | 'reorder',
     projectId: string | null,
-    data?: CreateProjectInfoReq | UpdateProjectInfoReq | RemoveProjectInfoReq
+    data?: CreateProjectInfoReq | UpdateProjectInfoReq | RemoveProjectInfoReq | UpdateReorderListReq
   ) => {
     const apiFunction = async () => {
       switch (action) {
@@ -57,6 +62,9 @@ export const useProjectInfo = (): UseProjectInfoResult => {
           break;
         case 'delete':
           handleDeleteProjectInfoSuccess(await deleteProjectInfo(aui, data as RemoveProjectInfoReq));
+          break;
+        case 'reorder':
+          handleReorderProjectInfoSuccess(await reorderProjectInfo(aui, data as UpdateReorderListReq));
           break;
         case 'get':
         default:
@@ -72,13 +80,14 @@ export const useProjectInfo = (): UseProjectInfoResult => {
   const createProjectInfoHandler = (aui: string, data: CreateProjectInfoReq) => handleProjectElementRequest(aui, 'create', null, data);
   const updateProjectInfoHandler = (aui: string, data: UpdateProjectInfoReq) => handleProjectElementRequest(aui, 'update', null, data);
   const deleteProjectInfoHandler = (aui: string, data: RemoveProjectInfoReq) => handleProjectElementRequest(aui, 'delete', null, data);
-
+  const reorderProjectInfoHandler = (aui: string, data: UpdateReorderListReq) => handleProjectElementRequest(aui, 'reorder', null, data);
 
   return {
     projectInfoList,
     getProjectInfoList: getProjectElementHandler,
     createProjectInfo: createProjectInfoHandler,
     updateProjectInfo: updateProjectInfoHandler,
-    deleteProjectInfo: deleteProjectInfoHandler
+    deleteProjectInfo: deleteProjectInfoHandler,
+    reorderProjectInfo: reorderProjectInfoHandler
   };
 };

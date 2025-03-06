@@ -1,5 +1,5 @@
-import { ProjectElementListResponse, ProjectElementResponse } from '../dto/ResDtoRepository';
-import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, DeleteProjectElementReq, UpdateProjectElementReq } from '../dto/ReqDtoRepository';
+import { ProjectElementListResponse, ProjectElementResponse, ReorderResponse } from '../dto/ResDtoRepository';
+import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, DeleteProjectElementReq, UpdateProjectElementReq, UpdateReorderListReq } from '../dto/ReqDtoRepository';
 import { baseApi, handleApiError } from './apiConfig';
 
 
@@ -77,6 +77,21 @@ export const createProjectElementWithWorkDetail = async (aui: string, data: Crea
       throw new Error('Authentication required');
     }
     const response = await baseApi.post<ProjectElementResponse>(`/api/v1/project-element/import/detail?aui=${aui}`, data, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+export const reorderProjectElement = async (aui: string, data: UpdateReorderListReq): Promise<ReorderResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await baseApi.put<ReorderResponse>(`/api/v1/project-element/reorder?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;
