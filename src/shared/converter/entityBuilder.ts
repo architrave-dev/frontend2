@@ -14,7 +14,6 @@ export const projectBuilder = (newTitle: string): CreateProjectReq => {
 // projectInfo
 export const piBuilder = (parentId: string): CreateProjectInfoReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: parentId,
     customName: '',
     customValue: ''
@@ -42,7 +41,6 @@ export const peDetailImportBuilder = (projectId: string, detailId: string): Crea
 // projectElement
 export const peWorkBuilder = (projectId: string): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.WORK,
     createWorkReq: workBuilder(),
@@ -53,7 +51,6 @@ export const peWorkBuilder = (projectId: string): CreateProjectElementReq => {
 export const peDetailBuilder = (projectId: string, workId: string): CreateProjectElementReq => {
   // WorkDetail은 여기서 생성하지 않는다.
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.DETAIL,
     createWorkDetailReq: {
@@ -67,7 +64,6 @@ export const peDetailBuilder = (projectId: string, workId: string): CreateProjec
 }
 export const peDocBuilder = (projectId: string): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.DOCUMENT,
     createDocumentReq: documentBuilder(),
@@ -76,7 +72,6 @@ export const peDocBuilder = (projectId: string): CreateProjectElementReq => {
 }
 export const peTextBoxBuilder = (projectId: string): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.TEXTBOX,
     createTextBoxReq: textBoxBuilder(),
@@ -85,7 +80,6 @@ export const peTextBoxBuilder = (projectId: string): CreateProjectElementReq => 
 }
 export const peDividerBuilder = (projectId: string): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.DIVIDER,
     dividerType: DividerType.PLAIN
@@ -123,7 +117,6 @@ export const detailBuilder = (parentId: string): CreateWorkDetailReq => {
 // Career
 export const careerBuilder = (careerType: CareerType): CreateCareerReq => {
   return {
-    tempId: Math.floor(Math.random() * 1000) + "",
     careerType,
     yearFrom: new Date().getFullYear(),
     content: ""

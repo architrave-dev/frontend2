@@ -139,7 +139,6 @@ export interface RemoveProjectReq {
 
 //-------------- ProjectInfo
 export interface CreateProjectInfoReq {
-  tempId: string;
   projectId: string;
   customName: string;
   customValue: string;
@@ -172,7 +171,6 @@ export interface CreateProjectElementWithWorkDetailReq {
 
 // This is key to making a union workable
 export interface CreateProjectElementReqBase {
-  tempId: string;
   projectId: string;
   projectElementType: ProjectElementType;
 }
@@ -277,7 +275,6 @@ export interface UpdateMemberInfoReq {
 
 //-------------- Career
 export interface CreateCareerReq {
-  tempId: string;
   careerType: CareerType
   yearFrom: number;
   content: string;
