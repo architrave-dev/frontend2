@@ -136,7 +136,6 @@ export interface ProjectData {
   title: string;
   description: string;
   uploadFile: UploadFileData;
-  piIndex: string;
 }
 
 export interface ProjectInfoData {
@@ -254,11 +253,6 @@ export interface MenuVisible {
   works: boolean;
   about: boolean;
   contact: boolean;
-}
-
-export interface IndexData {
-  id: string;
-  tempId: string;
 }
 
 export interface ImageMetadata {

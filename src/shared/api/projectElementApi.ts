@@ -84,18 +84,3 @@ export const createProjectElementWithWorkDetail = async (aui: string, data: Crea
     throw handleApiError(error);
   }
 };
-
-// export const updateProjectElementList = async (aui: string, data: UpdateProjectElementListReq): Promise<ProjectElementListResponse> => {
-//   try {
-//     const authToken = localStorage.getItem('authToken');
-//     if (!authToken) {
-//       throw new Error('Authentication required');
-//     }
-//     const response = await baseApi.put<ProjectElementListResponse>(`/api/v1/project-element?aui=${aui}`, data, {
-//       headers: { Authorization: `${authToken}` }
-//     });
-//     return response.data;
-//   } catch (error) {
-//     throw handleApiError(error);
-//   }
-// };

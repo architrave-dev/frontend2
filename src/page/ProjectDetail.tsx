@@ -10,7 +10,6 @@ import HeadlessBtn from '../shared/component/headless/button/HeadlessBtn';
 import { BtnConfirm } from '../shared/component/headless/button/BtnBody';
 import { useEditMode } from '../shared/hooks/useEditMode';
 import { UpdateProjectReq } from '../shared/dto/ReqDtoRepository';
-import { IndexData } from '../shared/dto/EntityRepository';
 import { ServiceType } from '../shared/enum/EnumRepository';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
@@ -39,10 +38,6 @@ const ProjectDetail: React.FC = () => {
 
   if (!project) return null;
 
-  const convertToPiIndexList = (): IndexData[] => {
-    return [];
-  }
-
   const handleConfirm = async () => {
     if (!project || !aui) return;
     const baseRequest: UpdateProjectReq = {
@@ -50,8 +45,7 @@ const ProjectDetail: React.FC = () => {
       updateUploadFileReq: {
         uploadFileId: project.uploadFile.id,
         ...project.uploadFile
-      },
-      piIndexList: convertToPiIndexList(),
+      }
     }
 
     const finalRequest = imageChanged

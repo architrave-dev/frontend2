@@ -1,5 +1,5 @@
 import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
-import { IndexData, MenuVisible, SizeData } from './EntityRepository';
+import { MenuVisible, SizeData } from './EntityRepository';
 
 //-------------- Auth
 export interface SignUpReq {
@@ -130,7 +130,6 @@ export interface UpdateProjectReq {
   title: string;
   description: string;
   updateUploadFileReq: UpdateUploadFileReq;
-  piIndexList: IndexData[];
 }
 
 export interface RemoveProjectReq {
@@ -262,14 +261,6 @@ export type UpdateProjectElementReq =
 
 export interface DeleteProjectElementReq {
   projectElementId: string;
-}
-
-export interface UpdateProjectElementListReq {
-  projectId: string;
-  peIndexList: IndexData[];
-  // createProjectElements: CreateProjectElementReq[];
-  // updatedProjectElements: UpdateProjectElementReq[];
-  // removedProjectElements: RemoveProjectElementReq[];
 }
 
 //-------------- MemberInfo

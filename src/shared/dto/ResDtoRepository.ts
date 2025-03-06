@@ -58,7 +58,6 @@ export interface ProjectElementResponse {
 
 export interface ProjectElementListResponse {
   data: {
-    peIndex: string;
     projectElementList: ProjectElementData[];
   }
 }
