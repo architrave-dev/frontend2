@@ -1,5 +1,5 @@
-import { CareerListResponse, CareerResponse } from '../dto/ResDtoRepository';
-import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../dto/ReqDtoRepository';
+import { CareerListResponse, CareerResponse, ReorderResponse } from '../dto/ResDtoRepository';
+import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq, UpdateReorderListReq } from '../dto/ReqDtoRepository';
 import { baseApi, handleApiError } from './apiConfig';
 
 
@@ -50,6 +50,21 @@ export const deleteCareer = async (aui: string, data: RemoveCareerReq): Promise<
       throw new Error('Authentication required');
     }
     const response = await baseApi.delete<CareerResponse>(`/api/v1/career?aui=${aui}&careerId=${data.careerId}`, {
+      headers: { Authorization: `${authToken}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
+
+export const reorderCareer = async (aui: string, data: UpdateReorderListReq): Promise<ReorderResponse> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    const response = await baseApi.put<ReorderResponse>(`/api/v1/career/reorder?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

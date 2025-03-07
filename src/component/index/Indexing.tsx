@@ -22,7 +22,7 @@ const Indexing: React.FC = () => {
   const { project } = useProjectDetail();
   const { projectInfoList, reorderProjectInfo } = useProjectInfo();
   const { projectElementList, reorderProjectElement } = useProjectElement();
-  const { careerList } = useCareer();
+  const { careerList, reorderCareer } = useCareer();
   const [orderedDataList, setOrderedDataList] = useState<IndexOrderData[]>([]);
   const [grabbedData, setGrabbedData] = useState<IndexOrderData | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -182,7 +182,14 @@ const Indexing: React.FC = () => {
         reorderProjectElement(aui, updateProjectElementReorderListReq);
         break;
       case "Career":
-        console.log("Career submit");
+        if (!standardModal.value) return;
+
+        const updateCareerReorderListReq: UpdateReorderListReq = {
+          id: standardModal.value,
+          reorderReqList: reorderReqList
+        };
+        console.log("updateCareerReorderListReq", updateCareerReorderListReq);
+        reorderCareer(aui, updateCareerReorderListReq);
         break;
     }
     clearModal();
@@ -296,7 +303,7 @@ const IndexingComp = styled.div`
 const ContentContainer = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 500px;
+  min-height: 450px;
   
   display: flex;
   flex-direction: column;
