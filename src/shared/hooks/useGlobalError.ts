@@ -121,6 +121,16 @@ export const useGlobalError = () => {
     });
   }
 
+  const handleENF = async () => {
+    console.log("handleENF: Enum Not Found!!");
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "Invalid value requested.",
+      callBack: clearErr
+    });
+  }
+
   const handleSFE = async () => {
     console.log("handleSFE: File is too small!!");
     setStandardAlert({
@@ -237,6 +247,9 @@ export const useGlobalError = () => {
         break;
       case ErrorCode.RVN:
         await handleRVN();
+        break;
+      case ErrorCode.ENF:
+        await handleENF();
         break;
       case ErrorCode.SFE:
         await handleSFE();

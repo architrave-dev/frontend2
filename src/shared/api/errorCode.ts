@@ -2,6 +2,7 @@
 export enum ErrorCode {
   IDF = 'IDF', // Invalid Dto Field
   RVN = 'RVN', // Required Value Null
+  ENF = 'ENF', // Enum Not Found
   NFR = 'NFR', // Not Found Result
   NAU = 'NAU', // Not Authorized User
   AEV = 'AEV', // Already Exist Value
