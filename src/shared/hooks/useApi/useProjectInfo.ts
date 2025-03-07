@@ -1,6 +1,6 @@
 import { ProjectInfoData } from '../../dto/EntityRepository';
 import { CreateProjectInfoReq, RemoveProjectInfoReq, UpdateProjectInfoReq, UpdateReorderListReq } from '../../dto/ReqDtoRepository';
-import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse, ReorderResponse } from '../../dto/ResDtoRepository';
+import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse } from '../../dto/ResDtoRepository';
 import { createProjectInfo, deleteProjectInfo, getProjectInfoList, reorderProjectInfo, updateProjectInfo } from '../../api/projectInfoApi';
 import { useProjectInfoListStore } from '../../store/projectInfoStore';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
@@ -42,8 +42,9 @@ export const useProjectInfo = (): UseProjectInfoResult => {
     setDeletedTempAlert();
   };
 
-  const handleReorderProjectInfoSuccess = (response: ReorderResponse) => {
-    console.log("reordered well");
+  const handleReorderProjectInfoSuccess = (response: ProjectInfoListResponse) => {
+    const projectInfoListData = response.data;
+    setProjectInfoList(projectInfoListData);
   };
 
   const handleProjectElementRequest = async (

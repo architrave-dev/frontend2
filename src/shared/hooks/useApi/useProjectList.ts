@@ -2,7 +2,7 @@ import { useProjectListStore } from '../../store/projectListStore';
 import { createProject, deleteProject, getProjectList, reorderProject } from '../../api/projectApi';
 import { ProjectSimpleData } from '../../dto/EntityRepository';
 import { CreateProjectReq, RemoveProjectReq, UpdateReorderListReq } from '../../dto/ReqDtoRepository';
-import { CreatedProjectResponse, DeleteResponse, ProjectListResponse, ReorderResponse } from '../../dto/ResDtoRepository';
+import { CreatedProjectResponse, DeleteResponse, ProjectListResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 import { useApiWrapper } from './apiWrapper';
 
@@ -35,8 +35,9 @@ export const useProjectList = (): UseProjectListResult => {
     setProjects([...projects, createdProjectData]);
   };
 
-  const handleReorderProjectSuccess = (response: ReorderResponse) => {
-    console.log("reordered well");
+  const handleReorderProjectSuccess = (response: ProjectListResponse) => {
+    const projectListData = response.data;
+    setProjects(projectListData);
   };
 
   const handleProjectRequest = async (

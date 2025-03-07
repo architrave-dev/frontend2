@@ -1,4 +1,4 @@
-import { CreatedProjectResponse, DeleteResponse, ProjectListResponse, ProjectResponse, ReorderResponse } from '../dto/ResDtoRepository';
+import { CreatedProjectResponse, DeleteResponse, ProjectListResponse, ProjectResponse } from '../dto/ResDtoRepository';
 import { CreateProjectReq, RemoveProjectReq, UpdateProjectReq, UpdateReorderListReq } from '../dto/ReqDtoRepository';
 import { baseApi, handleApiError } from './apiConfig';
 
@@ -66,13 +66,13 @@ export const deleteProject = async (aui: string, data: RemoveProjectReq): Promis
   }
 };
 
-export const reorderProject = async (aui: string, data: UpdateReorderListReq): Promise<ReorderResponse> => {
+export const reorderProject = async (aui: string, data: UpdateReorderListReq): Promise<ProjectListResponse> => {
   try {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
       throw new Error('Authentication required');
     }
-    const response = await baseApi.put<ReorderResponse>(`/api/v1/project/reorder?aui=${aui}`, data, {
+    const response = await baseApi.put<ProjectListResponse>(`/api/v1/project/reorder?aui=${aui}`, data, {
       headers: { Authorization: `${authToken}` }
     });
     return response.data;

@@ -2,7 +2,7 @@ import { createCareer, deleteCareer, getCareerList, reorderCareer, updateCareer 
 import { useCareerListStore } from '../../store/careerStore';
 import { CareerData } from '../../dto/EntityRepository';
 import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq, UpdateReorderListReq } from '../../dto/ReqDtoRepository';
-import { CareerListResponse, CareerResponse, ReorderResponse } from '../../dto/ResDtoRepository';
+import { CareerListResponse, CareerResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 import { useApiWrapper } from './apiWrapper';
 
@@ -39,8 +39,9 @@ export const useCareer = (): UseCareerResult => {
     console.log("deleted well");
     setDeletedTempAlert();
   };
-  const handleReorderCareerSuccess = (response: ReorderResponse) => {
-    console.log("reordered well");
+  const handleReorderCareerSuccess = (response: CareerListResponse) => {
+    const careerListData = response.data;
+    setCareers(careerListData);
   };
 
   const handleCareerRequest = async (

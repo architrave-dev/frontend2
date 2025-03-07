@@ -2,7 +2,7 @@ import { createProjectElement, createProjectElementWithWork, createProjectElemen
 import { useProjectElementListStore } from '../../store/projectElementStore';
 import { ProjectElementData } from '../../dto/EntityRepository';
 import { CreateProjectElementReq, CreateProjectElementWithWorkDetailReq, CreateProjectElementWithWorkReq, DeleteProjectElementReq, UpdateProjectElementReq, UpdateReorderListReq } from '../../dto/ReqDtoRepository';
-import { ProjectElementListResponse, ProjectElementResponse, ReorderResponse } from '../../dto/ResDtoRepository';
+import { ProjectElementListResponse, ProjectElementResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 import { useApiWrapper } from './apiWrapper';
 
@@ -46,8 +46,9 @@ export const useProjectElement = (): UseProjectElementResult => {
     setDeletedTempAlert();
   };
 
-  const handleReorderProjectElementSuccess = (response: ReorderResponse) => {
-    console.log("reordered well");
+  const handleReorderProjectElementSuccess = (response: ProjectElementListResponse) => {
+    const projectElementListData = response.data;
+    setProjectElementList(projectElementListData.projectElementList);
   };
 
 
