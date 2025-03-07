@@ -25,8 +25,8 @@ export const useProjectElement = (): UseProjectElementResult => {
 
 
   const handleProjectElementSuccess = (response: ProjectElementListResponse) => {
-    const projectElementListData = response.data;
-    setProjectElementList(projectElementListData.projectElementList);
+    const projectElementList = response.data;
+    setProjectElementList(projectElementList);
   };
 
   const handleCreateProjectElementSuccess = (response: ProjectElementResponse) => {
@@ -47,8 +47,8 @@ export const useProjectElement = (): UseProjectElementResult => {
   };
 
   const handleReorderProjectElementSuccess = (response: ProjectElementListResponse) => {
-    const projectElementListData = response.data;
-    setProjectElementList(projectElementListData.projectElementList);
+    const projectElementList = response.data;
+    setProjectElementList(projectElementList);
   };
 
 
