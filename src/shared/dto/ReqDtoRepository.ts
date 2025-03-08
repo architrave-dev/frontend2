@@ -119,7 +119,7 @@ export interface UpdateDocumentReq {
 }
 
 //-------------- Project
-export interface CreateProjectReq {
+export interface CreateProjectReq extends IndexableReq {
   originUrl: string;
   title: string;
   description: string;
@@ -138,7 +138,7 @@ export interface RemoveProjectReq {
 
 
 //-------------- ProjectInfo
-export interface CreateProjectInfoReq {
+export interface CreateProjectInfoReq extends IndexableReq {
   projectId: string;
   customName: string;
   customValue: string;
@@ -154,15 +154,18 @@ export interface RemoveProjectInfoReq {
   id: string;
 }
 
+export interface IndexableReq {
+  index: number;
+}
 
 //-------------- ProjectElement
-export interface CreateProjectElementWithWorkReq {
+export interface CreateProjectElementWithWorkReq extends IndexableReq {
   projectId: string;
   workId: string;
   displayAlignment: DisplayAlignment;
   displaySize: DisplaySize;
 }
-export interface CreateProjectElementWithWorkDetailReq {
+export interface CreateProjectElementWithWorkDetailReq extends IndexableReq {
   projectId: string;
   workDetailId: string;
   displayAlignment: DisplayAlignment;
@@ -170,16 +173,16 @@ export interface CreateProjectElementWithWorkDetailReq {
 }
 
 // This is key to making a union workable
-export interface CreateProjectElementReqBase {
+export interface CreateProjectElementReqBase extends IndexableReq {
   projectId: string;
   projectElementType: ProjectElementType;
 }
 
 export interface CreateProjectElementReqWork extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.WORK;
-  createWorkReq: CreateWorkReq;            // Not optional
-  displayAlignment: DisplayAlignment;         // e.g. CENTER, LEFT, ...
-  displaySize: DisplaySize;        // e.g. BIG, SMALL, ...
+  createWorkReq: CreateWorkReq;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize,
 }
 
 export interface CreateProjectElementReqDetail extends CreateProjectElementReqBase {
@@ -274,7 +277,7 @@ export interface UpdateMemberInfoReq {
 }
 
 //-------------- Career
-export interface CreateCareerReq {
+export interface CreateCareerReq extends IndexableReq {
   careerType: CareerType
   yearFrom: number;
   content: string;
