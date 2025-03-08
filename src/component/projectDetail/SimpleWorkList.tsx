@@ -18,7 +18,7 @@ const WorkImport: React.FC = () => {
   const { clearModal } = useModalStore();
   const { project } = useProjectDetail();
   const { simpleList } = useWorkStationStore();
-  const { createProjectElementWithWork } = useProjectElement();
+  const { createProjectElementWithWork, projectElementList } = useProjectElement();
   const { getSimpleWorkDetailList } = useWorkDetail();
 
   if (!project) return null;
@@ -30,7 +30,8 @@ const WorkImport: React.FC = () => {
 
   const onClickHandler = async (workId: string) => {
     try {
-      await createProjectElementWithWork(aui, peWorkImportBuilder(project.id, workId));
+      const newIndex = projectElementList.length;
+      await createProjectElementWithWork(aui, peWorkImportBuilder(project.id, workId, newIndex));
     } catch (err) {
     }
     clearModal();

@@ -5,7 +5,7 @@ import { useProjectList } from '../../shared/hooks/useApi/useProjectList';
 import { useAui } from '../../shared/hooks/useAui';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import Space from '../../shared/Space';
-import { BtnCreate, BtnCreateWide } from '../../shared/component/headless/button/BtnBody';
+import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { projectBuilder } from '../../shared/converter/entityBuilder';
 import { ModalType } from '../../shared/enum/EnumRepository';
@@ -25,9 +25,10 @@ const ProjectList: React.FC = () => {
   }, [aui]);
 
   const handleCreate = async () => {
-    const newTitle = 'Project_' + (projects.length + 1)
+    const newIndex = projects.length;
+    const newTitle = 'Project_' + (newIndex + 1);
     try {
-      await createProject(aui, projectBuilder(newTitle));
+      await createProject(aui, projectBuilder(newTitle, newIndex));
     } catch (error) {
     } finally {
       setEditMode(false);

@@ -12,7 +12,7 @@ import { careerBuilder } from '../../shared/converter/entityBuilder';
 
 const CareerList: React.FC = () => {
   const { isEditMode } = useEditMode();
-  const { getCareerList, createCareer } = useCareer();
+  const { getCareerList, createCareer, careerList } = useCareer();
   const { aui } = useAui();
 
   useEffect(() => {
@@ -26,7 +26,8 @@ const CareerList: React.FC = () => {
 
 
   const handleCreateElement = async (careerType: CareerType) => {
-    await createCareer(aui, careerBuilder(careerType));
+    const newIndex = careerList.length;
+    await createCareer(aui, careerBuilder(careerType, newIndex));
   };
 
   const careerSections = [

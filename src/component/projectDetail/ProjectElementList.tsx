@@ -38,18 +38,19 @@ const ProjectElementList: React.FC = () => {
 
   const handleCreateElement = async (elementType: ProjectElementType) => {
     let newElement: CreateProjectElementReq;
+    const newIndex = projectElementList.length;
     switch (elementType) {
       case ProjectElementType.WORK:
-        newElement = peWorkBuilder(project.id);
+        newElement = peWorkBuilder(project.id, newIndex);
         break;
       case ProjectElementType.DOCUMENT:
-        newElement = peDocBuilder(project.id);
+        newElement = peDocBuilder(project.id, newIndex);
         break;
       case ProjectElementType.TEXTBOX:
-        newElement = peTextBoxBuilder(project.id);
+        newElement = peTextBoxBuilder(project.id, newIndex);
         break;
       case ProjectElementType.DIVIDER:
-        newElement = peDividerBuilder(project.id);
+        newElement = peDividerBuilder(project.id, newIndex);
         break;
       default:
         throw new Error(`Unsupported ProjectElementType: ${elementType}`);

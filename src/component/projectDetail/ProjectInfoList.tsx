@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectInfoListStore } from '../../shared/store/projectInfoStore';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import { piBuilder } from '../../shared/converter/entityBuilder';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
@@ -19,8 +18,7 @@ const ProjectInfoList: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const { isEditMode } = useEditMode();
   const { project } = useProjectDetail();
-  const { projectInfoList } = useProjectInfoListStore();
-  const { getProjectInfoList, createProjectInfo } = useProjectInfo();
+  const { getProjectInfoList, createProjectInfo, projectInfoList } = useProjectInfo();
   const { setStandardModal } = useModalStore();
 
   useEffect(() => {
@@ -38,7 +36,8 @@ const ProjectInfoList: React.FC = () => {
   if (project == null) return null;
 
   const handleCreateInfo = async () => {
-    await createProjectInfo(aui, piBuilder(project.id));
+    const newIndex = projectInfoList.length;
+    await createProjectInfo(aui, piBuilder(project.id, newIndex));
   };
 
   const handleReOrder = () => {

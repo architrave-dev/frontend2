@@ -11,7 +11,7 @@ import { peDetailBuilder } from '../../shared/converter/entityBuilder';
 const WorkListForDetail: React.FC = () => {
   const { aui } = useAui();
   const { project } = useProjectDetail();
-  const { createProjectElement } = useProjectElement();
+  const { createProjectElement, projectElementList } = useProjectElement();
   const { simpleList } = useWorkStationStore();
   const { clearModal } = useModalStore();
 
@@ -20,7 +20,8 @@ const WorkListForDetail: React.FC = () => {
   const createDetailWithWork = async (workId: string) => {
     const createPe = async () => {
       try {
-        const newElement = peDetailBuilder(project.id, workId);
+        const newIndex = projectElementList.length;
+        const newElement = peDetailBuilder(project.id, workId, newIndex);
         await createProjectElement(aui, newElement)
       } catch (err) {
       } finally {
