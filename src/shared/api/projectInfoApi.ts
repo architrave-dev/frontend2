@@ -1,6 +1,6 @@
 import { DeleteResponse, ProjectInfoListResponse, ProjectInfoResponse } from '../dto/ResDtoRepository';
 import { CreateProjectInfoReq, UpdateProjectInfoReq, RemoveProjectInfoReq, UpdateReorderListReq } from '../dto/ReqDtoRepository';
-import { baseApi, handleApiError } from './apiConfig';
+import { baseApi, handleApiError, sendApiRequest, sendDeleteApiRequest } from './apiConfig';
 
 
 export const getProjectInfoList = async (aui: string, projectId: string): Promise<ProjectInfoListResponse> => {
@@ -13,61 +13,17 @@ export const getProjectInfoList = async (aui: string, projectId: string): Promis
 };
 
 export const createProjectInfo = async (aui: string, data: CreateProjectInfoReq): Promise<ProjectInfoResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.post<ProjectInfoResponse>(`/api/v1/project-info?aui=${aui}`, data, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+  return sendApiRequest('post', `/api/v1/project-info?aui=${aui}`, data);
 };
 
 export const updateProjectInfo = async (aui: string, data: UpdateProjectInfoReq): Promise<ProjectInfoResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.put<ProjectInfoResponse>(`/api/v1/project-info?aui=${aui}`, data, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+  return sendApiRequest('put', `/api/v1/project-info?aui=${aui}`, data);
 };
 
 export const deleteProjectInfo = async (aui: string, data: RemoveProjectInfoReq): Promise<DeleteResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.delete<DeleteResponse>(`/api/v1/project-info?aui=${aui}&projectInfoId=${data.id}`, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+  return sendDeleteApiRequest(`/api/v1/project-info?aui=${aui}&projectInfoId=${data.id}`);
 };
 
 export const reorderProjectInfo = async (aui: string, data: UpdateReorderListReq): Promise<ProjectInfoListResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.put<ProjectInfoListResponse>(`/api/v1/project-info/reorder?aui=${aui}`, data, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+  return sendApiRequest('put', `/api/v1/project-info/reorder?aui=${aui}`, data);
 };

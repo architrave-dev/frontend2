@@ -14,6 +14,46 @@ export const baseApi = axios.create({
   },
 });
 
+type HttpMethod = 'post' | 'put';
+
+export async function sendApiRequest<T>(
+  method: HttpMethod,
+  endpoint: string,
+  data: any
+): Promise<T> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    throw new Error('Authentication required');
+  }
+
+  try {
+    const response = await baseApi[method]<T>(endpoint, data, {
+      headers: { Authorization: authToken }
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+}
+
+export async function sendDeleteApiRequest<T>(
+  endpoint: string,
+): Promise<T> {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    throw new Error('Authentication required');
+  }
+
+  try {
+    const config = { headers: { Authorization: authToken } };
+    const response = await baseApi.delete<T>(endpoint, config);
+
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+}
+
 const formatErrorMessage = (code: string, message: string): string => {
   return `${code}:: ${message}`;
 };
