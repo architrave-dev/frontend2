@@ -1,6 +1,6 @@
 import { BillboardResponse } from '../dto/ResDtoRepository';
 import { UpdateBillboardReq } from '../dto/ReqDtoRepository';
-import { baseApi, handleApiError } from './apiConfig';
+import { baseApi, handleApiError, sendApiRequest } from './apiConfig';
 
 
 export const getBillboard = async (aui: string): Promise<BillboardResponse> => {
@@ -13,16 +13,5 @@ export const getBillboard = async (aui: string): Promise<BillboardResponse> => {
 };
 
 export const updateBillboard = async (aui: string, data: UpdateBillboardReq): Promise<BillboardResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.put<BillboardResponse>(`/api/v1/billboard?aui=${aui}`, data, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+  return sendApiRequest('put', `/api/v1/billboard?aui=${aui}`, data);
 };

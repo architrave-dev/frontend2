@@ -3,57 +3,59 @@ import { CareerType, DisplayAlignment, DividerType, ProjectElementType, TextAlig
 
 
 // project
-export const projectBuilder = (newTitle: string): CreateProjectReq => {
+export const projectBuilder = (newTitle: string, index: number): CreateProjectReq => {
   return {
     originUrl: '',
     title: newTitle,
-    description: ''
+    description: '',
+    index
   };
 }
 
 // projectInfo
-export const piBuilder = (parentId: string): CreateProjectInfoReq => {
+export const piBuilder = (parentId: string, index: number): CreateProjectInfoReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: parentId,
     customName: '',
-    customValue: ''
+    customValue: '',
+    index
   };
 }
 
 // import projectElement
-export const peWorkImportBuilder = (projectId: string, workId: string): CreateProjectElementWithWorkReq => {
+export const peWorkImportBuilder = (projectId: string, workId: string, index: number): CreateProjectElementWithWorkReq => {
   return {
     projectId: projectId,
     workId: workId,
     displayAlignment: DisplayAlignment.CENTER,
     displaySize: DisplaySize.BIG,
+    index
   };
 }
-export const peDetailImportBuilder = (projectId: string, detailId: string): CreateProjectElementWithWorkDetailReq => {
+export const peDetailImportBuilder = (projectId: string, detailId: string, index: number): CreateProjectElementWithWorkDetailReq => {
   return {
     projectId: projectId,
     workDetailId: detailId,
     displayAlignment: DisplayAlignment.CENTER,
     displaySize: DisplaySize.BIG,
+    index
   };
 }
 
 // projectElement
-export const peWorkBuilder = (projectId: string): CreateProjectElementReq => {
+export const peWorkBuilder = (projectId: string, index: number): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.WORK,
     createWorkReq: workBuilder(),
     displayAlignment: DisplayAlignment.CENTER,
     displaySize: DisplaySize.BIG,
+    index
   };
 }
-export const peDetailBuilder = (projectId: string, workId: string): CreateProjectElementReq => {
+export const peDetailBuilder = (projectId: string, workId: string, index: number): CreateProjectElementReq => {
   // WorkDetail은 여기서 생성하지 않는다.
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.DETAIL,
     createWorkDetailReq: {
@@ -63,32 +65,33 @@ export const peDetailBuilder = (projectId: string, workId: string): CreateProjec
     },
     displayAlignment: DisplayAlignment.CENTER,
     displaySize: DisplaySize.BIG,
+    index
   };
 }
-export const peDocBuilder = (projectId: string): CreateProjectElementReq => {
+export const peDocBuilder = (projectId: string, index: number): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.DOCUMENT,
     createDocumentReq: documentBuilder(),
     displayAlignment: DisplayAlignment.CENTER,
+    index
   };
 }
-export const peTextBoxBuilder = (projectId: string): CreateProjectElementReq => {
+export const peTextBoxBuilder = (projectId: string, index: number): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.TEXTBOX,
     createTextBoxReq: textBoxBuilder(),
     textAlignment: TextAlignment.CENTER,
+    index
   };
 }
-export const peDividerBuilder = (projectId: string): CreateProjectElementReq => {
+export const peDividerBuilder = (projectId: string, index: number): CreateProjectElementReq => {
   return {
-    tempId: Math.floor(Math.random() * 100) + "",
     projectId: projectId,
     projectElementType: ProjectElementType.DIVIDER,
-    dividerType: DividerType.PLAIN
+    dividerType: DividerType.PLAIN,
+    index
   };
 }
 
@@ -121,12 +124,12 @@ export const detailBuilder = (parentId: string): CreateWorkDetailReq => {
 }
 
 // Career
-export const careerBuilder = (careerType: CareerType): CreateCareerReq => {
+export const careerBuilder = (careerType: CareerType, index: number): CreateCareerReq => {
   return {
-    tempId: Math.floor(Math.random() * 1000) + "",
     careerType,
     yearFrom: new Date().getFullYear(),
-    content: ""
+    content: "",
+    index
   };
 }
 

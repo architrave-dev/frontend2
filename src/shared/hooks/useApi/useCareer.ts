@@ -1,7 +1,7 @@
-import { createCareer, deleteCareer, getCareerList, updateCareer } from '../../api/careerApi';
+import { createCareer, deleteCareer, getCareerList, reorderCareer, updateCareer } from '../../api/careerApi';
 import { useCareerListStore } from '../../store/careerStore';
 import { CareerData } from '../../dto/EntityRepository';
-import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq } from '../../dto/ReqDtoRepository';
+import { CreateCareerReq, RemoveCareerReq, UpdateCareerReq, UpdateReorderListReq } from '../../dto/ReqDtoRepository';
 import { CareerListResponse, CareerResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 import { useApiWrapper } from './apiWrapper';
@@ -13,6 +13,7 @@ interface UseCareerResult {
   createCareer: (aui: string, data: CreateCareerReq) => Promise<void>;
   updateCareer: (aui: string, data: UpdateCareerReq) => Promise<void>;
   deleteCareer: (aui: string, data: RemoveCareerReq) => Promise<void>;
+  reorderCareer: (aui: string, data: UpdateReorderListReq) => Promise<void>;
 }
 
 export const useCareer = (): UseCareerResult => {
@@ -38,11 +39,15 @@ export const useCareer = (): UseCareerResult => {
     console.log("deleted well");
     setDeletedTempAlert();
   };
+  const handleReorderCareerSuccess = (response: CareerListResponse) => {
+    const careerListData = response.data;
+    setCareers(careerListData);
+  };
 
   const handleCareerRequest = async (
     aui: string,
-    action: 'get' | 'create' | 'update' | 'delete',
-    data?: CreateCareerReq | UpdateCareerReq | RemoveCareerReq
+    action: 'get' | 'create' | 'update' | 'delete' | 'reorder',
+    data?: CreateCareerReq | UpdateCareerReq | RemoveCareerReq | UpdateReorderListReq
   ) => {
     const apiFunction = async () => {
       switch (action) {
@@ -52,6 +57,8 @@ export const useCareer = (): UseCareerResult => {
           return handleUpdateCareerSuccess(await updateCareer(aui, data as UpdateCareerReq));
         case 'delete':
           return handleDeleteCareerSuccess(await deleteCareer(aui, data as RemoveCareerReq));
+        case 'reorder':
+          return handleReorderCareerSuccess(await reorderCareer(aui, data as UpdateReorderListReq));
         case 'get':
         default:
           return handleGetCareerListSuccess(await getCareerList(aui));
@@ -65,7 +72,7 @@ export const useCareer = (): UseCareerResult => {
   const createCareerHandler = (aui: string, data: CreateCareerReq) => handleCareerRequest(aui, 'create', data);
   const updateCareerHandler = (aui: string, data: UpdateCareerReq) => handleCareerRequest(aui, 'update', data);
   const deleteCareerHandler = (aui: string, data: RemoveCareerReq) => handleCareerRequest(aui, 'delete', data);
-
+  const reorderCareerHandler = (aui: string, data: UpdateReorderListReq) => handleCareerRequest(aui, 'reorder', data);
 
   return {
     careerList: careers,
@@ -73,5 +80,6 @@ export const useCareer = (): UseCareerResult => {
     createCareer: createCareerHandler,
     updateCareer: updateCareerHandler,
     deleteCareer: deleteCareerHandler,
+    reorderCareer: reorderCareerHandler,
   };
 };

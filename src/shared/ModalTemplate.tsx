@@ -11,6 +11,7 @@ import ChangeModal from '../component/setting/ChangeModal';
 import FullImageViewer from './component/FullImageViewer';
 import EmailSend from '../component/contact/EmailSend';
 import EmailVerification from '../component/auth/EmailVerification';
+import Indexing from '../component/index/Indexing';
 
 
 const ModalTemplate: React.FC = () => {
@@ -24,20 +25,22 @@ const ModalTemplate: React.FC = () => {
         return (
           <FullImageViewer />
         )
+      case ModalType.INDEXING:
+        return (
+          <WorkStationOverlay onClick={clearModal}>
+            <Indexing />
+          </WorkStationOverlay>
+        )
       case ModalType.WORK_STATION:
         return (
           <WorkStationOverlay onClick={clearModal}>
-            <WorkStationContent onClick={(e) => e.stopPropagation()}>
-              <WorkImport />
-            </WorkStationContent>
+            <WorkImport />
           </WorkStationOverlay>
         )
       case ModalType.TEMP_WORK:
         return (
           <WorkStationOverlay onClick={clearModal}>
-            <WorkStationContent onClick={(e) => e.stopPropagation()}>
-              <WorkListForDetail />
-            </WorkStationContent>
+            <WorkListForDetail />
           </WorkStationOverlay>
         )
       case ModalType.CHANGE_STATION:
@@ -47,6 +50,14 @@ const ModalTemplate: React.FC = () => {
               <ChangeModal />
             </ModalContentBlur>
           </ModalOverlayBrighter>
+        )
+      case ModalType.LOGIN:
+        return (
+          <ModalOverlay onClick={clearModal}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <Login />
+            </ModalContent>
+          </ModalOverlay>
         )
       case ModalType.REGISTER:
         return (
@@ -61,14 +72,6 @@ const ModalTemplate: React.FC = () => {
           <ModalOverlay onClick={clearModal}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <EmailVerification />
-            </ModalContent>
-          </ModalOverlay>
-        )
-      case ModalType.LOGIN:
-        return (
-          <ModalOverlay onClick={clearModal}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>
-              <Login />
             </ModalContent>
           </ModalOverlay>
         )

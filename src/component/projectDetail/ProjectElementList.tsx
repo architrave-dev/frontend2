@@ -38,18 +38,19 @@ const ProjectElementList: React.FC = () => {
 
   const handleCreateElement = async (elementType: ProjectElementType) => {
     let newElement: CreateProjectElementReq;
+    const newIndex = projectElementList.length;
     switch (elementType) {
       case ProjectElementType.WORK:
-        newElement = peWorkBuilder(project.id);
+        newElement = peWorkBuilder(project.id, newIndex);
         break;
       case ProjectElementType.DOCUMENT:
-        newElement = peDocBuilder(project.id);
+        newElement = peDocBuilder(project.id, newIndex);
         break;
       case ProjectElementType.TEXTBOX:
-        newElement = peTextBoxBuilder(project.id);
+        newElement = peTextBoxBuilder(project.id, newIndex);
         break;
       case ProjectElementType.DIVIDER:
-        newElement = peDividerBuilder(project.id);
+        newElement = peDividerBuilder(project.id, newIndex);
         break;
       default:
         throw new Error(`Unsupported ProjectElementType: ${elementType}`);
@@ -74,6 +75,15 @@ const ProjectElementList: React.FC = () => {
       title: null,
       value: null,
       handleChange: () => { }
+    });
+  }
+
+  const handleReOrder = () => {
+    setStandardModal({
+      modalType: ModalType.INDEXING,
+      title: "Element",
+      value: null,
+      handleChange: () => { },
     });
   }
 
@@ -119,6 +129,13 @@ const ProjectElementList: React.FC = () => {
               StyledBtn={BtnCreate}
             />
           </CreateButtonGroup>
+          <BtnContainer>
+            <HeadlessBtn
+              value={"Reorder"}
+              handleClick={handleReOrder}
+              StyledBtn={BtnCreate}
+            />
+          </BtnContainer>
         </Space>
       )}
     </ProjectElementListComp>
@@ -141,8 +158,16 @@ const ProjectElementListComp = styled.article`
 const CreateButtonGroup = styled.div`
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 0.7vw;
 `;
+
+const BtnContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+`
 
 
 export default ProjectElementList;

@@ -1,6 +1,6 @@
 import { DeleteResponse, WorkDetailListResponse, WorkDetailResponse, WorkDetailSimpleListResponse } from '../dto/ResDtoRepository';
 import { CreateWorkDetailReq, DeleteWorkDetailReq, UpdateWorkDetailReq } from '../dto/ReqDtoRepository';
-import { baseApi, handleApiError } from './apiConfig';
+import { baseApi, handleApiError, sendApiRequest, sendDeleteApiRequest } from './apiConfig';
 
 
 export const getWorkDetail = async (aui: string, workDetailId: string): Promise<WorkDetailResponse> => {
@@ -30,49 +30,16 @@ export const getWorkDetailList = async (aui: string, workId: string): Promise<Wo
   }
 };
 
-export const updateWorkDetail = async (aui: string, data: UpdateWorkDetailReq): Promise<WorkDetailResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.put<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}`, data, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+export const createWorkDetail = async (aui: string, data: CreateWorkDetailReq): Promise<WorkDetailResponse> => {
+  return sendApiRequest('post', `/api/v1/work-detail?aui=${aui}`, data);
 };
 
-export const createWorkDetail = async (aui: string, data: CreateWorkDetailReq): Promise<WorkDetailResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.post<WorkDetailResponse>(`/api/v1/work-detail?aui=${aui}`, data, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+export const updateWorkDetail = async (aui: string, data: UpdateWorkDetailReq): Promise<WorkDetailResponse> => {
+  return sendApiRequest('put', `/api/v1/work-detail?aui=${aui}`, data);
 };
 
 export const deleteWorkDetail = async (aui: string, data: DeleteWorkDetailReq): Promise<DeleteResponse> => {
-  try {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      throw new Error('Authentication required');
-    }
-    const response = await baseApi.delete<DeleteResponse>(`/api/v1/work-detail?aui=${aui}&workDetailId=${data.workDetailId}`, {
-      headers: { Authorization: `${authToken}` }
-    });
-    return response.data;
-  } catch (error) {
-    throw handleApiError(error);
-  }
+  return sendDeleteApiRequest(`/api/v1/work-detail?aui=${aui}&workDetailId=${data.workDetailId}`);
 };
 
 

@@ -1,5 +1,5 @@
 import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
-import { IndexData, MenuVisible, SizeData } from './EntityRepository';
+import { MenuVisible, SizeData } from './EntityRepository';
 
 //-------------- Auth
 export interface SignUpReq {
@@ -119,7 +119,7 @@ export interface UpdateDocumentReq {
 }
 
 //-------------- Project
-export interface CreateProjectReq {
+export interface CreateProjectReq extends IndexableReq {
   originUrl: string;
   title: string;
   description: string;
@@ -130,7 +130,6 @@ export interface UpdateProjectReq {
   title: string;
   description: string;
   updateUploadFileReq: UpdateUploadFileReq;
-  piIndexList: IndexData[];
 }
 
 export interface RemoveProjectReq {
@@ -139,8 +138,7 @@ export interface RemoveProjectReq {
 
 
 //-------------- ProjectInfo
-export interface CreateProjectInfoReq {
-  tempId: string;
+export interface CreateProjectInfoReq extends IndexableReq {
   projectId: string;
   customName: string;
   customValue: string;
@@ -156,15 +154,18 @@ export interface RemoveProjectInfoReq {
   id: string;
 }
 
+export interface IndexableReq {
+  index: number;
+}
 
 //-------------- ProjectElement
-export interface CreateProjectElementWithWorkReq {
+export interface CreateProjectElementWithWorkReq extends IndexableReq {
   projectId: string;
   workId: string;
   displayAlignment: DisplayAlignment;
   displaySize: DisplaySize;
 }
-export interface CreateProjectElementWithWorkDetailReq {
+export interface CreateProjectElementWithWorkDetailReq extends IndexableReq {
   projectId: string;
   workDetailId: string;
   displayAlignment: DisplayAlignment;
@@ -172,17 +173,16 @@ export interface CreateProjectElementWithWorkDetailReq {
 }
 
 // This is key to making a union workable
-export interface CreateProjectElementReqBase {
-  tempId: string;
+export interface CreateProjectElementReqBase extends IndexableReq {
   projectId: string;
   projectElementType: ProjectElementType;
 }
 
 export interface CreateProjectElementReqWork extends CreateProjectElementReqBase {
   projectElementType: ProjectElementType.WORK;
-  createWorkReq: CreateWorkReq;            // Not optional
-  displayAlignment: DisplayAlignment;         // e.g. CENTER, LEFT, ...
-  displaySize: DisplaySize;        // e.g. BIG, SMALL, ...
+  createWorkReq: CreateWorkReq;
+  displayAlignment: DisplayAlignment;
+  displaySize: DisplaySize,
 }
 
 export interface CreateProjectElementReqDetail extends CreateProjectElementReqBase {
@@ -264,14 +264,6 @@ export interface DeleteProjectElementReq {
   projectElementId: string;
 }
 
-export interface UpdateProjectElementListReq {
-  projectId: string;
-  peIndexList: IndexData[];
-  // createProjectElements: CreateProjectElementReq[];
-  // updatedProjectElements: UpdateProjectElementReq[];
-  // removedProjectElements: RemoveProjectElementReq[];
-}
-
 //-------------- MemberInfo
 export interface UpdateMemberInfoReq {
   id: string;
@@ -285,8 +277,7 @@ export interface UpdateMemberInfoReq {
 }
 
 //-------------- Career
-export interface CreateCareerReq {
-  tempId: string;
+export interface CreateCareerReq extends IndexableReq {
   careerType: CareerType
   yearFrom: number;
   content: string;
@@ -338,4 +329,15 @@ export interface EmailRequest {
   to: string;
   subject: string;
   body: string;
+}
+
+//-------------- Reorder
+export interface ReorderReq {
+  index: number;
+  id: string;
+}
+
+export interface UpdateReorderListReq {
+  id: string;
+  reorderReqList: ReorderReq[];
 }

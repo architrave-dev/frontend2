@@ -74,12 +74,10 @@ const ProjectSimpleComp = styled.div<{ $isEditMode: boolean }>`
   position: relative;
 
   width: 100%;
-  height: 56vh;
+  height: calc(130vw / 4);
   display: flex;
-  // align-items: center;
   justify-content: space-between; 
   margin-bottom: 20px;
-  // background-color: #EECFBB; /*for dev*/
   cursor: ${props => props.$isEditMode ? "auto" : "pointer"}
 `;
 

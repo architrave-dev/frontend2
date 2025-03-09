@@ -136,7 +136,6 @@ export interface ProjectData {
   title: string;
   description: string;
   uploadFile: UploadFileData;
-  piIndex: string;
 }
 
 export interface ProjectInfoData {
@@ -238,7 +237,6 @@ export interface CareerData {
   careerType: CareerType;
   yearFrom: string;
   content: string;
-  index: number;
 
   hasChanged?: boolean;
 }
@@ -257,15 +255,17 @@ export interface MenuVisible {
   contact: boolean;
 }
 
-export interface IndexData {
-  id: string;
-  tempId: string;
-}
-
 export interface ImageMetadata {
   MOBILE: boolean;
   TABLET: boolean;
   LAPTOP: boolean;
   DESKTOP: boolean;
   origin: boolean;
+}
+
+export interface IndexOrderData {
+  index: number;
+  id: string;
+  mainText: string;
+  subText: string;
 }

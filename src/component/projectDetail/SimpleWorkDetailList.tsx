@@ -17,7 +17,7 @@ const WorkDetailImport: React.FC<WorkDetailImportProps> = ({ simpleWorkDetailLis
   const { aui } = useAui();
   const { clearModal } = useModalStore();
   const { project } = useProjectDetail();
-  const { createProjectElementWithWorkDetail } = useProjectElement();
+  const { createProjectElementWithWorkDetail, projectElementList } = useProjectElement();
 
   if (!project) return null;
   if (simpleWorkDetailList.length === 0) return null;
@@ -25,7 +25,8 @@ const WorkDetailImport: React.FC<WorkDetailImportProps> = ({ simpleWorkDetailLis
 
   const onClickHandler = async (workDetailId: string) => {
     try {
-      await createProjectElementWithWorkDetail(aui, peDetailImportBuilder(project.id, workDetailId));
+      const newIndex = projectElementList.length;
+      await createProjectElementWithWorkDetail(aui, peDetailImportBuilder(project.id, workDetailId, newIndex));
     } catch (err) {
     }
     clearModal();

@@ -57,10 +57,7 @@ export interface ProjectElementResponse {
 }
 
 export interface ProjectElementListResponse {
-  data: {
-    peIndex: string;
-    projectElementList: ProjectElementData[];
-  }
+  data: ProjectElementData[];
 }
 export interface ProjectListResponse {
   data: ProjectSimpleData[];
@@ -119,4 +116,9 @@ export interface ContactResponse {
 //-------------- Setting
 export interface SettingResponse {
   data: SettingData;
+}
+
+//-------------- Reorder
+export interface ReorderResponse {
+  data: string;
 }

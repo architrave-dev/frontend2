@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
-import { useProjectInfoListStore } from '../../shared/store/projectInfoStore';
 import { BtnCreate } from '../../shared/component/headless/button/BtnBody';
 import { piBuilder } from '../../shared/converter/entityBuilder';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
@@ -11,14 +10,16 @@ import ProjectInfo from './ProjectInfo';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import Space from '../../shared/Space';
 import { useParams } from 'react-router-dom';
+import { ModalType } from '../../shared/enum/EnumRepository';
+import { useModalStore } from '../../shared/store/portal/modalStore';
 
 const ProjectInfoList: React.FC = () => {
   const { aui } = useAui();
   const { projectId } = useParams<{ projectId: string }>();
   const { isEditMode } = useEditMode();
   const { project } = useProjectDetail();
-  const { projectInfoList } = useProjectInfoListStore();
-  const { getProjectInfoList, createProjectInfo } = useProjectInfo();
+  const { getProjectInfoList, createProjectInfo, projectInfoList } = useProjectInfo();
+  const { setStandardModal } = useModalStore();
 
   useEffect(() => {
     if (!aui || !project || !projectId) return;
@@ -35,8 +36,18 @@ const ProjectInfoList: React.FC = () => {
   if (project == null) return null;
 
   const handleCreateInfo = async () => {
-    await createProjectInfo(aui, piBuilder(project.id));
+    const newIndex = projectInfoList.length;
+    await createProjectInfo(aui, piBuilder(project.id, newIndex));
   };
+
+  const handleReOrder = () => {
+    setStandardModal({
+      modalType: ModalType.INDEXING,
+      title: "Info",
+      value: null,
+      handleChange: () => { },
+    });
+  }
 
   return (
     <ProjectInfoListComp>
@@ -45,11 +56,18 @@ const ProjectInfoList: React.FC = () => {
       )}
       <Space $align={"center"} $height={"calc(6vw)"}>
         {isEditMode &&
-          <HeadlessBtn
-            value={"Info"}
-            handleClick={handleCreateInfo}
-            StyledBtn={BtnCreate}
-          />
+          <BtnContainer>
+            <HeadlessBtn
+              value={"Info"}
+              handleClick={handleCreateInfo}
+              StyledBtn={BtnCreate}
+            />
+            <HeadlessBtn
+              value={"Reorder"}
+              handleClick={handleReOrder}
+              StyledBtn={BtnCreate}
+            />
+          </BtnContainer>
         }
       </Space>
     </ProjectInfoListComp>
@@ -59,5 +77,13 @@ const ProjectInfoList: React.FC = () => {
 const ProjectInfoListComp = styled.article`
   position: relative;
 `;
+
+const BtnContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+`
 
 export default ProjectInfoList;

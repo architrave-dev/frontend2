@@ -8,6 +8,7 @@ export enum ModalType {
   ORIGIN_IMG = 'ORIGIN_IMG',
   CHANGE_STATION = 'CHANGE_STATION',
   EMAIL_SEND = 'EMAIL_SEND',
+  INDEXING = 'INDEXING',
 }
 
 export enum AlertType {
