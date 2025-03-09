@@ -34,17 +34,13 @@ const ModalTemplate: React.FC = () => {
       case ModalType.WORK_STATION:
         return (
           <WorkStationOverlay onClick={clearModal}>
-            <WorkStationContent onClick={(e) => e.stopPropagation()}>
-              <WorkImport />
-            </WorkStationContent>
+            <WorkImport />
           </WorkStationOverlay>
         )
       case ModalType.TEMP_WORK:
         return (
           <WorkStationOverlay onClick={clearModal}>
-            <WorkStationContent onClick={(e) => e.stopPropagation()}>
-              <WorkListForDetail />
-            </WorkStationContent>
+            <WorkListForDetail />
           </WorkStationOverlay>
         )
       case ModalType.CHANGE_STATION:

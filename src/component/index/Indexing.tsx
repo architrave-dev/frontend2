@@ -196,7 +196,7 @@ const Indexing: React.FC = () => {
   };
 
   return (
-    <IndexingFrame
+    <LeftModalFrame
       onClick={(e) => e.stopPropagation()}
       $isClosing={isClosing}
     >
@@ -253,20 +253,14 @@ const Indexing: React.FC = () => {
           />
         </ButtonContainer>
       </IndexingComp>
-    </IndexingFrame>
+    </LeftModalFrame>
   );
 };
 
-const IndexingFrame = styled.div<{ $isClosing: boolean }>`
+export const LeftModalFrame = styled.div<{ $isClosing: boolean }>`
   position: absolute;
   left: 4vw;
   width: 230px;
-
-  transform: ${({ $isClosing }) =>
-    $isClosing
-      ? 'translateX(-100%)'
-      : 'translateX(0)'
-  };
   
   padding: 20px;
   border-radius: 1px;
@@ -275,9 +269,13 @@ const IndexingFrame = styled.div<{ $isClosing: boolean }>`
   background-color: ${({ theme }) => theme.colors.color_Alpha_03};
   
   opacity: ${({ $isClosing }) => ($isClosing ? 0 : 1)};
-  transition: all 0.4s ease-out;
+  transform: ${({ $isClosing }) =>
+    $isClosing
+      ? 'translateX(-100%)'
+      : 'translateX(0)'
+  };
   animation: slideInFromLeft 0.5s ease-out;
-  
+  transition: all 0.4s ease-out;
   @keyframes slideInFromLeft {
     from {
       transform: translateX(-100%);

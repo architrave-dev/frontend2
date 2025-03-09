@@ -4,13 +4,13 @@ import { useAui } from '../../shared/hooks/useAui';
 import { useProjectDetail } from '../../shared/hooks/useApi/useProjectDetail';
 import { useProjectElement } from '../../shared/hooks/useApi/useProjectElement';
 import { useWorkStationStore } from '../../shared/store/workStationStore';
-import WorkDetailImport from './SimpleWorkDetailList';
 import { useWorkDetail } from '../../shared/hooks/useApi/useWorkDetail';
-import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { SmallestBtn } from '../../shared/component/headless/button/BtnBody';
-import SimpleWork from './SimpleWork';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { peWorkImportBuilder } from '../../shared/converter/entityBuilder';
+import WorkDetailImport from './SimpleWorkDetailList';
+import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
+import SimpleWork from './SimpleWork';
 
 
 const WorkImport: React.FC = () => {
@@ -24,16 +24,15 @@ const WorkImport: React.FC = () => {
   if (!project) return null;
   if (simpleList.length === 0) return (
     <NoWorkContainer onClick={clearModal}>
-      Work does not exist.
+      Work does not exist.<br />
+      Create Work First.
     </NoWorkContainer>
   );
 
   const onClickHandler = async (workId: string) => {
-    try {
-      const newIndex = projectElementList.length;
-      await createProjectElementWithWork(aui, peWorkImportBuilder(project.id, workId, newIndex));
-    } catch (err) {
-    }
+    const newIndex = projectElementList.length;
+    await createProjectElementWithWork(aui, peWorkImportBuilder(project.id, workId, newIndex));
+
     clearModal();
   };
 
@@ -64,7 +63,7 @@ const WorkImport: React.FC = () => {
   );
 };
 
-const NoWorkContainer = styled.div`
+export const NoWorkContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -74,7 +73,7 @@ const NoWorkContainer = styled.div`
   height: 500px;
 `
 
-const SimpleWorkContainer = styled.div`
+export const SimpleWorkContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
