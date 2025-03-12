@@ -27,6 +27,12 @@ export interface UpdateUploadFileReq {
   originUrl: string;
 }
 
+//-------------- Member
+export interface UpdateMemberReq {
+  id: string;
+  username: string;
+}
+
 //-------------- Billboard
 export interface UpdateBillboardReq {
   id: string;

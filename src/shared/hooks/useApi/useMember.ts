@@ -1,21 +1,27 @@
 import { useState } from 'react';
-import { checkAui, searchMember } from '../../api/memberApi';
-import { MemberResponse, SearchResponse } from '../../dto/ResDtoRepository';
+import { checkAui, searchMember, updateMember } from '../../api/memberApi';
+import { MemberResponse, MemberSimpleResponse, SearchResponse } from '../../dto/ResDtoRepository';
 import { useApiWrapper } from './apiWrapper';
 import { useSearchStore } from '../../store/searchStore';
-import { MemberSearchData } from '../../dto/EntityRepository';
+import { MemberSearchData, UserData } from '../../dto/EntityRepository';
+import { UpdateMemberReq } from '../../dto/ReqDtoRepository';
+import { useAui } from '../useAui';
+import { useAuthStore } from '../../store/authStore';
 
 interface UseMemberResult {
   checkAui: (aui: string) => Promise<void>;
   result: boolean;
   search: (username: string) => Promise<void>;
   searchList: MemberSearchData[];
+  updateMember: (aui: string, data: UpdateMemberReq) => Promise<void>;
 }
 
 export const useMember = (): UseMemberResult => {
-  const withApiHandler = useApiWrapper();
-  const [result, setResult] = useState(false);
+  const { aui } = useAui();
+  const { setUser } = useAuthStore();
   const { searchList, setSearchList } = useSearchStore();
+  const [result, setResult] = useState(false);
+  const withApiHandler = useApiWrapper();
 
   const handleMemberSuccess = (response: MemberResponse) => {
     const data = response.data;
@@ -25,15 +31,29 @@ export const useMember = (): UseMemberResult => {
     const { memberSearchList } = response.data;
     setSearchList(memberSearchList);
   };
+  const handleUpdateMemberSuccess = (response: MemberSimpleResponse) => {
+    const data = response;
+    console.log("updated Member", data);
+    // const onlyUserData: UserData = {
+    //   id: data.id,
+    //   email: data.email,
+    //   username: data.username,
+    //   aui: data.aui,
+    //   role: data.role
+    // }
+    // setUser(onlyUserData);
+  };
 
   const handleMemberRequest = async (
-    action: 'get' | 'search',
-    data?: string
+    action: 'get' | 'search' | 'update',
+    data?: string | UpdateMemberReq
   ) => {
     const apiFunction = async () => {
       switch (action) {
         case 'search':
           return handleSearchSuccess(await searchMember(data as string));
+        case 'update':
+          return handleUpdateMemberSuccess(await updateMember(aui, data as UpdateMemberReq));
         case 'get':
         default:
           return handleMemberSuccess(await checkAui(data as string));
@@ -45,11 +65,13 @@ export const useMember = (): UseMemberResult => {
 
   const checkAuiHandler = (aui: string) => handleMemberRequest('get', aui);
   const searchMemberHandler = (username: string) => handleMemberRequest('search', username);
+  const updateMemberHandler = (aui: string, data: UpdateMemberReq) => handleMemberRequest('update', data);
 
   return {
     checkAui: checkAuiHandler,
     result,
     search: searchMemberHandler,
     searchList,
+    updateMember: updateMemberHandler,
   };
 }

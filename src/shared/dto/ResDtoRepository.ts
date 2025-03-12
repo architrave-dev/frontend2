@@ -80,6 +80,14 @@ export interface ProjectInfoListResponse {
 export interface MemberResponse {
   data: string;
 }
+
+export interface MemberSimpleResponse {
+  id: string;
+  email: string;
+  username: string;
+  aui: string;
+  role: string;
+}
 export interface SearchResponse {
   data: {
     memberSearchList: MemberSearchData[];
