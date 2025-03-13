@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useEditMode } from '../hooks/useEditMode';
 
@@ -14,9 +14,11 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   const { isEditMode } = useEditMode();
   const [checked, setChecked] = useState<boolean>(defaultChecked);
 
+  useEffect(() => {
+    setChecked(defaultChecked);
+  }, [defaultChecked]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newChecked = !checked;
-    setChecked(newChecked);
     onChange(e);
   };
 
