@@ -15,7 +15,6 @@ import copyIcon from '../../asset/icon/copy.png';
 
 const MemberSetting: React.FC = () => {
   const { user } = useAuth();
-  const { setStandardAlert } = useStandardAlertStore();
   const { setStandardModal } = useModalStore();
   const { setTempAlert } = useTempAlertStore();
   const { updateMember } = useMember();
@@ -51,11 +50,12 @@ const MemberSetting: React.FC = () => {
   }
 
   const handleChangePw = () => {
-    setStandardAlert({
-      type: AlertType.ALERT,
-      position: AlertPosition.TOP,
-      content: "In Preparation..."
-    })
+    setStandardModal({
+      modalType: ModalType.CHANGE_PW,
+      title: "Password",
+      value: "",
+      handleChange: () => { }
+    });
   }
 
   return (
@@ -146,9 +146,6 @@ export const SubValue = styled.div`
   width: fit-content;
   padding: 8px 0px;
   ${({ theme }) => theme.typography.Body_03_2};
-  display: flex;
-  align-items: center;
-  gap: 4px;
 `;
 
 export const SubValueChange = styled.div`

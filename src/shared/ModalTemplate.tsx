@@ -12,6 +12,7 @@ import FullImageViewer from './component/FullImageViewer';
 import EmailSend from '../component/contact/EmailSend';
 import EmailVerification from '../component/auth/EmailVerification';
 import Indexing from '../component/index/Indexing';
+import ChangePWModal from '../component/setting/ChangePWModal';
 
 
 const ModalTemplate: React.FC = () => {
@@ -42,6 +43,12 @@ const ModalTemplate: React.FC = () => {
           <WorkStationOverlay onClick={clearModal}>
             <WorkListForDetail />
           </WorkStationOverlay>
+        )
+      case ModalType.CHANGE_PW:
+        return (
+          <ModalOverlayBrighter onClick={clearModal}>
+            <ChangePWModal />
+          </ModalOverlayBrighter>
         )
       case ModalType.CHANGE_STATION:
         return (
@@ -150,16 +157,5 @@ const WorkStationOverlay = styled.div`
   align-items: center;
 `;
 
-const WorkStationContent = styled.div`
-  position: absolute;
-  left: 6vw;
-
-  background-color: ${({ theme }) => theme.colors.color_White};
-  padding: 20px;
-  border-radius: 2px;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  width: 230px;
-  //height은 각자 정해
-`;
 
 export default ModalTemplate;
