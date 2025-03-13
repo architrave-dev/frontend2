@@ -150,7 +150,7 @@ const CandidatesList = styled.ul`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   border-top: none;
   border-radius: 0 0 2px 2px;
-  z-index: 10;
+  z-index: 2;
   padding: 0;
   margin: 0;
   list-style: none;

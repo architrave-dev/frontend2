@@ -33,6 +33,12 @@ export interface UpdateMemberReq {
   username: string;
 }
 
+export interface UpdatePasswordReq {
+  id: string;
+  password: string;
+  newPassword: string;
+}
+
 //-------------- Billboard
 export interface UpdateBillboardReq {
   id: string;

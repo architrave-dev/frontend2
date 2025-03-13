@@ -7,27 +7,40 @@ import { BtnModalMain, BtnModalSub } from '../../shared/component/headless/butto
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useValidation } from '../../shared/hooks/useValidation';
 import Space from '../../shared/Space';
+import { useMember } from '../../shared/hooks/useApi/useMember';
+import { useAui } from '../../shared/hooks/useAui';
+import { useAuth } from '../../shared/hooks/useApi/useAuth';
 
 
 const ChangePWModal: React.FC = () => {
+  const { aui } = useAui();
+  const { user } = useAuth();
   const { standardModal, isClosing, clearModal } = useModalStore();
+  const { updatePassword } = useMember();
   const { isValidPassword } = useValidation();
-  const [temp, setTemp] = useState(standardModal?.value || "");
+  const [pw, setPw] = useState(standardModal?.value || "");
   const [newPw, setNewPw] = useState("");
   const [newPwConfirm, setNewPwConfirm] = useState("");
   const [error, setError] = useState('');
 
-  if (standardModal == null) return null;
+
+  if (user == null || standardModal == null) return null;
 
   const handleChange = () => {
-    console.log("change pw test");
     if (validatePassword() && validateConfirmPassword()) {
-      console.log("yes you can change pw");
+      updatePassword(aui, {
+        id: user.id,
+        password: pw,
+        newPassword: newPw,
+      });
     }
-    // clearModal();
   };
 
   const validatePassword = () => {
+    if (pw === newPw) {
+      setError('New password cannot be the same as the current one');
+      return false;
+    }
     if (!isValidPassword(newPw)) {
       setError('Invalid password, min-length: 4');
       return false;
@@ -54,8 +67,8 @@ const ChangePWModal: React.FC = () => {
         <Title>Change Password</Title>
         <HeadlessInput
           type={'password'}
-          value={temp}
-          handleChange={(e) => setTemp(e.target.value)}
+          value={pw}
+          handleChange={(e) => setPw(e.target.value)}
           placeholder={"Enter Current Password"}
           StyledInput={SettingPWInput}
         />
