@@ -50,8 +50,9 @@ export const useGlobalError = () => {
     setStandardAlert({
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
-      content: "No matching data found",
+      content: "No matching Member. Please check your AUI.",
       callBack: () => {
+        window.location.href = '/';
         clearErr();
       }
     });
