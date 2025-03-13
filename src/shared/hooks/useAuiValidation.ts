@@ -4,9 +4,16 @@ import { useAui } from './useAui';
 import { useMember } from './useApi/useMember';
 
 
-const isValidAui = (AUI: string | undefined): boolean => {
+const isValidAui = (AUI: string): boolean => {
   if (!AUI) return false;
-  const auiPattern = /^[a-zA-Z0-9가-힣]+-[a-zA-Z0-9]{8}$/;
+  const auiPattern = /^[a-f0-9]{8}$/;
+  const onlyDigitsPattern = /^[0-9]+$/;
+  const onlyLettersPattern = /^[a-f]+$/;
+
+  if (onlyDigitsPattern.test(AUI) || onlyLettersPattern.test(AUI)) {
+    return false;
+  }
+
   return auiPattern.test(AUI);
 };
 
@@ -34,13 +41,6 @@ export const useAuiValidation = (AUI: string | undefined) => {
     }
     handleAui();
   }, [AUI, location.pathname, navigate]);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     navigate('/');
-  //   }
-
-  // }, [error]);
 
   return AUI;
 };

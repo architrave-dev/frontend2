@@ -11,7 +11,7 @@ export const useInitPage = () => {
   const [searchParams] = useSearchParams();
   useAuiValidation(AUI);
 
-  const { isEditMode, setEditMode } = useEditMode();
+  const { setEditMode } = useEditMode();
   const { user, setUser } = useAuth();
 
   useEffect(() => {
