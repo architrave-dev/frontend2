@@ -53,9 +53,7 @@ const ModalTemplate: React.FC = () => {
       case ModalType.CHANGE_STATION:
         return (
           <ModalOverlayBrighter onClick={clearModal}>
-            <ModalContentBlur onClick={(e) => e.stopPropagation()}>
-              <ChangeModal />
-            </ModalContentBlur>
+            <ChangeModal />
           </ModalOverlayBrighter>
         )
       case ModalType.LOGIN:
@@ -127,15 +125,6 @@ const ModalOverlayBrighter = styled.div`
   align-items: center;
 
   z-index: 5; 
-`;
-
-const ModalContentBlur = styled.div`
-  background-color: ${({ theme }) => theme.colors.color_Alpha_04};
-  padding: 20px;
-  width: 440px;
-  border-radius: 2px;
-  backdrop-filter: blur(4px);
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
 `;
 
 const ModalContent = styled.div`

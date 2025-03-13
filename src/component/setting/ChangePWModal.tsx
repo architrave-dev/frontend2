@@ -96,7 +96,7 @@ const ChangePWModal: React.FC = () => {
 export const ChangeModalFrame = styled.div<{ $isClosing: boolean }>`
   padding: 20px;
   width: 440px;
-  height: 350px;
+  height: fit-content;
   border-radius: 1px;
   backdrop-filter: blur(4px);
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
