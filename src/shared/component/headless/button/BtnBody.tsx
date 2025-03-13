@@ -189,3 +189,17 @@ export const BtnFloat = styled.button`
   color: ${({ theme }) => theme.colors.color_Gray_03};
   ${({ theme }) => theme.typography.Body_03_2};
 `;
+
+export const BtnFloatSmall = styled.button`
+  padding: 0.2rem 0.5rem;
+  font-size: 1rem;
+  transition: all 0.3s;
+
+  background-color: transparent;
+  &:hover {
+    transform: scale(1.1);
+  }
+  ${({ theme }) => theme.typography.Body_03_2};
+
+  cursor: pointer;
+`;

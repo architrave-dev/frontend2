@@ -1,23 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, ModalType, TempAlertPosition, TempAlertType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import MoleculeDivBtn from '../../shared/component/molecule/MoleculeDivBtn';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useMember } from '../../shared/hooks/useApi/useMember';
 import { UpdateMemberReq } from '../../shared/dto/ReqDtoRepository';
 import { useAui } from '../../shared/hooks/useAui';
+import { BtnFloatSmall } from '../../shared/component/headless/button/BtnBody';
+import { useTempAlertStore } from '../../shared/store/portal/tempAlertStore';
+import HeadlessIconBtn from '../../shared/component/headless/button/HeadlessIconBtn';
+import copyIcon from '../../asset/icon/copy.png';
 
 const MemberSetting: React.FC = () => {
   const { user } = useAuth();
   const { setStandardAlert } = useStandardAlertStore();
   const { setStandardModal } = useModalStore();
+  const { setTempAlert } = useTempAlertStore();
   const { updateMember } = useMember();
   const { aui } = useAui();
 
 
   if (!user) return null;
+
+  const handleCopyAui = () => {
+    navigator.clipboard.writeText(user.aui);
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Copy complete.",
+      duration: 2500
+    });
+  }
 
   const handleChangeUsername = () => {
     setStandardModal({
@@ -60,7 +75,12 @@ const MemberSetting: React.FC = () => {
         </SubWrapper>
         <SubWrapper>
           <SubTitle>AUI (Artist Unique Id)</SubTitle>
-          <SubValue>{user.aui}</SubValue>
+          <SubValue>{user.aui}
+            <HeadlessIconBtn
+              icon={copyIcon}
+              handleClick={handleCopyAui}
+              StyledBtn={BtnFloatSmall}
+            /></SubValue>
         </SubWrapper>
         <SubWrapper>
           <SubTitle>Email</SubTitle>
@@ -126,6 +146,9 @@ export const SubValue = styled.div`
   width: fit-content;
   padding: 8px 0px;
   ${({ theme }) => theme.typography.Body_03_2};
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 export const SubValueChange = styled.div`
