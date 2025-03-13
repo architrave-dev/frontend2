@@ -7,6 +7,7 @@ import { MemberSearchData, UserData } from '../../dto/EntityRepository';
 import { UpdateMemberReq } from '../../dto/ReqDtoRepository';
 import { useAui } from '../useAui';
 import { useAuthStore } from '../../store/authStore';
+import { useTempAlertStore } from '../../store/portal/tempAlertStore';
 
 interface UseMemberResult {
   checkAui: (aui: string) => Promise<void>;
@@ -18,8 +19,9 @@ interface UseMemberResult {
 
 export const useMember = (): UseMemberResult => {
   const { aui } = useAui();
-  const { setUser } = useAuthStore();
+  const { user, setUser } = useAuthStore();
   const { searchList, setSearchList } = useSearchStore();
+  const { setUpdatedTempAlert } = useTempAlertStore();
   const [result, setResult] = useState(false);
   const withApiHandler = useApiWrapper();
 
@@ -32,16 +34,13 @@ export const useMember = (): UseMemberResult => {
     setSearchList(memberSearchList);
   };
   const handleUpdateMemberSuccess = (response: MemberSimpleResponse) => {
-    const data = response;
-    console.log("updated Member", data);
-    // const onlyUserData: UserData = {
-    //   id: data.id,
-    //   email: data.email,
-    //   username: data.username,
-    //   aui: data.aui,
-    //   role: data.role
-    // }
-    // setUser(onlyUserData);
+    const data = response.data;
+    const mergedUser: UserData = {
+      ...user,
+      ...data
+    }
+    setUser(mergedUser);
+    setUpdatedTempAlert();
   };
 
   const handleMemberRequest = async (
