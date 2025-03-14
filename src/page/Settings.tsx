@@ -1,33 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useInitPage } from '../shared/hooks/useInitPage';
-import { useAui } from '../shared/hooks/useAui';
 import MemberSetting from '../component/setting/MemberSetting';
 import PageSetting from '../component/setting/PageSetting';
 import Subscription from '../component/setting/Subscription';
-import { useCheckLoginOwner } from '../shared/hooks/useCheckLoginOwner';
 import Loading from '../shared/component/Loading';
 import { useLoadingStore } from '../shared/store/loadingStore';
+import { isLoggedInOwner } from '../shared/util/isLoggedInOwner';
+import { useStandardAlertStore } from '../shared/store/portal/alertStore';
+import { AlertPosition } from '../shared/enum/EnumRepository';
+import { AlertType } from '../shared/enum/EnumRepository';
 
 
 const Settings: React.FC = () => {
-  useInitPage();
+  const { AUI } = useInitPage();
   const navigate = useNavigate();
-  const { aui } = useAui();
   const { isLoading } = useLoadingStore();
-  const { isLoggedInOwner } = useCheckLoginOwner();
+  const { setStandardAlert } = useStandardAlertStore();
 
-  if (!isLoggedInOwner()) {
-    navigate(`/${aui}`);
-  }
+  useEffect(() => {
+    if (!isLoggedInOwner(AUI)) {
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "Unauthorized access.",
+        callBack: () => {
+          navigate(`/`);
+        }
+      });
+    }
+  }, [AUI]);
 
   return (
     <SettingsContainer>
       <Loading isLoading={isLoading} />
-      <MemberSetting />
-      <PageSetting />
-      <Subscription />
+      {isLoggedInOwner(AUI) && (
+        <>
+          <MemberSetting />
+          <PageSetting />
+          <Subscription />
+        </>
+      )}
     </SettingsContainer>
   );
 }

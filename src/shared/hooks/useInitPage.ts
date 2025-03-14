@@ -1,27 +1,21 @@
 import { useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAuiValidation } from './useAuiValidation';
 import { useAuth } from './useApi/useAuth';
-import { useEditMode } from './useEditMode';
 import { UserData } from '../dto/EntityRepository';
 
+//AUI를 처음으로 받아서
+//useAuiValidation 확인
+
+//로그인정보 여부를 
+// localStorage에서 확인 후
+//user 세팅
 
 export const useInitPage = () => {
   const { AUI } = useParams<{ AUI: string }>();
-  const [searchParams] = useSearchParams();
-  useAuiValidation(AUI);
-
-  const { setEditMode } = useEditMode();
   const { user, setUser } = useAuth();
 
-  useEffect(() => {
-    const editModeParam = searchParams.get('isEditMode');
-    if (editModeParam) {
-      setEditMode(true);
-    } else {
-      setEditMode(false);
-    }
-  }, []);
+  useAuiValidation(AUI);
 
   useEffect(() => {
     if (!user) {
@@ -29,11 +23,9 @@ export const useInitPage = () => {
       if (userFromStorage) {
         const parsedUserData: UserData = JSON.parse(userFromStorage);
         setUser(parsedUserData);
-      } else {
-        console.error("there is no login data");
       }
     }
-  }, [user]);
+  }, []);
 
-  return { AUI, user };
+  return { AUI };
 }

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAui } from './useAui';
 import { useMember } from './useApi/useMember';
 
@@ -20,17 +20,13 @@ const isValidAui = (AUI: string): boolean => {
 export const useAuiValidation = (AUI: string | undefined) => {
   const { setOwnerAui } = useAui();
   const navigate = useNavigate();
-  const location = useLocation();
   const errorRoute = '/error';
   const { checkAui } = useMember();
 
   useEffect(() => {
     const handleAui = async () => {
-      if (AUI === undefined) {
-        navigate('/');
-        return;
-      }
-      if (location.pathname !== '/' && !isValidAui(AUI)) {
+      if (!AUI) return;
+      if (!isValidAui(AUI)) {
         console.error("Invalid AUI:", AUI);
         navigate(errorRoute);
         return;
@@ -40,7 +36,5 @@ export const useAuiValidation = (AUI: string | undefined) => {
       }
     }
     handleAui();
-  }, [AUI, location.pathname, navigate]);
-
-  return AUI;
+  }, [AUI]);
 };
