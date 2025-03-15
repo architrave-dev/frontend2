@@ -13,8 +13,8 @@ import EmailSend from '../component/contact/EmailSend';
 import EmailVerification from '../component/auth/EmailVerification';
 import Indexing from '../component/index/Indexing';
 import ChangePWModal from '../component/setting/ChangePWModal';
-import FindModal from '../component/landing/FindModal';
-
+import FindAuiModal from '../component/landing/FindAuiModal';
+import FindPWModal from '../component/landing/FindPWModal';
 
 const ModalTemplate: React.FC = () => {
   const { standardModal, clearModal } = useModalStore();
@@ -57,10 +57,16 @@ const ModalTemplate: React.FC = () => {
             <ChangeModal />
           </ModalOverlayBrighter>
         )
-      case ModalType.FIND:
+      case ModalType.FIND_AUI:
         return (
           <ModalOverlayBrighter onClick={clearModal}>
-            <FindModal />
+            <FindAuiModal />
+          </ModalOverlayBrighter>
+        )
+      case ModalType.FIND_PW:
+        return (
+          <ModalOverlayBrighter onClick={clearModal}>
+            <FindPWModal />
           </ModalOverlayBrighter>
         )
       case ModalType.LOGIN:

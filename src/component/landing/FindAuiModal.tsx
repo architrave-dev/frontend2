@@ -10,7 +10,7 @@ import { useAuth } from '../../shared/hooks/useApi/useAuth';
 import Space from '../../shared/Space';
 
 
-const FindModal: React.FC = () => {
+const FindAuiModal: React.FC = () => {
   const { standardModal, isClosing, clearModal } = useModalStore();
   const { findAui } = useAuth();
   const [email, setEmail] = useState('');
@@ -101,7 +101,7 @@ export const FindModalFrame = styled.div<{ $isClosing: boolean }>`
   }
 `;
 
-const ChangeModalComp = styled.div`
+export const ChangeModalComp = styled.div`
   width: 100%;
 
   display: flex;
@@ -110,13 +110,13 @@ const ChangeModalComp = styled.div`
   padding: 2vh 1vw;
 `
 
-const Title = styled.h2`
+export const Title = styled.h2`
   margin-bottom: 44px;
   color: ${({ theme }) => theme.colors.color_Gray_02};
   ${({ theme }) => theme.typography.Body_01_1};
 `;
 
-const BtnContainer = styled.div`
+export const BtnContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -125,7 +125,7 @@ const BtnContainer = styled.div`
   margin-top: 0.5vh;
 `
 
-const ErrorText = styled.div`
+export const ErrorText = styled.div` 
   width: 100%;
   display: flex;
   align-items: center;
@@ -142,4 +142,4 @@ const ErrorText = styled.div`
   }
 `;
 
-export default FindModal;
+export default FindAuiModal;

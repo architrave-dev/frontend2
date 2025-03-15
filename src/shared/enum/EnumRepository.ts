@@ -10,7 +10,8 @@ export enum ModalType {
   EMAIL_SEND = 'EMAIL_SEND',
   INDEXING = 'INDEXING',
   CHANGE_PW = 'CHANGE_PW',
-  FIND = 'FIND',
+  FIND_AUI = 'FIND_AUI',
+  FIND_PW = 'FIND_PW',
 }
 
 export enum AlertType {
