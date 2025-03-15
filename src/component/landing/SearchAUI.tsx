@@ -1,16 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useModalStore } from '../../shared/store/portal/modalStore';
+import { ModalType } from '../../shared/enum/EnumRepository';
 
 const SearchAui: React.FC = () => {
+  const { setStandardModal } = useModalStore();
 
   const openFindAuiModal = () => {
-    console.log("openFindAuiModal");
+    setStandardModal({
+      modalType: ModalType.FIND,
+      title: "AUI (Artist Unique ID)",
+      value: null,
+      handleChange: () => { },
+    });
   };
-
 
   return (
     <Text>
-      <span>Forgot your AUI(Artist Unique ID)?</span>
+      <span>Forgot your URL or AUI(Artist Unique ID)?</span>
       <FindText onClick={openFindAuiModal}>find it</FindText>
     </Text>
   );

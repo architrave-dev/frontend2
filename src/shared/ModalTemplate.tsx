@@ -13,6 +13,7 @@ import EmailSend from '../component/contact/EmailSend';
 import EmailVerification from '../component/auth/EmailVerification';
 import Indexing from '../component/index/Indexing';
 import ChangePWModal from '../component/setting/ChangePWModal';
+import FindModal from '../component/landing/FindModal';
 
 
 const ModalTemplate: React.FC = () => {
@@ -54,6 +55,12 @@ const ModalTemplate: React.FC = () => {
         return (
           <ModalOverlayBrighter onClick={clearModal}>
             <ChangeModal />
+          </ModalOverlayBrighter>
+        )
+      case ModalType.FIND:
+        return (
+          <ModalOverlayBrighter onClick={clearModal}>
+            <FindModal />
           </ModalOverlayBrighter>
         )
       case ModalType.LOGIN:

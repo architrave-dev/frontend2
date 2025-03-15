@@ -2,6 +2,14 @@ import { ActivateReq, LoginReq, RefreshReq, SignUpReq } from '../dto/ReqDtoRepos
 import { AuthResponse, SimpleStringResponse } from '../dto/ResDtoRepository';
 import { baseApi, handleApiError } from './apiConfig';
 
+export const findAui = async (data: LoginReq): Promise<SimpleStringResponse> => {
+  try {
+    const response = await baseApi.post<SimpleStringResponse>('/api/v1/auth/aui', data);
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};
 
 export const signUp = async (data: SignUpReq): Promise<SimpleStringResponse> => {
   try {
