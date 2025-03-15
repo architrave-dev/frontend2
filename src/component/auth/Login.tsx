@@ -166,7 +166,7 @@ const ToggleText = styled.p`
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin: 30px 0px 20px 0px;
+  margin: 26px 0px 20px 0px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
   &:hover {
     color: ${({ theme }) => theme.colors.color_Gray_02};

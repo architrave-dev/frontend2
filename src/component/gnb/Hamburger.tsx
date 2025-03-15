@@ -2,15 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import hamburger128 from '../../asset/gnb/hamburger_128.png';
 import { useMenu } from '../../shared/hooks/useMenu';
-import { extractUsernameFromAui } from '../../shared/hooks/useApi/useAuth';
 import { useLocation } from 'react-router-dom';
 import logo from '../../asset/gnb/logo_small.png';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
-import { useAui } from '../../shared/hooks/useAui';
 
 const Hamburger: React.FC = () => {
   const location = useLocation();
-  const { aui } = useAui();
   const { isMenuOpen, openMenu, closeMenu } = useMenu();
   const { setting } = useSetting();
 
@@ -33,7 +30,7 @@ const Hamburger: React.FC = () => {
     <LogoComp onClick={showGnb}>
       <HamburgerComp src={hamburger128} alt='toggle menu icon' />
       <Username>
-        {setting.pageName !== extractUsernameFromAui(aui) ? setting.pageName.toUpperCase() : aui}
+        {setting.pageName.toUpperCase()}
       </Username>
     </LogoComp>
   );

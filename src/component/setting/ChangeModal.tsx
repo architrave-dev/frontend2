@@ -5,10 +5,11 @@ import { SettingInput } from '../../shared/component/headless/input/InputBody';
 import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { BtnModalMain, BtnModalSub } from '../../shared/component/headless/button/BtnBody';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { ChangeModalFrame } from './ChangePWModal';
 
 
 const ChangeModal: React.FC = () => {
-  const { standardModal, clearModal } = useModalStore();
+  const { standardModal, isClosing, clearModal } = useModalStore();
   const [temp, setTemp] = useState(standardModal?.value || "");
 
   if (standardModal == null) return null;
@@ -21,28 +22,33 @@ const ChangeModal: React.FC = () => {
   };
 
   return (
-    <ChangeModalComp>
-      <Title>Change {standardModal.title}</Title>
-      <HeadlessInput
-        type={'text'}
-        value={temp}
-        handleChange={(e) => setTemp(e.target.value)}
-        placeholder={"Enter " + standardModal.title}
-        StyledInput={SettingInput}
-      />
-      <BtnContainer>
-        <HeadlessBtn
-          value={"Change"}
-          handleClick={handleChange}
-          StyledBtn={BtnModalMain}
+    <ChangeModalFrame
+      onClick={(e) => e.stopPropagation()}
+      $isClosing={isClosing}
+    >
+      <ChangeModalComp>
+        <Title>Change {standardModal.title}</Title>
+        <HeadlessInput
+          type={'text'}
+          value={temp}
+          handleChange={(e) => setTemp(e.target.value)}
+          placeholder={"Enter " + standardModal.title}
+          StyledInput={SettingInput}
         />
-        <HeadlessBtn
-          value={"Cancel"}
-          handleClick={clearModal}
-          StyledBtn={BtnModalSub}
-        />
-      </BtnContainer>
-    </ChangeModalComp>
+        <BtnContainer>
+          <HeadlessBtn
+            value={"Change"}
+            handleClick={handleChange}
+            StyledBtn={BtnModalMain}
+          />
+          <HeadlessBtn
+            value={"Cancel"}
+            handleClick={clearModal}
+            StyledBtn={BtnModalSub}
+          />
+        </BtnContainer>
+      </ChangeModalComp>
+    </ChangeModalFrame>
   );
 };
 

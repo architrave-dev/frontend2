@@ -1,17 +1,19 @@
 import { useAuthStore } from '../../store/authStore';
-import { signUp, login, refresh, activate } from '../../api/authAPI';
+import { signUp, login, refresh, activate, findAui } from '../../api/authAPI';
 import { UserData, UserDataWithRefreshToken } from '../../dto/EntityRepository';
 import { ActivateReq, LoginReq, RefreshReq, SignUpReq } from '../../dto/ReqDtoRepository';
 import { AuthResponse, SimpleStringResponse } from '../../dto/ResDtoRepository';
 import { useTempAlertStore } from '../../store/portal/tempAlertStore';
-import { ModalType, TempAlertPosition, TempAlertType } from '../../enum/EnumRepository';
+import { AlertPosition, AlertType, ModalType, TempAlertPosition, TempAlertType } from '../../enum/EnumRepository';
 import { useApiWrapper } from './apiWrapper';
 import { useModalStore } from '../../store/portal/modalStore';
+import { useStandardAlertStore } from '../../store/portal/alertStore';
 
 
 interface UseAuthResult {
   user: UserData | null;
   setUser: (user: UserData) => void;
+  findAui: (data: LoginReq) => Promise<void>;
   signUp: (data: SignUpReq) => Promise<void>;
   login: (data: LoginReq) => Promise<void>;
   refresh: (data: RefreshReq) => Promise<void>;
@@ -21,6 +23,7 @@ interface UseAuthResult {
 
 export const useAuth = (): UseAuthResult => {
   const { user, setUser, clearAuth } = useAuthStore();
+  const { setStandardAlert } = useStandardAlertStore();
   const { setTempAlert } = useTempAlertStore();
   const { setStandardModal, clearModal } = useModalStore();
   const withApiHandler = useApiWrapper();
@@ -88,12 +91,26 @@ export const useAuth = (): UseAuthResult => {
     });
   };
 
+  const handleFindAuiSuccess = (response: SimpleStringResponse) => {
+    const { value } = response.data;
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: `Here is your URL: https://www.architrive.com/${value}`,
+      callBack: () => {
+        clearModal();
+      }
+    });
+  };
+
   const handleAuthRequest = async <T extends SignUpReq | LoginReq | RefreshReq | ActivateReq>(
-    action: 'signup' | 'login' | 'refresh' | 'activate',
+    action: 'signup' | 'login' | 'refresh' | 'activate' | 'find_aui',
     data: T
   ) => {
     const apiFunction = async () => {
       switch (action) {
+        case 'find_aui':
+          return handleFindAuiSuccess(await findAui(data as LoginReq));
         case 'signup':
           return handleSignupSuccess(await signUp(data as SignUpReq));
         case 'refresh':
@@ -109,6 +126,7 @@ export const useAuth = (): UseAuthResult => {
     await withApiHandler(apiFunction, [action, data]);
   };
 
+  const findAuiHandler = (data: LoginReq) => handleAuthRequest('find_aui', data);
   const signUpHandler = (data: SignUpReq) => handleAuthRequest('signup', data);
   const loginHandler = (data: LoginReq) => handleAuthRequest('login', data);
   const refreshHandler = (data: RefreshReq) => handleAuthRequest('refresh', data);
@@ -129,14 +147,11 @@ export const useAuth = (): UseAuthResult => {
   return {
     user,
     setUser,
+    findAui: findAuiHandler,
     signUp: signUpHandler,
     login: loginHandler,
     refresh: refreshHandler,
     activate: activateHandler,
     logout,
   };
-}
-
-export const extractUsernameFromAui = (aui: string): string => {
-  return aui.split("-")[0].toUpperCase();
 }

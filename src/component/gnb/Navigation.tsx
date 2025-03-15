@@ -3,14 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useMenu } from '../../shared/hooks/useMenu';
-import { useCheckLoginOwner } from '../../shared/hooks/useCheckLoginOwner';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
-
+import { isLoggedInOwner } from '../../shared/util/isLoggedInOwner';
 
 const Navigation: React.FC = () => {
   const { aui } = useAui();
   const { setting, getSetting } = useSetting();
-  const { isLoggedInOwner } = useCheckLoginOwner();
   const location = useLocation();
   const { isMenuOpen, closeMenu } = useMenu();
 
@@ -56,7 +54,7 @@ const Navigation: React.FC = () => {
             </NavItem>
           )
         )}
-        {isLoggedInOwner() &&
+        {isLoggedInOwner(aui) &&
           <NavItem>
             <StyledLink
               to={`/${aui}/settings`}

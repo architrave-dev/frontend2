@@ -12,7 +12,9 @@ import FullImageViewer from './component/FullImageViewer';
 import EmailSend from '../component/contact/EmailSend';
 import EmailVerification from '../component/auth/EmailVerification';
 import Indexing from '../component/index/Indexing';
-
+import ChangePWModal from '../component/setting/ChangePWModal';
+import FindAuiModal from '../component/landing/FindAuiModal';
+import FindPWModal from '../component/landing/FindPWModal';
 
 const ModalTemplate: React.FC = () => {
   const { standardModal, clearModal } = useModalStore();
@@ -43,12 +45,28 @@ const ModalTemplate: React.FC = () => {
             <WorkListForDetail />
           </WorkStationOverlay>
         )
+      case ModalType.CHANGE_PW:
+        return (
+          <ModalOverlayBrighter onClick={clearModal}>
+            <ChangePWModal />
+          </ModalOverlayBrighter>
+        )
       case ModalType.CHANGE_STATION:
         return (
           <ModalOverlayBrighter onClick={clearModal}>
-            <ModalContentBlur onClick={(e) => e.stopPropagation()}>
-              <ChangeModal />
-            </ModalContentBlur>
+            <ChangeModal />
+          </ModalOverlayBrighter>
+        )
+      case ModalType.FIND_AUI:
+        return (
+          <ModalOverlayBrighter onClick={clearModal}>
+            <FindAuiModal />
+          </ModalOverlayBrighter>
+        )
+      case ModalType.FIND_PW:
+        return (
+          <ModalOverlayBrighter onClick={clearModal}>
+            <FindPWModal />
           </ModalOverlayBrighter>
         )
       case ModalType.LOGIN:
@@ -122,15 +140,6 @@ const ModalOverlayBrighter = styled.div`
   z-index: 5; 
 `;
 
-const ModalContentBlur = styled.div`
-  background-color: ${({ theme }) => theme.colors.color_Alpha_04};
-  padding: 20px;
-  width: 440px;
-  border-radius: 2px;
-  backdrop-filter: blur(4px);
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_04};
-`;
-
 const ModalContent = styled.div`
   background-color: ${({ theme }) => theme.colors.color_White};
   padding: 20px;
@@ -150,16 +159,5 @@ const WorkStationOverlay = styled.div`
   align-items: center;
 `;
 
-const WorkStationContent = styled.div`
-  position: absolute;
-  left: 6vw;
-
-  background-color: ${({ theme }) => theme.colors.color_White};
-  padding: 20px;
-  border-radius: 2px;
-  border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
-  width: 230px;
-  //height은 각자 정해
-`;
 
 export default ModalTemplate;

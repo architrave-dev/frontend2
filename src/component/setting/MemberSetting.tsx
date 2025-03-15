@@ -1,23 +1,62 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { AlertPosition, AlertType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, ModalType, TempAlertPosition, TempAlertType } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import MoleculeDivBtn from '../../shared/component/molecule/MoleculeDivBtn';
+import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useMember } from '../../shared/hooks/useApi/useMember';
+import { UpdateMemberReq } from '../../shared/dto/ReqDtoRepository';
+import { useAui } from '../../shared/hooks/useAui';
+import { BtnFloatSmall } from '../../shared/component/headless/button/BtnBody';
+import { useTempAlertStore } from '../../shared/store/portal/tempAlertStore';
+import HeadlessIconBtn from '../../shared/component/headless/button/HeadlessIconBtn';
+import copyIcon from '../../asset/icon/copy.png';
 
 const MemberSetting: React.FC = () => {
   const { user } = useAuth();
-  const { setStandardAlert } = useStandardAlertStore();
+  const { setStandardModal } = useModalStore();
+  const { setTempAlert } = useTempAlertStore();
+  const { updateMember } = useMember();
+  const { aui } = useAui();
+
+
+  if (!user) return null;
+
+  const handleCopyAui = () => {
+    navigator.clipboard.writeText(user.aui);
+    setTempAlert({
+      type: TempAlertType.UPDATED,
+      position: TempAlertPosition.RB,
+      content: "Copy complete.",
+      duration: 2500
+    });
+  }
+
+  const handleChangeUsername = () => {
+    setStandardModal({
+      modalType: ModalType.CHANGE_STATION,
+      title: "Username",
+      value: user.username,
+      handleChange: (value: string) => handleUpdateMember('username', value)
+    });
+  }
+
+  const handleUpdateMember = async (field: keyof UpdateMemberReq, value: string | boolean) => {
+    await updateMember(aui, {
+      ...user,
+      [field]: value
+    });
+  }
 
   const handleChangePw = () => {
-    setStandardAlert({
-      type: AlertType.ALERT,
-      position: AlertPosition.TOP,
-      content: "In Preparation..."
-    })
+    setStandardModal({
+      modalType: ModalType.CHANGE_PW,
+      title: "Password",
+      value: "",
+      handleChange: () => { }
+    });
   }
-  // 로딩 상태를 처리합니다.
-  if (!user) return null;
 
   return (
     <MemberSettingComp>
@@ -25,11 +64,23 @@ const MemberSetting: React.FC = () => {
       <SubContainer>
         <SubWrapper>
           <SubTitle>Username</SubTitle>
-          <SubValue>{user.aui}</SubValue>
+          <MoleculeDivBtn
+            value={user.username}
+            defaultValue={user.username}
+            handleClick={handleChangeUsername}
+            DivChangeStyle={SubValueChange}
+            DivStyle={SubValue}
+            StyledBtn={SubValueBtn}
+          />
         </SubWrapper>
         <SubWrapper>
           <SubTitle>AUI (Artist Unique Id)</SubTitle>
-          <SubValue>{user.aui}</SubValue>
+          <SubValue>{user.aui}
+            <HeadlessIconBtn
+              icon={copyIcon}
+              handleClick={handleCopyAui}
+              StyledBtn={BtnFloatSmall}
+            /></SubValue>
         </SubWrapper>
         <SubWrapper>
           <SubTitle>Email</SubTitle>

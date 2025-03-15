@@ -5,6 +5,7 @@ import Welcome from '../component/landing/Welcome';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
 import { useInitPage } from '../shared/hooks/useInitPage';
+import SearchForgot from '../component/landing/SearchForgot';
 // import { useHealthCheck } from '../shared/hooks/useHealthCheck';
 
 const Landing: React.FC = () => {
@@ -17,6 +18,7 @@ const Landing: React.FC = () => {
       <Loading isLoading={isLoading} />
       <Welcome />
       <SearchBar />
+      <SearchForgot />
     </LandingContainer>
   );
 }

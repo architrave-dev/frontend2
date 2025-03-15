@@ -113,7 +113,7 @@ const SearchWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   outline: none;
 `;
 
@@ -150,7 +150,8 @@ const CandidatesList = styled.ul`
   border: 1px solid ${({ theme }) => theme.colors.color_Gray_05};
   border-top: none;
   border-radius: 0 0 2px 2px;
-  z-index: 10;
+  backdrop-filter: blur(4px);
+  z-index: 2;
   padding: 0;
   margin: 0;
   list-style: none;

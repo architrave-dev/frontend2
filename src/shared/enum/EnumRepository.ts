@@ -9,6 +9,9 @@ export enum ModalType {
   CHANGE_STATION = 'CHANGE_STATION',
   EMAIL_SEND = 'EMAIL_SEND',
   INDEXING = 'INDEXING',
+  CHANGE_PW = 'CHANGE_PW',
+  FIND_AUI = 'FIND_AUI',
+  FIND_PW = 'FIND_PW',
 }
 
 export enum AlertType {

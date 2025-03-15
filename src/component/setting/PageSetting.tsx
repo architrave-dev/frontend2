@@ -7,14 +7,16 @@ import { MenuVisible } from '../../shared/dto/EntityRepository';
 import MoleculeDivToggle from '../../shared/component/molecule/MoleculeDivToggle';
 import { useAui } from '../../shared/hooks/useAui';
 import MoleculeDivBtn from '../../shared/component/molecule/MoleculeDivBtn';
-import { ModalType } from '../../shared/enum/EnumRepository';
+import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 
 
 const PageSetting: React.FC = () => {
   const { aui } = useAui();
   const { setting, updateSetting } = useSetting();
   const { setStandardModal } = useModalStore();
+  const { setStandardAlert } = useStandardAlertStore();
 
   if (!setting) return null;
 
@@ -24,6 +26,22 @@ const PageSetting: React.FC = () => {
       title: "Title Name",
       value: setting.pageName,
       handleChange: (value: string) => handlePageChange('pageName', value)
+    });
+  }
+
+  const handlePageVisibilityChange = async () => {
+    const newVisibility = !setting.pageVisible;
+    const message = newVisibility
+      ? "Do you want to make your page public?\nUsername search will be enabled."
+      : "Do you want to make your page private?\nUsername search will be disabled, and access will be URL-only.";
+
+    setStandardAlert({
+      type: AlertType.CONFIRM,
+      position: AlertPosition.TOP,
+      content: message,
+      callBack: async () => {
+        await handlePageChange('pageVisible', newVisibility);
+      }
     });
   }
 
@@ -73,7 +91,7 @@ const PageSetting: React.FC = () => {
           <MoleculeDivToggle
             value={setting.pageVisible}
             name={setting.pageVisible === true ? "Public" : "Private"}
-            handleToggle={(e) => handlePageChange("pageVisible", e.target.checked)}
+            handleToggle={handlePageVisibilityChange}
           />
         </SubWrapper>
         <SubWrapper>
