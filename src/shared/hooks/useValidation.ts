@@ -2,6 +2,7 @@ import { CareerData, MemberInfoData, SizeData, WorkData } from '../dto/EntityRep
 import { AlertPosition, AlertType, CountryType, WorkType } from '../enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { CreateWorkReq } from '../dto/ReqDtoRepository';
+import { cleanUpPrice } from '../util/renderingPrice';
 
 
 
@@ -82,13 +83,15 @@ export const useValidation = () => {
   };
 
   const isValidPrice = (value: string): boolean => {
+    const price = cleanUpPrice(value);
+    if (price === "") return true;
     const regex = /^[0-9]+$/;
-    const isValid = regex.test(value);
+    const isValid = regex.test(price);
     if (!isValid) {
       setStandardAlert({
         type: AlertType.CONFIRM,
         position: AlertPosition.TOP,
-        content: "Invalid price format. Only positive integers (without '+') are allowed.",
+        content: "Invalid price format. Only positive integers are allowed.",
       });
     }
 

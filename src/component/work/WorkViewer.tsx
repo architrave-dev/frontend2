@@ -21,6 +21,7 @@ import SelectBox from '../../shared/component/SelectBox';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useImage } from '../../shared/hooks/useApi/useImage';
+import { renderingPrice } from '../../shared/util/renderingPrice';
 
 
 const WorkViewer: React.FC = () => {
@@ -110,7 +111,7 @@ const WorkViewer: React.FC = () => {
         </WorkInfo>
         <WorkInfo>
           <MoleculeInputDiv
-            value={activeWork.price}
+            value={renderingPrice(activeWork.price)}
             defaultValue={"Not for Sale"}
             placeholder={"Price ($)"}
             handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
