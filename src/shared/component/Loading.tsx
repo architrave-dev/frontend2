@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 interface LoadingProps {
@@ -6,6 +6,17 @@ interface LoadingProps {
 }
 
 const Loading: React.FC<LoadingProps> = ({ isLoading }) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isLoading) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isLoading]);
+
   return (
     <LoadingOverlay $isVisible={isLoading}>
       <Wave>
