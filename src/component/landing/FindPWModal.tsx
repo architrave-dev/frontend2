@@ -7,10 +7,14 @@ import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useValidation } from '../../shared/hooks/useValidation';
 import Space from '../../shared/Space';
 import { BtnContainer, ChangeModalComp, ErrorText, FindModalFrame, Title } from './FindAuiModal';
+import { AlertPosition } from '../../shared/enum/EnumRepository';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { AlertType } from '../../shared/enum/EnumRepository';
 
 
 const FindPWModal: React.FC = () => {
   const { standardModal, isClosing, clearModal } = useModalStore();
+  const { setStandardAlert } = useStandardAlertStore();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const { isEmail } = useValidation();
@@ -19,7 +23,11 @@ const FindPWModal: React.FC = () => {
 
   const handleChange = () => {
     if (!validateEmail()) return;
-    console.log(email);
+    setStandardAlert({
+      type: AlertType.ALERT,
+      position: AlertPosition.TOP,
+      content: "In Preparation..."
+    })
   };
 
   const validateEmail = () => {
