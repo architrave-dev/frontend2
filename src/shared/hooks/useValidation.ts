@@ -14,6 +14,7 @@ export const useValidation = () => {
   }
 
   const isValidYear = (value: string): boolean => {
+    if (value === "") return true;
     if (!isNumeric(value)) {
       setStandardAlert({
         type: AlertType.CONFIRM,
