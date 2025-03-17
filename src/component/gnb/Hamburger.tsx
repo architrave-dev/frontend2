@@ -2,12 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import hamburger128 from '../../asset/gnb/hamburger_128.png';
 import { useMenu } from '../../shared/hooks/useMenu';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../asset/gnb/logo_small.png';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
+import { useAui } from '../../shared/hooks/useAui';
 
 const Hamburger: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { aui } = useAui();
   const { isMenuOpen, openMenu, closeMenu } = useMenu();
   const { setting } = useSetting();
 
@@ -16,6 +19,10 @@ const Hamburger: React.FC = () => {
       closeMenu();
     else
       openMenu();
+  }
+  const handleUsernameClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    navigate(`/${aui}/`);
   }
   if (location.pathname === '/') {
     return (
@@ -29,7 +36,7 @@ const Hamburger: React.FC = () => {
   return (
     <LogoComp onClick={showGnb}>
       <HamburgerComp src={hamburger128} alt='toggle menu icon' />
-      <Username>
+      <Username onClick={(e) => handleUsernameClick(e)}>
         {setting.pageName.toUpperCase()}
       </Username>
     </LogoComp>
@@ -45,7 +52,7 @@ const LogoComp = styled.article`
 `;
 
 const HamburgerComp = styled.img`
-  width: calc(1.2vw);
+  width: clamp(10px, 2.3vw, 20px);
   cursor: pointer;
 `;
 
@@ -71,7 +78,7 @@ const ServiceName = styled.div`
 `;
 
 const LogoImg = styled.img`
-  width: calc(2.5vw);
+  width: clamp(1.4rem, 4vw, 2.5rem);
   padding-bottom: 2px;
 `;
 
