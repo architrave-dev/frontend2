@@ -55,7 +55,6 @@ const DividerVertical: React.FC<DividerVerticalProps> = ({
 
 const DividerVerticalComp = styled.span`
   height: 18px;
-  padding-right:4px;
   color: ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_04};
 `;

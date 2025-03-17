@@ -19,7 +19,7 @@ const MoleculeDescription: React.FC<MoleculeDescriptionProps> = ({
     <StyledDescription $alignment={alignment ? alignment : TextAlignment.LEFT} >
       {value.split('\n').map((content, index) => (
         <React.Fragment key={index}>
-          {index == 0 ?
+          {index === 0 ?
             null
             :
             <br />

@@ -35,7 +35,7 @@ const OrgDescription: React.FC<OrgDescriptionProps> = ({
   return (
     <>
       {isEditMode ? (
-        <OrgDescriptionWrapper $isVisible={visible}>
+        <OrgWrapper $isVisible={visible}>
           <HeadlessTextArea
             alignment={alignment ? alignment : TextAlignment.LEFT}
             content={value}
@@ -45,8 +45,8 @@ const OrgDescription: React.FC<OrgDescriptionProps> = ({
           />
           <VisibileGrab
             onDoubleClick={changeVisible}
-          >:.</VisibileGrab>
-        </OrgDescriptionWrapper>
+          >.:</VisibileGrab>
+        </OrgWrapper>
       ) : (
         visible ?
           <MoleculeDescription
@@ -61,22 +61,21 @@ const OrgDescription: React.FC<OrgDescriptionProps> = ({
   );
 };
 
-const OrgDescriptionWrapper = styled.div<{ $isVisible: boolean }>`
+export const OrgWrapper = styled.div<{ $isVisible: boolean }>`
   position: relative;
   display: flex;
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0.5)};
 `;
 
-const VisibileGrab = styled.div`
-  top: 0;
-  left: 10px;
-  width: 20px;
+export const VisibileGrab = styled.div`
+  width: fit-content;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
   cursor: pointer;
+  ${({ theme }) => theme.typography.Body_03_2};
 `;
 
 export default OrgDescription;

@@ -12,7 +12,6 @@ import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
-import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
@@ -22,10 +21,10 @@ import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useImage } from '../../shared/hooks/useApi/useImage';
 import { renderingPrice } from '../../shared/util/renderingPrice';
-import MoleculeInputDivVisibility from '../../shared/component/molecule/MoleculeInputDivVisibility';
 import DividerVertical from './DividerVertical';
 import OrgDescription from '../../shared/component/organism/OrgDescription';
 import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
+import OrgInputDivVisibi from '../../shared/component/organism/OrgInputDivVisi';
 
 
 const WorkViewer: React.FC = () => {
@@ -123,25 +122,6 @@ const WorkViewer: React.FC = () => {
           />
         </WorkInfo>
         <WorkInfo>
-          <MoleculeInputDiv
-            value={renderingPrice(activeWork.price)}
-            defaultValue={"Not for Sale"}
-            placeholder={"Price ($)"}
-            handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
-            inputStyle={WorkViewerInfo}
-            StyledDiv={Info}
-          />
-          <DividerVertical left={"price"} right={"collection"} />
-          <MoleculeInputDiv
-            value={activeWork.collection}
-            defaultValue={"Artist's Collection"}
-            placeholder={"Collection"}
-            handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
-            inputStyle={WorkViewerInfo}
-            StyledDiv={Info}
-          />
-        </WorkInfo>
-        <WorkInfo>
           {isEditMode ?
             <SelectBoxWrapper>
               <SelectBox
@@ -153,7 +133,25 @@ const WorkViewer: React.FC = () => {
             : <Info>{activeWork.workType}</Info>
           }
           <DividerVertical left={"workType"} right={"price"} />
+          <OrgInputDivVisibi
+            value={renderingPrice(activeWork.price)}
+            placeholder={"Price ($)"}
+            handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
+            visible={workPropertyVisible.price}
+            changeVisible={() => handleDoubleClick('price')}
+          />
           <DividerVertical left={"price"} right={"collection"} />
+          <OrgInputDivVisibi
+            value={activeWork.collection}
+            placeholder={"Collection"}
+            handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
+            inputStyle={WorkViewerInfo}
+            StyledDiv={Info}
+            visible={workPropertyVisible.collection}
+            changeVisible={() => handleDoubleClick('collection')}
+          />
         </WorkInfo>
         <OrgDescription
           value={activeWork.description}
