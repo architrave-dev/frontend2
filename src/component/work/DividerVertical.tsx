@@ -29,7 +29,9 @@ const DividerVertical: React.FC<DividerVerticalProps> = ({
     // 전부 값이 있어야하고
     if (!!(activeWork[left] && activeWork[right])) {
       //visibility 설정이 가능한 친구들일 경우,
-      if (left === "price" && right === "collection") {
+      if ((left === "workType" && right === "price") ||
+        (left === "price" && right === "collection")
+      ) {
         //전부 다 true여야 해.
         if (workPropertyVisible[left] && workPropertyVisible[right]) {
           return true;

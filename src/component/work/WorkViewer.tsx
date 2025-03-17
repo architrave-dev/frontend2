@@ -7,7 +7,7 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, BtnWorkViewerBlack, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType, DisplaySize, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
+import { SizeData, WorkData, WorkPropertyVisibleData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
@@ -22,7 +22,10 @@ import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useImage } from '../../shared/hooks/useApi/useImage';
 import { renderingPrice } from '../../shared/util/renderingPrice';
+import MoleculeInputDivVisibility from '../../shared/component/molecule/MoleculeInputDivVisibility';
 import DividerVertical from './DividerVertical';
+import OrgDescription from '../../shared/component/organism/OrgDescription';
+import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
 
 
 const WorkViewer: React.FC = () => {
@@ -30,11 +33,12 @@ const WorkViewer: React.FC = () => {
   const { aui } = useAui();
   const { updateWork, deleteWork } = useWorkList();
   const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange } = useWorkViewStore();
+  const { workPropertyVisible, updateWorkPropertyVisible } = useWorkPropertyVisible();
   const { setStandardAlert } = useStandardAlertStore();
   const { checkType } = useValidation();
   const { uploadImage } = useImage();
 
-  if (!activeWork) return null;
+  if (!activeWork || !workPropertyVisible) return null;
 
   const handleChangeWithValidate = (field: keyof WorkData, value: string | SizeData) => {
     if (!checkType(field, value)) {
@@ -71,6 +75,14 @@ const WorkViewer: React.FC = () => {
       position: AlertPosition.TOP,
       content: "Are you sure you want to delete this work?",
       callBack: callback
+    });
+  };
+
+  const handleDoubleClick = async (field: keyof WorkPropertyVisibleData) => {
+    if (!isEditMode) return null;
+    await updateWorkPropertyVisible(aui, {
+      ...workPropertyVisible,
+      [field]: !workPropertyVisible[field]
     });
   };
 
@@ -140,13 +152,17 @@ const WorkViewer: React.FC = () => {
             </SelectBoxWrapper>
             : <Info>{activeWork.workType}</Info>
           }
+          <DividerVertical left={"workType"} right={"price"} />
+          <DividerVertical left={"price"} right={"collection"} />
         </WorkInfo>
-        <MoleculeTextareaDescription
+        <OrgDescription
           value={activeWork.description}
           handleChange={(e) => handleChangeWithValidate("description", e.target.value)}
           alignment={TextAlignment.LEFT}
           StyledTextarea={TextAreaWorkViewer}
           StyledDescription={Description}
+          visible={workPropertyVisible.description}
+          changeVisible={() => handleDoubleClick('description')}
         />
       </WorkInfoContainer>
       <ImgWrapper>
@@ -192,8 +208,6 @@ const WorkViewComp = styled.section`
   &::-webkit-scrollbar {
     display: none;
   }
-
-  // background-color: #eae7dc;
 `;
 
 
@@ -258,12 +272,8 @@ const ImgWrapper = styled.div`
 `
 
 const WorkImage = styled.img`
-  //부모 크기에 맞춤
   width: 100%;
   height: 100%; 
-  //이미지 크기에 맞춤
-  // max-width: 100%; 
-  // max-height: 100%;
   object-fit: contain;
 `;
 

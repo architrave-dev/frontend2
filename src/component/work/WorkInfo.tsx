@@ -27,10 +27,6 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data, handleClick }) => {
         <TitleBlock>{data.title}</TitleBlock>
         <BlockWithVisible
           width={"1.5"}
-          field={"workType"}
-          value={data.workType === WorkType.NONE ? '-' : data.workType} />
-        <BlockWithVisible
-          width={"1.5"}
           value={convertSizeToString(data.size)} />
         <BlockWithVisible
           width={"2"}
@@ -39,9 +35,9 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data, handleClick }) => {
           width={"0.8"}
           value={data.prodYear} />
         <BlockWithVisible
-          width={"1.5"}
-          field={"description"}
-          value={data.description === '' ? '-' : data.description} />
+          width={"1.2"}
+          field={"workType"}
+          value={data.workType === WorkType.NONE ? '-' : data.workType} />
         <BlockWithVisible
           width={"1.2"}
           field={"price"}
@@ -50,6 +46,10 @@ const WorkInfo: React.FC<WorkInfoProps> = ({ data, handleClick }) => {
           width={"1.2"}
           field={"collection"}
           value={data.collection === "" ? "-" : data.collection} />
+        <BlockWithVisible
+          width={"1.5"}
+          field={"description"}
+          value={data.description === '' ? '-' : data.description} />
         {activeWork && <SpaceBlock />}
       </ContentWrapper>
       {isActive && <ArrowBlock>{"----->"}</ArrowBlock>}
