@@ -22,6 +22,7 @@ import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useImage } from '../../shared/hooks/useApi/useImage';
 import { renderingPrice } from '../../shared/util/renderingPrice';
+import DividerVertical from './DividerVertical';
 
 
 const WorkViewer: React.FC = () => {
@@ -92,7 +93,7 @@ const WorkViewer: React.FC = () => {
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
-          <DividerSmall>|</DividerSmall>
+          <DividerVertical left={"prodYear"} right={"material"} />
           <MoleculeInputDiv
             value={activeWork.material}
             placeholder={"Material"}
@@ -100,7 +101,7 @@ const WorkViewer: React.FC = () => {
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
-          <DividerSmall>|</DividerSmall>
+          <DividerVertical left={"material"} right={"size"} />
           <MoleculeInputDiv
             value={convertSizeToString(activeWork.size)}
             placeholder={"Size"}
@@ -118,7 +119,7 @@ const WorkViewer: React.FC = () => {
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
-          <DividerSmall>|</DividerSmall>
+          <DividerVertical left={"price"} right={"collection"} />
           <MoleculeInputDiv
             value={activeWork.collection}
             defaultValue={"Artist's Collection"}
@@ -229,13 +230,6 @@ const Info = styled.div`
   padding-right:4px;
   margin-bottom: 1px;
   text-align: center;
-  ${({ theme }) => theme.typography.Body_04};
-`;
-
-const DividerSmall = styled.span`
-  height: 18px;
-  padding-right:4px;
-  color: ${({ theme }) => theme.colors.color_Gray_05};
   ${({ theme }) => theme.typography.Body_04};
 `;
 

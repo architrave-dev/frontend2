@@ -9,18 +9,18 @@ interface MoleculeInputDivProps {
   value: string | number;
   placeholder: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: () => void;
   inputStyle: StyledInputComponent;
   StyledDiv: StyledDivComponent;
+  onClick: () => void;
 }
 
 const MoleculeInputDiv: React.FC<MoleculeInputDivProps> = ({
   value,
   placeholder,
   handleChange,
-  onClick,
   inputStyle,
   StyledDiv,
+  onClick,
 }) => {
   const { isEditMode } = useEditMode();
 
