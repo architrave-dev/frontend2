@@ -25,6 +25,7 @@ import DividerVertical from './DividerVertical';
 import OrgDescription from '../../shared/component/organism/OrgDescription';
 import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
 import OrgInputDivVisibi from '../../shared/component/organism/OrgInputDivVisi';
+import OrgSelectDivVisi from '../../shared/component/organism/OrgSelectDivVisi';
 
 
 const WorkViewer: React.FC = () => {
@@ -122,16 +123,14 @@ const WorkViewer: React.FC = () => {
           />
         </WorkInfo>
         <WorkInfo>
-          {isEditMode ?
-            <SelectBoxWrapper>
-              <SelectBox
-                value={activeWork.workType}
-                selectType={SelectType.WORK_TYPE}
-                handleChange={(value) => handleChangeWithValidate("workType", value)}
-                direction={false} />
-            </SelectBoxWrapper>
-            : <Info>{activeWork.workType}</Info>
-          }
+          <OrgSelectDivVisi
+            value={activeWork.workType}
+            selectType={SelectType.WORK_TYPE}
+            handleChange={(value) => handleChangeWithValidate("workType", value)}
+            StyledDiv={Info}
+            visible={workPropertyVisible.workType}
+            changeVisible={() => handleDoubleClick('workType')}
+          />
           <DividerVertical left={"workType"} right={"price"} />
           <OrgInputDivVisibi
             value={renderingPrice(activeWork.price)}
@@ -208,8 +207,6 @@ const WorkViewComp = styled.section`
   }
 `;
 
-
-
 const WorkInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -234,7 +231,7 @@ const Title = styled.h2`
 const WorkInfo = styled.div`
   display: flex;
   gap: 10px;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
 `;
 
 const Info = styled.div`
@@ -242,12 +239,6 @@ const Info = styled.div`
   padding-right:4px;
   margin-bottom: 1px;
   text-align: center;
-  ${({ theme }) => theme.typography.Body_04};
-`;
-
-const SelectBoxWrapper = styled.article`
-  width: 50%;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_04};
 `;
 
