@@ -17,7 +17,7 @@ interface UseCareerResult {
 }
 
 export const useCareer = (): UseCareerResult => {
-  const { careers, setCareers, setOnlyCareers } = useCareerListStore();
+  const { careers, setCareers, afterCreateCareer, afterUpdateCareer } = useCareerListStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
   const withApiHandler = useApiWrapper();
 
@@ -26,13 +26,12 @@ export const useCareer = (): UseCareerResult => {
     setCareers(careerListData);
   };
   const handleCreateCareerSuccess = (response: CareerResponse) => {
-    const careerData = response.data;
-    setCareers([...careers, careerData]);
+    const createdCareerData = response.data;
+    afterCreateCareer(createdCareerData);
   };
   const handleUpdateCareerSuccess = (response: CareerResponse) => {
     const updatedCareerData = response.data;
-    const careerListData = careers.map((c) => c.id === updatedCareerData.id ? updatedCareerData : c);
-    setOnlyCareers(careerListData);
+    afterUpdateCareer(updatedCareerData);
     setUpdatedTempAlert();
   };
   const handleDeleteCareerSuccess = (response: CareerResponse) => {

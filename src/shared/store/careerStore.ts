@@ -3,15 +3,15 @@ import { CareerData } from '../dto/EntityRepository';
 
 interface CareerListState {
   careers: CareerData[];
-  setOnlyCareers: (careers: CareerData[]) => void;
   setCareers: (careers: CareerData[]) => void;
   updateCareer: (id: string, updates: Partial<CareerData>) => void;
+  afterCreateCareer: (career: CareerData) => void;
+  afterUpdateCareer: (updatedCareer: CareerData) => void;
   afterDeleteCareer: (id: string) => void;
 }
 
 export const useCareerListStore = create<CareerListState>((set) => ({
   careers: [],
-  setOnlyCareers: (careers) => set({ careers }),
   setCareers: (careers) =>
     set(() => ({
       careers: careers.map((c) => ({ ...c, hasChanged: false })),
@@ -23,6 +23,14 @@ export const useCareerListStore = create<CareerListState>((set) => ({
           { ...c, ...updates, hasChanged: true }
           : c
       ),
+    })),
+  afterCreateCareer: (career) =>
+    set(({ careers }) => ({
+      careers: [...careers, { ...career, hasChanged: false }]
+    })),
+  afterUpdateCareer: (updatedCareer) =>
+    set(({ careers }) => ({
+      careers: careers.map((c) => c.id === updatedCareer.id ? updatedCareer : c)
     })),
   afterDeleteCareer: (id) =>
     set(({ careers }) => ({
