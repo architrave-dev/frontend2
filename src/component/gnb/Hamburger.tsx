@@ -6,8 +6,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../asset/gnb/logo_small.png';
 import { useSetting } from '../../shared/hooks/useApi/useSetting';
 import { useAui } from '../../shared/hooks/useAui';
+import { AlertType } from '../../shared/enum/EnumRepository';
+import { AlertPosition } from '../../shared/enum/EnumRepository';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+
 
 const Hamburger: React.FC = () => {
+  const { isEditMode } = useEditMode();
+  const { setStandardAlert } = useStandardAlertStore();
   const location = useLocation();
   const navigate = useNavigate();
   const { aui } = useAui();
@@ -22,6 +29,14 @@ const Hamburger: React.FC = () => {
   }
   const handleUsernameClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+    if (isEditMode) {
+      setStandardAlert({
+        type: AlertType.ALERT,
+        position: AlertPosition.TOP,
+        content: "Cannot move to other page in edit mode.",
+      });
+      return;
+    }
     navigate(`/${aui}/`);
   }
   if (location.pathname === '/') {
