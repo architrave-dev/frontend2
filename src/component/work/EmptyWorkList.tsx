@@ -20,4 +20,5 @@ const EmptyWorkListContainer = styled.div`
   align-items: center;
   text-align: center;
   ${({ theme }) => theme.typography.Body_03_2};
+  color: ${({ theme }) => theme.colors.color_Gray_05};
 `;

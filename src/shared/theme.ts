@@ -21,7 +21,7 @@ const theme: DefaultTheme = {
     font_H01: '68px',
     font_H015: 'clamp(1.8rem, 4vw, 2.8rem)',
     font_H02: 'clamp(1.8rem, 4vw, 2.25rem)',
-    font_H03: 'clamp(1.3rem, 3vw, 2rem)',
+    font_H03: 'clamp(1.3rem, 2.7vw, 1.8rem)',
     font_B00: 'clamp(0.9rem, 2.5vw, 1.4rem)',
     font_B01: '20px',
     font_B02: '16px',
