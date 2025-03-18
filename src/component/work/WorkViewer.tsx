@@ -16,7 +16,6 @@ import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { useValidation } from '../../shared/hooks/useValidation';
-import SelectBox from '../../shared/component/SelectBox';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useImage } from '../../shared/hooks/useApi/useImage';
@@ -60,6 +59,7 @@ const WorkViewer: React.FC = () => {
     const finalRequest = imageChanged
       ? await uploadImage(aui, ServiceType.WORK, baseRequest)
       : baseRequest;
+    if (!finalRequest) return;
 
     await updateWork(aui, finalRequest as UpdateWorkReq);
     setEditMode(false);
@@ -247,7 +247,6 @@ const Description = styled.div`
   color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_03_2};
 `
-
 
 const ImgWrapper = styled.div`
   position: relative;

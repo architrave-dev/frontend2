@@ -1,6 +1,6 @@
 
 import { useGlobalErrStore } from '../../store/errorStore';
-import { ErrorCode } from '../../api/errorCode';
+import { ErrorCode, convertStringToErrorCode } from '../../api/errorCode';
 import { useLoadingStore } from '../../store/loadingStore';
 import { ServiceType } from '../../enum/EnumRepository';
 import { uploadToS3 } from '../../aws/s3Upload';
@@ -11,8 +11,8 @@ type UpdateReqType = UpdateBillboardReq | UpdateMemberInfoReq | UpdateProjectReq
 type UpdatePEType = { id: string, updateUploadFileReq: UpdateUploadFileReq, workId?: string };
 
 interface UseImageResult {
-  uploadImage: (aui: string, serviceType: ServiceType, data: UpdateReqType) => Promise<UpdateReqType>;
-  uploadPEImage: (aui: string, serviceType: ServiceType, data: UpdatePEType, projectId?: string) => Promise<UpdatePEType>;
+  uploadImage: (aui: string, serviceType: ServiceType, data: UpdateReqType) => Promise<UpdateReqType | undefined>;
+  uploadPEImage: (aui: string, serviceType: ServiceType, data: UpdatePEType, projectId?: string) => Promise<UpdatePEType | undefined>;
 }
 
 const MIN_SIZE = 1024 * 50;
@@ -24,19 +24,16 @@ export const useImage = (): UseImageResult => {
   const { setManagedErr, clearErr } = useGlobalErrStore();
 
   //이미지 크기 확인
-  const sizeCheck = (file: File): boolean => {
+  const sizeCheckSmall = (file: File): boolean => {
     if (file.size < MIN_SIZE) {
       console.log("file.size 가 너무 작아. 최소 50KB 이상!!")
-      setManagedErr({
-        errCode: ErrorCode.SFE,
-      });
       return false;
     }
+    return true;
+  }
+  const sizeCheckBig = (file: File): boolean => {
     if (file.size > MAX_SIZE) {
       console.log("file.size 가 너무 크다. 최대 10MB 이하!!")
-      setManagedErr({
-        errCode: ErrorCode.BFE,
-      });
       return false;
     }
     return true;
@@ -53,9 +50,9 @@ export const useImage = (): UseImageResult => {
     clearErr();
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
-    if (!sizeCheck(file)) {
-      return prevData;
-    }
+    // if (!sizeCheck(file)) {
+    //   return prevData;
+    // }
     try {
       let originUrl: string;
       switch (serviceType) {
@@ -94,15 +91,19 @@ export const useImage = (): UseImageResult => {
     serviceType: ServiceType,
     prevData: T,
     aui: string
-  ): Promise<T> => {
+  ): Promise<T | undefined> => {
     setIsLoading(true);
     clearErr();
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
-    if (!sizeCheck(file)) {
-      return prevData;
-    }
     try {
+      if (!sizeCheckSmall(file)) {
+        throw new Error('SFE');
+      }
+      if (!sizeCheckBig(file)) {
+        throw new Error('BFE');
+      }
+
       let extraData: string[] = [];
       switch (serviceType) {
         case ServiceType.BILLBOARD:
@@ -134,11 +135,11 @@ export const useImage = (): UseImageResult => {
         }
       };
     } catch (err) {
+      const errCode = err instanceof Error ? err.message as ErrorCode : ErrorCode.AWS;
       setManagedErr({
-        errCode: ErrorCode.AWS,
-        // retryFunction: () => handleCareerRequest(aui, action, data)
+        errCode: convertStringToErrorCode(errCode)
       });
-      throw err;
+      return undefined;
     } finally {
       setIsLoading(false);
     }

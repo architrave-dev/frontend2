@@ -43,6 +43,7 @@ const About: React.FC = () => {
     const finalRequest = imageChanged
       ? await uploadImage(aui, ServiceType.MEMBER_INFO, baseRequest)
       : baseRequest;
+    if (!finalRequest) return;
 
     await updateMemberInfo(aui, finalRequest as UpdateMemberInfoReq);
     setEditMode(false);

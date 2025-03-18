@@ -53,6 +53,7 @@ const Billboard: React.FC = () => {
     const finalRequest = imageChanged
       ? await uploadImage(aui, ServiceType.BILLBOARD, baseRequest)
       : baseRequest;
+    if (!finalRequest) return;
 
     await updateBillboard(aui, finalRequest as UpdateBillboardReq);
     setEditMode(false);

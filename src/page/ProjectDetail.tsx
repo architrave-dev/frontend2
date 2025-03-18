@@ -51,7 +51,7 @@ const ProjectDetail: React.FC = () => {
     const finalRequest = imageChanged
       ? await uploadImage(aui, ServiceType.PROJECT, baseRequest)
       : baseRequest;
-
+    if (!finalRequest) return;
     await updateProject(aui, finalRequest as UpdateProjectReq);
     setEditMode(false);
   };
