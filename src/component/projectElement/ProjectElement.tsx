@@ -60,6 +60,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
             ServiceType.WORK,
             updateDto.updateWorkReq
           );
+          if (!afterUploadImage) return;
           updateDto.updateWorkReq = afterUploadImage as UpdateWorkReq;
           break;
 
@@ -69,6 +70,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
             ServiceType.DETAIL,
             updateDto.updateWorkDetailReq
           );
+          if (!afterUploadDetailImage) return;
           updateDto.updateWorkDetailReq = afterUploadDetailImage as UpdateWorkDetailReq;
           break;
 
@@ -79,6 +81,7 @@ const ProjectElement: React.FC<ProjectElementProps> = ({ data }) => {
             updateDto.updateDocumentReq,
             project.id
           );
+          if (!afterUploadDocImage) return;
           updateDto.updateDocumentReq = afterUploadDocImage as UpdateDocumentReq;
           break;
         default:

@@ -45,15 +45,18 @@ export const useImage = (): UseImageResult => {
     prevData: T,
     aui: string,
     projectId?: string
-  ): Promise<T> => {
+  ): Promise<T | undefined> => {
     setIsLoading(true);
     clearErr();
     const localImageUrl = prevData.updateUploadFileReq.originUrl;
     const file = base64ToFileWithMime(localImageUrl);
-    // if (!sizeCheck(file)) {
-    //   return prevData;
-    // }
     try {
+      if (!sizeCheckSmall(file)) {
+        throw new Error('SFE');
+      }
+      if (!sizeCheckBig(file)) {
+        throw new Error('BFE');
+      }
       let originUrl: string;
       switch (serviceType) {
         case ServiceType.WORK:
@@ -76,10 +79,11 @@ export const useImage = (): UseImageResult => {
         }
       };
     } catch (err) {
+      const errCode = err instanceof Error ? err.message as ErrorCode : ErrorCode.AWS;
       setManagedErr({
-        errCode: ErrorCode.AWS,
+        errCode: convertStringToErrorCode(errCode)
       });
-      throw err;
+      return undefined;
     } finally {
       setIsLoading(false);
     }
