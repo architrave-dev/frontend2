@@ -97,7 +97,7 @@ const ContactComp: React.FC = () => {
         <Contact_1>
           <MoleculeInputAnchor
             value={contact.sns?.instagram}
-            defaultValue={"Instagram"}
+            defaultValue={"Enter Instagram ID"}
             placeholder={"Instagram"}
             handleChange={(e) => handleSnsChange({ instagram: e.target.value })}
             inputStyle={ContactInput}
@@ -105,7 +105,7 @@ const ContactComp: React.FC = () => {
           />
           <MoleculeInputAnchor
             value={contact.sns?.twitter}
-            defaultValue={"X"}
+            defaultValue={"Enter X ID"}
             placeholder={"X"}
             handleChange={(e) => handleSnsChange({ twitter: e.target.value })}
             inputStyle={ContactInput}
@@ -113,7 +113,7 @@ const ContactComp: React.FC = () => {
           />
           <MoleculeInputAnchor
             value={contact.sns?.facebook}
-            defaultValue={"Facebook"}
+            defaultValue={"Enter facebook ID"}
             placeholder={"Facebook"}
             handleChange={(e) => handleSnsChange({ facebook: e.target.value })}
             inputStyle={ContactInput}
@@ -121,7 +121,7 @@ const ContactComp: React.FC = () => {
           />
           <MoleculeInputAnchor
             value={contact.sns?.url1}
-            defaultValue={"Website"}
+            defaultValue={"Enter website URL"}
             placeholder={"URL"}
             handleChange={(e) => handleSnsChange({ url1: e.target.value })}
             inputStyle={ContactInput}
@@ -179,7 +179,7 @@ const ContactDiv = styled.div`
 `
 
 const ContactAnchor = styled.a`
-  width: 20%;
+  width: fit-content;
   min-width: 100px;
   height: 20px;
 
@@ -191,6 +191,7 @@ const ContactAnchor = styled.a`
 
   color: ${({ theme }) => theme.colors.color_Gray_02};
   ${({ theme }) => theme.typography.Body_02_2};
+  background-color: skyblue;
   cursor: pointer;
 `
 
