@@ -4,35 +4,36 @@ import { StyledAnchorComponent, StyledInputComponent } from '../../dto/StyleComp
 import HeadlessInput from '../headless/input/HeadlessInput';
 import Arrow from '../Arrow';
 import styled from 'styled-components';
-import { OrgWrapper, VisibileGrab } from '../organism/OrgDescription';
+import { OrgWrapper, VisibileGrab } from './OrgDescription';
 
-interface MoleculeInputAnchorProps {
+
+interface OrgInputAnchorVisiProps {
   value: string;
   defaultValue: string;
   placeholder: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputStyle: StyledInputComponent;
   StyledAnchor: StyledAnchorComponent;
+  visible: boolean;
+  changeVisible: () => void;
 }
 
-const MoleculeInputAnchor: React.FC<MoleculeInputAnchorProps> = ({
+const OrgInputAnchorVisi: React.FC<OrgInputAnchorVisiProps> = ({
   value,
   defaultValue,
   placeholder,
   handleChange,
   inputStyle,
   StyledAnchor,
+  visible,
+  changeVisible,
 }) => {
   const { isEditMode } = useEditMode();
-
-  const changeVisible = () => {
-    console.log('changeVisible');
-  }
 
   return (
     <>
       {isEditMode ? (
-        <OrgWrapper $isVisible={true}>
+        <OrgWrapper $isVisible={visible}>
           <HeadlessInput
             type={'text'}
             value={value || ''}
@@ -45,13 +46,17 @@ const MoleculeInputAnchor: React.FC<MoleculeInputAnchorProps> = ({
           >.:</VisibileGrab>
         </OrgWrapper>
       ) : (
-        value ?
-          <StyledAnchor href={value} target="_blank" rel="noopener noreferrer">
-            {value}
-            <Arrow />
-          </StyledAnchor>
-          :
-          <DefaultDiv>{defaultValue}</DefaultDiv>
+        visible ? (
+          value ?
+            <StyledAnchor href={value} target="_blank" rel="noopener noreferrer">
+              {value}
+              <Arrow />
+            </StyledAnchor>
+            :
+            <DefaultDiv>{defaultValue}</DefaultDiv>
+        ) : (
+          null
+        )
       )}
     </>
   );
@@ -63,7 +68,7 @@ const DefaultDiv = styled.div`
   color: ${({ theme }) => theme.colors.color_Gray_04} !important;
   ${({ theme }) => theme.typography.Body_03_2};
 
-  background-color: beige;
+  background-color: ${({ theme }) => theme.colors.color_Gray_06};
 `;
 
-export default MoleculeInputAnchor;
+export default OrgInputAnchorVisi;
