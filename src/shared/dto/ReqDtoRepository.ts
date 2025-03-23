@@ -327,6 +327,19 @@ export interface UpdateContactReq {
   url1: string;
 }
 
+//-------------- ContactPropertyVisible
+export interface UpdateContactPropertyVisibleReq {
+  contactPropertyVisibleId: string;
+  address: boolean;
+  email: boolean;
+  contact: boolean;
+  twitter: boolean;
+  instagram: boolean;
+  facebook: boolean;
+  youtube: boolean;
+  url1: boolean;
+}
+
 //-------------- Setting
 export interface UpdateSettingReq {
   id: string;
