@@ -23,7 +23,7 @@ import { renderingPrice } from '../../shared/util/renderingPrice';
 import DividerVertical from './DividerVertical';
 import OrgDescription from '../../shared/component/organism/OrgDescription';
 import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
-import OrgInputDivVisibi from '../../shared/component/organism/OrgInputDivVisi';
+import OrgInputDivVisi from '../../shared/component/organism/OrgInputDivVisi';
 import OrgSelectDivVisi from '../../shared/component/organism/OrgSelectDivVisi';
 
 
@@ -132,8 +132,9 @@ const WorkViewer: React.FC = () => {
             changeVisible={() => handleDoubleClick('workType')}
           />
           <DividerVertical left={"workType"} right={"price"} />
-          <OrgInputDivVisibi
+          <OrgInputDivVisi
             value={renderingPrice(activeWork.price)}
+            defaultValue={"Price ($)"}
             placeholder={"Price ($)"}
             handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
             inputStyle={WorkViewerInfo}
@@ -142,8 +143,9 @@ const WorkViewer: React.FC = () => {
             changeVisible={() => handleDoubleClick('price')}
           />
           <DividerVertical left={"price"} right={"collection"} />
-          <OrgInputDivVisibi
+          <OrgInputDivVisi
             value={activeWork.collection}
+            defaultValue={"Collection"}
             placeholder={"Collection"}
             handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
             inputStyle={WorkViewerInfo}

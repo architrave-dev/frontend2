@@ -54,9 +54,7 @@ const OrgInputAnchorVisi: React.FC<OrgInputAnchorVisiProps> = ({
             </StyledAnchor>
             :
             <DefaultDiv>{defaultValue}</DefaultDiv>
-        ) : (
-          null
-        )
+        ) : null
       )}
     </>
   );

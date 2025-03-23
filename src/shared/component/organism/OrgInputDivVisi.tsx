@@ -1,13 +1,14 @@
 import React from 'react';
 import { useEditMode } from '../../hooks/useEditMode';
 import { StyledDivComponent, StyledInputComponent } from '../../dto/StyleCompRepository';
-import { useWorkPropertyVisible } from '../../hooks/useApi/useWorkPropertyVisible';
 import { OrgWrapper, VisibileGrab } from './OrgDescription';
 import HeadlessInput from '../headless/input/HeadlessInput';
+import { styled } from 'styled-components';
 
 
 interface OrgInputDivVisiProps {
   value: string | number;
+  defaultValue: string;
   placeholder: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputStyle: StyledInputComponent;
@@ -18,6 +19,7 @@ interface OrgInputDivVisiProps {
 
 const OrgInputDivVisi: React.FC<OrgInputDivVisiProps> = ({
   value,
+  defaultValue,
   placeholder,
   handleChange,
   inputStyle,
@@ -26,10 +28,6 @@ const OrgInputDivVisi: React.FC<OrgInputDivVisiProps> = ({
   changeVisible,
 }) => {
   const { isEditMode } = useEditMode();
-  const { workPropertyVisible } = useWorkPropertyVisible();
-
-  if (!workPropertyVisible) return null;
-
 
   return (
     <>
@@ -39,7 +37,7 @@ const OrgInputDivVisi: React.FC<OrgInputDivVisiProps> = ({
             type={'text'}
             value={value}
             handleChange={handleChange}
-            placeholder={"Enter " + placeholder}
+            placeholder={placeholder}
             StyledInput={inputStyle}
           />
           <VisibileGrab
@@ -47,14 +45,25 @@ const OrgInputDivVisi: React.FC<OrgInputDivVisiProps> = ({
           >.:</VisibileGrab>
         </OrgWrapper>
       ) : (
-        visible ?
-          <StyledDiv>{value}</StyledDiv>
-          :
-          null
+        visible ? (
+          value ? (
+            <StyledDiv>{value}</StyledDiv>
+          ) : (
+            <DefaultDiv>{defaultValue}</DefaultDiv>
+          )
+        ) : null
       )}
     </>
   );
 };
 
+const DefaultDiv = styled.div`
+  width: 100%;
+  height: 20px;
+  color: ${({ theme }) => theme.colors.color_Gray_04} !important;
+  ${({ theme }) => theme.typography.Body_03_2};
+
+  background-color: ${({ theme }) => theme.colors.color_Gray_06};
+`;
 
 export default OrgInputDivVisi;
