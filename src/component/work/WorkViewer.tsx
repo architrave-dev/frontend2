@@ -123,36 +123,42 @@ const WorkViewer: React.FC = () => {
           />
         </WorkInfo>
         <WorkInfo>
-          <OrgSelectDivVisi
-            value={activeWork.workType}
-            selectType={SelectType.WORK_TYPE}
-            handleChange={(value) => handleChangeWithValidate("workType", value)}
-            StyledDiv={Info}
-            visible={workPropertyVisible.workType}
-            changeVisible={() => handleDoubleClick('workType')}
-          />
+          <OrgInputDivVisiWrapper>
+            <OrgSelectDivVisi
+              value={activeWork.workType}
+              selectType={SelectType.WORK_TYPE}
+              handleChange={(value) => handleChangeWithValidate("workType", value)}
+              StyledDiv={Info}
+              visible={workPropertyVisible.workType}
+              changeVisible={() => handleDoubleClick('workType')}
+            />
+          </OrgInputDivVisiWrapper>
           <DividerVertical left={"workType"} right={"price"} />
-          <OrgInputDivVisi
-            value={renderingPrice(activeWork.price)}
-            defaultValue={"Price ($)"}
-            placeholder={"Price ($)"}
-            handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
-            inputStyle={WorkViewerInfo}
-            StyledDiv={Info}
-            visible={workPropertyVisible.price}
-            changeVisible={() => handleDoubleClick('price')}
-          />
+          <OrgInputDivVisiWrapper>
+            <OrgInputDivVisi
+              value={renderingPrice(activeWork.price)}
+              defaultValue={"Price ($)"}
+              placeholder={"Price ($)"}
+              handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
+              inputStyle={WorkViewerInfo}
+              StyledDiv={Info}
+              visible={workPropertyVisible.price}
+              changeVisible={() => handleDoubleClick('price')}
+            />
+          </OrgInputDivVisiWrapper>
           <DividerVertical left={"price"} right={"collection"} />
-          <OrgInputDivVisi
-            value={activeWork.collection}
-            defaultValue={"Collection"}
-            placeholder={"Collection"}
-            handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
-            inputStyle={WorkViewerInfo}
-            StyledDiv={Info}
-            visible={workPropertyVisible.collection}
-            changeVisible={() => handleDoubleClick('collection')}
-          />
+          <OrgInputDivVisiWrapper>
+            <OrgInputDivVisi
+              value={activeWork.collection}
+              defaultValue={"Collection"}
+              placeholder={"Collection"}
+              handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
+              inputStyle={WorkViewerInfo}
+              StyledDiv={Info}
+              visible={workPropertyVisible.collection}
+              changeVisible={() => handleDoubleClick('collection')}
+            />
+          </OrgInputDivVisiWrapper>
         </WorkInfo>
         <OrgDescription
           value={activeWork.description}
@@ -235,6 +241,10 @@ const WorkInfo = styled.div`
   gap: 10px;
   color: ${({ theme }) => theme.colors.color_Gray_03};
 `;
+
+const OrgInputDivVisiWrapper = styled.div`
+  width: fit-content;
+`
 
 const Info = styled.div`
   height: 18px;
