@@ -40,7 +40,7 @@ const WorkList: React.FC = () => {
     const getWorkListWithApi = async () => {
       if (!aui) return;
       console.log("getting work List...")
-      await getWorkList(aui);
+      await getWorkList(aui, { page: 1, size: 10 });
     }
     getWorkListWithApi();
   }, [aui]);

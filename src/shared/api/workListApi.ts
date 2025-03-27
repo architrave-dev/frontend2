@@ -1,7 +1,6 @@
 import { DeleteResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../dto/ResDtoRepository';
-import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../dto/ReqDtoRepository';
+import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq, MetadataForQuery } from '../dto/ReqDtoRepository';
 import { baseApi, handleApiError, sendApiRequest, sendDeleteApiRequest } from './apiConfig';
-import { MetadataForQuery } from '../dto/EntityRepository';
 
 
 export const getWork = async (workId: string): Promise<WorkWithDetailResponse> => {

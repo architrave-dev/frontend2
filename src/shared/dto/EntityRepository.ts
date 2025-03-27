@@ -282,15 +282,9 @@ export interface IndexOrderData {
   subText: string;
 }
 
-export interface MetadataForQuery {
-  page: number;
-  size: number;
-}
-
-export interface PageableData<T> {
+export interface PageData {
   page: number;
   size: number;
   totalElements: number;
   totalPages: number;
-  content: T[];
 }

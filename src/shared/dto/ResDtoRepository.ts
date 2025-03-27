@@ -1,4 +1,4 @@
-import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData, ContactData, SettingData, ProjectInfoData, MemberSearchData, UserData, ContactPropertyVisibleData, PageableData } from './EntityRepository';
+import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData, ContactData, SettingData, ProjectInfoData, MemberSearchData, UserData, ContactPropertyVisibleData, PageData } from './EntityRepository';
 
 
 export interface AuthResponse {
@@ -132,7 +132,6 @@ export interface ReorderResponse {
   data: string;
 }
 
-//-------------- Pageable
-export interface PageableResponse<T> {
-  data: PageableData<T>;
+export interface PageableResponse<T> extends PageData {
+  content: T[];
 }

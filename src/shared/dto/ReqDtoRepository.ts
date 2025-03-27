@@ -366,3 +366,9 @@ export interface UpdateReorderListReq {
   id: string;
   reorderReqList: ReorderReq[];
 }
+
+//-------------- MetadataForQuery
+export interface MetadataForQuery {
+  page: number;
+  size: number;
+}
