@@ -6,12 +6,13 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 export interface MemberInfoEachProps {
   name: string;
+  defaultValue: string;
   value: string | number;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
-  name, value, handleChange
+  name, defaultValue, value, handleChange
 }) => {
 
   return (
@@ -19,6 +20,7 @@ const MemberInfoEach: React.FC<MemberInfoEachProps> = ({
       <NameSection>{name}</NameSection>
       <MoleculeInputDiv
         value={value}
+        defaultValue={defaultValue}
         placeholder={"value"}
         handleChange={handleChange}
         inputStyle={MemberInfoValue}

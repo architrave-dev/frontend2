@@ -7,20 +7,24 @@ import HeadlessBtn from '../../shared/component/headless/button/HeadlessBtn';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import { BtnWorkViewer, BtnWorkViewerBlack, OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 import { AlertPosition, AlertType, DisplaySize, SelectType, ServiceType, TextAlignment } from '../../shared/enum/EnumRepository';
-import { SizeData, WorkData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
+import { SizeData, WorkData, WorkPropertyVisibleData, convertSizeToString, convertStringToSize } from '../../shared/dto/EntityRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { WorkViewerInfo, WorkViewerTitle } from '../../shared/component/headless/input/InputBody';
 import { TextAreaWorkViewer } from '../../shared/component/headless/textarea/TextAreaBody';
 import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
-import MoleculeTextareaDescription from '../../shared/component/molecule/MoleculeTextareaDescription';
 import MoleculeImg from '../../shared/component/molecule/MoleculeImg';
 import WorkDetailList from './WorkDetailList';
 import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowOriginBtn';
 import { useValidation } from '../../shared/hooks/useValidation';
-import SelectBox from '../../shared/component/SelectBox';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
 import { UpdateWorkReq } from '../../shared/dto/ReqDtoRepository';
 import { useImage } from '../../shared/hooks/useApi/useImage';
+import { renderingPrice } from '../../shared/util/renderingPrice';
+import DividerVertical from './DividerVertical';
+import OrgDescription from '../../shared/component/organism/OrgDescription';
+import { useWorkPropertyVisible } from '../../shared/hooks/useApi/useWorkPropertyVisible';
+import OrgInputDivVisi from '../../shared/component/organism/OrgInputDivVisi';
+import OrgSelectDivVisi from '../../shared/component/organism/OrgSelectDivVisi';
 
 
 const WorkViewer: React.FC = () => {
@@ -28,11 +32,12 @@ const WorkViewer: React.FC = () => {
   const { aui } = useAui();
   const { updateWork, deleteWork } = useWorkList();
   const { activeWork, hasChanged, imageChanged, updateActiveWork: handleChange, updateImage: handleImageChange } = useWorkViewStore();
+  const { workPropertyVisible, updateWorkPropertyVisible } = useWorkPropertyVisible();
   const { setStandardAlert } = useStandardAlertStore();
   const { checkType } = useValidation();
   const { uploadImage } = useImage();
 
-  if (!activeWork) return null;
+  if (!activeWork || !workPropertyVisible) return null;
 
   const handleChangeWithValidate = (field: keyof WorkData, value: string | SizeData) => {
     if (!checkType(field, value)) {
@@ -54,6 +59,7 @@ const WorkViewer: React.FC = () => {
     const finalRequest = imageChanged
       ? await uploadImage(aui, ServiceType.WORK, baseRequest)
       : baseRequest;
+    if (!finalRequest) return;
 
     await updateWork(aui, finalRequest as UpdateWorkReq);
     setEditMode(false);
@@ -69,6 +75,14 @@ const WorkViewer: React.FC = () => {
       position: AlertPosition.TOP,
       content: "Are you sure you want to delete this work?",
       callBack: callback
+    });
+  };
+
+  const handleDoubleClick = async (field: keyof WorkPropertyVisibleData) => {
+    if (!isEditMode) return null;
+    await updateWorkPropertyVisible(aui, {
+      ...workPropertyVisible,
+      [field]: !workPropertyVisible[field]
     });
   };
 
@@ -91,7 +105,7 @@ const WorkViewer: React.FC = () => {
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
-          <DividerSmall>|</DividerSmall>
+          <DividerVertical left={"prodYear"} right={"material"} />
           <MoleculeInputDiv
             value={activeWork.material}
             placeholder={"Material"}
@@ -99,7 +113,7 @@ const WorkViewer: React.FC = () => {
             inputStyle={WorkViewerInfo}
             StyledDiv={Info}
           />
-          <DividerSmall>|</DividerSmall>
+          <DividerVertical left={"material"} right={"size"} />
           <MoleculeInputDiv
             value={convertSizeToString(activeWork.size)}
             placeholder={"Size"}
@@ -109,42 +123,51 @@ const WorkViewer: React.FC = () => {
           />
         </WorkInfo>
         <WorkInfo>
-          <MoleculeInputDiv
-            value={activeWork.price}
-            defaultValue={"Not for Sale"}
-            placeholder={"Price ($)"}
-            handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
-            inputStyle={WorkViewerInfo}
-            StyledDiv={Info}
-          />
-          <DividerSmall>|</DividerSmall>
-          <MoleculeInputDiv
-            value={activeWork.collection}
-            defaultValue={"Artist's Collection"}
-            placeholder={"Collection"}
-            handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
-            inputStyle={WorkViewerInfo}
-            StyledDiv={Info}
-          />
+          <OrgInputDivVisiWrapper>
+            <OrgSelectDivVisi
+              value={activeWork.workType}
+              selectType={SelectType.WORK_TYPE}
+              handleChange={(value) => handleChangeWithValidate("workType", value)}
+              StyledDiv={Info}
+              visible={workPropertyVisible.workType}
+              changeVisible={() => handleDoubleClick('workType')}
+            />
+          </OrgInputDivVisiWrapper>
+          <DividerVertical left={"workType"} right={"price"} />
+          <OrgInputDivVisiWrapper>
+            <OrgInputDivVisi
+              value={renderingPrice(activeWork.price)}
+              defaultValue={"Price ($)"}
+              placeholder={"Price ($)"}
+              handleChange={(e) => handleChangeWithValidate("price", e.target.value)}
+              inputStyle={WorkViewerInfo}
+              StyledDiv={Info}
+              visible={workPropertyVisible.price}
+              changeVisible={() => handleDoubleClick('price')}
+            />
+          </OrgInputDivVisiWrapper>
+          <DividerVertical left={"price"} right={"collection"} />
+          <OrgInputDivVisiWrapper>
+            <OrgInputDivVisi
+              value={activeWork.collection}
+              defaultValue={"Collection"}
+              placeholder={"Collection"}
+              handleChange={(e) => handleChangeWithValidate("collection", e.target.value)}
+              inputStyle={WorkViewerInfo}
+              StyledDiv={Info}
+              visible={workPropertyVisible.collection}
+              changeVisible={() => handleDoubleClick('collection')}
+            />
+          </OrgInputDivVisiWrapper>
         </WorkInfo>
-        <WorkInfo>
-          {isEditMode ?
-            <SelectBoxWrapper>
-              <SelectBox
-                value={activeWork.workType}
-                selectType={SelectType.WORK_TYPE}
-                handleChange={(value) => handleChangeWithValidate("workType", value)}
-                direction={false} />
-            </SelectBoxWrapper>
-            : <Info>{activeWork.workType}</Info>
-          }
-        </WorkInfo>
-        <MoleculeTextareaDescription
+        <OrgDescription
           value={activeWork.description}
           handleChange={(e) => handleChangeWithValidate("description", e.target.value)}
           alignment={TextAlignment.LEFT}
           StyledTextarea={TextAreaWorkViewer}
           StyledDescription={Description}
+          visible={workPropertyVisible.description}
+          changeVisible={() => handleDoubleClick('description')}
         />
       </WorkInfoContainer>
       <ImgWrapper>
@@ -190,11 +213,7 @@ const WorkViewComp = styled.section`
   &::-webkit-scrollbar {
     display: none;
   }
-
-  // background-color: #eae7dc;
 `;
-
-
 
 const WorkInfoContainer = styled.div`
   display: flex;
@@ -220,8 +239,12 @@ const Title = styled.h2`
 const WorkInfo = styled.div`
   display: flex;
   gap: 10px;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
+  color: ${({ theme }) => theme.colors.color_Gray_03};
 `;
+
+const OrgInputDivVisiWrapper = styled.div`
+  width: fit-content;
+`
 
 const Info = styled.div`
   height: 18px;
@@ -231,25 +254,11 @@ const Info = styled.div`
   ${({ theme }) => theme.typography.Body_04};
 `;
 
-const DividerSmall = styled.span`
-  height: 18px;
-  padding-right:4px;
-  color: ${({ theme }) => theme.colors.color_Gray_05};
-  ${({ theme }) => theme.typography.Body_04};
-`;
-
-const SelectBoxWrapper = styled.article`
-  width: 50%;
-  color: ${({ theme }) => theme.colors.color_Gray_04};
-  ${({ theme }) => theme.typography.Body_04};
-`;
-
 const Description = styled.div`
   padding: 6px 0 9px 0;
   color: ${({ theme }) => theme.colors.color_Gray_04};
   ${({ theme }) => theme.typography.Body_03_2};
 `
-
 
 const ImgWrapper = styled.div`
   position: relative;
@@ -263,12 +272,8 @@ const ImgWrapper = styled.div`
 `
 
 const WorkImage = styled.img`
-  //부모 크기에 맞춤
   width: 100%;
   height: 100%; 
-  //이미지 크기에 맞춤
-  // max-width: 100%; 
-  // max-height: 100%;
   object-fit: contain;
 `;
 

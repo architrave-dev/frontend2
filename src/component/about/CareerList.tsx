@@ -46,6 +46,11 @@ const CareerList: React.FC = () => {
 
   return (
     <CareerListComp>
+      {!isEditMode && careerList.length === 0 &&
+        <EmptyCareerListContainer>
+          Create your career to proceed.
+        </EmptyCareerListContainer>
+      }
       {careerSections.map((section) => (
         <CareerSection key={section.title} type={section.type} title={section.title} />
       ))}
@@ -77,6 +82,8 @@ const CareerList: React.FC = () => {
               handleClick={() => handleCreateElement(CareerType.PRS)}
               StyledBtn={BtnCreate}
             />
+          </CreateButtonGroup>
+          <CreateButtonGroup>
             <HeadlessBtn
               value={"Residency"}
               handleClick={() => handleCreateElement(CareerType.RSD)}
@@ -108,6 +115,17 @@ const CareerList: React.FC = () => {
     </CareerListComp>
   );
 }
+
+const EmptyCareerListContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.color_Gray_05};
+  ${({ theme }) => theme.typography.Body_03_2};
+`;
 
 const CareerListComp = styled.section`
   width: 100%;

@@ -40,13 +40,6 @@ const ColumnInfo: React.FC = () => {
         <BlockWithVisible
           width={"1.5"}
           isColumn={true}
-          field={'workType'}
-          value={"Type"}
-          doubleClickHandler={() => handleDoubleClick('workType')}
-        />
-        <BlockWithVisible
-          width={"1.5"}
-          isColumn={true}
           value={"Size(cm)"}
         />
         <BlockWithVisible
@@ -60,11 +53,11 @@ const ColumnInfo: React.FC = () => {
           value={"Year"}
         />
         <BlockWithVisible
-          width={"1.5"}
+          width={"1.2"}
           isColumn={true}
-          field={'description'}
-          value={"Description"}
-          doubleClickHandler={() => handleDoubleClick('description')}
+          field={'workType'}
+          value={"Type"}
+          doubleClickHandler={() => handleDoubleClick('workType')}
         />
         <BlockWithVisible
           width={"1.2"}
@@ -79,6 +72,13 @@ const ColumnInfo: React.FC = () => {
           field={'collection'}
           value={"Collection"}
           doubleClickHandler={() => handleDoubleClick('collection')}
+        />
+        <BlockWithVisible
+          width={"1.5"}
+          isColumn={true}
+          field={'description'}
+          value={"Description"}
+          doubleClickHandler={() => handleDoubleClick('description')}
         />
         {activeWork && <SpaceBlock />}
       </InfoContainer>

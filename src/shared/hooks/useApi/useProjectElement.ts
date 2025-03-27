@@ -19,7 +19,7 @@ interface UseProjectElementResult {
 }
 
 export const useProjectElement = (): UseProjectElementResult => {
-  const { projectElementList, setProjectElementList } = useProjectElementListStore();
+  const { projectElementList, setProjectElementList, afterCreateProjectElement, afterUpdateProjectElement } = useProjectElementListStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
   const withApiHandler = useApiWrapper();
 
@@ -30,14 +30,13 @@ export const useProjectElement = (): UseProjectElementResult => {
   };
 
   const handleCreateProjectElementSuccess = (response: ProjectElementResponse) => {
-    const createdProjectElement = response.data;
-    setProjectElementList([...projectElementList, createdProjectElement]);
+    const createdPe = response.data;
+    afterCreateProjectElement(createdPe);
   };
 
   const handleUpdateProjectElementSuccess = (response: ProjectElementResponse) => {
     const updated = response.data;
-    const peListData = projectElementList.map((pe) => pe.id === updated.id ? updated : pe);
-    setProjectElementList(peListData);
+    afterUpdateProjectElement(updated);
     setUpdatedTempAlert();
   };
 

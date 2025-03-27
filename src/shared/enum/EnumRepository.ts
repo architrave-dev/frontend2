@@ -107,9 +107,7 @@ export enum TextAlignment {
 }
 
 export enum WorkType {
-  PAINTING_WATER = 'PAINTING_WATER',
-  PAINTING_OIL = 'PAINTING_OIL',
-  PAINTING_DRY = 'PAINTING_DRY',
+  PAINTING = 'PAINTING',
   PRINTS = 'PRINTS',
   PHOTO = 'PHOTO',
   STUDY = 'STUDY',

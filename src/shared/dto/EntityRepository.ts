@@ -232,6 +232,18 @@ export interface SocialMedia {
   url1: string;
 }
 
+export interface ContactPropertyVisibleData {
+  id: string;
+  address: boolean;
+  email: boolean;
+  contact: boolean;
+  twitter: boolean;
+  instagram: boolean;
+  facebook: boolean;
+  youtube: boolean;
+  url1: boolean;
+}
+
 export interface CareerData {
   id: string;
   careerType: CareerType;

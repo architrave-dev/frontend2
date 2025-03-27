@@ -2,37 +2,52 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useContact } from '../../shared/hooks/useApi/useContact';
-import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 import { ContactInput } from '../../shared/component/headless/input/InputBody';
-import MoleculeInputAnchor from '../../shared/component/molecule/MoleculeInputAnchor';
 import { useContactStore } from '../../shared/store/contactStore';
 import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
 import { useMenu } from '../../shared/hooks/useMenu';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
-import MoleculeInputDivWithAction from '../../shared/component/molecule/MoleculeInputDivWithAction';
+import OrgInputDivVisiAction from '../../shared/component/organism/OrgInputDivVisiAction';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
+import { useEditMode } from '../../shared/hooks/useEditMode';
+import { useContactPropertyVisible } from '../../shared/hooks/useApi/useContactPropertyVisible';
+import { ContactPropertyVisibleData } from '../../shared/dto/EntityRepository';
+import OrgInputAnchorVisi from '../../shared/component/organism/OrgInputAnchorVisi';
+import OrgInputDivVisi from '../../shared/component/organism/OrgInputDivVisi';
 
 
 const ContactComp: React.FC = () => {
   const { aui } = useAui();
   const { user } = useAuth();
+  const { isEditMode } = useEditMode();
   const { contact, getContact } = useContact();
   const { closeMenu } = useMenu();
   const { setStandardModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
   const { updateContact: handleChange, updateSns: handleSnsChange } = useContactStore();
+  const { contactPropertyVisible, getContactPropertyVisible, updateContactPropertyVisible } = useContactPropertyVisible();
 
   useEffect(() => {
     const getContactWithApi = async () => {
       if (!aui) return;
-      console.log("getting work List...")
+      console.log("getting contact List...")
       await getContact(aui);
     }
     getContactWithApi();
   }, [aui]);
 
-  if (!contact) {
+  useEffect(() => {
+    const getContactPropertyVisibleWithApi = async () => {
+      if (!aui) return;
+      console.log("getting contactPropertyVisible...");
+      await getContactPropertyVisible(aui);
+    }
+    getContactPropertyVisibleWithApi();
+  }, [aui]);
+
+
+  if (!contact || !contactPropertyVisible) {
     return null;
   }
 
@@ -63,79 +78,110 @@ const ContactComp: React.FC = () => {
     closeMenu();
   }
 
+  const handleDoubleClick = async (field: keyof ContactPropertyVisibleData) => {
+    if (!isEditMode) return null;
+    await updateContactPropertyVisible(aui, {
+      contactPropertyVisibleId: contactPropertyVisible.id,
+      ...contactPropertyVisible,
+      [field]: !contactPropertyVisible[field]
+    });
+  };
 
   return (
     <ContactContainer>
       <ContactTitle>Contact</ContactTitle>
       <Contact1Container>
         <Contact_1>
-          <MoleculeInputDiv
+          <OrgInputDivVisi
             value={contact.address}
-            placeholder={"address"}
+            defaultValue={"00-0, example-ro 0-gil, Sample-gu, Seoul, Republic of Korea"}
+            placeholder={"Enter your address"}
             handleChange={(e) => handleChange({ address: e.target.value })}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
+            visible={contactPropertyVisible.address}
+            changeVisible={() => handleDoubleClick('address')}
           />
         </Contact_1>
         <Contact_1>
-          <MoleculeInputDivWithAction
+          <OrgInputDivVisiAction
             value={contact.email}
+            defaultValue={"username@email.com"}
             placeholder={"email"}
             handleChange={(e) => handleChange({ email: e.target.value })}
             onClick={handleSendEmail}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
+            visible={contactPropertyVisible.email}
+            changeVisible={() => handleDoubleClick('email')}
           />
-          <MoleculeInputDiv
+          <OrgInputDivVisi
             value={contact.contact}
-            placeholder={"contact"}
+            defaultValue={"010-1234-5678"}
+            placeholder={"Enter your contact"}
             handleChange={(e) => handleChange({ contact: e.target.value })}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
+            visible={contactPropertyVisible.email}
+            changeVisible={() => handleDoubleClick('email')}
           />
         </Contact_1>
         <Contact_1>
-          <MoleculeInputAnchor
+          <OrgInputAnchorVisi
             value={contact.sns?.instagram}
-            defaultValue={"Instagram"}
+            defaultValue={"Enter Instagram ID"}
             placeholder={"Instagram"}
             handleChange={(e) => handleSnsChange({ instagram: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
+            visible={contactPropertyVisible.instagram}
+            changeVisible={() => handleDoubleClick('instagram')}
           />
-          <MoleculeInputAnchor
+          <OrgInputAnchorVisi
             value={contact.sns?.twitter}
-            defaultValue={"X"}
+            defaultValue={"Enter X ID"}
             placeholder={"X"}
             handleChange={(e) => handleSnsChange({ twitter: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
+            visible={contactPropertyVisible.twitter}
+            changeVisible={() => handleDoubleClick('twitter')}
           />
-          <MoleculeInputAnchor
+          <OrgInputAnchorVisi
             value={contact.sns?.facebook}
-            defaultValue={"Facebook"}
+            defaultValue={"Enter facebook ID"}
             placeholder={"Facebook"}
             handleChange={(e) => handleSnsChange({ facebook: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
+            visible={contactPropertyVisible.facebook}
+            changeVisible={() => handleDoubleClick('facebook')}
           />
-          <MoleculeInputAnchor
+          <OrgInputAnchorVisi
             value={contact.sns?.url1}
-            defaultValue={"Website"}
+            defaultValue={"Enter website URL"}
             placeholder={"URL"}
             handleChange={(e) => handleSnsChange({ url1: e.target.value })}
             inputStyle={ContactInput}
             StyledAnchor={ContactAnchor}
+            visible={contactPropertyVisible.url1}
+            changeVisible={() => handleDoubleClick('url1')}
           />
         </Contact_1>
       </Contact1Container>
+
+      {isEditMode && (
+        <SettingNotice>
+          * If you prefer not to use this page, go to Settings &gt; Menu Visibility.
+        </SettingNotice>
+      )}
     </ContactContainer >
   );
 };
 
 
 const ContactContainer = styled.section`
-  width: 50%;
+  width: clamp(300px, 50%, 500px);
   display: flex;
   flex-direction: column;
 
@@ -179,7 +225,7 @@ const ContactDiv = styled.div`
 `
 
 const ContactAnchor = styled.a`
-  width: 20%;
+  width: fit-content;
   min-width: 100px;
   height: 20px;
 
@@ -191,7 +237,18 @@ const ContactAnchor = styled.a`
 
   color: ${({ theme }) => theme.colors.color_Gray_02};
   ${({ theme }) => theme.typography.Body_02_2};
+  background-color: skyblue;
   cursor: pointer;
 `
+
+const SettingNotice = styled.div`
+  width: 100%;
+  height: 3vh;
+  display: flex;
+
+  align-items: end;
+  color: ${({ theme }) => theme.colors.color_Gray_05};
+  ${({ theme }) => theme.typography.Body_04};
+`;
 
 export default ContactComp;

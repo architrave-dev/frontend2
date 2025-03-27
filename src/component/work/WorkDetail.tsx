@@ -47,7 +47,7 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
     const finalRequest = data.imageChanged
       ? await uploadImage(aui, ServiceType.DETAIL, baseRequest)
       : baseRequest;
-
+    if (!finalRequest) return;
     await updateWorkDetail(aui, finalRequest as UpdateWorkDetailReq);
   };
 

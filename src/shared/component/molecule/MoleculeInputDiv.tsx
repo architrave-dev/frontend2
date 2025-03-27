@@ -2,6 +2,7 @@ import React from 'react';
 import { useEditMode } from '../../hooks/useEditMode';
 import { StyledDivComponent, StyledInputComponent } from '../../dto/StyleCompRepository';
 import HeadlessInput from '../headless/input/HeadlessInput';
+import styled from 'styled-components';
 
 interface MoleculeInputDivProps {
   value: string | number;
@@ -33,11 +34,18 @@ const MoleculeInputDiv: React.FC<MoleculeInputDivProps> = ({
           StyledInput={inputStyle}
         />
       ) : (
-        <StyledDiv>{value || defaultValue}</StyledDiv>
+        value !== "" ?
+          <StyledDiv>{value}</StyledDiv>
+          :
+          <DefaultDiv as={StyledDiv}>{defaultValue}</DefaultDiv>
       )}
     </>
   );
 };
+
+const DefaultDiv = styled.div`
+  color: ${({ theme }) => theme.colors.color_Gray_05} !important;
+`;
 
 
 export default MoleculeInputDiv;

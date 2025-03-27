@@ -16,7 +16,7 @@ interface UseProjectInfoResult {
 }
 
 export const useProjectInfo = (): UseProjectInfoResult => {
-  const { projectInfoList, setProjectInfoList, setOnlyProjectInfoList } = useProjectInfoListStore();
+  const { projectInfoList, setProjectInfoList, afterCreateProjectInfo, afterUpdateProjectInfo } = useProjectInfoListStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
   const withApiHandler = useApiWrapper();
 
@@ -27,13 +27,11 @@ export const useProjectInfo = (): UseProjectInfoResult => {
 
   const handleCreateProjectInfoSuccess = (response: ProjectInfoResponse) => {
     const createdProjectElement = response.data;
-    setProjectInfoList([...projectInfoList, createdProjectElement]);
-
+    afterCreateProjectInfo(createdProjectElement);
   };
   const handleUpdateProjectInfoSuccess = (response: ProjectInfoResponse) => {
     const updatedProjectInfo = response.data;
-    const newPiList = projectInfoList.map((pi) => pi.id === updatedProjectInfo.id ? updatedProjectInfo : pi);
-    setOnlyProjectInfoList(newPiList);
+    afterUpdateProjectInfo(updatedProjectInfo);
     setUpdatedTempAlert();
   };
 
