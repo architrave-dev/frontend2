@@ -1,4 +1,4 @@
-import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData, ContactData, SettingData, ProjectInfoData, MemberSearchData, UserData, ContactPropertyVisibleData } from './EntityRepository';
+import { CareerData, BillboardData, MemberInfoData, ProjectData, ProjectElementData, ProjectSimpleData, UserDataWithRefreshToken, WorkData, WorkDetailData, WorkWithDetailData, WorkPropertyVisibleData, WorkSimpleData, WorkDetailSimpleData, ContactData, SettingData, ProjectInfoData, MemberSearchData, UserData, ContactPropertyVisibleData, PageableData } from './EntityRepository';
 
 
 export interface AuthResponse {
@@ -20,7 +20,7 @@ export interface BillboardResponse {
 
 //-------------- Work
 export interface WorkListResponse {
-  data: WorkData[];
+  data: PageableResponse<WorkData>;
 }
 export interface WorkResponse {
   data: WorkData;
@@ -130,4 +130,9 @@ export interface SettingResponse {
 //-------------- Reorder
 export interface ReorderResponse {
   data: string;
+}
+
+//-------------- Pageable
+export interface PageableResponse<T> {
+  data: PageableData<T>;
 }

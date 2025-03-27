@@ -281,3 +281,16 @@ export interface IndexOrderData {
   mainText: string;
   subText: string;
 }
+
+export interface MetadataForQuery {
+  page: number;
+  size: number;
+}
+
+export interface PageableData<T> {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  content: T[];
+}
