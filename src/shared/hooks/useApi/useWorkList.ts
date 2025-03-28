@@ -21,7 +21,7 @@ interface UseWorkListResult {
 }
 
 export const useWorkList = (): UseWorkListResult => {
-  const { workList, setWorkList } = useWorkListStore();
+  const { workList, setWorkList, addWork } = useWorkListStore();
   const { setSimpleWorkList } = useWorkStationStore();
   const { setActiveWork, setActiveWorkDetailList, afterDeleteActiveWork } = useWorkViewStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
@@ -61,7 +61,7 @@ export const useWorkList = (): UseWorkListResult => {
 
   const handleCreatWorkSuccess = (response: WorkResponse) => {
     const data = response.data;
-    setWorkList([...workList, data]);
+    addWork(data, page.size);
     setActiveWork(data);
     setActiveWorkDetailList([]);
   };
