@@ -6,6 +6,7 @@ import SortStation from '../component/work/SortStation';
 import ColumnInfo from '../component/work/ColumnInfo';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
+import PageAboutWork from '../component/work/PageAboutWork';
 
 const Works: React.FC = () => {
   useInitPage();
@@ -17,6 +18,7 @@ const Works: React.FC = () => {
       <SortStation />
       <ColumnInfo />
       <WorkList />
+      <PageAboutWork />
     </WorkContainer>
   );
 }
