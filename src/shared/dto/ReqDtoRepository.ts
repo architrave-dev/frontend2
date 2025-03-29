@@ -1,4 +1,4 @@
-import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, CountryType, SortOrder, SortDirection } from '../enum/EnumRepository';
+import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
 import { MenuVisible, SizeData, WorkSortData } from './EntityRepository';
 
 //-------------- Auth

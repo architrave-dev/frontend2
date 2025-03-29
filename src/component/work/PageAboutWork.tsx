@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { usePageStore } from '../../shared/store/pageStore';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
@@ -7,6 +7,7 @@ import { useEditMode } from '../../shared/hooks/useEditMode';
 import { AlertType } from '../../shared/enum/EnumRepository';
 import { AlertPosition } from '../../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { useWorkListStore } from '../../shared/store/WorkListStore';
 
 const LIMIT_PAGE_NUM = 5;       //한번에 보이는 페이지 갯수
 
@@ -15,8 +16,15 @@ const PageAboutWork: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { page } = usePageStore();
   const { getWorkList } = useWorkList();
+  const { sortData } = useWorkListStore();
   const { setStandardAlert } = useStandardAlertStore();
   const [currentWindow, setCurrentWindow] = React.useState(1);
+
+  useEffect(() => {
+    if (!aui) return;
+    console.log("getWorkList called, sortData changed", sortData);
+    getWorkList(aui, { page: page.page, size: 10, sortData: sortData });
+  }, [sortData]);
 
   const handlePageClick = (pageNum: number) => {
     if (isEditMode) {
@@ -27,7 +35,7 @@ const PageAboutWork: React.FC = () => {
       })
       return;
     }
-    getWorkList(aui, { page: pageNum, size: 10 });
+    getWorkList(aui, { page: pageNum, size: 10, sortData: sortData });
   };
 
   const handlePageWindowClick = (direction: 'prev' | 'next') => {
@@ -42,11 +50,11 @@ const PageAboutWork: React.FC = () => {
 
     if (direction === 'prev' && currentWindow > 1) {
       const newPage = (currentWindow - 2) * LIMIT_PAGE_NUM + 1;
-      getWorkList(aui, { page: newPage, size: 10 });
+      getWorkList(aui, { page: newPage, size: 10, sortData: sortData });
       setCurrentWindow(currentWindow - 1);
     } else if (direction === 'next' && currentWindow < Math.ceil(page.totalPages / LIMIT_PAGE_NUM)) {
       const newPage = currentWindow * LIMIT_PAGE_NUM + 1;
-      getWorkList(aui, { page: newPage, size: 10 });
+      getWorkList(aui, { page: newPage, size: 10, sortData: sortData });
       setCurrentWindow(currentWindow + 1);
     }
   };

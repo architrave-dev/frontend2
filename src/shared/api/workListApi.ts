@@ -14,7 +14,9 @@ export const getWork = async (workId: string): Promise<WorkWithDetailResponse> =
 
 export const getWorkList = async (aui: string, metaData: MetadataForQuery): Promise<WorkListResponse> => {
   try {
-    const response = await baseApi.get<WorkListResponse>(`/api/v1/work/list?aui=${aui}&page=${metaData.page}&size=${metaData.size}`);
+    const response = await baseApi.get<WorkListResponse>(
+      `/api/v1/work/list?aui=${aui}&page=${metaData.page}&size=${metaData.size}&sortBy=${metaData.sortData.sort}&direction=${metaData.sortData.direction}`
+    );
     return response.data;
   } catch (error) {
     throw handleApiError(error);

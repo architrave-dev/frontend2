@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useAui } from '../../shared/hooks/useAui';
 import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
 import WorkInfo from './WorkInfo';
-import { sortWorkList } from './SortStation';
 import { useWorkViewStore } from '../../shared/store/WorkViewStore';
 import { WorkData } from '../../shared/dto/EntityRepository';
 import WorkViewer from './WorkViewer';
@@ -20,7 +19,7 @@ import EmptyWorkList from './EmptyWorkList';
 const WorkList: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { workList, getWorkList, getWork, createWork } = useWorkList();
-  const { sortBy } = useWorkListStore();
+  const { sortData } = useWorkListStore();
   const { aui } = useAui();
   const { activeWork } = useWorkViewStore();
 
@@ -40,13 +39,11 @@ const WorkList: React.FC = () => {
     const getWorkListWithApi = async () => {
       if (!aui) return;
       console.log("getting work List...")
-      await getWorkList(aui, { page: 1, size: 10 });
+      await getWorkList(aui, { page: 1, size: 10, sortData: sortData });
     }
     getWorkListWithApi();
   }, [aui]);
 
-
-  const sortedWorkList = Array.isArray(workList) ? sortWorkList(workList, sortBy) : [];
 
   const handleCreateWork = async () => {
     await createWork(aui, workBuilder());
@@ -54,10 +51,10 @@ const WorkList: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!sortedWorkList.length) return;
+    if (!workList.length) return;
     let newIndex = selectedIndex;
     if (e.key === 'ArrowDown') {
-      if (selectedIndex < sortedWorkList.length - 1) {
+      if (selectedIndex < workList.length - 1) {
         newIndex = selectedIndex + 1;
       }
     } else if (e.key === 'ArrowUp') {
@@ -69,18 +66,18 @@ const WorkList: React.FC = () => {
   };
 
   const handleClick = (i: number) => {
-    if (!sortedWorkList.length) return;
+    if (!workList.length) return;
     let newIndex = i;
     changeActiveWork(newIndex);
   };
 
   const changeActiveWork = (newIndex: number) => {
-    if (sortedWorkList.length <= 0) {
+    if (workList.length <= 0) {
       return;
     }
     const getWorkWithDetailWithApi = async () => {
       console.log("getting work and Detail List...")
-      await getWork(sortedWorkList[newIndex].id);
+      await getWork(workList[newIndex].id);
       setSelectedIndex(newIndex);
     }
     if (activeWork == null || newIndex !== selectedIndex) {
@@ -103,7 +100,7 @@ const WorkList: React.FC = () => {
       ref={workListRef}
       onKeyDown={handleKeyDown}>
       <WorkListComp>
-        {sortedWorkList.map((each: WorkData, i: number) =>
+        {workList.map((each: WorkData, i: number) =>
           <WorkInfo
             key={each.id}
             data={each}
@@ -111,7 +108,7 @@ const WorkList: React.FC = () => {
             handleClick={() => handleClick(i)}
           />
         )}
-        {sortedWorkList.length === 0 && <EmptyWorkList />}
+        {workList.length === 0 && <EmptyWorkList />}
         {isEditMode &&
           <Space $height='80px'>
             <HeadlessBtn

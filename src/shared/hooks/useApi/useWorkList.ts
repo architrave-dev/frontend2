@@ -21,7 +21,7 @@ interface UseWorkListResult {
 }
 
 export const useWorkList = (): UseWorkListResult => {
-  const { workList, setWorkList, addWork } = useWorkListStore();
+  const { workList, setWorkList, addWork, sortData } = useWorkListStore();
   const { setSimpleWorkList } = useWorkStationStore();
   const { setActiveWork, setActiveWorkDetailList, afterDeleteActiveWork } = useWorkViewStore();
   const { setUpdatedTempAlert, setDeletedTempAlert } = useTempAlertStore();
@@ -76,7 +76,7 @@ export const useWorkList = (): UseWorkListResult => {
       switch (action) {
         case 'delete':
           handleDeleteWorkSuccess(await deleteWork(aui, data as DeleteWorkReq));
-          getWorkListHandler(aui, { page: page.page, size: page.size });
+          getWorkListHandler(aui, { page: page.page, size: page.size, sortData: sortData });
           break;
         case 'update':
           handleUpdateWorkSuccess(await updateWork(aui, data as UpdateWorkReq));
