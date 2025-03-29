@@ -96,6 +96,7 @@ export enum SelectType {
   DISPLAY_ALIGNMENT = 'DISPLAY_ALIGNMENT',
   WORK_SIZE = 'WORK_SIZE',
   SORT_ORDER = 'SORT_ORDER',
+  SORT_DIRECTION = 'SORT_DIRECTION',
   WORK_TYPE = 'WORK_TYPE',
   COUNTRY = 'COUNTRY'
 }
@@ -132,12 +133,13 @@ export enum DisplaySize {
 }
 
 export enum SortOrder {
-  TITLE_ASC = 'TITLE_ASC',
-  TITLE_DESC = 'TITLE_DESC',
-  SIZE_ASC = 'SIZE_ASC',
-  SIZE_DESC = 'SIZE_DESC',
-  YEAR_ASC = 'YEAR_ASC',
-  YEAR_DESC = 'YEAR_DESC',
+  TITLE = 'title',
+  YEAR = 'prodYear',
+}
+
+export enum SortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
 }
 
 export enum ServiceType {

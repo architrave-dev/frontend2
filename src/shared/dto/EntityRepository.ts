@@ -1,4 +1,4 @@
-import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType } from '../enum/EnumRepository';
+import { CareerType, CountryType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, SortDirection, SortOrder } from '../enum/EnumRepository';
 
 /**
  * 전부 ~Data로 통일
@@ -287,4 +287,9 @@ export interface PageData {
   size: number;
   totalElements: number;
   totalPages: number;
+}
+
+export interface WorkSortData {
+  sort: SortOrder;
+  direction: SortDirection;
 }
