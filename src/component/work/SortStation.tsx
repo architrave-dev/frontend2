@@ -4,27 +4,13 @@ import SelectBox from '../../shared/component/SelectBox';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, SelectType, SortDirection, SortOrder } from '../../shared/enum/EnumRepository';
-import { WorkData, getAreaFromSize } from '../../shared/dto/EntityRepository';
 import { useWorkListStore } from '../../shared/store/WorkListStore';
-import { useWorkList } from '../../shared/hooks/useApi/useWorkList';
-
-
-const compareValues = <T extends keyof WorkData>(a: WorkData[T], b: WorkData[T]): number => {
-  if (typeof a === 'string' && typeof b === 'string') {
-    return a.localeCompare(b);
-  }
-  if (a < b) return -1;
-  if (a > b) return 1;
-  return 0;
-};
-
 
 
 const SortStation: React.FC = () => {
   const { isEditMode } = useEditMode();
   const { setStandardAlert } = useStandardAlertStore();
   const { sortData, setSortData } = useWorkListStore();
-  const { getWorkList } = useWorkList();
 
   const handleOrderChange = (value: SortOrder) => {
     if (isEditMode) {
@@ -69,8 +55,6 @@ const SortStation: React.FC = () => {
           handleChange={handleDirectionChange}
           direction={false} />
       </SelectBoxWrapper>
-      filter,
-      input tag,
     </SortingStation>
   );
 }
@@ -81,7 +65,6 @@ const SortingStation = styled.article`
 
   display: flex;
   justify-content: flex-end;
-  // padding: 4px 0px;
 
   gap: 10px;
 `;
