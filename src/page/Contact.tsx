@@ -15,6 +15,7 @@ import { useValidation } from '../shared/hooks/useValidation';
 import { AlertType } from '../shared/enum/EnumRepository';
 import { AlertPosition } from '../shared/enum/EnumRepository';
 import { useStandardAlertStore } from '../shared/store/portal/alertStore';
+import { useShiftTab } from '../shared/hooks/useShiftTab'
 
 
 const Contact: React.FC = () => {
@@ -26,7 +27,7 @@ const Contact: React.FC = () => {
   const { isLoading } = useLoadingStore();
   const { isEmail } = useValidation();
   const { setStandardAlert } = useStandardAlertStore();
-
+  const { handleShiftTabForEditMode } = useShiftTab();
 
   const handleConfirm = async () => {
     if (hasChanged) {
@@ -52,7 +53,9 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <ContactContainer>
+    <ContactContainer
+      onKeyDown={(e) => handleShiftTabForEditMode(e, hasChanged)}
+      tabIndex={-1}>
       <Loading isLoading={isLoading} />
       <ContactComp />
       {isEditMode && hasChanged &&

@@ -17,7 +17,6 @@ export const useShiftTab = (): UseShiftTabResult => {
     switch (e.key) {
       case 'Tab':
         if (e.shiftKey) {        // Shift+Tab 키 조합 감지
-          console.log("Shift+Tab");
           e.preventDefault();
           if (!isEditMode) {
             setEditMode(true);
