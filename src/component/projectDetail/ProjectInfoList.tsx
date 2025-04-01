@@ -26,12 +26,12 @@ const ProjectInfoList: React.FC = () => {
     if (projectId !== project.id.toString()) return;
 
     const fetchProjectInfo = async () => {
-      console.log("getting projectInfoList...", project.id);
+      console.log("getting projectInfoList... projectId: ", project.id);
       await getProjectInfoList(aui, project.id);
     };
 
     fetchProjectInfo();
-  }, [aui, project, projectId]);
+  }, [aui, projectId]);
 
   if (project == null) return null;
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProjectElementList from '../component/projectDetail/ProjectElementList';
 import ProjectDetailContainer from '../component/projectDetail/ProjectDetailContainer';
@@ -15,6 +15,9 @@ import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
 import { useProjectStore } from '../shared/store/projectStore';
 import { useImage } from '../shared/hooks/useApi/useImage';
+import { useShiftTab } from '../shared/hooks/useShiftTab';
+import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
+import { useProjectInfo } from '../shared/hooks/useApi/useProjectInfo';
 
 
 const ProjectDetail: React.FC = () => {
@@ -25,7 +28,17 @@ const ProjectDetail: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
   const { hasChanged, imageChanged } = useProjectStore();
+  const { projectElementList } = useProjectElement();
+  const { projectInfoList } = useProjectInfo();
   const { uploadImage } = useImage();
+  const { handleShiftTabForEditMode } = useShiftTab();
+  const [allChanged, setAllChanged] = useState(false);
+
+  useEffect(() => {
+    const peChanged = projectElementList.some((pe) => pe.hasChanged);
+    const piChanged = projectInfoList.some((pi) => pi.hasChanged);
+    setAllChanged(hasChanged || peChanged || piChanged);
+  }, [hasChanged, projectElementList, projectInfoList]);
 
   useEffect(() => {
     const getProjectWithApi = async () => {
@@ -57,7 +70,9 @@ const ProjectDetail: React.FC = () => {
   };
 
   return (
-    <ProjectDetailPage>
+    <ProjectDetailPage
+      onKeyDown={(e) => handleShiftTabForEditMode(e, allChanged)}
+      tabIndex={-1}>
       <Loading isLoading={isLoading} />
       <ProjectDetailContainer />
       <ProjectElementList />

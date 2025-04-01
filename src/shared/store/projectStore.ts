@@ -15,7 +15,7 @@ export const useProjectStore = create<ProjectState>((set) => ({
   project: null,
   hasChanged: false,
   imageChanged: false,
-  setProject: (project) => set({ project }),
+  setProject: (project) => set({ project, hasChanged: false, imageChanged: false }),
   updateProject: (updates) =>
     set(({ project }) => ({
       project: project ?
