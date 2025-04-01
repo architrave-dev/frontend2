@@ -11,13 +11,14 @@ import { isLoggedInOwner } from '../shared/util/isLoggedInOwner';
 import { useStandardAlertStore } from '../shared/store/portal/alertStore';
 import { AlertPosition } from '../shared/enum/EnumRepository';
 import { AlertType } from '../shared/enum/EnumRepository';
-
+import { useShiftTab } from '../shared/hooks/useShiftTab';
 
 const Settings: React.FC = () => {
   const { AUI } = useInitPage();
   const navigate = useNavigate();
   const { isLoading } = useLoadingStore();
   const { setStandardAlert } = useStandardAlertStore();
+  const { handleShiftTabForEditMode } = useShiftTab();
 
   useEffect(() => {
     if (!isLoggedInOwner(AUI)) {
@@ -33,7 +34,9 @@ const Settings: React.FC = () => {
   }, [AUI]);
 
   return (
-    <SettingsContainer>
+    <SettingsContainer
+      onKeyDown={(e) => handleShiftTabForEditMode(e, false)}
+      tabIndex={-1}>
       <Loading isLoading={isLoading} />
       {isLoggedInOwner(AUI) && (
         <>
