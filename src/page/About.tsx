@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MemberInfo from '../component/about/MemberInfo';
 import CareerList from '../component/about/CareerList';
@@ -32,6 +32,12 @@ const About: React.FC = () => {
   const { isLoading } = useLoadingStore();
   const { uploadImage } = useImage();
   const { handleShiftTabForEditMode } = useShiftTab();
+  const [allChanged, setAllChanged] = useState(false);
+
+  useEffect(() => {
+    const careerChanged = careerList.some((career) => career.hasChanged);
+    setAllChanged(memberInfoChanged || careerChanged);
+  }, [careerList, memberInfoChanged]);
 
   const handleConfirm = async () => {
     if (!memberInfo || !aui) return;
@@ -69,7 +75,7 @@ const About: React.FC = () => {
 
   return (
     <AboutContainer
-      onKeyDown={(e) => handleShiftTabForEditMode(e, memberInfoChanged)}
+      onKeyDown={(e) => handleShiftTabForEditMode(e, allChanged)}
       tabIndex={-1}>
       <Loading isLoading={isLoading} />
       {/* {memberInfo &&
