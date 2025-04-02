@@ -63,7 +63,7 @@ const MemberInfo: React.FC = () => {
             value={memberInfo.name}
             handleChange={(e) => handleChange({ name: e.target.value })}
           />
-          <MemberInfoEach name={"Born"} value={memberInfo.year} defaultValue={"1992"} handleChange={(e) => handleChangeWithValidate({ year: e.target.value })} />
+          <MemberInfoEach name={"Born"} value={memberInfo.year} defaultValue={1992} handleChange={(e) => handleChangeWithValidate({ year: e.target.value })} />
           <MemberInfoSelect name={"Country"} value={memberInfo.country} handleChange={(value: CountryType) => handleChangeWithValidate({ country: value })} />
           <MemberInfoEach name={"Email"} value={memberInfo.email} defaultValue={"username@email.com"} handleChange={(e) => handleChangeWithValidate({ email: e.target.value })} />
           <MemberInfoEach name={"Contact"} value={memberInfo.contact} defaultValue={"01012345678"} handleChange={(e) => handleChange({ contact: e.target.value })} />

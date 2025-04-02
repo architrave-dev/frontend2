@@ -6,7 +6,7 @@ import MoleculeInputDiv from '../../shared/component/molecule/MoleculeInputDiv';
 
 export interface MemberInfoEachProps {
   name: string;
-  defaultValue: string;
+  defaultValue: string | number;
   value: string | number;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
