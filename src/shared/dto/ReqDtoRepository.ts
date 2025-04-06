@@ -1,5 +1,5 @@
 import { CareerType, DividerType, ProjectElementType, TextAlignment, DisplayAlignment, DisplaySize, WorkType, CountryType } from '../enum/EnumRepository';
-import { MenuVisible, SizeData } from './EntityRepository';
+import { MenuVisible, SizeData, WorkSortData } from './EntityRepository';
 
 //-------------- Auth
 export interface SignUpReq {
@@ -365,4 +365,11 @@ export interface ReorderReq {
 export interface UpdateReorderListReq {
   id: string;
   reorderReqList: ReorderReq[];
+}
+
+//-------------- MetadataForQuery
+export interface MetadataForQuery {
+  page: number;
+  size: number;
+  sortData: WorkSortData;
 }

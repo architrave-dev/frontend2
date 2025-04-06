@@ -6,17 +6,26 @@ import SortStation from '../component/work/SortStation';
 import ColumnInfo from '../component/work/ColumnInfo';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
+import PageAboutWork from '../component/work/PageAboutWork';
+import { useShiftTab } from '../shared/hooks/useShiftTab';
+import { useWorkViewStore } from '../shared/store/WorkViewStore';
+
 
 const Works: React.FC = () => {
   useInitPage();
   const { isLoading } = useLoadingStore();
+  const { handleShiftTabForEditMode } = useShiftTab();
+  const { hasChanged } = useWorkViewStore();
 
   return (
-    <WorkContainer>
+    <WorkContainer
+      onKeyDown={(e) => handleShiftTabForEditMode(e, hasChanged)}
+      tabIndex={-1}>
       <Loading isLoading={isLoading} />
       <SortStation />
       <ColumnInfo />
       <WorkList />
+      <PageAboutWork />
     </WorkContainer>
   );
 }

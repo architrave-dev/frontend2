@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 interface MoleculeInputDivProps {
   value: string | number;
-  defaultValue?: string;
+  defaultValue?: string | number;
   placeholder: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputStyle: StyledInputComponent;
@@ -28,13 +28,13 @@ const MoleculeInputDiv: React.FC<MoleculeInputDivProps> = ({
       {isEditMode ? (
         <HeadlessInput
           type={'text'}
-          value={value}
+          value={value || ""}
           handleChange={handleChange}
           placeholder={"Enter " + placeholder}
           StyledInput={inputStyle}
         />
       ) : (
-        value !== "" ?
+        !!value ?
           <StyledDiv>{value}</StyledDiv>
           :
           <DefaultDiv as={StyledDiv}>{defaultValue}</DefaultDiv>

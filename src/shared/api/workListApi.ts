@@ -1,5 +1,5 @@
 import { DeleteResponse, WorkListResponse, WorkResponse, WorkSimpleListResponse, WorkWithDetailResponse } from '../dto/ResDtoRepository';
-import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq } from '../dto/ReqDtoRepository';
+import { CreateWorkReq, DeleteWorkReq, UpdateWorkReq, MetadataForQuery } from '../dto/ReqDtoRepository';
 import { baseApi, handleApiError, sendApiRequest, sendDeleteApiRequest } from './apiConfig';
 
 
@@ -12,9 +12,11 @@ export const getWork = async (workId: string): Promise<WorkWithDetailResponse> =
   }
 };
 
-export const getWorkList = async (aui: string): Promise<WorkListResponse> => {
+export const getWorkList = async (aui: string, metaData: MetadataForQuery): Promise<WorkListResponse> => {
   try {
-    const response = await baseApi.get<WorkListResponse>(`/api/v1/work/list?aui=${aui}`);
+    const response = await baseApi.get<WorkListResponse>(
+      `/api/v1/work/list?aui=${aui}&page=${metaData.page}&size=${metaData.size}&sortBy=${metaData.sortData.sort}&direction=${metaData.sortData.direction}`
+    );
     return response.data;
   } catch (error) {
     throw handleApiError(error);

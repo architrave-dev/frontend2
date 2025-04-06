@@ -5,14 +5,19 @@ import ProjectList from '../component/project/ProjectList';
 import { useInitPage } from '../shared/hooks/useInitPage';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
-
+import { useBillboardStore } from '../shared/store/billboardStore';
+import { useShiftTab } from '../shared/hooks/useShiftTab';
 
 const Projects: React.FC = () => {
   useInitPage();
   const { isLoading } = useLoadingStore();
+  const { hasChanged } = useBillboardStore();
+  const { handleShiftTabForEditMode } = useShiftTab();
 
   return (
-    <ProjectsPage>
+    <ProjectsPage
+      onKeyDown={(e) => handleShiftTabForEditMode(e, hasChanged)}
+      tabIndex={-1}>
       <Loading isLoading={isLoading} />
       <Bilboard />
       <ProjectList />

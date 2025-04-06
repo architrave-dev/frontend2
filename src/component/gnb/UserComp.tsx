@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEditMode } from '../../shared/hooks/useEditMode';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
@@ -8,6 +8,13 @@ import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
 import { AlertPosition, AlertType, ModalType } from '../../shared/enum/EnumRepository';
 import { useMenu } from '../../shared/hooks/useMenu';
 import { useModalStore } from '../../shared/store/portal/modalStore';
+import { useMemberInfoStore } from '../../shared/store/memberInfoStore';
+import { useCareer } from '../../shared/hooks/useApi/useCareer';
+import { useContactStore } from '../../shared/store/contactStore';
+import { useBillboardStore } from '../../shared/store/billboardStore';
+import { useWorkViewStore } from '../../shared/store/WorkViewStore';
+import { useProjectChangeTrackingStore } from '../../shared/store/projectStore';
+
 
 const UserComp: React.FC = () => {
   const navigate = useNavigate();
@@ -17,11 +24,80 @@ const UserComp: React.FC = () => {
   const { isMenuOpen, closeMenu } = useMenu();
   const { setStandardModal } = useModalStore();
   const { setStandardAlert } = useStandardAlertStore();
+  const { pathname } = useLocation();
 
+  const { hasChanged: billboardChanged } = useBillboardStore();
+  const { allChanged: projectChanged } = useProjectChangeTrackingStore();
+  const { hasChanged: workViewChanged } = useWorkViewStore();
+  const { hasChanged: memberInfoChanged } = useMemberInfoStore();
+  const { hasChanged: contactChanged } = useContactStore();
+  const { careerList } = useCareer();
+
+  const pageExtracter = () => {
+    const page = pathname.split("/")[2];
+    const projectId = pathname.split("/")[3];
+    if (projectId) {
+      return "projectDetail";
+    } else if (page === "" || page === "projects") {
+      return "projects";
+    } else if (page === "works") {
+      return "works";
+    } else if (page === "about") {
+      return "about";
+    } else if (page === "contact") {
+      return "contact";
+    } else if (page === "settings") {
+      return "settings";
+    } else {
+      return "ERROR"
+    }
+  }
 
   const toggleEditMode = () => {
-    // "There are unsaved hanges. Do you want to leave edit mode? Any unsaved changes will be discarded."
-    setEditMode(!isEditMode);
+    const page = pageExtracter();
+    console.log("page: ", page);
+    let isChanged = false;
+    switch (page) {
+      case "about":
+        const careerChanged = careerList.some((career) => career.hasChanged);
+        isChanged = memberInfoChanged || careerChanged;
+        break;
+      case "contact":
+        isChanged = contactChanged;
+        break;
+      case "projects":
+        isChanged = billboardChanged;
+        break;
+      case "projectDetail":
+        isChanged = projectChanged;
+        break;
+      case "settings":
+        isChanged = false;
+        break;
+      case "works":
+        isChanged = workViewChanged;
+        break;
+    }
+
+
+    if (!isEditMode) {
+      setEditMode(true);
+    } else {
+      if (isChanged) {
+        setStandardAlert({
+          type: AlertType.CONFIRM,
+          position: AlertPosition.TOP,
+          content: "You have unsaved changes. Are you sure you want to leave?\nAny unsaved changes will be discarded.",
+          callBack: () => {
+            // setEditMode(false);
+            window.location.reload(); // 새로고침이 편하긴 해...
+            // 일단 이렇게 해두자.
+          }
+        })
+      } else {
+        setEditMode(false);
+      }
+    }
   };
 
   const loginHandler = () => {

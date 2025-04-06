@@ -15,7 +15,7 @@ export const useProjectStore = create<ProjectState>((set) => ({
   project: null,
   hasChanged: false,
   imageChanged: false,
-  setProject: (project) => set({ project }),
+  setProject: (project) => set({ project, hasChanged: false, imageChanged: false }),
   updateProject: (updates) =>
     set(({ project }) => ({
       project: project ?
@@ -36,4 +36,16 @@ export const useProjectStore = create<ProjectState>((set) => ({
       hasChanged: true,
       imageChanged: true,
     })),
+}));
+
+interface ProjectChangeTrackingState {
+  // project내의 모든 변경사항(project, projectInfo, projectElement)을 
+  // follow up 하는 값
+  allChanged: boolean;
+  setAllChanged: (hasChanged: boolean) => void;
+}
+
+export const useProjectChangeTrackingStore = create<ProjectChangeTrackingState>((set) => ({
+  allChanged: false,
+  setAllChanged: (hasChanged: boolean) => set({ allChanged: hasChanged }),
 }));

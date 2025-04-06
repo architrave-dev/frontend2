@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MemberInfo from '../component/about/MemberInfo';
 import CareerList from '../component/about/CareerList';
@@ -19,6 +19,8 @@ import { useCareer } from '../shared/hooks/useApi/useCareer';
 import downloadIcon from '../asset/icon/download.png';
 import HeadlessIconBtn from '../shared/component/headless/button/HeadlessIconBtn';
 import { useImage } from '../shared/hooks/useApi/useImage';
+import { useShiftTab } from '../shared/hooks/useShiftTab';
+
 
 const About: React.FC = () => {
   useInitPage();
@@ -29,6 +31,13 @@ const About: React.FC = () => {
   const { hasChanged: memberInfoChanged, imageChanged } = useMemberInfoStore();
   const { isLoading } = useLoadingStore();
   const { uploadImage } = useImage();
+  const { handleShiftTabForEditMode } = useShiftTab();
+  const [allChanged, setAllChanged] = useState(false);
+
+  useEffect(() => {
+    const careerChanged = careerList.some((career) => career.hasChanged);
+    setAllChanged(memberInfoChanged || careerChanged);
+  }, [careerList, memberInfoChanged]);
 
   const handleConfirm = async () => {
     if (!memberInfo || !aui) return;
@@ -65,7 +74,9 @@ const About: React.FC = () => {
   };
 
   return (
-    <AboutContainer>
+    <AboutContainer
+      onKeyDown={(e) => handleShiftTabForEditMode(e, allChanged)}
+      tabIndex={-1}>
       <Loading isLoading={isLoading} />
       {/* {memberInfo &&
         <Viewer>
