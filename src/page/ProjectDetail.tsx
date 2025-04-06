@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ProjectElementList from '../component/projectDetail/ProjectElementList';
 import ProjectDetailContainer from '../component/projectDetail/ProjectDetailContainer';
@@ -13,7 +13,7 @@ import { UpdateProjectReq } from '../shared/dto/ReqDtoRepository';
 import { ServiceType } from '../shared/enum/EnumRepository';
 import { useLoadingStore } from '../shared/store/loadingStore';
 import Loading from '../shared/component/Loading';
-import { useProjectStore } from '../shared/store/projectStore';
+import { useProjectChangeTrackingStore, useProjectStore } from '../shared/store/projectStore';
 import { useImage } from '../shared/hooks/useApi/useImage';
 import { useShiftTab } from '../shared/hooks/useShiftTab';
 import { useProjectElement } from '../shared/hooks/useApi/useProjectElement';
@@ -28,11 +28,11 @@ const ProjectDetail: React.FC = () => {
   const { isEditMode, setEditMode } = useEditMode();
   const { project, getProject, updateProject } = useProjectDetail();
   const { hasChanged, imageChanged } = useProjectStore();
+  const { allChanged, setAllChanged } = useProjectChangeTrackingStore();
   const { projectElementList } = useProjectElement();
   const { projectInfoList } = useProjectInfo();
   const { uploadImage } = useImage();
   const { handleShiftTabForEditMode } = useShiftTab();
-  const [allChanged, setAllChanged] = useState(false);
 
   useEffect(() => {
     const peChanged = projectElementList.some((pe) => pe.hasChanged);

@@ -24,7 +24,7 @@ export const useShiftTab = (): UseShiftTabResult => {
               setStandardAlert({
                 type: AlertType.CONFIRM,
                 position: AlertPosition.TOP,
-                content: "You have unsaved changes. Are you sure you want to leave?",
+                content: "You have unsaved changes. Are you sure you want to leave?\nAny unsaved changes will be discarded.",
                 callBack: () => {
                   // setEditMode(false);
                   window.location.reload(); // 새로고침이 편하긴 해...
