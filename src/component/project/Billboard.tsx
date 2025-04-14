@@ -41,12 +41,12 @@ const Billboard: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!billboard || !aui) return;
-
+    const { uploadFile, ...billboardWithoutUploadFile } = billboard;
     const baseRequest: UpdateBillboardReq = {
-      ...billboard,
+      ...billboardWithoutUploadFile,
       updateUploadFileReq: {
-        ...billboard.uploadFile,
-        uploadFileId: billboard.uploadFile.id
+        originUrl: uploadFile.originUrl,
+        uploadFileId: uploadFile.id
       }
     };
 
