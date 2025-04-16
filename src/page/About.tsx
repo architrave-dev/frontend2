@@ -41,11 +41,12 @@ const About: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!memberInfo || !aui) return;
+    const { uploadFile, ...memberInfoWithoutUploadFile } = memberInfo;
     const baseRequest: UpdateMemberInfoReq = {
-      ...memberInfo,
+      ...memberInfoWithoutUploadFile,
       updateUploadFileReq: {
-        ...memberInfo.uploadFile,
-        uploadFileId: memberInfo.uploadFile.id
+        originUrl: uploadFile.originUrl,
+        uploadFileId: uploadFile.id
       }
     };
 

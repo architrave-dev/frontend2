@@ -22,7 +22,7 @@ const PageAboutWork: React.FC = () => {
 
   useEffect(() => {
     if (!aui) return;
-    console.log("getWorkList called, sortData changed", sortData);
+    // console.log("getWorkList called, sortData changed", sortData);
     getWorkList(aui, { page: page.page, size: 10, sortData: sortData });
   }, [sortData]);
 

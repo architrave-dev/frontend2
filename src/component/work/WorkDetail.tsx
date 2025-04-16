@@ -36,12 +36,13 @@ const WorkDetail: React.FC<WorkDetailProps> = ({ index, workId, data }) => {
 
 
   const handleUpdate = async () => {
+    const { uploadFile, ...workDetailWithoutUploadFile } = data;
     const baseRequest: UpdateWorkDetailReq = {
-      ...data,
+      ...workDetailWithoutUploadFile,
       workId,
       updateUploadFileReq: {
-        ...data.uploadFile,
-        uploadFileId: data.uploadFile.id
+        originUrl: uploadFile.originUrl,
+        uploadFileId: uploadFile.id
       },
     }
     const finalRequest = data.imageChanged

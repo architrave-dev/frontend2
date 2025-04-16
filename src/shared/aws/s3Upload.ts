@@ -1,5 +1,8 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { ServiceType } from '../enum/EnumRepository';
+import { getConfig } from '../env/envManager';
+
+const config = getConfig();
 
 interface AwsS3UploadResult {
   originUrl: string;
@@ -15,7 +18,7 @@ const s3Client = new S3Client({
 
 export async function uploadToS3(file: File, aui: string, serviceType: ServiceType, identifier: string[]): Promise<AwsS3UploadResult> {
   const prefix = makePrefix(serviceType, identifier);
-  const bucketName = process.env.REACT_APP_S3_BUCKET_NAME!;
+  const bucketName = config.s3BucketName;
 
   // Create base file key without size suffix
   const baseFileKey = `${file.name}`;
@@ -87,8 +90,8 @@ export const base64ToFileWithMime = (base64: string): File => {
 
 export const convertS3UrlToCloudFrontUrl = (s3Url: string): string => {
   if (s3Url === "") return s3Url;
-  const s3Domain = process.env.REACT_APP_BUCKET_DOMAIN!;
-  const cloudFrontDomain = process.env.REACT_APP_DOMAIN!;
+  const s3Domain = config.s3BucketDomain;
+  const cloudFrontDomain = config.cloudFrontDomain;
 
   try {
     const url = new URL(s3Url);

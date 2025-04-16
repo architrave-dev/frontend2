@@ -48,11 +48,12 @@ const WorkViewer: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!activeWork || !aui) return;
+    const { uploadFile, ...workWithoutUploadFile } = activeWork;
     const baseRequest: UpdateWorkReq = {
-      ...activeWork,
+      ...workWithoutUploadFile,
       updateUploadFileReq: {
-        ...activeWork.uploadFile,
-        uploadFileId: activeWork.uploadFile.id
+        originUrl: uploadFile.originUrl,
+        uploadFileId: uploadFile.id
       }
     }
 

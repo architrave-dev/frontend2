@@ -53,11 +53,12 @@ const ProjectDetail: React.FC = () => {
 
   const handleConfirm = async () => {
     if (!project || !aui) return;
+    const { uploadFile, ...projectWithoutUploadFile } = project;
     const baseRequest: UpdateProjectReq = {
-      ...project,  //projectDetailCheck에서 확인 함
+      ...projectWithoutUploadFile,  //projectDetailCheck에서 확인 함
       updateUploadFileReq: {
-        uploadFileId: project.uploadFile.id,
-        ...project.uploadFile
+        originUrl: uploadFile.originUrl,
+        uploadFileId: uploadFile.id
       }
     }
 
