@@ -5,6 +5,7 @@ interface EnvironmentConfig {
   s3BucketName: string;
   s3BucketDomain: string;
   cloudFrontDomain: string;
+  appDomain: string;
 }
 
 const configs: Record<Environment, EnvironmentConfig> = {
@@ -13,12 +14,14 @@ const configs: Record<Environment, EnvironmentConfig> = {
     s3BucketName: process.env.REACT_APP_S3_BUCKET_NAME || '',
     s3BucketDomain: process.env.REACT_APP_BUCKET_DOMAIN || '',
     cloudFrontDomain: process.env.REACT_APP_DOMAIN || '',
+    appDomain: process.env.REACT_APP_DOMAIN || '',
   },
   prod: {
     apiBaseUrl: process.env.REACT_APP_BACKEND_PROD_IP || '',
     s3BucketName: process.env.REACT_APP_S3_BUCKET_NAME_PROD || '',
     s3BucketDomain: process.env.REACT_APP_BUCKET_DOMAIN_PROD || '',
     cloudFrontDomain: process.env.REACT_APP_TEST_DOMAIN || '',
+    appDomain: process.env.REACT_APP_TEST_DOMAIN || '',
   },
 };
 
