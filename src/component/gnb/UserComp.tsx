@@ -38,7 +38,7 @@ const UserComp: React.FC = () => {
     const projectId = pathname.split("/")[3];
     if (projectId) {
       return "projectDetail";
-    } else if (page === "" || page === "projects") {
+    } else if (!page || page === "projects") {
       return "projects";
     } else if (page === "works") {
       return "works";
