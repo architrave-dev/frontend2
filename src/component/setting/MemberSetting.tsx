@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../shared/hooks/useApi/useAuth';
-import { AlertPosition, AlertType, ModalType, TempAlertPosition, TempAlertType } from '../../shared/enum/EnumRepository';
-import { useStandardAlertStore } from '../../shared/store/portal/alertStore';
+import { ModalType, TempAlertPosition, TempAlertType } from '../../shared/enum/EnumRepository';
 import MoleculeDivBtn from '../../shared/component/molecule/MoleculeDivBtn';
 import { useModalStore } from '../../shared/store/portal/modalStore';
 import { useMember } from '../../shared/hooks/useApi/useMember';
@@ -19,7 +18,6 @@ const MemberSetting: React.FC = () => {
   const { setTempAlert } = useTempAlertStore();
   const { updateMember } = useMember();
   const { aui } = useAui();
-
 
   if (!user) return null;
 

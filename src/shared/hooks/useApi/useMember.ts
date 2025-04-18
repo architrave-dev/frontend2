@@ -43,6 +43,7 @@ export const useMember = (): UseMemberResult => {
       ...data
     }
     setUser(mergedUser);
+    localStorage.setItem('userData', JSON.stringify(mergedUser));
     setUpdatedTempAlert();
   };
   const handleUpdatePasswordSuccess = (response: MemberResponse) => {

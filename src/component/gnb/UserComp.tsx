@@ -55,7 +55,6 @@ const UserComp: React.FC = () => {
 
   const toggleEditMode = () => {
     const page = pageExtracter();
-    console.log("page: ", page);
     let isChanged = false;
     switch (page) {
       case "about":
