@@ -31,7 +31,7 @@ const ProjectInfoList: React.FC = () => {
     };
 
     fetchProjectInfo();
-  }, [aui, projectId]);
+  }, [aui, projectId, project?.id]);
 
   if (project == null) return null;
 

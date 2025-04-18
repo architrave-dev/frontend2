@@ -122,8 +122,8 @@ const ContactComp: React.FC = () => {
             handleChange={(e) => handleChange({ contact: e.target.value })}
             inputStyle={ContactInput}
             StyledDiv={ContactDiv}
-            visible={contactPropertyVisible.email}
-            changeVisible={() => handleDoubleClick('email')}
+            visible={contactPropertyVisible.contact}
+            changeVisible={() => handleDoubleClick('contact')}
           />
         </Contact_1>
         <Contact_1>

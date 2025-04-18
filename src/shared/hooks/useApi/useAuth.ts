@@ -8,6 +8,7 @@ import { AlertPosition, AlertType, ModalType, TempAlertPosition, TempAlertType }
 import { useApiWrapper } from './apiWrapper';
 import { useModalStore } from '../../store/portal/modalStore';
 import { useStandardAlertStore } from '../../store/portal/alertStore';
+import { getConfig } from '../../env/envManager';
 
 
 interface UseAuthResult {
@@ -27,6 +28,7 @@ export const useAuth = (): UseAuthResult => {
   const { setTempAlert } = useTempAlertStore();
   const { setStandardModal, clearModal } = useModalStore();
   const withApiHandler = useApiWrapper();
+  const config = getConfig();
 
   const settingLoginUser = (data: UserDataWithRefreshToken, authToken: string) => {
     clearModal();
@@ -96,7 +98,7 @@ export const useAuth = (): UseAuthResult => {
     setStandardAlert({
       type: AlertType.ALERT,
       position: AlertPosition.TOP,
-      content: `Here is your URL: https://www.architrive.com/${value}`,
+      content: `Here is your URL: ${config.appDomain}/${value}`,
       callBack: () => {
         clearModal();
       }

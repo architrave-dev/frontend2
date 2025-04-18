@@ -8,11 +8,37 @@ import { useLoadingStore } from '../../shared/store/loadingStore';
 
 const SearchBar: React.FC = () => {
   const [searchString, setSearchString] = useState('');
+  const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const { checkAui, result, search, searchList } = useMember();
   const { isLoading } = useLoadingStore();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
   const [showCandidates, setShowCandidates] = useState(false);
+
+  // Add debounce effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchString(searchString);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchString]);
+
+  // Use debounced value for search
+  useEffect(() => {
+    const performSearch = async () => {
+      if (debouncedSearchString.length <= 0) {
+        setShowCandidates(false);
+        return;
+      }
+      setShowCandidates(true);
+      await search(debouncedSearchString);
+    };
+
+    performSearch();
+  }, [debouncedSearchString]);
 
   useEffect(() => {
     if (searchRef.current) {
@@ -39,8 +65,6 @@ const SearchBar: React.FC = () => {
   }, [result])
 
   const handleChange = async (username: string) => {
-    setShowCandidates(true);
-    await search(username);
     setSearchString(username);
   }
 
