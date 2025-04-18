@@ -39,6 +39,11 @@ const SearchBar: React.FC = () => {
   }, [result])
 
   const handleChange = async (username: string) => {
+    if (username.length <= 0) {
+      setShowCandidates(false);
+      setSearchString(username);
+      return;
+    }
     setShowCandidates(true);
     await search(username);
     setSearchString(username);
