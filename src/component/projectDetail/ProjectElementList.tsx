@@ -148,7 +148,8 @@ const ProjectElementListComp = styled.article`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: calc(4vh) calc(10vw) calc(8vh) calc(10vw);
+  padding: calc(4vh) 0 calc(8vh) 0;
+  // padding: calc(4vh) calc(10vw) calc(8vh) calc(10vw);
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;

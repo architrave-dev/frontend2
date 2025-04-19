@@ -14,6 +14,7 @@ import MoleculeShowOriginBtn from '../../shared/component/molecule/MoleculeShowO
 import { OriginBtnBottom } from '../../shared/component/headless/button/BtnBody';
 import { useValidation } from '../../shared/hooks/useValidation';
 import { convertS3UrlToCloudFrontUrl } from '../../shared/aws/s3Upload';
+import { useImageStyleJudge } from '../../shared/hooks/useImageStyleJudge';
 
 export interface WorkProps {
   peId: string;
@@ -31,6 +32,17 @@ const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
     updateDisplaySize: handleDisplaySizeChange
   } = useProjectElementListStore();
   const { checkType } = useValidation();
+  const { imageStyle } = useImageStyleJudge(data.uploadFile?.originUrl);
+
+  const getStyledImage = () => {
+    if (imageStyle === 'landscape') {
+      return WorkImageForLandscape;
+    } else if (imageStyle === 'portrait') {
+      return WorkImageForPortrait;
+    }
+    // Default case if orientation hasn't been determined yet
+    return WorkImageForLandscape;
+  };
 
   const handleChangeWithValidate = (field: keyof WorkData, value: string | SizeData) => {
     if (!checkType(field, value)) {
@@ -70,7 +82,7 @@ const Work: React.FC<WorkProps> = ({ peId, alignment, displaySize, data }) => {
               peId,
               originUrl
             )}
-            StyledImg={WorkImage}
+            StyledImg={getStyledImage()}
           />
         </ImgWrapper>
         {isEditMode ? (
@@ -149,20 +161,39 @@ export const SelectBoxContainer = styled.div`
   width: 100%;
   display: flex;
   gap: 20px;
+  padding: 0 10vw;
 `
 
 
-export const WorkImage = styled.img<{ $displaySize: DisplaySize }>`
-  max-width: 100%;
-  max-height: ${({ $displaySize }) => {
+export const WorkImageForPortrait = styled.img<{ $displaySize: DisplaySize }>`
+  height: ${({ $displaySize }) => {
     switch ($displaySize) {
       case DisplaySize.SMALL:
         return '35vh';
       case DisplaySize.REGULAR:
         return '55vh';
       case DisplaySize.BIG:
+        return '80vh';
+      case DisplaySize.WIDE:
       default:
-        return '90vh';
+        return '100vh';
+    }
+  }};
+  object-fit: contain;
+`;
+
+export const WorkImageForLandscape = styled.img<{ $displaySize: DisplaySize }>`
+  width: ${({ $displaySize }) => {
+    switch ($displaySize) {
+      case DisplaySize.SMALL:
+        return '35vw';
+      case DisplaySize.REGULAR:
+        return '55vw';
+      case DisplaySize.BIG:
+        return '80vw';
+      case DisplaySize.WIDE:
+      default:
+        return '100vw';
     }
   }};
   object-fit: contain;
@@ -170,6 +201,8 @@ export const WorkImage = styled.img<{ $displaySize: DisplaySize }>`
 
 export const WorkCoreWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   display: flex;
+  width: 100%;
+  align-items: center;
   flex-direction: ${({ $displayAlignment }) => {
     switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
@@ -193,6 +226,9 @@ export const WorkCoreWrapper = styled.div<{ $displayAlignment: DisplayAlignment 
 
 export const ImgWrapper = styled.div<{ $displayAlignment: DisplayAlignment }>`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: ${({ $displayAlignment }) => {
     switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
@@ -207,7 +243,7 @@ export const TitleInfoWrpper = styled.div<{ $displayAlignment: DisplayAlignment 
   width: ${({ $displayAlignment }) => {
     switch ($displayAlignment) {
       case DisplayAlignment.CENTER:
-        return '100%';
+        return '70%';
       default:
         return '20%';
     }

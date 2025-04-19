@@ -127,6 +127,7 @@ export enum DisplayAlignment {
 }
 
 export enum DisplaySize {
+  WIDE = 'WIDE',
   BIG = 'BIG',
   REGULAR = 'REGULAR',
   SMALL = 'SMALL'
